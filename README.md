@@ -1,4 +1,10 @@
 # UI.Material
+~~~javascript
+	var material = new UI.Material({
+		inside: h.getMaterial(),
+		position: "top:20px; left:100px; width:600px; height:600px"
+	});
+~~~
 
 # UI.BorderLayout
 ~~~javascript

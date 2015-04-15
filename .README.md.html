@@ -640,6 +640,12 @@ function setDocumentScrollTop(ypos)
 </head>
 <body class="markdown-body">
 <h1> <a id="user-content-uimaterial" class="anchor" href="#uimaterial" aria-hidden="true"><span class="octicon octicon-link"></span></a>UI.Material</h1> 
+<div class="highlight highlight-javascript">
+ <pre>    <span class="pl-k">var</span> material <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">UI.Material</span>({
+        inside<span class="pl-k">:</span> h.getMaterial(),
+        position<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">&quot;</span>top:20px; left:100px; width:600px; height:600px<span class="pl-pds">&quot;</span></span>
+    });</pre>
+</div> 
 <h1> <a id="user-content-uiborderlayout" class="anchor" href="#uiborderlayout" aria-hidden="true"><span class="octicon octicon-link"></span></a>UI.BorderLayout</h1> 
 <div class="highlight highlight-javascript">
  <pre>    <span class="pl-k">var</span> layout <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">UI.BorderLayout</span>({
@@ -654,6 +660,40 @@ function setDocumentScrollTop(ypos)
  <pre>    <span class="pl-k">var</span> progress <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">UI.ProgressBar</span>({
         inside<span class="pl-k">:</span> layout.getSouth()
     });</pre>
-</div>
+</div> 
+<table> 
+ <thead> 
+  <tr> 
+   <th>Nazwa</th> 
+   <th>Typ</th> 
+   <th>Domyślnie</th> 
+   <th>Wymagany</th> 
+   <th>Opis</th> 
+  </tr> 
+ </thead> 
+ <tbody> 
+  <tr> 
+   <td>inside</td> 
+   <td>HTMLElement</td> 
+   <td></td> 
+   <td>Tak</td> 
+   <td>Element HTML, w kt&oacute;rym umieszczony zostanie komponent</td> 
+  </tr> 
+  <tr> 
+   <td>totalColor</td> 
+   <td>String</td> 
+   <td>#000000</td> 
+   <td></td> 
+   <td>Kolor paska</td> 
+  </tr> 
+  <tr> 
+   <td>doneColor</td> 
+   <td>String</td> 
+   <td>#00FF00</td> 
+   <td></td> 
+   <td>Kolor postępu</td> 
+  </tr> 
+ </tbody> 
+</table>
 </body>
 </html>
