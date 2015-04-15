@@ -17,7 +17,9 @@
 	});
 ~~~
 
-First Header | Second Header
------------- | -------------
-Content from cell 1 | Content from cell 2
-Content in the first column | Content in the second column
+Nazwa | Typ | Domyślnie | Wymagany | Opis
+----- | --- | --------- | ----- | ---
+inside | HTMLElement | | Tak | Element HTML, w którym umieszczony zostanie komponent
+totalColor | String | #000000 | | Kolor paska
+doneColor | String | #00FF00 | | Kolor postępu
+
