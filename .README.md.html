@@ -639,7 +639,16 @@ function setDocumentScrollTop(ypos)
 
 </head>
 <body class="markdown-body">
+<h1> <a id="user-content-uimaterial" class="anchor" href="#uimaterial" aria-hidden="true"><span class="octicon octicon-link"></span></a>UI.Material</h1> 
 <h1> <a id="user-content-uiborderlayout" class="anchor" href="#uiborderlayout" aria-hidden="true"><span class="octicon octicon-link"></span></a>UI.BorderLayout</h1> 
+<div class="highlight highlight-javascript">
+ <pre>    <span class="pl-k">var</span> layout <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">UI.BorderLayout</span>({
+        inside<span class="pl-k">:</span> mat.getMaterial(),
+        south<span class="pl-k">:</span> {
+            height<span class="pl-k">:</span> <span class="pl-c1">50</span>
+        }
+    });</pre>
+</div> 
 <h1> <a id="user-content-uiprogressbar" class="anchor" href="#uiprogressbar" aria-hidden="true"><span class="octicon octicon-link"></span></a>UI.ProgressBar</h1> 
 <div class="highlight highlight-javascript">
  <pre>    <span class="pl-k">var</span> progress <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">UI.ProgressBar</span>({

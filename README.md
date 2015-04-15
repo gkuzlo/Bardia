@@ -1,4 +1,14 @@
+# UI.Material
+
 # UI.BorderLayout
+~~~javascript
+	var layout = new UI.BorderLayout({
+		inside: mat.getMaterial(),
+		south: {
+			height: 50
+		}
+	});
+~~~
 
 # UI.ProgressBar
 ~~~javascript
