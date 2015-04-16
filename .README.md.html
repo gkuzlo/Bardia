@@ -639,13 +639,7 @@ function setDocumentScrollTop(ypos)
 
 </head>
 <body class="markdown-body">
-<h1> <a id="user-content-uimaterial" class="anchor" href="#uimaterial" aria-hidden="true"><span class="octicon octicon-link"></span></a>UI.Material</h1> 
-<div class="highlight highlight-javascript">
- <pre>    <span class="pl-k">var</span> material <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">UI.Material</span>({
-        inside<span class="pl-k">:</span> h.getMaterial(),
-        position<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">&quot;</span>top:20px; left:100px; width:600px; height:600px<span class="pl-pds">&quot;</span></span>
-    });</pre>
-</div> 
+<p>I think you should use an</p> 
 <h1> <a id="user-content-uiborderlayout" class="anchor" href="#uiborderlayout" aria-hidden="true"><span class="octicon octicon-link"></span></a>UI.BorderLayout</h1> 
 <div class="highlight highlight-javascript">
  <pre>    <span class="pl-k">var</span> layout <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">UI.BorderLayout</span>({
@@ -655,43 +649,70 @@ function setDocumentScrollTop(ypos)
         }
     });</pre>
 </div> 
+<h1> <a id="user-content-uimaterial" class="anchor" href="#uimaterial" aria-hidden="true"><span class="octicon octicon-link"></span></a>UI.Material</h1> 
+<div class="highlight highlight-javascript">
+ <pre>    <span class="pl-k">var</span> material <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">UI.Material</span>({
+        inside<span class="pl-k">:</span> h.getMaterial(),
+        position<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">&quot;</span>top:20px; left:100px; width:600px; height:600px<span class="pl-pds">&quot;</span></span>
+    });</pre>
+</div> 
 <h1> <a id="user-content-uiprogressbar" class="anchor" href="#uiprogressbar" aria-hidden="true"><span class="octicon octicon-link"></span></a>UI.ProgressBar</h1> 
 <div class="highlight highlight-javascript">
  <pre>    <span class="pl-k">var</span> progress <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">UI.ProgressBar</span>({
         inside<span class="pl-k">:</span> layout.getSouth()
     });</pre>
 </div> 
+<p>Atrybuty</p> 
 <table> 
  <thead> 
   <tr> 
-   <th>Nazwa</th> 
-   <th>Typ</th> 
-   <th>Domyślnie</th> 
-   <th>Wymagany</th> 
-   <th>Opis</th> 
+   <th align="left">Nazwa</th> 
+   <th align="left">Typ</th> 
+   <th align="left">Domyślnie</th> 
+   <th align="left">Wymagany</th> 
+   <th align="left">Opis</th> 
   </tr> 
  </thead> 
  <tbody> 
   <tr> 
-   <td>inside</td> 
-   <td>HTMLElement</td> 
-   <td></td> 
-   <td>Tak</td> 
-   <td>Element HTML, w kt&oacute;rym umieszczony zostanie komponent</td> 
+   <td align="left">inside</td> 
+   <td align="left">HTMLElement</td> 
+   <td align="left"></td> 
+   <td align="left">Tak</td> 
+   <td align="left">Element HTML, w kt&oacute;rym umieszczony zostanie komponent</td> 
   </tr> 
   <tr> 
-   <td>totalColor</td> 
-   <td>String</td> 
-   <td>#000000</td> 
-   <td></td> 
-   <td>Kolor paska</td> 
+   <td align="left">totalColor</td> 
+   <td align="left">String</td> 
+   <td align="left">#000000</td> 
+   <td align="left"></td> 
+   <td align="left">Kolor paska</td> 
   </tr> 
   <tr> 
-   <td>doneColor</td> 
-   <td>String</td> 
-   <td>#00FF00</td> 
-   <td></td> 
-   <td>Kolor postępu</td> 
+   <td align="left">doneColor</td> 
+   <td align="left">String</td> 
+   <td align="left">#00FF00</td> 
+   <td align="left"></td> 
+   <td align="left">Kolor postępu</td> 
+  </tr> 
+ </tbody> 
+</table> 
+<p>Metody</p> 
+<table> 
+ <thead> 
+  <tr> 
+   <th align="left">Nazwa</th> 
+   <th align="left">ParaOpis</th> 
+  </tr> 
+ </thead> 
+ <tbody> 
+  <tr> 
+   <td align="left">setProgress(Integer [0-100]</td> 
+   <td align="left">postęp zaawansowania</td> 
+  </tr> 
+  <tr> 
+   <td align="left">setLabel(String)</td> 
+   <td align="left">Ustawia etykietę na paskiem</td> 
   </tr> 
  </tbody> 
 </table>
