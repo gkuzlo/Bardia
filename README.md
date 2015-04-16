@@ -39,4 +39,4 @@ Metody
 Nazwa | ParaOpis |
 :----- | :--- | 
 setProgress | postęp zaawansowania (Integer 0 - 100)
-setLabel    | Ustawia etykietę na paskiem
+setLabel    | Ustawia etykietę na paskiem (String)
