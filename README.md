@@ -38,5 +38,5 @@ Metody
 
 Nazwa | ParaOpis |
 :----- | :--- | 
-setProgress | postęp zaawansowania (Integer 0 - 100)
-setLabel    | Ustawia etykietę na paskiem (String)
+setProgress(Integer [0-100] | postęp zaawansowania
+setLabel(String)    | Ustawia etykietę na paskiem
