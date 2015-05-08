@@ -43,7 +43,7 @@ module.exports = function(grunt) {
                     "src/tabs/UI.Toolbar.js",
                     "src/tabs/UI.Tabs.js"
                 ], 
-                dest: 'dest/bardia.js'},
+                dest: 'dist/bardia.js'},
             ]
         },
         css: {
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
             	src: [
                     'src/**/*.css'
                 ],
-                dest: 'dest/bardia.css'},
+                dest: 'dist/bardia.css'},
             ]        	
         }
       },
