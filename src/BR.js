@@ -1,0 +1,3 @@
+var BR = {
+	version: "0.0.1"
+}

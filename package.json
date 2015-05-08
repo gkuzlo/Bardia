@@ -1,0 +1,29 @@
+{
+  "name": "Bardia",
+  "version": "1.0.0",
+  "description": "Description",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gkuzlo/Bardia.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "MaterialDesign",
+    "UserInterface"
+  ],
+  "author": "Grzegorz Kuz�o",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gkuzlo/Bardia/issues"
+  },
+  "homepage": "https://github.com/gkuzlo/Bardia",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-uglify": "^0.9.1",
+    "uglify": "^0.1.3"
+  }
+}
