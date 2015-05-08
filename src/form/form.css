@@ -1,0 +1,14 @@
+.form {
+	position:absolute; top:0px; right:0px; left:0px; bottom:0px; 
+}
+.form_header {
+	position:absolute; top:0px; right:0px; left:0px; height:55px; line-height:55px; font-size:16px; font-weight:bold; padding-left:10px;
+	background-color:#ebf0ee; color:#525070; border:0px solid #c9cece; border-width:0px 0px 1px 0px; 
+}
+.form_fields_content {
+	position:absolute; top:80px; right:0px; left:0px; bottom:60px; overflow:auto
+}
+
+.form_footer {
+	position:absolute; right:0px; left:0px; bottom:0px; height:60px; border:0px solid #cdcdcf; border-width:0px 0px 0px 0px;
+}

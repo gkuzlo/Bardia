@@ -1,0 +1,133 @@
+
+div {
+    margin:0px; padding:0px; border:0px; font-family:Arial; color:black;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+.inside {
+	position:absolute; top:0px; left:0px; bottom:0px; right:0px; background-color:white;
+}
+
+.header {
+    height:70px; position:absolute; top:0px; right:0px; left:0px; line-height:65px; overflow:hidden; float:left; font-size:20px; padding-left:70px;
+    background-color:#ebf0ee; color:#525070; border:0px
+}
+
+.content {
+    position:absolute; top:70px; bottom:0px; right:0px; left:0px; overflow:hidden;
+}
+
+.bg_main {
+    background-color:#525070
+}
+
+.fg_main {
+    color:#535270
+}
+
+.bg_white {
+    background-color: #ffffff
+}
+
+.fg_white {
+    color: #c9c8d5
+}
+
+.fg_black {
+    color: #000000
+}
+
+.fg_bold {
+    font-weight:bold
+}
+
+.rows_content {
+	position:absolute; top:0px; left:0px; bottom:0px; right:0px; overflow:auto
+}
+
+.default_shadow {
+	box-shadow: 0px 0px 5px #444444; 
+}
+
+.default_shadow_1 {
+	box-shadow: 3px 3px 8px #444444; 
+}
+
+.toolbar-control {
+	position:relative; overflow:hidden; height:50px; width:50px; line-height:50px; background-color:#e8e7ee; border:2px solid #535270; color:#535270; text-align:center; border-radius:5px; box-shadow: 0px 0px 5px #777777;
+}
+
+.toolbar-control-selected {
+	position:relative; overflow:hidden; height:50px; width:50px; line-height:50px; background-color:#fbd86e; border:2px solid #535270; color:#535270; text-align:center; border-radius:5px; box-shadow: 0px 0px 5px #777777;
+}
+
+.ripple {
+	background-color:#535270; position:absolute; top:0px; left:0px; bottom:0px; right:0px; opacity:0.0;
+}
+
+.toast {
+	background-color:#fdfdfd; border:1px solid grey; position:absolute; top:0px; left:0px; right:0px; bottom:0px; border-radius: 5px; 
+}
+
+.error {
+	color:red
+}
+
+.toast_title {
+	position:absolute; top:0px; left:0px; line-height:16px; font-size:12px; font-weight:bold; padding:5px;
+}
+
+.toast_description {
+	position:absolute; top:17px; left:0px; font-size:12px; padding:15px 5px 5px 5px
+}
+
+.node {
+	background-color:white; border-radius:50%; border:2px solid #6dbbcf;
+}
+
+.node_to_stop {
+	background-color:transparent; border:3px solid orange; border-radius:50%;
+}
+
+.stopPoint {
+	background-color:transparent; border-radius:50%; border:3px solid green;
+}
+
+.stopPointLabel {
+	margin:50px; background-color:white; border-radius:5px; border:1px solid #535270; width:200px; line-height:18px; font-size:14px; overflow:hidden; text-align:center;
+}
+
+.node-selected {
+	background-color:green; border-radius:50%;
+}
+
+.node-highlighted {
+	background-color:#535270; border-radius:50%; 
+}
+
+.calendar_day {
+	position:absolute; font-family:Helvetica; font-size:11px; padding-right:2px; text-align:right;
+	width:17px; height:14px; border:1px solid transparent; overflow:hidden; 
+	-webkit-border-radius: 3px; border-radius:3px; cursor:pointer;
+	background-color:transparent;
+}
+
+.grid_header {
+	position:absolute; top:0px; right:0px; left:0px; height:55px; line-height:55px; font-size:16px; font-weight:bold; padding-left:70px;
+	background-color:#ebf0ee; color:#525070; border:0px solid #c9cece; border-width:0px 0px 1px 0px; 
+}
+
+.grid-cell {
+	background-color:#00ff00
+}
+
+.toolbar_bg {
+	background-color:rgba(30, 29, 41, 1); color:#525160
+}
+
+.toolbar_marker_bg {
+	background-color:#6dbbcf
+}
