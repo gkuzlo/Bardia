@@ -1,13 +1,15 @@
 /**
- * 
+ * @class UI.FabToolbar
  */
 UI.FabToolbar = Class.create({
 	/**
-	 * 
+	 * @constructor
+	 * @param config
 	 */
     initialize: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
+            orientation: "right",
             buttons: [
             ]
         }, config || {});
@@ -15,89 +17,54 @@ UI.FabToolbar = Class.create({
         this.render();
     },
     /**
-     * 
+     * @method render
      */
     render: function() {
     	var h = this;
 
+    	h.config.inside.setStyle({
+    		position: "absolute",
+    		left: "0px",
+    		display: "flex",
+    		flexDirection: (h.config.orientation=="right")?"row-reverse":"row",
+    		backgroundColor: "transparent",
+    		textAlign: "right",
+    		border: "1px solid lightGrey",
+    		borderWidth: "1px 0px 0px 0px"
+    	});
+
+    	h.setButtons(h.config.buttons);
+    },
+    /**
+     * @method setButtons
+     * @param buttons
+     */
+    setButtons: function(buttons) {
+    	var h = this;
+    	
+    	h.config.inside.update();
+    	
     	h.hashedFabs = new Hash();
 
     	var i=0;
-    	for (i=0; i<h.config.buttons.length; i++) {
+    	for (i=0; i<buttons.length; i++) {
+
+    		var button = buttons[i];
+    		
     		var fab = new UI.Fab({
     			inside: h.config.inside,
-    			right: 40,
-    			left: "",
-    			top: 50 + (i*60),
-    			icon: h.config.buttons[i].icon,
-    			title: h.config.buttons[i].title,
-    			text: h.config.buttons[i].text,
-    			fill: h.config.buttons[i].fill,
-    			controller: h.config.buttons[i].controller,
+    			icon: buttons[i].icon,
+    			title: buttons[i].title,
+    			text: buttons[i].text,
+    			fill: buttons[i].fill,
     			onClick: function(fab) {
-    				h.selectFab(fab);
+    				fab.onClick();
     			}
     		});
-    		
-    		h.hashedFabs.set(h.config.buttons[i].id, fab);
-    	}
-    },
-    selectFabById: function(id) {
-    	var h = this;
-    		h.selectFab(h.hashedFabs.get(id));
-    },
-    /**
-     * 
-     */
-    selectFab: function(fab) {
-    	var h = this;
-    		if (h.selectedFab !== undefined) {
-    			h.unselectFab(h.selectedFab);
-    		}
-    		
-    		var player = fab.getMaterial().animate([
-	  		    {
-	  		     opacity: 1, 
-	  		     transform: "scale(1)"
-	  		    },
-	  		    {
-	  		     opacity: 0.8, 
-	  		     transform: "scale(1.5)"
-	  		    },
-	  		], {
-	  			direction: 'normal',
-	  		    duration: 300,
-	  		    easing: "ease",
-	  			iterations: 1,
-	  			fill: "both"
-	  		});
+    		fab.onClick = button.onClick;
 
-    	h.selectedFab = fab;
-    	
-    	if (h.config.onSelect) {
-    		h.config.onSelect(fab.config.controller);
-    	}
-    },
-    /**
-     * 
-     */
-    unselectFab: function(fab) {
-		var player = fab.getMaterial().animate([
-  		    {
-  		     opacity: 0.8, 
-  		     transform: "scale(1.5)"
-  		    },
-  		    {
-  		     opacity: 1, 
-  		     transform: "scale(1)"
-  		    },
-  		], {
-  			direction: 'normal',
-  		    duration: 300,
-  		    easing: "ease",
-  			iterations: 1,
-  			fill: "both"
-  		});
+    		h.hashedFabs.set(buttons[i].id, fab);
+    	}    	
     },
     hide: function() {
     	var h = this;
@@ -107,8 +74,10 @@ UI.FabToolbar = Class.create({
     	var h = this;
     		h.hideOrShow(true);
     },
+    /** 
+     * @param display
+     */
     hideOrShow: function(display) {
-    	var h = this;
     	var i=0;
     	for (i=0; i<this.hashedFabs.keys().length; i++) {
     		var fab = this.hashedFabs.get(this.hashedFabs.keys()[i]);

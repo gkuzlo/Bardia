@@ -1,18 +1,12 @@
-/*
- *
- */
+
 UI.Menu = Class.create(UI.MaterialComponent, {
-	/**
-	 *
-	 */
+
 	initConfig: function(config) {
         this.config = Object.extend({
         	items: []
         }, config || {});
 	},
-	/**
-	 *
-	 */
+
 	render: function() {
 		var h = this;
 		
@@ -41,7 +35,7 @@ UI.Menu = Class.create(UI.MaterialComponent, {
 		
 		this.fetch();
 	},
-	/*
+	/**
 	 * parametr data powinien zawsze zawierac kolekcję rows.
 	 * rows to sa obiekty JSON
 	 */

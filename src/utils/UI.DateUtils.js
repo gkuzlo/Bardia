@@ -1,10 +1,5 @@
-/**
-*
-*/
+
 UI.DateUtils = Class.create({
-   /**
-    *  
-    */
    initialize: function() {
        this.months = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
    },
@@ -70,9 +65,6 @@ UI.DateUtils = Class.create({
            }
        return result;
    },
-   /**
-    *
-    */
    formatDateMonthDayTimeNoSec: function(date) {
        var result = "";
            if (!date) {
@@ -259,9 +251,6 @@ UI.DateUtils = Class.create({
 	       }
 	   return result;
    },
-   /**
-    * 
-    */
    convertIntToTime: function(intValue) {
 	   var result = "00:00";
 	       try {

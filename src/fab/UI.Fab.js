@@ -1,37 +1,31 @@
-/**
- * 
- */
+
 UI.Fab = Class.create({
-	/*
-	 *  
-	 */
+
     initialize: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
-            top: "",
-            left: 10,
-            right: "",
             width: 40,
             height: 40,
-            bottom: "",
             fill: "orange",
             icon: "help",
-            zHeight: 8,
-            title: "Insert title here ..."
+            title: "Insert title here ...",
+            style: undefined
         }, config || {});
 
         this.render();
     },
-    /*
-     * 
-     */
+
     render: function() {
     	var h = this;
     	
     	h.material = new Element("DIV", {
-    		"style": "box-shadow: 3px 3px " + h.config.zHeight + "px #666666; position:absolute; padding:0px; font-size:" + h.config.height + "px; color:white; text-align:center; line-height:" + h.config.height + "px; border-radius:50%; position:absolute; top:" + h.config.top + "px; left:" + h.config.left + "px; right:" + h.config.right + "px; height:" + h.config.height + "px; width:" + h.config.width + "px; background-color:" + h.config.fill + "; bottom: " + h.config.bottom + "px; overflow:hidden",
+    		"style": "margin:10px; box-shadow: 3px 3px 8px #666666; padding:0px; font-size:12px; color:white; text-align:center; line-height:40px; border-radius:50%; height:40px; width:40px; background-color:" + h.config.fill + "; overflow:hidden",
     		"title": h.config.title
     	});
+    	
+    	if (h.config.style) {
+    		h.material.style = h.config.style;
+    	}
     	
     	h.material.on("mousedown", function(e) {
 			e.cancelBubble = true;
@@ -42,7 +36,7 @@ UI.Fab = Class.create({
 			e.cancelBubble = true;
 			e.returnValue = false;
 		});
-
+    	
     	if (h.config.icon !== undefined) {
     		h.material.setStyle({
     			background: "url('" + $ICON(h.config.icon) + "') no-repeat center center " + h.config.fill

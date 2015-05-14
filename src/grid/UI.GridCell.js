@@ -1,10 +1,6 @@
-/**
- * 
- */
+
 UI.GridCell = Class.create({
-	/**
-	 * 
-	 */
+
     initialize: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
@@ -16,9 +12,7 @@ UI.GridCell = Class.create({
 
         this.render();
     },
-    /**
-     * 
-     */
+
     render: function() {
     	var h = this;
 

@@ -1,4 +1,6 @@
-
+/**
+ * @class UI.DatePicker
+ */
 UI.DatePicker = Class.create({
 	initialize: function(config) {
 		this.config = config;
@@ -15,8 +17,6 @@ UI.DatePicker = Class.create({
 		var handler = this;
 
 		if (this.config) {
-			var DU = new UI.DateUtils();
-			
 			/*
 			 * miesiac
 			 */

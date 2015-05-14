@@ -1,10 +1,6 @@
-/**
- * 
- */
+
 UI.FabProgress = Class.create({
-	/**
-	 * 
-	 */
+
     initialize: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
@@ -13,9 +9,7 @@ UI.FabProgress = Class.create({
 
         this.render();
     },
-    /**
-     * 
-     */
+
     render: function() {
     	var h = this;
     		
@@ -107,9 +101,7 @@ UI.FabProgress = Class.create({
     	});
     	h.label.update(percentage + "%");
     },
-    /**
-     * 
-     */
+
     close: function() {
     	var h = this;
 

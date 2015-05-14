@@ -1,17 +1,11 @@
-/**
- *
- */
+
 UI.Grid = Class.create(UI.MaterialComponent, {
-	/**
-	 * 
-	 */
+
 	initConfig: function(config) {
         this.config = Object.extend({
         }, config || {});
 	},
-	/**
-	 * 
-	 */
+
     initialize: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
@@ -28,9 +22,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
         this.render();
     },
-    /**
-     * 
-     */
+
     render: function() {
     	var h = this;
     		h.material = new Element("DIV", {

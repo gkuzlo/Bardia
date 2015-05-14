@@ -1,18 +1,12 @@
-/**
- * 
- */
+
 UI.BreadCrumb = Class.create(UI.MaterialComponent, {
-	/**
-	 * 
-	 */
+
     initConfig: function(config) {
         this.config = Object.extend({
         	orientation: "vertical"
         }, config || {});
     },
-    /**
-     * 
-     */
+
     render: function() {
         var h = this;
         
@@ -28,9 +22,7 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 
     	h.addItem(h.config.firstItem);
     },
-    /**
-     * 
-     */
+
     addItem: function(nextItem) {
     	
     	nextItem.removeNextItem = function() {
@@ -89,9 +81,7 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 
         item.click();
     },
-    /**
-     * 
-     */
+
     displayMarker: function(html) {
     	var h = this;
 

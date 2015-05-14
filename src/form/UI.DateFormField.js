@@ -1,6 +1,4 @@
-/*
- * Lookup
- */
+
 UI.DateFormField = Class.create(UI.LookupFormField, {
 	render: function() {
     	var h = this;
@@ -43,9 +41,7 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 		
 		h.fab = new UI.Fab({
 			inside: h.inside,
-			width: 20,
-			height: 20,
-			left: 120 + 20,
+			style: "position:absolute; left:120px; width:20px; height:20px; top:18px;",
 			fill: "green",
 			icon: "calendar",
 			bottom: 8,
@@ -54,9 +50,7 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 			}
 		});
 	},
-	/**
-	 * 
-	 */
+
     setInputValue: function(date) {
     	var h = this;
     	
@@ -70,9 +64,7 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
     		h.unanimateLabel();
     	}
     },
-    /**
-     * 
-     */
+
     setBeanValue: function(date) {
     	var h = this;
 
@@ -96,42 +88,18 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
     	h.input.disabled = ro;
     },
     /**
-     * 
+     * @method showLookupCard 
      */
     showLookupCard: function() {
     	var h = this;
-    	
-		var f = h.form.formContent;
-		var formOffset = f.cumulativeOffset();
-		var fieldOffset = h.fab.material.cumulativeOffset(); 
-
-		h.tmpFab = h.fab.material.clone();
-		h.tmpFab.setStyle({
-			bottom: "",
-			top: (fieldOffset.top - formOffset.top) + "px",
-			left: (fieldOffset.left - formOffset.left) + "px",
-			overflow: "hidden"
+	
+		h.calendarDiv = new Element("DIV", {
+			style: "position:absolute; top:0px; left:0px; bottom:0px; right:0px; opacity:0.0; background-color:white"
 		});
-		h.form.formContent.insert(h.tmpFab);
-		
-		var calendarDiv = new Element("DIV", {
-			style: "position:absolute; top:20px; left:50%; margin-left:-87px; width:175px; height:200px"
-		});
-		h.tmpFab.insert(calendarDiv);
-
-		var fab = new UI.Fab({
-			inside: h.tmpFab,
-			bottom: 10,
-			title: "Zamknij listę",
-			fill: "red",
-			icon: "cancel",
-			onClick: function() {
-				h.removeLookupCard();
-			}
-		});
+		h.form.getMaterial().insert(h.calendarDiv);
 
 		new UI.DatePicker({
-			inside: calendarDiv,
+			inside: h.calendarDiv,
 			dateSelected: function(date) {
 				h.setBeanValue(new UI.DateUtils().formatFullDate(date));
 				h.setInputValue(new UI.DateUtils().formatFullDate(date));
@@ -140,28 +108,16 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 			}
 		});
 
-		var player = h.tmpFab.animate([
+		var player = h.calendarDiv.animate([
   		    {
-  		     opacity: 0.5, 
-  		     height: h.fab.material.getHeight() + "px", 
-  		     borderRadius: "0%", 
-  		     top: (fieldOffset.top - formOffset.top) + "px", 
-  		     left: (fieldOffset.left - formOffset.left) + "px", 
-  		     width: h.fab.material.getWidth() + "px", 
-  		     backgroundColor: h.fab.config.fill
+  		     opacity: 0.0, 
   		    },
   		    {
-  		     opacity: 1.0, 
-  		     height: f.getHeight() + "px", 
-  		     borderRadius: "0%", 
-  		     top:"0px", 
-  		     left:"0px", 
-  		     width: f.getWidth() + "px", 
-  		     backgroundColor: "white"
+  		     opacity: 1.0
   		    },
   		], {
   			direction: 'normal',
-  		    duration: 450,
+  		    duration: 750,
   		    easing: "ease",
   			iterations: 1,
   			fill: "both"
@@ -171,47 +127,18 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 			if (h.config.fetchList) {
 				h.config.fetchList(h.list);
 			}
-		}
+		};
     },
-    /**
-     * 
-     */
+
     removeLookupCard: function() {
     	var h = this;
-    	
-		var f = h.form.formContent;
-		var formOffset = f.cumulativeOffset();
-		var fieldOffset = h.fab.material.cumulativeOffset(); 
-
-		var player = h.tmpFab.animate([
-		    {
-	  		     opacity: 1.0, 
-	  		     height: f.getHeight() + "px", 
-	  		     borderRadius: "0%", 
-	  		     top:"0px", 
-	  		     left:"0px", 
-	  		     width: f.getWidth() + "px", 
-	  		     backgroundColor: "white"
-	  		    },
-	  		    {
-	  		     opacity: 0.5, 
-	  		     height: "0px", 
-	  		     borderRadius: "0%", 
-	  		     top: (fieldOffset.top - formOffset.top) + "px", 
-	  		     left: (fieldOffset.left - formOffset.left) + "px", 
-	  		     width: "0px", 
-	  		     backgroundColor: h.fab.config.fill
-	  		    },
-	  		], {
-	  			direction: 'normal',
-	  		    duration: 450,
-	  		    easing: "ease",
-	  			iterations: 1,
-	  			fill: "both"
-	  		});
-			
-			player.onfinish = function() {
-				h.tmpFab.remove();
-			}
+   
+    	$PLAY(h.calendarDiv, [
+    	    { opacity: 1.0 },
+    	    { opacity: 0.0 }
+    	],
+    	function() {
+    		h.calendarDiv.remove();
+    	});
     }
 });

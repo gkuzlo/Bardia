@@ -2,9 +2,7 @@
  * @class UI.BooleanFormField
  */
 UI.BooleanFormField = Class.create({
-	/**
-	 * 
-	 */
+
     initialize: function(config) {    	
         this.config = Object.extend({
         	property: "$",
@@ -41,40 +39,26 @@ UI.BooleanFormField = Class.create({
     		});
     		h.label.insert(h.config.label);
     		
-    		h.falseFab = new UI.Fab({
-    			inside: h.inside,
-    			width: 20,
-    			height: 20,
-    			top: 20,
-    			left: 20,
-    			fill: "grey",
-    			icon: "done",
-    			bottom: 8,
-    			onClick: function() {
-    				h.switchOn();
-    				h.setBeanValue(true);
-    			}
+    		h.falseFab = new Element("DIV", {
+    			style: "box-shadow: 3px 3px 8px #666666; position:absolute; border-radius:50%; top:20px; left:20px; width:20px; height:20px; background-color:grey; background-image:url('" + $ICON("done") + "')"
     		});
-
-    		h.trueFab = new UI.Fab({
-    			inside: h.inside,
-    			width: 20,
-    			height: 20,
-    			top: 20,
-    			left: 20,
-    			fill: "green",
-    			icon: "done",
-    			bottom: 8,
-    			onClick: function() {
-    				h.switchOff();
-    				h.setBeanValue(false);
-    			}
+    		h.falseFab.on("click", function() {
+				h.switchOn();
+				h.setBeanValue(true);
     		});
+    		h.inside.insert(h.falseFab);
+    		
+    		h.trueFab = new Element("DIV", {
+    			style: "position:absolute; border-radius:50%; top:20px; left:20px; width:20px; height:20px; background-color:green; background-image:url('" + $ICON("done") + "')"
+    		});
+    		h.trueFab.on("click", function() {
+				h.switchOff();
+				h.setBeanValue(false);
+    		});
+    		h.inside.insert(h.trueFab);
     		
     		if (this.config.value == false) {
-	    		h.trueFab.getMaterial().setStyle({
-	    			transform: "scale(0)"
-	    		});
+	    		h.trueFab.hide();
     		}
 
 		h.inside.insert(h.label);
@@ -92,7 +76,7 @@ UI.BooleanFormField = Class.create({
     switchOn: function() {
     	var h = this;
     	
-		h.trueFab.getMaterial().animate([
+		h.trueFab.animate([
 		    {opacity: 0.0, transform: "scale(0)"},
 		    {opacity: 1.0, transform: "scale(1)"},
 		], {
@@ -125,7 +109,7 @@ UI.BooleanFormField = Class.create({
     switchOff: function() {
     	var h = this;
     	
-		h.trueFab.getMaterial().animate([
+		h.trueFab.animate([
 		    {opacity: 1.0, transform: "scale(1)"},
 		    {opacity: 0.0, transform: "scale(0)"},
 		], {

@@ -1,0 +1,4234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>dist\bardia.js - Bardia</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="Bardia" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/UI.BooleanFormField.html">UI.BooleanFormField</a></li>
+                                <li><a href="../classes/UI.Crud.html">UI.Crud</a></li>
+                                <li><a href="../classes/UI.Form.html">UI.Form</a></li>
+                                <li><a href="../classes/UI.IconSet.html">UI.IconSet</a></li>
+                                <li><a href="../classes/UI.ListFormField.html">UI.ListFormField</a></li>
+                                <li><a href="../classes/UI.LookupFormField.html">UI.LookupFormField</a></li>
+                                <li><a href="../classes/UI.Material.html">UI.Material</a></li>
+                                <li><a href="../classes/UI.MaterialComponent.html">UI.MaterialComponent</a></li>
+                                <li><a href="../classes/UI.Panel.html">UI.Panel</a></li>
+                                <li><a href="../classes/UI.StringUtils.html">UI.StringUtils</a></li>
+                                <li><a href="../classes/UI.TextFormField.html">UI.TextFormField</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: dist\bardia.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+
+var UI = {
+    version: 1.0,
+    uploadAction: &quot;http://localhost:8080/scheduler/file.upload&quot;,
+    DATE_FORMAT: &quot;yyyy-MM-ddTHH:mm:ss.SSSZ&quot;,
+    DATE_YYYMMMDDD_FORMAT: &quot;yyyy-MM-dd&quot;,
+    
+    VISIBLE: 1,
+    READONLY: 2,
+    HIDDEN: 4
+}
+
+UI.play = function(html, config) {
+	html.animate(config, {
+		direction: &#x27;normal&#x27;,
+	    duration: 1000,
+	    easing: &quot;ease&quot;,
+		iterations: 1,
+		fill: &quot;both&quot;
+	});
+}
+
+$PLAY = UI.play;
+
+UI.Header = Class.create({
+
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            title: &quot;Insert title here ...&quot;,
+            className: &quot;bg_main fg_white&quot;
+        }, config || {});
+
+        this.render();
+    },
+    render: function() {
+        var h = this;
+            h.header = new Element(&quot;DIV&quot;, {
+                className: &quot;header &quot; + h.config.className
+            });
+            h.header.insert(h.config.title);
+            h.config.inside.insert(h.header);
+    },
+    addHeaderElement: function(element) {
+    	this.header.insert(element.getHTML());
+    }
+});
+
+UI.Content = Class.create({
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body
+        }, config || {});
+
+        this.render();
+    },
+    render: function() {
+    	var h = this;
+    	
+    	h.content = new Element(&quot;DIV&quot;, {
+        	class: &quot;content bg_white fg_black&quot;
+        });
+        
+        h.config.inside.insert(h.content);
+    },
+    getMaterial: function() {
+    	return this.content;
+    }
+});
+
+UI.HeaderDialog = Class.create({
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            title: &quot;Insert title here ...&quot;,
+            icon: &quot;icons/1/ic_view_headline_white_24dp.png&quot;,
+            width: 400,
+            height: 300,
+        }, config || {});
+
+        this.render();
+    },
+    render: function() {
+    	var h = this;
+
+		this.icon = new Element(&quot;IMG&quot;, {
+        	src: h.config.icon,
+        	title: h.config.title,
+        	style: &quot;vertical-align:middle; margin:0px 10px 0px 10px&quot;
+        });
+
+        this.icon.on(&quot;click&quot;, &quot;img&quot;, function(e) {
+        	var menu = new UI.ContextMenu({
+        		parent: e.element(),
+        		width: h.config.width,
+        		height: h.config.height,
+        		onShow: function(inside, dialog) {
+        			if (h.config.onShow !== undefined) {
+        				h.config.onShow(inside, dialog);
+        			}
+        		}
+        	});
+        });
+    },
+    getHTML: function() {
+    	return this.icon
+    },
+    close: function() {
+    	alert(&quot;Closing .... &quot;);
+    }
+});
+
+UI.HeaderButton = Class.create({
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            title: &quot;Insert title here ...&quot;,
+            icon: &quot;icons/1/ic_view_headline_white_24dp.png&quot;
+        }, config || {});
+
+        this.render();
+    },
+    render: function() {
+    	var h = this;
+
+		this.icon = new Element(&quot;IMG&quot;, {
+        	src: h.config.icon,
+        	title: h.config.title,
+        	style: &quot;vertical-align:middle; margin:0px 10px 0px 10px&quot;
+        });
+        
+        if (h.config.onClick !== undefined) {
+        	h.config.onClick();
+        }
+    },
+    getHTML: function() {
+    	return this.icon
+    }
+});
+
+UI.HeaderLabel = Class.create({
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            title: &quot;Insert title here ...&quot;
+        }, config || {});
+
+        this.render();
+    },
+    render: function() {
+		this.div = new Element(&quot;DIV&quot;, {
+			style: &quot;display:inline-block; color:white; margin:0px 10px 0px 10px&quot;
+        });
+        this.div.update(this.config.title);
+    },
+    setTitle: function(title) {
+    	this.div.update(title);
+    	
+		var player = this.div.animate([
+   		    {opacity: 0.0, transform: &quot;scale(1)&quot;, color: &quot;#fbd86e&quot;},
+   		    {opacity: 1.0, transform: &quot;scale(1)&quot;, color: &quot;#ffffff&quot;}
+   		], {
+   			direction: &#x27;normal&#x27;,
+   		    duration: 500,
+   		    easing: &quot;ease-in-out&quot;,
+   			iterations: 1
+   		});
+    },
+    getHTML: function() {
+    	return this.div;
+    }
+});
+
+UI.ContextMenu = Class.create({
+    initialize: function(config) {
+        this.config = Object.extend({
+            width: 400,
+            height: 300
+        }, config || {});
+
+        this.render();
+    },
+    render: function() {
+    	var h = this;
+    	
+    	var box = this.config.parent.getBoundingClientRect();
+    	
+    	var dialog = new UI.Dialog({
+    		top: box.top + box.height,
+    		left: box.left,
+    		width: h.config.width,
+    		height: h.config.height,
+    		onShow: function(inside, dlg) {
+    			if (h.config.onShow !== undefined) {
+    				h.config.onShow(inside, dlg);
+    			}
+    		}
+    	});
+    }
+});
+
+UI.Dialog = Class.create({
+	initialize: function(config) {
+        this.config = Object.extend({
+        	top:100,
+        	left:100,
+            width: 300,
+            height: 400
+        }, config || {});
+        
+        this.render();
+	},
+	render: function() {
+		var h = this;
+		
+		this.bg = new Element(&quot;DIV&quot;, {
+			style: &quot;position:absolute; top:0px; left:0px; right:0px; bottom:0px&quot;
+		});
+		
+		this.bg1 = new Element(&quot;DIV&quot;, {
+			class: &quot;bg_main&quot;,
+			style: &quot;position:absolute; top:0px; left:0px; right:0px; bottom:0px; opacity:0.5;&quot;
+		});
+		
+		this.bg1.on(&quot;click&quot;, &quot;div&quot;, function(e) {
+			h.close();
+		});
+		
+		this.bg.insert(this.bg1);
+		document.body.insert(this.bg);
+		
+		this.dlg = new Element(&quot;DIV&quot;, {
+			style: &quot;background-color:white; position:absolute; top:&quot; + h.config.top + &quot;px; left:&quot; + h.config.left + &quot;px; width:&quot; + h.config.width + &quot;px; height:&quot; + h.config.height + &quot;px; z-index:1000000&quot;,
+			class: &quot;default_shadow&quot;
+		});
+		
+		this.bg.insert(this.dlg);
+		
+		if (this.config.onShow) {
+			this.config.onShow(h.dlg, this);
+		}
+	},
+	/*
+	 *
+	 */
+	close: function() {
+		delete this.dlg;
+		delete this.bg1;
+		
+		this.bg.remove();
+	}
+});
+
+UI.Toast = Class.create({
+	initialize: function(config) {
+        this.config = Object.extend({
+        	title: &quot;DEFAULT_TOAST&quot;,
+        	description: &quot;DEFAULT_TOAST_HTML&quot;
+        }, config || {});
+	},
+	show: function() {
+		var h = this;
+			this.div = new Element(&quot;DIV&quot;, {
+				style: &quot;opacity:1.0; position:relative; width:300px; height:100px; display:block; margin:2px; opacity:0.0&quot;,
+				class: &quot;default_shadow&quot;
+			});
+
+			var toast = new Element(&quot;DIV&quot;, {
+				class: &quot;toast&quot;
+			});
+
+			this.div.insert(toast);
+
+			var t = new Element(&quot;DIV&quot;, {
+				class: &quot;toast_title&quot;
+			});
+			t.update(h.config.title);
+			toast.insert(t);
+
+			var d = new Element(&quot;DIV&quot;, {
+				class: &quot;toast_description&quot;
+			});
+			d.update(h.config.description);
+			toast.insert(d);
+
+		return h.div;
+	},
+	added: function() {
+		var h = this;
+		
+		var player = this.div.animate([
+		    {opacity: 0.0, transform: &quot;scale(0)&quot;},
+		    {opacity: 1.0, transform: &quot;scale(1)&quot;}
+		], {
+			direction: &#x27;normal&#x27;,
+			easing: &quot;ease-in-out&quot;,
+		    duration: 750,
+			iterations: 1,
+			fill: &quot;both&quot;
+		});
+		
+		player.onfinish = function(e) {
+			var f = function() {
+				h.close();
+			}
+			setTimeout(f, 5000);
+		}
+	},
+	close: function() {
+		var h = this;
+	
+		var player = this.div.animate([
+		    {opacity: 1.0, transform: &quot;scale(1)&quot;},
+		    {opacity: 0.0, transform: &quot;scale(0)&quot;}
+		], {
+			direction: &#x27;normal&#x27;,
+		    duration: 750,
+		    easing: &quot;ease-in-out&quot;,
+			iterations: 1,
+			fill: &quot;both&quot;
+		});
+		
+		player.onfinish = function(e) {
+			h.div.remove();
+		}
+	}
+});
+
+UI.ToastManager = Class.create({
+	initialize: function(config) {
+        this.config = Object.extend({
+        }, config || {});
+        
+        this.render();
+	},
+	render: function() {
+		var h = this;
+		this.div = new Element(&quot;DIV&quot;, {
+			style: &quot;position:absolute; top:70px; right:400px; width:300px; z-index:2000000; background-color:transparent&quot;
+		});
+		window.document.body.insert(this.div);
+	},
+	showToast: function(_title, _description, bean) {
+
+		var title = _title;
+		var description = _description;
+
+		if (bean !== undefined) {
+			title = title;
+			description = description;
+		}
+		
+		var toast = new UI.Toast({
+			title: title,
+			description: description,
+			level: 0
+		});
+		
+		this.div.insert(toast.show());
+		
+		toast.added();
+		
+		var closefun = function() {
+			toast.close();
+		}
+		
+		setTimeout(closefun, 5000);
+	}
+});
+
+/*
+ * Utilities
+ */
+/**
+ * @class UI.StringUtils
+ */
+UI.StringUtils = Class.create({
+	initialize: function(config) {
+        this.config = Object.extend({
+        }, config || {});
+	},
+	compile: function(str, bean) {
+		var result = str;
+
+		var found = [];
+		var rxp = /{([^}]+)}/g;
+		var curMatch;
+
+			while(curMatch = rxp.exec( str ) ) {
+			    found.push(curMatch[1]);
+			}
+			
+			var i=0;
+			for (i=0; i&lt;found.length; i++) {
+				try {
+					var val = eval(&quot;bean.&quot; + found[i]);
+					if (val !== undefined) {
+						result = result.replace(&quot;{&quot; + found[i] + &quot;}&quot;, val)
+					} else {
+						result = result.replace(&quot;{&quot; + found[i] + &quot;}&quot;, &quot;&quot;)
+					}
+				} catch (e) {
+					result = result.replace(&quot;{&quot; + found[i] + &quot;}&quot;, &quot;&quot;)
+				}
+			}
+			
+		return result;
+	},
+	unempty: function(v) {
+		var result = &quot;&quot;;
+			if (v !== undefined) {
+				result = v;
+			}
+		return result;
+	}
+});
+
+var STRUTILS = new UI.StringUtils();
+
+UI.CookieManager = Class.create({
+    initialize: function(config) {
+    },
+    setCookie: function(name, value) {
+        var days = 100;
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime()+(days*24*60*60*1000));
+            var expires = &quot;; expires=&quot;+date.toGMTString();
+        }
+        else var expires = &quot;&quot;;
+        document.cookie = name+&quot;=&quot;+value+expires+&quot;; path=/&quot;;
+    },
+    getCookie: function(name) {
+        var nameEQ = name + &quot;=&quot;;
+        var ca = document.cookie.split(&#x27;;&#x27;);
+        for(var i=0; i&lt;ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == &#x27; &#x27;) c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+});
+
+UI.Resources = Class.create({
+    initialize: function(path, appName) {
+        this.path = path;
+
+        this.postfix = &quot;&quot;;
+
+        var cookieManager = new UI.CookieManager();
+            if(cookieManager.getCookie(&quot;lang_&quot; + appName) != null) {
+                var language = cookieManager.getCookie(&quot;lang_&quot; + appName).evalJSON();
+                this.postfix = language.fileExt;
+            }
+        this.properties = new Hash();
+    },
+    load: function() {
+        var handler = this;
+
+		try {
+	        new Ajax.Request(this.path + this.postfix + &quot;.properties?ts=&quot; + new Date(), {
+	            method: &#x27;GET&#x27;,
+	            contentType: &quot;text/plain&quot;,
+	            onSuccess: function(transport) {
+	                var response = transport.responseText || &quot;no response text&quot;;
+
+	                var list = response.split(&quot;\n&quot;);
+	                var i=0;
+	                for (i=0; i&lt;list.length; i++) {
+	                    try {
+	                    	
+	                        if (list[i].trim().indexOf(&quot;#&quot;) == 0) {
+	                            continue;
+	                        }
+	
+	                        var eqIndex = list[i].indexOf(&quot;=&quot;);
+	                        
+	                        var key = list[i].substr(0, eqIndex).trim();
+	                        var value = list[i].substr(eqIndex + 1).trim();
+	                        
+	                        if (&quot;&quot; != key) {
+	                        	handler.properties.set(key, value);
+	                        }
+	                    } catch (e) {
+							alert(e);
+	                    }
+	                }
+
+	                handler.onLoad();
+	            },
+	            onFailure: function(s) {  
+					$SIGNAL(&quot;failure&quot;);
+	            }
+	        });
+        } catch (e) {
+        	alert(e);
+        }
+    },
+    get: function(key, bean) {
+        var result = &quot;&quot;;
+            if ((result = this.properties.get(key)) === undefined) {
+                result = &quot;???_&quot; + key + &quot;_???&quot;;
+            }
+
+            if (bean !== undefined) {
+            	result = STRUTILS.compile(result, bean);
+            }
+            
+        return result; 
+    }
+});
+/**
+ * @class UI.IconSet
+ */
+UI.IconSet = Class.create({
+    initialize: function(config) {
+        this.config = Object.extend({
+        	path: &quot;&quot;,
+        	hash: new Hash()
+        }, config || {});
+
+        this.config.hash.set(&quot;default&quot;, &quot;/ic_stars_white_18dp.png&quot;);
+        this.config.hash.set(&quot;menu&quot;, &quot;/ic_stars_black_18dp.png&quot;);
+        this.config.hash.set(&quot;done&quot;, &quot;/ic_done_white_18dp.png&quot;);
+        this.config.hash.set(&quot;menu&quot;, &quot;/ic_reorder_white_18dp.png&quot;);
+        this.config.hash.set(&quot;refresh&quot;, &quot;/ic_cached_white_18dp.png&quot;);
+        this.config.hash.set(&quot;help&quot;, &quot;/ic_help_white_18dp.png&quot;);
+        this.config.hash.set(&quot;download&quot;, &quot;/ic_get_app_white_18dp.png&quot;);
+        this.config.hash.set(&quot;calendar&quot;, &quot;/ic_reorder_white_18dp.png&quot;);
+        this.config.hash.set(&quot;cancel&quot;, &quot;/ic_thumb_down_white_18dp.png&quot;);
+        this.config.hash.set(&quot;add&quot;, &quot;/ic_note_add_white_18dp.png&quot;);
+        this.config.hash.set(&quot;close&quot;, &quot;/ic_highlight_remove_white_18dp.png&quot;);
+        this.config.hash.set(&quot;search&quot;, &quot;/ic_pageview_white_18dp.png&quot;);
+        this.config.hash.set(&quot;resize&quot;, &quot;/ic_open_with_white_18dp.png&quot;);
+        this.config.hash.set(&quot;login&quot;, &quot;/ic_accessibility_white_18dp.png&quot;);
+        this.config.hash.set(&quot;import&quot;, &quot;/ic_input_white_18dp.png&quot;);
+        this.config.hash.set(&quot;arrow_right&quot;, &quot;/ic_trending_neutral_white_18dp.png&quot;);
+    },
+    getIcon: function(iconId) {
+    	var h = this;
+		
+    	var result = &quot;&quot;;
+    	
+    	var src = this.config.hash.get(iconId);
+    		if (src === null || src === undefined) {
+    			result = this.getIcon(&quot;help&quot;);
+    		} else {
+    			result = h.config.path + src;
+    		}
+    	return result;
+    }
+});
+/**
+ * @class UI.MaterialComponent
+ */
+UI.MaterialComponent = Class.create({
+	/**
+	 * @constructor
+	 * @param config
+	 */
+    initialize: function(config) {
+		try {
+	        this.initConfig(config);
+	        this.renderMaterial();
+			this.render();
+		} catch (e) {
+			alert(&quot;--------&quot; + e);
+		}
+    },
+    initConfig: function(config) {
+    	alert(&quot;initConfig() not implemeted&quot;);
+    },
+    renderMaterial: function() {    	
+    	var h = this;
+    	
+			h.material = new Element(&quot;DIV&quot;, {class: &quot;inside&quot;});
+			h.config.inside.insert(h.material);
+			
+	    	h.material.on(&quot;mousedown&quot;, function(e) {
+				//e.cancelBubble = true;
+				e.returnValue = false;
+			});
+			
+	    	h.material.on(&quot;click&quot;, function(e) {
+				//e.cancelBubble = true;
+				e.returnValue = false;
+			});
+    },
+    render: function() {
+    	alert(&quot;render() not implemeted&quot;);
+    },
+    /**
+     * @methid getMaterial
+     * 
+     * Pobranie materiału, na którym będzie wyeysowany komponent
+     */
+    getMaterial: function() {
+    	return this.material;
+    },
+    /**
+     * @method destroy
+     */
+    destroy: function() {
+    	var h = this;
+			h.material.remove();
+			
+			delete h.material;
+    }
+});
+/**
+ * @class UI.Panel
+ */
+UI.Panel = Class.create(UI.MaterialComponent, {
+    initConfig: function(config) {
+        this.config = Object.extend({
+        	className: &quot;bg_main fg_white&quot;
+        }, config || {});
+    },
+    render: function() {
+        var h = this;
+
+    	this.content = new UI.Content({
+    		inside: h.getMaterial()
+    	});
+        
+    	this.header = new UI.Header({
+    		inside: h.getMaterial(),
+    		title: h.config.title,
+    		className: h.config.className
+    	});
+    },
+    getContent: function() {
+    	return this.content.getMaterial();
+    }
+});
+
+
+UI.DateUtils = Class.create({
+   initialize: function() {
+       this.months = [&quot;Styczeń&quot;, &quot;Luty&quot;, &quot;Marzec&quot;, &quot;Kwiecień&quot;, &quot;Maj&quot;, &quot;Czerwiec&quot;, &quot;Lipiec&quot;, &quot;Sierpień&quot;, &quot;Wrzesień&quot;, &quot;Październik&quot;, &quot;Listopad&quot;, &quot;Grudzień&quot;];
+   },
+   formatDate: function(date) {
+       var result = &quot;&quot;;
+           if (!date) {
+               return result;
+           }
+           try {
+               result = this.formatNumber(date.getDate(), 2) + &quot;-&quot; + this.formatNumber((date.getMonth() + 1), 2) + &quot;-&quot; + this.formatNumber(date.getFullYear(), 4);
+           } catch (e) {
+               new UI.AlertDialog({message: e});
+           }
+       return result;
+   },
+   formatDateYYYYMMDD: function(date) {
+       var result = &quot;&quot;;
+           if (!date) {
+               return result;
+           }
+           try {
+               var parser = new DateParser(UI.DATE_YYYMMMDDD_FORMAT);
+                   result = parser.format(date); 
+           } catch (e) {
+               new UI.AlertDialog({message: e});
+           }
+       return result;
+   },
+   formatFullDate: function(date) {
+       var result = &quot;&quot;;
+           if (!date) {
+               return result;
+           }
+           try {
+               var parser = new DateParser(UI.DATE_FORMAT);
+                   result = parser.format(date); 
+           } catch (e) {
+               new UI.AlertDialog({message: e});
+           }
+       return result;
+   },
+   formatDateTime: function(date) {
+       var result = &quot;&quot;;
+           if (!date) {
+               return result;
+           }
+           try {
+               result = this.formatNumber(date.getFullYear(), 4) + &quot;-&quot; + this.formatNumber((date.getMonth() + 1), 2) + &quot;-&quot; + this.formatNumber(date.getDate(), 2) + &quot; &quot; + this.formatNumber(date.getHours(), 2) + &quot;:&quot; + this.formatNumber(date.getMinutes(), 2) + &quot;:&quot; + this.formatNumber(date.getSeconds(), 2);
+           } catch (e) {
+               new UI.AlertDialog({message: e});
+           }
+       return result;
+   },
+   formatDateTimeNoSec: function(date) {
+       var result = &quot;&quot;;
+           if (!date) {
+               return result;
+           }
+           try {
+               result = this.formatNumber(date.getFullYear(), 4) + &quot;-&quot; + this.formatNumber((date.getMonth() + 1), 2) + &quot;-&quot; + this.formatNumber(date.getDate(), 2) + &quot; &quot; + this.formatNumber(date.getHours(), 2) + &quot;:&quot; + this.formatNumber(date.getMinutes(), 2);
+           } catch (e) {
+               new UI.AlertDialog({message: e});
+           }
+       return result;
+   },
+   formatDateMonthDayTimeNoSec: function(date) {
+       var result = &quot;&quot;;
+           if (!date) {
+               return result;
+           }
+           try {
+               result = this.formatNumber((date.getMonth() + 1), 2) + &quot;-&quot; + this.formatNumber(date.getDate(), 2) + &quot; &quot; + this.formatNumber(date.getHours(), 2) + &quot;:&quot; + this.formatNumber(date.getMinutes(), 2);
+           } catch (e) {
+               new UI.AlertDialog({message: e});
+           }
+       return result;
+   },
+   formatTime: function(date) {
+       var result = &quot;&quot;;
+           try {
+               result = this.formatNumber(date.getHours(), 2) + &quot;:&quot; + this.formatNumber(date.getMinutes(), 2);
+           } catch (e) {
+               result = &quot;&quot;; 
+           }
+       return result;
+   },
+   formatTimeSec: function(date) {
+       return this.formatNumber(date.getHours(), 2) + &quot;:&quot; + this.formatNumber(date.getMinutes(), 2) + &quot;:&quot; + this.formatNumber(date.getSeconds(), 2);
+   },  
+   formatNumberToTime: function(num) {
+       var hours = (num - (num % 60)) / 60;
+       var minutes = num % 60;
+
+       return this.formatNumber(hours, 2) + &quot;:&quot; + this.formatNumber(minutes, 2);
+   },
+   formatNumber: function(num, len) {
+       var result = null;
+       try {
+           result = &quot;&quot; + parseInt(num);
+           while (result.length &lt; len) {
+               result = &quot;0&quot; + result;
+           }
+       } catch (e) {
+           new UI.AlertDialog({message: e});
+       }
+       
+       if (isNaN(parseInt(num))) {
+           result = &quot;&quot;;
+       }
+       
+       return result;
+   },
+   parseNumber: function(number) {
+   },
+   parseDate: function(dateStr) {
+
+       if (!dateStr) {
+           return &quot;&quot;;
+       }
+
+       var parser = new DateParser(UI.DATE_FORMAT);
+           result = parser.parse(dateStr);
+
+       return result;
+   },
+   getMonthName: function(zeroBasedNo) {
+       return this.months[zeroBasedNo];
+   },
+   rollDays: function(pDate, pDays) {
+       var result = pDate;
+           result.setDate(result.getDate() + pDays);
+       return result;
+   },
+   rollHours: function(pDate, pHours) {
+       var result = new Date();
+           result.setTime(pDate.getTime() + (pHours * 60 * 60 *1000));
+       return result;
+   },
+   dayDiff: function(startDate, endDate) {
+       var result = 0;
+           var sDate = new Date();
+               sDate.setFullYear(startDate.getFullYear());
+               sDate.setMonth(startDate.getMonth());
+               sDate.setDate(startDate.getDate());
+               sDate.setHours(0);
+               sDate.setMinutes(0);
+               sDate.setSeconds(0);
+               sDate.setMilliseconds(0);
+               
+           var eDate = new Date();
+               eDate.setFullYear(endDate.getFullYear());
+               eDate.setMonth(endDate.getMonth());
+               eDate.setDate(endDate.getDate());
+               eDate.setHours(0);
+               eDate.setMinutes(0);
+               eDate.setSeconds(0);
+               eDate.setMilliseconds(0);
+               
+           result = (eDate.getTime() - sDate.getTime()) / 1000 / 60 / 60 / 24;
+    
+       return result;
+   },
+   hoursDiff: function(startDate, endDate) {
+       var result = 0;
+           var sDate = new Date();
+               sDate.setFullYear(startDate.getFullYear());
+               sDate.setMonth(startDate.getMonth());
+               sDate.setDate(startDate.getDate());
+               sDate.setHours(startDate.getHours());
+               sDate.setMinutes(0);
+               sDate.setSeconds(0);
+               sDate.setMilliseconds(0);
+               
+           var eDate = new Date();
+               eDate.setFullYear(endDate.getFullYear());
+               eDate.setMonth(endDate.getMonth());
+               eDate.setDate(endDate.getDate());
+               eDate.setHours(endDate.getHours());
+               eDate.setMinutes(0);
+               eDate.setSeconds(0);
+               eDate.setMilliseconds(0);
+               
+           result = (eDate.getTime() - sDate.getTime()) / 1000 / 60 / 60;
+
+       return result;
+   },
+   yearDiff18: function(birthDate, currDate) {
+       
+       var result = false;
+       
+           var currDate = new Date (currDate);
+           var birthDate = new Date (birthDate);
+           
+           var currYear = new Date(currDate);
+           var currMonth = new Date(currDate);
+           var currDay = new Date(currDate);
+           
+           var birthYear = new Date(birthDate);
+           var birthMonth = new Date(birthDate);
+           var birthDay = new Date(birthDate);
+           
+           currYear = currYear.getFullYear();
+           currMonth = currMonth.getMonth() + 1;
+           currDay = currDay.getDate();
+           
+           birthYear = birthYear.getFullYear(birthDate);
+           birthMonth = birthMonth.getMonth(birthDate) + 1;
+           birthDay = birthDay.getDate(birthDate);
+           
+           if ( (currYear - birthYear &gt; 18)   || ((currYear - birthYear &gt;= 18) &amp;&amp; (currMonth - birthMonth &gt;= 0) &amp;&amp; (currDay - birthDay &gt;= 0))) {
+               result = true;
+           } else {
+               result = false;
+           }
+       return result;
+   },
+   roundToDay: function(date) {
+       if(date === undefined || date ==&quot;&quot;){
+           date = new Date();
+       }
+       var eDate = new Date();
+           eDate.setFullYear(date.getFullYear());
+           eDate.setMonth(date.getMonth());
+           eDate.setDate(date.getDate());
+           eDate.setHours(0);
+           eDate.setMinutes(0);
+           eDate.setSeconds(0);
+           eDate.setMilliseconds(0);
+           
+       return eDate;
+   },
+   getNowMinutes: function() {
+       var result = 0;
+           var d = new Date();
+           result = (d.getHours() * 60) + d.getMinutes();
+       return result;
+   },
+   /**
+    * na wejsciu czas w formacie HH:MM
+    * na wyjściu liczba HH * 60 + MM
+    */
+   convertTimeToInt: function(time) {
+	   var result = 0;
+	       try {
+	    	   var sub = time.split(&quot;:&quot;);
+	    	   result = parseInt(sub[0]) * 60 + parseInt(sub[1]);
+	       } catch (e) {
+	           result = 0; 
+	       }
+	   return result;
+   },
+   convertIntToTime: function(intValue) {
+	   var result = &quot;00:00&quot;;
+	       try {
+	    	   this.formatNumber(((intValue - intValue % 60) / 60), 2) + &quot;:&quot; + this.formatNumber((intValue % 60), 2)
+	       } catch (e) {
+	    	   
+	       }
+	   return result;
+   }
+});
+
+UI.Fab = Class.create({
+
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            top: &quot;&quot;,
+            left: 10,
+            right: &quot;&quot;,
+            width: 40,
+            height: 40,
+            bottom: &quot;&quot;,
+            fill: &quot;orange&quot;,
+            icon: &quot;help&quot;,
+            zHeight: 8,
+            title: &quot;Insert title here ...&quot;
+        }, config || {});
+
+        this.render();
+    },
+
+    render: function() {
+    	var h = this;
+    	
+    	h.material = new Element(&quot;DIV&quot;, {
+    		&quot;style&quot;: &quot;box-shadow: 3px 3px &quot; + h.config.zHeight + &quot;px #666666; position:absolute; padding:0px; font-size:&quot; + h.config.height + &quot;px; color:white; text-align:center; line-height:&quot; + h.config.height + &quot;px; border-radius:50%; position:absolute; top:&quot; + h.config.top + &quot;px; left:&quot; + h.config.left + &quot;px; right:&quot; + h.config.right + &quot;px; height:&quot; + h.config.height + &quot;px; width:&quot; + h.config.width + &quot;px; background-color:&quot; + h.config.fill + &quot;; bottom: &quot; + h.config.bottom + &quot;px; overflow:hidden&quot;,
+    		&quot;title&quot;: h.config.title
+    	});
+    	
+    	h.material.on(&quot;mousedown&quot;, function(e) {
+			e.cancelBubble = true;
+			e.returnValue = false;
+		});
+		
+    	h.material.on(&quot;click&quot;, function(e) {
+			e.cancelBubble = true;
+			e.returnValue = false;
+		});
+
+    	if (h.config.icon !== undefined) {
+    		h.material.setStyle({
+    			background: &quot;url(&#x27;&quot; + $ICON(h.config.icon) + &quot;&#x27;) no-repeat center center &quot; + h.config.fill
+    		});
+    	}
+
+    	h.material.on(&quot;click&quot;, function() {
+        	if (h.config.onClick !== undefined) {
+        		h.config.onClick(h);
+        	}
+    	});
+
+    	h.config.inside.insert(h.material);
+    	
+    	if (h.config.targetFill !== undefined) {
+    		h.material.on(&quot;mouseover&quot;, function() {
+    			var player = h.material.animate([
+         		    { 
+         		    	backgroundColor: h.config.fill
+         		    },
+         		    { 
+         		    	backgroundColor: h.config.targetFill
+         		    },
+         		], {
+         			direction: &#x27;normal&#x27;,
+         		    duration: 600,
+         		    easing: &quot;ease&quot;,
+         			iterations: 1,
+         			fill: &quot;both&quot;
+         		});
+    		});
+    		
+    		h.material.on(&quot;mouseout&quot;, function() {
+    			var player = h.material.animate([
+         		    { 
+         		    	backgroundColor: h.config.targetFill
+         		    },
+         		    { 
+         		    	backgroundColor: h.config.fill
+         		    },
+         		], {
+         			direction: &#x27;normal&#x27;,
+         		    duration: 600,
+         		    easing: &quot;ease&quot;,
+         			iterations: 1,
+         			fill: &quot;both&quot;
+         		});
+    		});
+    	}
+    },
+    getMaterial: function() {
+    	return this.material;
+    },
+    hide: function() {
+    	var h = this;
+    		h.material.hide();
+    },
+    disappear: function() {
+    	var h = this;
+
+		var player = h.material.animate([
+  		    {
+  		     opacity: 1, 
+  		     transform: &quot;scale(1)&quot;
+  		    },
+  		    {
+  		     opacity: 0.0, 
+  		     transform: &quot;scale(4)&quot;
+  		    },
+  		], {
+  			direction: &#x27;normal&#x27;,
+  		    duration: 1000,
+  		    easing: &quot;ease&quot;,
+  			iterations: 1,
+  			fill: &quot;both&quot;
+  		});
+    },
+    appear: function() {
+    	var h = this;
+
+		var player = h.material.animate([
+   		    {
+ 		     opacity: 0.0, 
+ 		     transform: &quot;scale(4)&quot;
+ 		    },
+  		    {
+  		     opacity: 1, 
+  		     transform: &quot;scale(1)&quot;
+  		    },
+  		], {
+  			direction: &#x27;normal&#x27;,
+  		    duration: 1000,
+  		    easing: &quot;ease&quot;,
+  			iterations: 1,
+  			fill: &quot;both&quot;
+  		});
+    },
+    show: function() {
+    	var h = this;
+    		h.material.show();
+    }
+});
+
+UI.FabProgress = Class.create({
+
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            scale: 2
+        }, config || {});
+
+        this.render();
+    },
+
+    render: function() {
+    	var h = this;
+    		
+    	h.div = new Element(&quot;DIV&quot;, {
+    		style: &quot;position:absolute; top:0px; left:0px; bottom:0px; right:0px; background-color:black; opacity:0.5; z-index:100000&quot;
+    	});
+    	h.config.inside.insert(h.div);
+
+    	h.fab = h.config.fab.getMaterial().clone();
+    	
+    	h.fab.setStyle({
+    		left: h.config.fab.getMaterial().getClientRects()[0].left + &quot;px&quot;,
+    		top: h.config.fab.getMaterial().getClientRects()[0].top + &quot;px&quot;
+    	});
+
+    	h.div.insert(h.fab);
+    	h.animate(h.fab);
+    },
+    animate: function(fab) {
+    	var h = this;
+    	
+    	if (h.closed) {
+    		return;
+    	}
+    	
+		var fa = fab.clone();
+		fa.setStyle({ 
+			zIndex: 100002
+		});
+		h.config.inside.insert(fa);
+		var player = fa.animate([
+ 		    {
+ 		     opacity: 1, 
+ 		     transform: &quot;scale(0.1)&quot;
+ 		    },
+ 		    {
+ 		     opacity: 0.0, 
+ 		     transform: &quot;scale(&quot; + h.config.scale + &quot;)&quot;
+ 		    },
+ 		], {
+ 			direction: &#x27;normal&#x27;,
+ 		    duration: 1000,
+ 		    easing: &quot;ease&quot;,
+ 			iterations: 1,
+ 			fill: &quot;both&quot;
+ 		});
+		
+   		player.onfinish = function() {
+   			fa.remove();
+   			h.animate(fab);
+   		}
+    },
+    setPercentage: function(percentage) {
+    	var h = this;
+    	if (h.label == undefined) {
+    		h.label = new Element(&quot;DIV&quot;);
+        	h.label.setStyle({
+        		width: 200 + &quot;px&quot;,
+        		height: 20 + &quot;px&quot;,
+        		border: &quot;1px solid &quot; + h.config.fab.config.fill,
+        		color: h.config.fab.config.fill,
+        		textAlign: &quot;center&quot;,
+        		backgroundColor: &quot;transparent&quot;,
+        		position: &quot;absolute&quot;,
+        		left: (h.config.fab.getMaterial().getClientRects()[0].left + 40) + &quot;px&quot;,
+        		top: h.config.fab.getMaterial().getClientRects()[0].top + &quot;px&quot;
+        	});
+
+        	h.div.insert(h.label);
+        	
+    		h.prog = new Element(&quot;DIV&quot;);
+        	h.prog.setStyle({
+        		width: 200 + &quot;px&quot;,
+        		height: 20 + &quot;px&quot;,
+        		border: &quot;0px&quot;,
+        		opacity: &quot;0.2&quot;,
+        		textAlign: &quot;center&quot;,
+        		backgroundColor: h.config.fab.config.fill,
+        		position: &quot;absolute&quot;,
+        		left: (h.config.fab.getMaterial().getClientRects()[0].left + 40) + &quot;px&quot;,
+        		top: h.config.fab.getMaterial().getClientRects()[0].top + &quot;px&quot;
+        	});
+
+        	h.div.insert(h.prog);
+    	}
+
+    	h.prog.setStyle({
+    		width: (2 * percentage) + &quot;px&quot;
+    	});
+    	h.label.update(percentage + &quot;%&quot;);
+    },
+
+    close: function() {
+    	var h = this;
+
+    	h.closed = true;
+    	
+		h.div.remove();
+		delete h.div;
+		
+		h.fab.remove();
+		delete h.fab;
+    }
+});
+/** 
+  sjlksjlksjlksjslkjsl 
+~~~javascript
+	var progress = new UI.ProgressBar({
+		inside: layout.getSouth()
+	});
+~~~
+  
+  @class UI.Material
+  @method
+  @example
+        jQuery.ajax({ 
+            url: &#x27;foo/&#x27;
+        });
+
+ */
+UI.Material = Class.create({
+    initialize: function(config) {
+    	    	
+        this.config = Object.extend({
+            inside: window.document.body,
+            effect: &quot;from-left&quot;,
+            position: &quot;top:100px; left:100px; width:500px; height:500px&quot;,
+            modal: false
+        }, config || {});
+
+        this.render();
+    },
+    /**
+    * Use AJAX to retrieve data
+    * @method render
+    * @param {Object} options The request options
+        @param {String} options.url The url of the request.
+        @param {String} [options.type=get] The request type, defaults to &#x60;GET&#x60;.
+    * @example
+    This accepts markdown syntax!
+
+        jQuery.ajax({ 
+            url: &#x27;foo/&#x27;
+        });
+
+    * @return {jQuery.Deferred}
+    */ 
+    render: function() {
+    	var h = this;
+    	
+    	if (h.config.modal == true) {
+			h.curtain = new Element(&quot;DIV&quot;, {
+				style: &quot;position:absolute; top:0px; left:0px; right:0px; bottom:0px; opacity:0; display:none&quot;,
+				class: &quot;bg_main&quot;
+			});
+			h.config.inside.insert(h.curtain);
+    	}
+
+    	h.material = new Element(&quot;DIV&quot;, {
+    		style: &quot;position:absolute; overflow:hidden; background-color:white; &quot; + h.config.position,
+    		&quot;class&quot;: &quot;default_shadow&quot;
+    	});
+    	
+    	h.material.on(&quot;mousedown&quot;, function(e) {
+			e.cancelBubble = true;
+			e.returnValue = false;
+		});
+		
+    	h.material.on(&quot;click&quot;, function(e) {
+			e.cancelBubble = true;
+			e.returnValue = false;
+		});
+    	
+    	h.material.on(&quot;dblclick&quot;, function(e) {
+			e.cancelBubble = true;
+			e.returnValue = false;
+		});
+
+    	h.config.inside.insert(h.material);
+    	
+    	h.width = h.material.getBoundingClientRect().width;
+    	h.height = h.material.getBoundingClientRect().height;
+    	h.left = h.material.getBoundingClientRect().left - h.config.inside.getBoundingClientRect().left;
+    	h.right = h.material.getBoundingClientRect().right;
+    	h.bottom = parseInt(h.material.style.bottom);
+    	h.top = h.material.getBoundingClientRect().top;
+    	    	
+    	h.parentWidth = h.config.inside.getBoundingClientRect().width;
+    	
+    	if (h.config.effect == &quot;from-left&quot;) {
+    		h.material.setStyle({
+    			left: (-h.width) + &quot;px&quot;
+    		});
+    	} else if (h.config.effect == &quot;from-right&quot;) {
+    		h.material.setStyle({
+    			right: (-h.width) + &quot;px&quot;
+    		});
+    	} else if (h.config.effect == &quot;from-bottom&quot;) {
+    		h.material.setStyle({
+    			bottom: (-h.height) + &quot;px&quot;
+    		});
+    	} else if (h.config.effect == &quot;from-top&quot;) {
+
+    	}
+    	
+    	h.material.on(&quot;mousedown&quot;, function(e) {
+			e.cancelBubble = true;
+			e.returnValue = false;
+		});
+		
+    	h.material.on(&quot;click&quot;, function(e) {
+			e.cancelBubble = true;
+			e.returnValue = false;
+		});
+
+    	h.config.inside.insert(h.material);
+    },
+    show: function() {
+    	var h = this;
+    	
+    	h.curtainOn();
+    	
+    	var translateX = 0;
+    	var translateY = 0;
+
+    	if (h.config.effect == &quot;from-left&quot;) {
+    		var player = h.material.animate([
+    		    {transform: &quot;translate(0px, 0px)&quot;},
+    		    {transform: &quot;translate(&quot; + (h.width + h.left) + &quot;px, 0px)&quot;},
+    		], {
+    			direction: &#x27;normal&#x27;,
+    		    duration: 450,
+    		    easing: &quot;ease&quot;,
+    			iterations: 1,
+    			fill: &quot;both&quot;
+    		});
+    	} else if (h.config.effect == &quot;from-right&quot;) {
+    		var player = h.material.animate([
+     		    {transform: &quot;translate(0px, 0px)&quot;},
+     		    {transform: &quot;translate(-&quot; + h.width + &quot;px, 0px)&quot;},
+     		], {
+     			direction: &#x27;normal&#x27;,
+     		    duration: 450,
+     		    easing: &quot;ease&quot;,
+     			iterations: 1,
+     			fill: &quot;both&quot;
+     		});
+    	} else if (h.config.effect == &quot;from-bottom&quot;) {
+    		var player = h.material.animate([
+      		    {transform: &quot;translate(0px, 0px)&quot;},
+      		    {transform: &quot;translate(0px, -&quot; + (h.bottom + h.height) + &quot;px)&quot;},
+      		], {
+      			direction: &#x27;normal&#x27;,
+      		    duration: 450,
+      		    easing: &quot;ease&quot;,
+      			iterations: 1,
+      			fill: &quot;both&quot;
+      		});
+    	}
+    },
+    updateHeight: function(pixels) {
+    	var h = this;
+    	
+		var player = h.material.animate([
+		    {height: h.height + &quot;px&quot;},
+		    {height: pixels + &quot;px&quot;}
+		], {
+			direction: &#x27;normal&#x27;,
+		    duration: 750,
+		    easing: &quot;ease&quot;,
+			iterations: 1,
+			fill: &quot;both&quot;
+		});
+		
+		player.onfinish = function() {
+	    	h.height = pixels;
+	    	
+	    	if (h.config.onHeightChanged) {
+	    		h.config.onHeightChanged();
+	    	}
+		}
+    },
+    hide: function() {
+    	var h = this;
+
+    	if (h.config.effect == &quot;from-left&quot;) {
+    		var player = h.material.animate([
+    		    {transform: &quot;translate(&quot; + (h.width + h.left) + &quot;px, 0px)&quot;},
+    		    {transform: &quot;translate(-&quot; + (h.width + h.left) + &quot;px, 0px)&quot;},
+    		], {
+    			direction: &#x27;normal&#x27;,
+    		    duration: 750,
+    		    easing: &quot;ease&quot;,
+    			iterations: 1,
+    			fill: &quot;both&quot;
+    		});
+    	} else if (h.config.effect == &quot;from-right&quot;) {
+    		var player = h.material.animate([
+    		    {transform: &quot;translate(-&quot; + (h.width + h.right) + &quot;px, 0px)&quot;},
+     		    {transform: &quot;translate(0px, 0px)&quot;}
+     		], {
+     			direction: &#x27;normal&#x27;,
+     		    duration: 750,
+     		    easing: &quot;ease&quot;,
+     			iterations: 1,
+     			fill: &quot;both&quot;
+     		});
+    	} else if (h.config.from == &quot;bottom&quot;) {
+    		translateX = 0;
+    		translateY = -h.config.height - h.config.bottom;
+    	}
+   		
+    	h.curtainOff();
+    },
+	curtainOn: function() {
+		var h = this;
+
+		if (h.curtain === undefined) {
+			return;
+		}
+		
+		h.curtain.setStyle({
+			display: &quot;block&quot;
+		});
+		
+		var player = h.curtain.animate([
+  		    {opacity: 0},
+  		    {opacity: 0.8},
+  		], {
+  			direction: &#x27;normal&#x27;,
+  		    duration: 200,
+  		    easing: &quot;ease&quot;,
+  			iterations: 1,
+  			fill: &quot;both&quot;
+  		});
+		
+	},
+	curtainOff: function() {
+		var h = this;
+		
+		if (h.curtain === undefined) {
+			return;
+		}
+
+		var player = h.curtain.animate([
+		    {opacity: 0.8},
+		    {opacity: 0},
+		], {
+			direction: &#x27;normal&#x27;,
+		    duration: 200,
+		    easing: &quot;ease&quot;,
+			iterations: 1,
+			fill: &quot;both&quot;
+		});
+		
+   		player.onfinish = function(e) {
+   			h.curtain.setStyle({
+   				display: &quot;none&quot;
+   			});
+		}
+	},
+	/**
+	 * @method getMaterial
+	 */
+    getMaterial: function() {
+    	return this.material;
+    }
+});
+/*
+ * @class UI.List
+ */
+UI.List = Class.create(UI.MaterialComponent, {
+	/*
+	 *
+	 */
+	initConfig: function(config) {            	
+        this.config = Object.extend({
+        	removable: false,
+        	buttons: [],
+        	rows: []
+        }, config || {});
+	},
+	/*
+	 *
+	 */
+	render: function() {
+		var h = this;
+
+		h.config.inside.on(&quot;mousedown&quot;, function(e) {
+			e.cancelBubble = true;
+			e.returnValue = false;
+		});
+		
+		h.config.inside.on(&quot;click&quot;, function(e) {
+			e.cancelBubble = true;
+			e.returnValue = false;
+		});
+		
+		h.config.inside.on(&quot;DOMMouseScroll&quot;, function(e) {
+			e.cancelBubble = true;
+			e.returnValue = false;
+		});
+
+		h.panel = new UI.Panel({
+			inside: h.getMaterial(),
+			title: h.config.title,
+			className: &quot;list_header&quot;
+		});
+
+		h.rowsContent = new Element(&quot;DIV&quot;, {
+			class: &quot;list_content&quot;
+		});
+		
+		h.rowsFooter = new Element(&quot;DIV&quot;, {
+			class: &quot;list_footer&quot;
+		});
+		
+		h.listContent = new Element(&quot;DIV&quot;, {
+			class: &quot;list&quot;
+		});
+				
+		new UI.Form({
+			inside: h.rowsFooter,
+			fields: [
+		         {
+		        	 property: &quot;search&quot;,
+		        	 label: &quot;Szukaj&quot;,
+		        	 disableTab: true,
+		        	 onChanging: function(v) {
+		        		 var f = function() {
+		        			 h.filter(v);	 
+		        		 }
+		        		 setTimeout(f, 0);
+		        	 }
+		         }
+			]
+		});
+		
+		h.listContent.insert(h.rowsContent);
+		h.listContent.insert(h.rowsFooter);
+
+		h.panel.getContent().update(h.listContent);
+
+		this.rowsContent.on(&quot;click&quot;, &quot;div.row&quot;, function(e, element) {
+			if (h.config.onClick) {
+				h.config.onClick(element);
+			}
+		});
+		
+		var b = 0;
+		for (b=0; b &lt; h.config.buttons.length; b++) {
+			h.config.buttons[b].inside = h.getMaterial(); 
+			h.config.buttons[b].top = 35;
+			h.config.buttons[b].left = 10 + 50 * (b);
+			
+			var fab = new UI.Fab(h.config.buttons[b]);
+		}
+	},
+	/*
+	 *  parametr data powinien zawsze zawierac kolekcję rows.
+	 *  rows to sa obiekty JSON
+	 * 
+	 *  np:
+	 * 
+	 *  var elements = [&quot;A&quot;, &quot;B&quot;];
+	 *  
+	 * 	list.fetch({
+	 *     rows: elements
+	 *  });
+	 */
+	fetch: function(data) {
+		var h = this;
+
+		h.config.rows = data.rows || [];
+		h.rowsContent.update(&quot;&quot;);
+
+		var i=0;
+		for (i=0; i&lt;h.config.rows.length; i++) {
+
+			var row = new Element(&quot;DIV&quot;, {
+				style: &quot;overflow:hidden&quot;,
+				class: &quot;row&quot;				// row to jest klasa fake
+			});
+			row.bean = h.config.rows[i];
+						
+			if (h.config.header !== undefined) {
+				var _header = new Element(&quot;DIV&quot;, {
+					style: &quot;font-weight:bold; overflow:hidden&quot;
+				});
+				_header.update(STRUTILS.compile(h.config.header, h.config.rows[i]));
+				row.insert(_header);
+			} else if (h.config.headerRenderer !== undefined) {
+				var _header = new Element(&quot;DIV&quot;, {
+					style: &quot;font-weight:bold; overflow:hidden&quot;
+				});
+				_header.update(h.config.headerRenderer(row, _header));
+				row.insert(_header);				
+			}
+
+			if (h.config.footer !== undefined) {
+				var _footer = new Element(&quot;DIV&quot;, {
+					style: &quot;overflow:hidden&quot;
+				});
+				_footer.insert(STRUTILS.compile(h.config.footer, h.config.rows[i]));
+				row.insert(_footer);
+			} else if (h.config.footerRenderer !== undefined) {
+				var _footer = new Element(&quot;DIV&quot;, {
+					style: &quot;overflow:hidden&quot;
+				});
+				_footer.update(h.config.footerRenderer(row, _footer));
+				row.insert(_footer);				
+			}
+
+			h.rowsContent.insert(row);
+			
+			var rr = row;
+
+			if (h.config.removable === true) {
+				new UI.Fab({
+					inside: row,
+					text: &quot;&quot;,
+					fill: &quot;#ffffff&quot;,
+					targetFill: &quot;red&quot;,
+					width: 18,
+					height: 18,
+					left: 21,
+					top: 12,
+					title: &quot;Usuń&quot;,
+					icon: &quot;close&quot;,
+					zHeight: 3,
+					onClick: function(fab) {
+						if (h.config.onRemove) {
+							h.config.onRemove(fab.config.inside);
+						}
+					}
+				});
+			}
+		}
+	},
+	/**
+	 * odfiltrowanie wyświetlonych wierszy
+	 */
+	filter: function(v) {
+		var h = this;
+				
+		var i=0;
+		for (i=0; i&lt;h.rowsContent.childElements().length; i++) {
+			var child = h.rowsContent.childElements()[i];
+			if (child.innerHTML.toLowerCase().indexOf(v.toLowerCase()) &gt;= 0) {
+				child.show();
+			} else {
+				child.hide();
+			}
+		}
+	}
+});
+/**
+ * Formularz
+ * 
+ * @class UI.Form
+ * @constructor
+ */
+UI.Form = Class.create(UI.MaterialComponent, {
+
+    initConfig: function(config) {
+        this.config = Object.extend({
+            fields: [],
+            fieldControlls: [],
+            bean: {}
+        }, config || {});
+    },
+    /**
+     * @method render
+     */
+    render: function() {
+    	var h = this;
+
+		h.formContent = new Element(&quot;DIV&quot;, {
+			class: &quot;form&quot;
+		});
+		h.config.inside.update(h.formContent);
+		
+		var top = 60;
+		var bottom = 60;
+		
+		if (h.config.title == undefined) {
+			top = 0;
+		}
+		
+		if (h.config.buttons == undefined) {
+			bottom = 0;
+		}
+
+		h.fieldsContent = new Element(&quot;DIV&quot;, {
+			class: &quot;form_fields_content&quot;,
+			style: &quot;top:&quot; + top + &quot;px; bottom:&quot; + bottom + &quot;px&quot;
+		});
+		h.formContent.insert(h.fieldsContent);
+
+		if (h.config.title !== undefined) {
+			h.formHeader = new Element(&quot;DIV&quot;, {
+				class: &quot;form_header bg_main fg_white&quot;
+			});
+			h.formHeader.insert(h.config.title);
+			h.formContent.insert(h.formHeader);
+		}
+        
+		if (h.config.buttons !== undefined) {
+			h.formFooter = new Element(&quot;DIV&quot;, {
+				class: &quot;form_footer&quot;
+			});
+			h.formContent.insert(h.formFooter);
+		}
+
+    	if (h.config.fields !== undefined) {
+    		var i=0;
+    		for (i=0; i&lt;h.config.fields.length; i++) {		
+    			var fieldConfig = h.config.fields[i];
+    				if (fieldConfig.type === undefined) {
+    					fieldConfig.type = &quot;Text&quot;;
+    				}
+
+    				var field = eval(&quot;new UI.&quot; + fieldConfig.type + &quot;FormField();&quot;);
+
+    					if (field.initConfig === undefined) {
+    						alert(&quot;Property: &quot; + fieldConfig.property);
+    					}
+    				
+    					field.initConfig(fieldConfig);
+    					
+    					field.form = this;
+
+    					h.config.fieldControlls.push(field);
+
+    				h.fieldsContent.insert(field.getMaterial());
+    		}
+    	}
+
+    	if (h.config.buttons !== undefined) {
+	    	var i=0; 
+	    	for (i=0; i&lt;h.config.buttons.length; i++) {
+	    		var fabConfig = h.config.buttons[i];
+	    			fabConfig.inside = h.formContent;
+	    			fabConfig.left = h.config.inside.getClientRects()[0].width - (60 * (i+1));
+	    			fabConfig.top = h.config.inside.getClientRects()[0].height - 80;
+	
+	    		new UI.Fab(fabConfig);
+	    	}
+    	}
+    },
+
+    setTitle: function(title) {
+    	var h = this;
+    		h.formHeader.update(title);
+    },
+    /**
+     * Metoda zwraca pole formularza dla zadanej właściwości
+     * 
+     * @method getField
+     */
+    getField: function(propertyName) {
+    	var h = this;
+    	var i=0;
+    	for (i=0; i&lt;h.config.fields.length; i++) {
+    		if (h.config.fields[i].property == propertyName) {
+    			return h.config.fieldControlls[i];
+    		}
+    	}
+    	return null;
+    },
+    /**
+     * @method setFields
+     * 
+     * Metoda dynamicznie tworzy atrybuty w formularzu
+     */
+    setFields: function(fields) {
+    	var h = this;
+    		h.config.fields = fields;
+    		h.render();
+    		h.setBean(h.getBean());
+    },
+    /**
+     * @method setBean
+     */
+    setBean: function(bean) {
+    	var h = this;
+    	
+    	h.config.bean = bean;
+    	
+    	var i=0;
+    	for (i=0; i&lt;h.config.fields.length; i++) {
+    		h.config.fieldControlls[i].setBean(bean);
+    	}
+    },
+    /**
+     * @method getBean
+     */
+    getBean: function() {
+    	return this.config.bean;
+    },
+    /**
+     * Walidacja wymaganych pól formularza
+     */
+    validate: function() {
+    	var result = true;
+    	return result;
+    }
+});
+/**
+ * 
+ * 
+ * @class UI.TextFormField
+ */
+UI.TextFormField = Class.create({
+
+    initialize: function() {    	
+    },
+    /**
+     * @method setConfig
+     */
+    initConfig: function(config) {
+        this.config = Object.extend({
+        	property: &quot;$&quot;,
+        	disableTab: false,
+        	readOnly: false,
+        	width: 200,
+        	bean: {},
+        	mask: new Input(null)
+        }, config || {});
+
+        this.render();
+        this.setReadOnly(this.config.readOnly);
+    },
+    /**
+     * @method render
+     */
+    render: function() {
+    	var h = this;
+    	
+			h.inside = new Element(&quot;DIV&quot;, {
+				style: &quot;position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent&quot;
+			});
+    		
+    		h.input = new Element(&quot;INPUT&quot;, {
+    			type: &quot;text&quot;,
+    			style: &quot;position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:&quot; + h.config.width + &quot;px&quot;
+    		});
+    		h.input.on(&quot;focus&quot;, function() {
+    			h.animateLabel();
+    		});
+    		    		    		
+    		if (h.config.mask) {
+    			var mask = new InputMask(h.config.mask, h.input)
+    				mask.blurFunction = function() {
+    					if (h.config.onChange !== undefined) {
+    						h.config.onChange(h.getBeanValue());
+    					}
+            			if (h.isEmpty(h.input.value)) {
+            				h.unanimateLabel()
+            			}
+    				}
+	    			mask.keyUpFunction = function() {
+	        			h.setBeanValue();
+
+	        			if (h.config.onChanging !== undefined) {
+	        				h.config.onChanging(h.getBeanValue());
+	        			}    				
+	    			}
+    		} else {
+        		h.input.on(&quot;blur&quot;, function(e) {
+        			if (h.isEmpty(h.input.value)) {
+        				h.unanimateLabel()
+        			}
+        			if (h.config.onChange !== undefined) {
+        				h.config.onChange(h.getBeanValue());
+        			}
+        		});
+        		h.input.on(&quot;keyup&quot;, function(e) {
+        			h.setBeanValue();
+        			
+        			if (h.config.onChanging !== undefined) {
+        				h.config.onChanging(h.getBeanValue());
+        			}
+        		});
+        		h.input.on(&quot;keydown&quot;, function(e) {
+        			e.cancelBubble = true;
+        		});
+    		}
+    		    		
+    		h.label = new Element(&quot;DIV&quot;, {
+    			style: &quot;position:absolute; top:10px; left:10px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;&quot;
+    		});
+    		h.label.insert(h.config.label);
+
+	    	h.underline = new Element(&quot;DIV&quot;, {
+	    		style: &quot;position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:&quot; + h.config.width + &quot;px&quot;
+	    	});
+
+		h.inside.insert(h.underline);
+		h.inside.insert(h.label);
+		h.inside.insert(h.input);
+
+		if (h.config.disableTab == true) {
+			var fakeInput = new Element(&quot;INPUT&quot;, {
+				style: &quot;width:0px; border:0px; visible:false&quot;
+			});
+
+			fakeInput.on(&quot;focus&quot;, function(e) {
+				h.input.focus();
+			});
+			h.inside.insert(fakeInput);
+		}
+    },
+    /**
+     * @method setReadOnly
+     */
+    setReadOnly: function(readOnly) {
+    	var h = this;
+    	var ro = readOnly || false;
+
+    	h.input.readOnly = ro;
+    	h.input.disabled = ro;
+    },
+    /**
+     * @method animateLabel
+     */
+    animateLabel: function() {
+    	var h = this;
+    	
+		var player = h.label.animate([
+		    {opacity: 1.0, transform: &quot;translate(0px, 0px)&quot;, color:&quot;#cdcdcf&quot;, fontSize: &quot;14px&quot;},
+		    {opacity: 1.0, transform: &quot;translate(0px, -18px)&quot;, color:&quot;#999999&quot;, fontSize: &quot;11px&quot;},
+		], {
+			direction: &#x27;normal&#x27;,
+		    duration: 200,
+		    easing: &quot;ease&quot;,
+			iterations: 1,
+			fill: &quot;both&quot;
+		});
+    },
+    /**
+     * @method unanimateLabel
+     */
+    unanimateLabel: function() {
+    	var h = this;
+    	
+		var player = h.label.animate([
+  		    {opacity: 1.0, transform: &quot;translate(0px, -18px)&quot;, color:&quot;#cdcdcf&quot;, fontSize: &quot;11px&quot;},
+		    {opacity: 1.0, transform: &quot;translate(0px, 0px)&quot;, color:&quot;#cdcdcf&quot;, fontSize: &quot;14px&quot;},
+		], {
+			direction: &#x27;normal&#x27;,
+		    duration: 200,
+		    easing: &quot;ease&quot;,
+			iterations: 1,
+			fill: &quot;both&quot;
+		});
+    },
+    /**
+     * @method getMaterial
+     */
+    getMaterial: function() {
+    	return this.inside;
+    },
+    isEmpty: function(v) {
+    	var result = false;
+    		if (v === undefined || v.trim() == &quot;&quot;) {
+    			result = true;
+    		}
+    	return result;
+    },
+    setBean: function(bean) {
+    	var h = this;
+    	h.config.bean = bean;
+    	
+    	var v = h.getBeanValue();
+    	if (h.config.render !== undefined) {
+    		v = h.config.render(v);
+    	}
+		h.setInputValue(v);
+    },
+    getBeanValue: function() {
+    	var h = this;
+    	var r = undefined;
+    		try {
+    			r = eval(&quot;h.config.bean.&quot; + h.config.property);
+    		} catch (e) {
+    			
+    		}
+    	return r;
+    },
+    setBeanValue: function(v) {
+    	var h = this;
+    	
+    	var v = h.getInputValue();
+    	if (h.config.parse != undefined) {
+    		v = h.config.parse(v);
+    	}
+    	
+    	eval(&quot;h.config.bean.&quot; + h.config.property + &quot; = v;&quot;);
+    },
+    /**
+     * @method setInputValue
+     */
+    setInputValue: function(val) {
+    	var h = this;
+    	
+    	if (val === undefined) {
+    		val = &quot;&quot;;
+    	}
+    	
+    	var v = new String(val);
+
+    	if (v !== undefined &amp;&amp; v.trim() !== &quot;&quot; &amp;&amp; v.trim() !== &#x27;&#x27;) {
+    		h.animateLabel();
+    		h.input.value = v;
+    	} else {
+    		h.input.value = &quot;&quot;;
+    		h.unanimateLabel();
+    	}
+    },
+    /**
+     * @method getInputValue
+     */
+    getInputValue: function() {
+    	var h = this;
+    	var val = h.input.value;
+    		val = h.validate(val);
+    	return val;
+    },
+    /**
+     * walidacja po wpisaniu (na onblur)
+     * 
+     * @method validate
+     */
+    validate: function(v) {
+    	return v;
+    },
+    /**
+     * walidacja podczas wpisywania
+     * 
+     * @method preValidate
+     */
+    preValidate: function() {
+    }
+});
+/**
+ * @class UI.LookupFormField
+ */
+UI.LookupFormField = Class.create(UI.TextFormField, {
+	render: function() {
+    	var h = this;
+    	
+		h.inside = new Element(&quot;DIV&quot;, {
+			style: &quot;position:relative; top:0px; height:40px; width:100%; line-height:20px;&quot;
+		});
+		
+		h.input = new Element(&quot;INPUT&quot;, {
+			type: &quot;text&quot;,
+			readOnly: true,
+			style: &quot;position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:&quot; + h.config.width + &quot;px&quot;
+		});
+		h.input.on(&quot;focus&quot;, function() {
+			h.animateLabel();
+		});
+		h.input.on(&quot;blur&quot;, function(e) {
+			if (h.isEmpty(h.input.value)) {
+				h.unanimateLabel()
+			}
+		});
+		h.input.on(&quot;change&quot;, function(e) {
+			if (h.config.onChange !== undefined) {
+				h.config.onChange(h.getBeanValue());
+			}
+		});
+		h.input.on(&quot;keyup&quot;, function(e) {
+			h.setBeanValue(h.getInputValue());
+
+			if (h.config.onChanging !== undefined) {
+				h.config.onChanging(h.getBeanValue());
+			}
+		});
+		h.input.disabled = true;
+
+		h.label = new Element(&quot;DIV&quot;, {
+			style: &quot;position:absolute; top:20px; left:10px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;&quot;
+		});
+		h.label.insert(h.config.label);
+
+    	h.underline = new Element(&quot;DIV&quot;, {
+    		style: &quot;position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:&quot; + h.config.width + &quot;px&quot;
+    	});
+
+		h.inside.insert(h.underline);
+		h.inside.insert(h.label);
+		h.inside.insert(h.input);
+		
+		h.fab = new UI.Fab({
+			inside: h.inside,
+			width: 20,
+			height: 20,
+			left: h.config.width + 20,
+			fill: &quot;green&quot;,
+			icon: &quot;download&quot;,
+			bottom: 8,
+			onClick: function() {
+				h.showLookupCard();
+			}
+		});
+	},
+	/**
+	 * @method setInputValue
+	 */
+    setInputValue: function(bean) {
+    	var h = this;
+    	
+    	if (bean !== undefined) {
+    		h.animateLabel();
+    		if (h.config.pattern !== undefined) {
+    			h.input.value = STRUTILS.compile(h.config.pattern, bean);
+    		} else if (h.config.patternRenderer !== undefined) {
+    			h.input.value = h.config.patternRenderer(bean);
+    		}
+    	} else {
+    		h.input.value = &quot;&quot;;
+    		h.unanimateLabel();
+    	}
+    },
+
+    setBeanValue: function(bean) {
+    	var h = this;
+
+    	eval(&quot;h.config.bean.&quot; + h.config.property + &quot; = bean;&quot;);
+
+		if (h.config.onChange !== undefined) {
+			h.config.onChange(h.getBeanValue());
+		}
+    },
+    /**
+     * @method setReadOnly
+     */
+    setReadOnly: function(readOnly) {
+    	var h = this;
+
+    	var ro = readOnly || false;
+
+    	h.fab.getMaterial().setStyle({
+    		display: (ro==true)?&quot;none&quot;:&quot;block&quot;
+    	});
+    },
+
+    showLookupCard: function() {
+    	var h = this;
+    	
+		var f = h.form.formContent;
+		var formOffset = f.cumulativeOffset();
+		var fieldOffset = h.fab.material.cumulativeOffset(); 
+						
+		h.tmpFab = h.fab.material.clone();
+		h.tmpFab.setStyle({
+			bottom: &quot;&quot;,
+			top: (fieldOffset.top - formOffset.top) + &quot;px&quot;,
+			left: (fieldOffset.left - formOffset.left) + &quot;px&quot;,
+			overflow: &quot;hidden&quot;
+		});
+		h.form.formContent.insert(h.tmpFab);
+
+		h.list = new UI.List({
+			inside: h.tmpFab,
+			title: h.config.label,
+			header: h.config.pattern,
+			headerRenderer: function(row) {
+				return h.config.patternRenderer(row.bean);
+			},
+			onClick: function(row) {
+				if (h.config.onChange) {
+					h.setBeanValue(row.bean);
+					h.setInputValue(row.bean);
+					h.removeLookupCard();
+				}
+			}
+		});
+
+		var fab = new UI.Fab({
+			inside: h.tmpFab,
+			top: 80,
+			title: &quot;Zamknij listę&quot;,
+			fill: &quot;red&quot;,
+			text: &quot;&lt;&quot;,
+			onClick: function() {
+				h.removeLookupCard();
+			}
+		});
+
+		var player = h.tmpFab.animate([
+  		    {
+  		     opacity: 0.5, 
+  		     height: h.fab.material.getHeight() + &quot;px&quot;, 
+  		     borderRadius: &quot;0%&quot;, 
+  		     top: (fieldOffset.top - formOffset.top) + &quot;px&quot;, 
+  		     left: (fieldOffset.left - formOffset.left) + &quot;px&quot;, 
+  		     width: h.fab.material.getWidth() + &quot;px&quot;, 
+  		     backgroundColor: h.fab.config.fill
+  		    },
+  		    {
+  		     opacity: 1.0, 
+  		     height: f.getHeight() + &quot;px&quot;, 
+  		     borderRadius: &quot;0%&quot;, 
+  		     top:&quot;0px&quot;, 
+  		     left:&quot;0px&quot;, 
+  		     width: f.getWidth() + &quot;px&quot;, 
+  		     backgroundColor: &quot;white&quot;
+  		    },
+  		], {
+  			direction: &#x27;normal&#x27;,
+  		    duration: 450,
+  		    easing: &quot;ease&quot;,
+  			iterations: 1,
+  			fill: &quot;both&quot;
+  		});
+
+		player.onfinish = function() {
+			if (h.config.fetchList) {
+				h.config.fetchList(h.list);
+			}
+		}
+    },
+
+    removeLookupCard: function() {
+    	var h = this;
+    	
+		var f = h.form.formContent;
+		var formOffset = f.cumulativeOffset();
+		var fieldOffset = h.fab.material.cumulativeOffset(); 
+
+		var player = h.tmpFab.animate([
+		    {
+	  		     opacity: 1.0, 
+	  		     height: f.getHeight() + &quot;px&quot;, 
+	  		     borderRadius: &quot;0%&quot;, 
+	  		     top:&quot;0px&quot;, 
+	  		     left:&quot;0px&quot;, 
+	  		     width: f.getWidth() + &quot;px&quot;, 
+	  		     backgroundColor: &quot;white&quot;
+	  		    },
+	  		    {
+	  		     opacity: 0.5, 
+	  		     height: &quot;0px&quot;, 
+	  		     borderRadius: &quot;0%&quot;, 
+	  		     top: (fieldOffset.top - formOffset.top) + &quot;px&quot;, 
+	  		     left: (fieldOffset.left - formOffset.left) + &quot;px&quot;, 
+	  		     width: &quot;0px&quot;, 
+	  		     backgroundColor: h.fab.config.fill
+	  		    },
+	  		], {
+	  			direction: &#x27;normal&#x27;,
+	  		    duration: 450,
+	  		    easing: &quot;ease&quot;,
+	  			iterations: 1,
+	  			fill: &quot;both&quot;
+	  		});
+			
+			player.onfinish = function() {
+				h.tmpFab.remove();
+			}
+    }
+});
+/**
+ * @class UI.ListFormField
+ */
+UI.ListFormField = Class.create(UI.LookupFormField, {
+	/**
+	 * @method setInputValue
+	 */
+    setInputValue: function(str) {
+    	var h = this;
+    	
+    	if (str !== undefined) {
+    		h.animateLabel();
+    		h.input.value = str;
+
+    		if (h.config.patternRenderer !== undefined) {
+    			h.input.value = h.config.patternRenderer(str);
+    		} else if (h.config.pattern !== undefined) {
+    			h.input.value = str;
+    		} 
+    	} else {
+    		h.input.value = &quot;&quot;;
+    		h.unanimateLabel();
+    	}
+    },
+
+    setBeanValue: function(str) {
+    	var h = this;
+
+    	eval(&quot;h.config.bean.&quot; + h.config.property + &quot; = str;&quot;);
+
+		if (h.config.onChange !== undefined) {
+			h.config.onChange(h.getBeanValue());
+		}
+    },
+    /**
+     * @method setReadOnly
+     */
+    setReadOnly: function(readOnly) {
+    	var h = this;
+
+    	var ro = readOnly || false;
+
+    	h.fab.getMaterial().setStyle({
+    		display: (ro==true)?&quot;none&quot;:&quot;block&quot;
+    	});
+    },
+    /**
+     * @method showLookupCard
+     */
+    showLookupCard: function() {
+    	var h = this;
+    	
+		var f = h.form.formContent;
+		var formOffset = f.cumulativeOffset();
+		var fieldOffset = h.fab.material.cumulativeOffset(); 
+						
+		h.tmpFab = h.fab.material.clone();
+		h.tmpFab.setStyle({
+			bottom: &quot;&quot;,
+			top: (fieldOffset.top - formOffset.top) + &quot;px&quot;,
+			left: (fieldOffset.left - formOffset.left) + &quot;px&quot;,
+			overflow: &quot;hidden&quot;
+		});
+		h.form.formContent.insert(h.tmpFab);
+
+		h.list = new UI.List({
+			inside: h.tmpFab,
+			title: h.config.label,
+			headerRenderer: function(row) {
+				return h.config.patternRenderer(row.bean);
+			},
+			onClick: function(row) {
+				if (h.config.onChange) {
+					h.setBeanValue(row.bean);
+					h.setInputValue(row.bean);
+					h.removeLookupCard();
+				}
+			}
+		});
+
+		var fab = new UI.Fab({
+			inside: h.tmpFab,
+			top: 80,
+			title: &quot;Zamknij listę&quot;,
+			fill: &quot;red&quot;,
+			text: &quot;&lt;&quot;,
+			onClick: function() {
+				h.removeLookupCard();
+			}
+		});
+
+		var player = h.tmpFab.animate([
+  		    {
+  		     opacity: 0.5, 
+  		     height: h.fab.material.getHeight() + &quot;px&quot;, 
+  		     borderRadius: &quot;0%&quot;, 
+  		     top: (fieldOffset.top - formOffset.top) + &quot;px&quot;, 
+  		     left: (fieldOffset.left - formOffset.left) + &quot;px&quot;, 
+  		     width: h.fab.material.getWidth() + &quot;px&quot;, 
+  		     backgroundColor: h.fab.config.fill
+  		    },
+  		    {
+  		     opacity: 1.0, 
+  		     height: f.getHeight() + &quot;px&quot;, 
+  		     borderRadius: &quot;0%&quot;, 
+  		     top:&quot;0px&quot;, 
+  		     left:&quot;0px&quot;, 
+  		     width: f.getWidth() + &quot;px&quot;, 
+  		     backgroundColor: &quot;white&quot;
+  		    },
+  		], {
+  			direction: &#x27;normal&#x27;,
+  		    duration: 450,
+  		    easing: &quot;ease&quot;,
+  			iterations: 1,
+  			fill: &quot;both&quot;
+  		});
+
+		player.onfinish = function() {
+			if (h.config.fetchList) {
+				h.config.fetchList(h.list);
+			}
+		}
+    },
+
+    removeLookupCard: function() {
+    	var h = this;
+    	
+		var f = h.form.formContent;
+		var formOffset = f.cumulativeOffset();
+		var fieldOffset = h.fab.material.cumulativeOffset(); 
+
+		var player = h.tmpFab.animate([
+		    {
+		     opacity: 1.0, 
+		     height: f.getHeight() + &quot;px&quot;, 
+		     borderRadius: &quot;0%&quot;, 
+		     top:&quot;0px&quot;, 
+		     left:&quot;0px&quot;, 
+		     width: f.getWidth() + &quot;px&quot;, 
+		     backgroundColor: &quot;white&quot;
+		    },
+		    {
+		     opacity: 0.5, 
+		     height: &quot;0px&quot;, 
+		     borderRadius: &quot;0%&quot;, 
+		     top: (fieldOffset.top - formOffset.top) + &quot;px&quot;, 
+		     left: (fieldOffset.left - formOffset.left) + &quot;px&quot;, 
+		     width: &quot;0px&quot;, 
+		     backgroundColor: h.fab.config.fill
+		    },
+		], {
+			direction: &#x27;normal&#x27;,
+		    duration: 450,
+		    easing: &quot;ease&quot;,
+			iterations: 1,
+			fill: &quot;both&quot;
+		});
+			
+		player.onfinish = function() {
+			h.tmpFab.remove();
+		}
+    }
+});
+/*
+ * File
+ * 
+ * Kontrolka File obsługuje atrybut beana formularza typu file, który ma loid i name
+ * 
+ * Przykład:
+ * 
+ * var bean = {
+ * 		name: &quot;Nazwa&quot;,
+ *      age: 12,
+ *      report: {
+ *      	loid: 1234,
+ *      	name: &quot;raport.txt&quot;
+ *      }
+ * }
+ * 
+ * var form = new UI.Form({
+ * 		fields: [
+ * 			{
+ * 				property: &quot;report&quot;,
+ * 				type: &quot;File&quot;
+ * 			}
+ * 		]
+ * 		....
+ * });
+ * 
+ * form.setBean(bean);
+ */
+UI.FileFormField = Class.create(UI.TextFormField, {
+
+    initialize: function(config) {    
+        this.config = Object.extend({
+        	property: &quot;$&quot;,
+        	disableTab: false,
+        	readOnly: false,
+        	width: 200,
+        	bean: {}        	
+        }, config || {});
+    },
+
+    initConfig: function(config) {
+        this.config = Object.extend({
+        	property: &quot;$&quot;,
+        	disableTab: false,
+        	readOnly: false,
+        	width: 200,
+        	bean: {},
+        	uploadAction: UI.uploadAction,
+        	jsonFileAttributeName: &quot;name&quot;
+        }, config || {});
+
+        this.render();
+        this.setReadOnly(this.config.readOnly);
+    },
+
+	render: function() {
+    	var h = this;
+    	
+		h.inside = new Element(&quot;DIV&quot;, {
+			style: &quot;position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent&quot;
+		});
+		
+		h.input = new Element(&quot;INPUT&quot;, {
+			type: &quot;text&quot;,
+			style: &quot;position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:&quot; + h.config.width + &quot;px&quot;
+		});
+		h.input.disabled = true;
+		h.input.on(&quot;focus&quot;, function() {
+			h.animateLabel();
+		});
+		h.input.on(&quot;blur&quot;, function(e) {
+			if (h.isEmpty(h.input.value)) {
+				h.unanimateLabel()
+			}
+		});
+		h.input.on(&quot;change&quot;, function(e) {
+			if (h.config.onChange !== undefined) {
+				h.config.onChange(h.getBeanValue());
+			}
+		});
+		h.input.on(&quot;keyup&quot;, function(e) {
+			h.setBeanValue(h.getInputValue());
+			
+			if (h.config.onChanging !== undefined) {
+				h.config.onChanging(h.getBeanValue());
+			}
+		});
+						
+		h.label = new Element(&quot;DIV&quot;, {
+			style: &quot;position:absolute; top:10px; left:10px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;&quot;
+		});
+		h.label.insert(h.config.label);
+
+    	h.underline = new Element(&quot;DIV&quot;, {
+    		style: &quot;position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:&quot; + h.config.width + &quot;px&quot;
+    	});
+
+		h.inside.insert(h.underline);
+		h.inside.insert(h.label);
+		h.inside.insert(h.input);
+		
+		h.frameid = &quot;file_upload_frame_&quot; + h.config.property + &quot;_&quot; + new Date().getTime();
+
+		h.fab = new UI.Fab({
+			inside: h.inside,
+			width: 20,
+			height: 20,
+			left: h.config.width + 20,
+			fill: &quot;green&quot;,
+			icon: &quot;download&quot;,
+			bottom: 8,
+			onClick: function() {				
+				h.fileInput.click();
+			}
+		});
+
+		h.initFileUploader();
+	},
+	initFileUploader: function() {
+		var h = this;
+
+		h.fileInput = new Element(&quot;INPUT&quot;, {
+			type: &quot;file&quot;,
+			name: &quot;fileName_&quot; + h.frameid,
+			style: &quot;display:none&quot;
+		});
+
+		var form = new Element(&quot;FORM&quot;, {
+		    action: h.config.uploadAction,
+		    method: &quot;POST&quot;,
+		    enctype: &quot;multipart/form-data&quot;,
+		    target: h.frameid,
+		    style: &quot;display:none; width:0px; height:0px&quot;
+		});
+
+		h.inside.insert(form);
+		form.insert(h.fileInput);
+
+		h.fileInput.on(&quot;change&quot;, function() {
+
+	    	h.progress = new UI.FabProgress({
+	    		fab: h.fab
+	    	});
+
+			var form = new FormData();
+				form.append(&quot;file&quot;, h.fileInput.files[0]);
+
+			// send via XHR - look ma, no headers being set!
+			var xhr = new XMLHttpRequest();
+
+			xhr.upload.addEventListener(&quot;progress&quot;, function(e) {
+				var pc = parseInt(100 - (e.loaded / e.total * 100));
+				h.progress.setPercentage(100 - pc);
+			}, false);
+
+			xhr.onreadystatechange = function (evt) {
+				if (xhr.readyState == 4) {
+					h.progress.close();
+
+					var createdFile = xhr.responseText.evalJSON();						
+                    	h.setBeanValue(createdFile);
+                    	h.setInputValue(createdFile);
+                    	
+            		if (h.config.onChange !== undefined) {
+            			h.config.onChange(h.getBeanValue());
+            		}
+				}
+			}
+
+			xhr.open(&quot;POST&quot;, h.config.uploadAction, true);
+			xhr.send(form);
+		});
+	},
+
+    setInputValue: function(bean) {
+    	var h = this;
+    	
+    	if (bean === undefined) {
+    		bean = {};
+    	}
+    	
+    	if (bean !== undefined) {
+    		if(undefined !== eval(&quot;h.config.bean.&quot; + h.config.property)) {
+        		h.animateLabel();
+    			h.input.value = eval(&quot;h.config.bean.&quot; + h.config.property + &quot;.&quot; + h.config.jsonFileAttributeName)
+    		} else {
+    			h.unanimateLabel();
+    		}
+    	} else {
+    		h.input.value = &quot;&quot;;
+    		h.unanimateLabel();
+    	}
+    },
+
+    setBeanValue: function(bean) {
+    	var h = this;
+    	eval(&quot;h.config.bean.&quot; + h.config.property + &quot; = bean;&quot;);
+    },
+
+    showUploadFile: function() {
+    	var h = this;    		
+    }
+});
+
+UI.DateFormField = Class.create(UI.LookupFormField, {
+	render: function() {
+    	var h = this;
+    	
+		h.inside = new Element(&quot;DIV&quot;, {
+			style: &quot;position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent&quot;
+		});
+		
+		h.input = new Element(&quot;INPUT&quot;, {
+			type: &quot;text&quot;,
+			readOnly: true,
+			style: &quot;position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:120px&quot;
+		});
+		h.input.on(&quot;focus&quot;, function() {
+			h.animateLabel();
+		});
+		h.input.on(&quot;blur&quot;, function(e) {
+			if (h.isEmpty(h.input.value)) {
+				h.unanimateLabel()
+			}
+		});
+		h.input.on(&quot;change&quot;, function(e) {
+			if (h.config.onChange !== undefined) {
+				h.config.onChange(h.getBeanValue());
+			}
+		});
+		
+		h.label = new Element(&quot;DIV&quot;, {
+			style: &quot;position:absolute; top:10px; left:10px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;&quot;
+		});
+		h.label.insert(h.config.label);
+
+    	h.underline = new Element(&quot;DIV&quot;, {
+    		style: &quot;position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:120px&quot;
+    	});
+
+		h.inside.insert(h.underline);
+		h.inside.insert(h.label);
+		h.inside.insert(h.input);
+		
+		h.fab = new UI.Fab({
+			inside: h.inside,
+			width: 20,
+			height: 20,
+			left: 120 + 20,
+			fill: &quot;green&quot;,
+			icon: &quot;calendar&quot;,
+			bottom: 8,
+			onClick: function() {
+				h.showLookupCard();
+			}
+		});
+	},
+
+    setInputValue: function(date) {
+    	var h = this;
+    	
+    	var DU = new UI.DateUtils();
+
+    	if (date !== undefined) {
+    		h.animateLabel();
+    		h.input.value = DU.formatDate(DU.parseDate(date));
+    	} else {
+    		h.input.value = &quot;&quot;;
+    		h.unanimateLabel();
+    	}
+    },
+
+    setBeanValue: function(date) {
+    	var h = this;
+
+    	eval(&quot;h.config.bean.&quot; + h.config.property + &quot; = date;&quot;);
+
+		if (h.config.onChange !== undefined) {
+			h.config.onChange(h.getBeanValue());
+		}
+    },
+    /**
+     * @method setReadOnly
+     */
+    setReadOnly: function(readOnly) {
+    	var h = this;
+
+    	var ro = readOnly || false;
+
+    	h.fab.getMaterial().setStyle({
+    		display: (ro==true)?&quot;none&quot;:&quot;block&quot;
+    	});
+    	h.input.disabled = ro;
+    },
+
+    showLookupCard: function() {
+    	var h = this;
+    	
+		var f = h.form.formContent;
+		var formOffset = f.cumulativeOffset();
+		var fieldOffset = h.fab.material.cumulativeOffset(); 
+
+		h.tmpFab = h.fab.material.clone();
+		h.tmpFab.setStyle({
+			bottom: &quot;&quot;,
+			top: (fieldOffset.top - formOffset.top) + &quot;px&quot;,
+			left: (fieldOffset.left - formOffset.left) + &quot;px&quot;,
+			overflow: &quot;hidden&quot;
+		});
+		h.form.formContent.insert(h.tmpFab);
+		
+		var calendarDiv = new Element(&quot;DIV&quot;, {
+			style: &quot;position:absolute; top:20px; left:50%; margin-left:-87px; width:175px; height:200px&quot;
+		});
+		h.tmpFab.insert(calendarDiv);
+
+		var fab = new UI.Fab({
+			inside: h.tmpFab,
+			bottom: 10,
+			title: &quot;Zamknij listę&quot;,
+			fill: &quot;red&quot;,
+			icon: &quot;cancel&quot;,
+			onClick: function() {
+				h.removeLookupCard();
+			}
+		});
+
+		new UI.DatePicker({
+			inside: calendarDiv,
+			dateSelected: function(date) {
+				h.setBeanValue(new UI.DateUtils().formatFullDate(date));
+				h.setInputValue(new UI.DateUtils().formatFullDate(date));
+
+				h.removeLookupCard();
+			}
+		});
+
+		var player = h.tmpFab.animate([
+  		    {
+  		     opacity: 0.5, 
+  		     height: h.fab.material.getHeight() + &quot;px&quot;, 
+  		     borderRadius: &quot;0%&quot;, 
+  		     top: (fieldOffset.top - formOffset.top) + &quot;px&quot;, 
+  		     left: (fieldOffset.left - formOffset.left) + &quot;px&quot;, 
+  		     width: h.fab.material.getWidth() + &quot;px&quot;, 
+  		     backgroundColor: h.fab.config.fill
+  		    },
+  		    {
+  		     opacity: 1.0, 
+  		     height: f.getHeight() + &quot;px&quot;, 
+  		     borderRadius: &quot;0%&quot;, 
+  		     top:&quot;0px&quot;, 
+  		     left:&quot;0px&quot;, 
+  		     width: f.getWidth() + &quot;px&quot;, 
+  		     backgroundColor: &quot;white&quot;
+  		    },
+  		], {
+  			direction: &#x27;normal&#x27;,
+  		    duration: 450,
+  		    easing: &quot;ease&quot;,
+  			iterations: 1,
+  			fill: &quot;both&quot;
+  		});
+
+		player.onfinish = function() {
+			if (h.config.fetchList) {
+				h.config.fetchList(h.list);
+			}
+		}
+    },
+
+    removeLookupCard: function() {
+    	var h = this;
+    	
+		var f = h.form.formContent;
+		var formOffset = f.cumulativeOffset();
+		var fieldOffset = h.fab.material.cumulativeOffset(); 
+
+		var player = h.tmpFab.animate([
+		    {
+	  		     opacity: 1.0, 
+	  		     height: f.getHeight() + &quot;px&quot;, 
+	  		     borderRadius: &quot;0%&quot;, 
+	  		     top:&quot;0px&quot;, 
+	  		     left:&quot;0px&quot;, 
+	  		     width: f.getWidth() + &quot;px&quot;, 
+	  		     backgroundColor: &quot;white&quot;
+	  		    },
+	  		    {
+	  		     opacity: 0.5, 
+	  		     height: &quot;0px&quot;, 
+	  		     borderRadius: &quot;0%&quot;, 
+	  		     top: (fieldOffset.top - formOffset.top) + &quot;px&quot;, 
+	  		     left: (fieldOffset.left - formOffset.left) + &quot;px&quot;, 
+	  		     width: &quot;0px&quot;, 
+	  		     backgroundColor: h.fab.config.fill
+	  		    },
+	  		], {
+	  			direction: &#x27;normal&#x27;,
+	  		    duration: 450,
+	  		    easing: &quot;ease&quot;,
+	  			iterations: 1,
+	  			fill: &quot;both&quot;
+	  		});
+			
+			player.onfinish = function() {
+				h.tmpFab.remove();
+			}
+    }
+});
+/**
+ * @class UI.BooleanFormField
+ */
+UI.BooleanFormField = Class.create({
+
+    initialize: function(config) {    	
+        this.config = Object.extend({
+        	property: &quot;$&quot;,
+        	readOnly: false,
+        	width: 200,
+        	value: false
+        }, config || {});
+    },
+    /**
+     * @method
+     */
+    initConfig: function(config) {
+        this.config = Object.extend({
+        	property: &quot;$&quot;,
+        	disableTab: false,
+        	readOnly: false,
+        	width: 200,
+        	bean: {}
+        }, config || {});
+
+        this.render();
+        this.setReadOnly(this.config.readOnly);
+    },
+    /**
+     * @method render
+     */
+    render: function() {
+    	var h = this;
+    		h.inside = new Element(&quot;DIV&quot;, {
+    			style: &quot;position:relative; top:0px; height:40px; width:100%; line-height:20px;&quot;
+    		});
+    		h.label = new Element(&quot;DIV&quot;, {
+    			style: &quot;position:absolute; top:20px; left:50px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;&quot;
+    		});
+    		h.label.insert(h.config.label);
+    		
+    		h.falseFab = new UI.Fab({
+    			inside: h.inside,
+    			width: 20,
+    			height: 20,
+    			top: 20,
+    			left: 20,
+    			fill: &quot;grey&quot;,
+    			icon: &quot;done&quot;,
+    			bottom: 8,
+    			onClick: function() {
+    				h.switchOn();
+    				h.setBeanValue(true);
+    			}
+    		});
+
+    		h.trueFab = new UI.Fab({
+    			inside: h.inside,
+    			width: 20,
+    			height: 20,
+    			top: 20,
+    			left: 20,
+    			fill: &quot;green&quot;,
+    			icon: &quot;done&quot;,
+    			bottom: 8,
+    			onClick: function() {
+    				h.switchOff();
+    				h.setBeanValue(false);
+    			}
+    		});
+    		
+    		if (this.config.value == false) {
+	    		h.trueFab.getMaterial().setStyle({
+	    			transform: &quot;scale(0)&quot;
+	    		});
+    		}
+
+		h.inside.insert(h.label);
+    },
+    /**
+     * @method setReadOnly
+     */
+    setReadOnly: function(readOnly) {
+    	var h = this;
+    	var ro = readOnly || false;
+    },
+    /**
+     * @method animateLabel
+     */
+    switchOn: function() {
+    	var h = this;
+    	
+		h.trueFab.getMaterial().animate([
+		    {opacity: 0.0, transform: &quot;scale(0)&quot;},
+		    {opacity: 1.0, transform: &quot;scale(1)&quot;},
+		], {
+			direction: &#x27;normal&#x27;,
+		    duration: 500,
+		    easing: &quot;ease&quot;,
+			iterations: 1,
+			fill: &quot;both&quot;
+		});
+		
+		h.label.animate([
+  		    {color: &quot;#cdcdcf&quot;},
+  		    {color: &quot;#999999&quot;},
+  		], {
+  			direction: &#x27;normal&#x27;,
+  		    duration: 500,
+  		    easing: &quot;ease&quot;,
+  			iterations: 1,
+  			fill: &quot;both&quot;
+  		});
+		
+		if (h.config.onChange) {
+			h.config.onChange(true);
+			h.setBeanValue(true);
+		}
+    },
+    /**
+     * @method unanimateLabel
+     */
+    switchOff: function() {
+    	var h = this;
+    	
+		h.trueFab.getMaterial().animate([
+		    {opacity: 1.0, transform: &quot;scale(1)&quot;},
+		    {opacity: 0.0, transform: &quot;scale(0)&quot;},
+		], {
+			direction: &#x27;normal&#x27;,
+		    duration: 500,
+		    easing: &quot;ease&quot;,
+			iterations: 1,
+			fill: &quot;both&quot;
+		});
+		
+		h.label.animate([
+   		    {color: &quot;#999999&quot;},
+   		    {color: &quot;#cdcdcf&quot;},
+   		], {
+   			direction: &#x27;normal&#x27;,
+   		    duration: 500,
+   		    easing: &quot;ease&quot;,
+   			iterations: 1,
+   			fill: &quot;both&quot;
+   		});
+		
+		if (h.config.onChange) {
+			h.config.onChange(false);
+			h.setBeanValue(false);
+		}
+    },
+    /**
+     * @method getMaterial
+     */
+    getMaterial: function() {
+    	return this.inside;
+    },
+    isEmpty: function(v) {
+    	var result = false;
+    		if (v === undefined || v.trim() == &quot;&quot;) {
+    			result = true;
+    		}
+    	return result;
+    },
+    setBean: function(bean) {
+    	var h = this;
+    	h.config.bean = bean;
+		h.setInputValue(h.getBeanValue());
+    },
+    getBeanValue: function() {
+    	var h = this;
+    	return eval(&quot;h.config.bean.&quot; + h.config.property);
+    },
+    setBeanValue: function(v) {
+    	var h = this;
+    	eval(&quot;h.config.bean.&quot; + h.config.property + &quot; = &quot; + v + &quot;&quot;);
+    },
+    /**
+     * @method setInputValue
+     */
+    setInputValue: function(val) {
+    	if (val == true) {
+    		this.switchOn();
+    	} else {
+    		this.switchOff();
+    	}
+    },
+    /**
+     * @method getInputValue
+     */
+    getInputValue: function() {
+
+    },
+    /**
+     * walidacja po wpisaniu (na onblur)
+     * 
+     * @method validate
+     */
+    validate: function(v) {
+    	return v;
+    },
+    /**
+     * walidacja podczas wpisywania
+     * 
+     * @method preValidate
+     */
+    preValidate: function() {
+    }
+});
+UI.PasswordFormField = Class.create(UI.TextFormField, {
+    /**
+     * @method render
+     */
+    render: function() {
+    	var h = this;
+    	
+    		h.inside = new Element(&quot;DIV&quot;, {
+    			style: &quot;position:relative; top:0px; height:40px; width:100%; line-height:20px;&quot;
+    		});
+
+    		h.input = new Element(&quot;INPUT&quot;, {
+    			type: &quot;password&quot;,
+    			style: &quot;position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:&quot; + h.config.width + &quot;px&quot;
+    		});
+    		h.input.on(&quot;focus&quot;, function() {
+    			h.animateLabel();
+    		});
+    		    		
+    		h.input.on(&quot;blur&quot;, function(e) {
+    			if (h.isEmpty(h.input.value)) {
+    				h.unanimateLabel()
+    			}
+    		});
+    		h.input.on(&quot;change&quot;, function(e) {
+    			if (h.config.onChange !== undefined) {
+    				h.config.onChange(h.getBeanValue());
+    			}
+    		});
+    		h.input.on(&quot;keyup&quot;, function(e) {
+    			h.setBeanValue(h.getInputValue());
+    			
+    			if (h.config.onChanging !== undefined) {
+    				h.config.onChanging(h.getBeanValue());
+    			}
+    		});
+    		h.input.on(&quot;keydown&quot;, function(e) {
+    			e.cancelBubble = true;
+    		});
+    		
+    		h.label = new Element(&quot;DIV&quot;, {
+    			style: &quot;position:absolute; top:20px; left:10px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;&quot;
+    		});
+    		h.label.insert(h.config.label);
+
+	    	h.underline = new Element(&quot;DIV&quot;, {
+	    		style: &quot;position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:&quot; + h.config.width + &quot;px&quot;
+	    	});
+
+		h.inside.insert(h.underline);
+		h.inside.insert(h.label);
+		h.inside.insert(h.input);
+
+		if (h.config.disableTab == true) {
+			var fakeInput = new Element(&quot;INPUT&quot;, {
+				style: &quot;width:0px; border:0px; visible:false&quot;
+			});
+
+			fakeInput.on(&quot;focus&quot;, function(e) {
+				h.input.focus();
+			});
+			h.inside.insert(fakeInput);
+		}
+    }
+});
+/**
+ * @constructor UI.BorderLayout
+ */
+UI.BorderLayout = Class.create(UI.MaterialComponent, {
+	/**
+	 * @method initConfig
+	 */
+	initConfig: function(config) {
+        this.config = Object.extend({
+        	items: []
+        }, config || {});
+	},
+	/**
+	 * @method render
+	 */
+    render: function() {
+        
+        var centerTop = 0;
+        var centerBottom = 0;
+        var centerLeft = 0;
+        var centerRight = 0;
+    
+        if (this.config.north !== undefined) {
+            var height = 50;
+
+                if (this.config.north.height) {
+                    height = this.config.north.height;
+                } else {
+                    this.config.north.height = height;
+                }
+                
+                centerTop = this.config.north.height;
+
+                this.north = document.createElement(&quot;DIV&quot;);
+                    this.north.style = &quot;position:absolute; overflow:hidden; top:0px; left:0px; right:0px; height:&quot; + height + &quot;px;&quot;;
+
+            this.config.inside.appendChild(this.north);
+        }
+        
+        if (this.config.south !== undefined) {
+            var height = 50;
+            
+                if (this.config.south.height) {
+                    height = this.config.south.height;
+                } else {
+                    this.config.south.height = height;
+                }
+                
+                centerBottom = height;
+
+                this.south = document.createElement(&quot;DIV&quot;);
+                    this.south.style = &quot;position:absolute; overflow:hidden; height:&quot; + height + &quot;px; left:0px; right:0px; bottom:0px;&quot;;
+            
+            this.config.inside.appendChild(this.south);
+        }
+        
+        if (this.config.west !== undefined) {
+            var width = 50;
+                        
+            if (this.config.west.width) {
+                width = this.config.west.width;
+            } else {
+                this.config.west.width = width;
+            }
+            
+            centerLeft = width;
+            
+            this.west = document.createElement(&quot;DIV&quot;);
+                this.west.style = &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; left:0px; width:&quot; + width + &quot;px; bottom:&quot; + centerBottom + &quot;px&quot;;
+
+            this.config.inside.appendChild(this.west);
+        }
+        
+        if (this.config.east !== undefined) {
+            var width = 50;
+                        
+            if (this.config.east.width) {
+                width = this.config.east.width;
+            } else {
+                this.config.east.width = width;
+            }
+            
+            centerRight = width;
+            
+            this.east = document.createElement(&quot;DIV&quot;);
+                this.east.style = &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; right:0px; width:&quot; + width + &quot;px; bottom:&quot; + centerBottom + &quot;px&quot;;
+
+            this.config.inside.appendChild(this.east);
+        }
+
+        this.center = document.createElement(&quot;DIV&quot;);
+            this.center.style = &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; left:&quot; + centerLeft + &quot;px; right:&quot; + centerRight + &quot;px; bottom:&quot; + centerBottom + &quot;px&quot;;
+
+        this.config.inside.appendChild(this.center);
+    },
+    getNorth: function() {
+        return this.north;
+    },
+    getWest: function() {
+        return this.west;
+    },
+    getEast: function() {
+        return this.east;
+    },
+    getSouth: function() {
+        return this.south;
+    },
+    getCenter: function() {
+        return this.center;
+    },
+    getDefault: function() {
+        return this.center;
+    }
+});
+/**
+* This is the description for my class.
+*
+* @class UI.Crud
+* @constructor
+*/
+UI.Crud = Class.create(UI.MaterialComponent, {
+
+	initConfig: function(config) {
+        this.config = Object.extend({
+        }, config || {});
+	},
+
+	render: function() {
+		var h = this;
+
+		if (h.config.list !== undefined) {
+			h.config.list.inside = h.getMaterial();
+			h.list = new UI.List(h.config.list);
+		}
+
+		h.curtain = new Element(&quot;DIV&quot;, {
+			style: &quot;position:absolute; top:0px; left:0px; right:0px; bottom:0px; opacity:0.9; display:none&quot;,
+			class: &quot;bg_main&quot;
+		});
+		h.getMaterial().insert(h.curtain);
+
+		h.mat = new UI.Material({
+			inside: h.getMaterial(),
+			effect: &quot;from-right&quot;,
+			position: &quot;top:0px; right:0px; bottom:0px; width:350px&quot;
+		});
+		
+		if (h.config.form !== undefined) {
+			h.config.form.inside = h.mat.getMaterial();
+			h.form = new UI.Form(h.config.form);
+		}
+	},
+	/**
+	 * @method openForm
+	 */
+	openForm: function(bean) {
+		var h = this;
+		if (bean !== undefined) {
+			h.form.setBean(bean);
+		}
+		
+		h.curtainOn();
+		h.mat.show();
+	},
+	/**
+	 * @method closeForm
+	 */
+	closeForm: function() {
+		var h = this;
+
+		h.curtainOff();
+		h.mat.hide();
+		
+		if (h.config.onCloseForm) {
+			h.config.onCloseForm();
+		}
+	},
+	/**
+	 * @method updateForm
+	 */
+	updateForm: function(bean) {
+		var h = this;
+		h.form.setBean(bean);
+	},
+	/**
+	 * Pobranie formularza z komponentu CRUD
+	 * 
+	 * @method getForm
+	 */
+	getForm: function() {
+		return this.form;
+	},
+	/**
+	 * @method getBean
+	 */
+	getBean: function() {
+		var h = this;
+		return h.form.getBean();
+	},
+	curtainOn: function() {
+		var h = this;
+		
+		h.curtain.setStyle({
+			display: &quot;block&quot;
+		});
+		
+		var player = h.curtain.animate([
+  		    {opacity: 0},
+  		    {opacity: 0.8},
+  		], {
+  			direction: &#x27;normal&#x27;,
+  		    duration: 200,
+  		    easing: &quot;ease&quot;,
+  			iterations: 1,
+  			fill: &quot;both&quot;
+  		});
+		
+	},
+	curtainOff: function() {
+		var h = this;
+
+		var player = h.curtain.animate([
+		    {opacity: 0.8},
+		    {opacity: 0},
+		], {
+			direction: &#x27;normal&#x27;,
+		    duration: 200,
+		    easing: &quot;ease&quot;,
+			iterations: 1,
+			fill: &quot;both&quot;
+		});
+		
+   		player.onfinish = function(e) {
+   			h.curtain.setStyle({
+   				display: &quot;none&quot;
+   			});
+		}
+	},
+	/**
+	 * @method fetchList
+	 */
+	fetchList: function(beans) {
+		var h = this;
+		
+		h.list.fetch({
+			rows: beans
+		});
+	}
+});
+
+UI.Menu = Class.create(UI.MaterialComponent, {
+
+	initConfig: function(config) {
+        this.config = Object.extend({
+        	items: []
+        }, config || {});
+	},
+
+	render: function() {
+		var h = this;
+		
+		h.panel = new UI.Panel({
+			inside: h.getMaterial(),
+			title: h.config.title
+		});
+
+		h.rowsContent = new Element(&quot;DIV&quot;, {
+			class: &quot;list_content&quot;
+		});
+				
+		h.listContent = new Element(&quot;DIV&quot;, {
+			class: &quot;list&quot;
+		});
+
+		h.listContent.insert(h.rowsContent);
+
+		h.panel.getMaterial().update(h.listContent);
+		
+		this.rowsContent.on(&quot;click&quot;, &quot;div.row&quot;, function(e, element) {
+			if (element.bean.onClick) {
+				element.bean.onClick(element);
+			}
+		});
+		
+		this.fetch();
+	},
+	/**
+	 * parametr data powinien zawsze zawierac kolekcję rows.
+	 * rows to sa obiekty JSON
+	 */
+	fetch: function() {
+		var h = this;
+
+		h.rowsContent.update(&quot;&quot;);
+
+		var i=0;
+		for (i=0; i&lt;h.config.items.length; i++) {
+			if (h.config.items[i].access == undefined || h.config.items[i].access == UI.HIDDEN) {
+				continue;
+			}
+
+			var row = new Element(&quot;DIV&quot;, {
+				class: &quot;row&quot;				// row to jest klasa fake
+			});
+			row.bean = h.config.items[i];
+						
+			if (h.config.header !== undefined) {
+				var _header = new Element(&quot;DIV&quot;, {
+					style: &quot;font-weight:bold&quot;
+				});
+				_header.update(STRUTILS.compile(h.config.header, row.bean));
+				row.insert(_header);
+			} else if (h.config.headerRenderer !== undefined) {
+				var _header = new Element(&quot;DIV&quot;, {
+					style: &quot;font-weight:bold&quot;
+				});
+				_header.update(h.config.headerRenderer(row));
+				row.insert(_header);				
+			}
+
+			if (h.config.footer !== undefined) {
+				var _footer = new Element(&quot;DIV&quot;, {
+					
+				});
+				_footer.insert(STRUTILS.compile(h.config.footer, row.bean));
+				row.insert(_footer);
+			} else if (h.config.footerRenderer !== undefined) {
+				var _footer = new Element(&quot;DIV&quot;, {
+				});
+				_footer.update(h.config.footerRenderer(row));
+				row.insert(_footer);				
+			}
+
+			h.rowsContent.insert(row);
+		}
+	}
+});
+
+UI.ProgressBar = Class.create(UI.MaterialComponent, {
+
+    initConfig: function(config) {
+        this.config = Object.extend({
+        	orientation: &quot;horizontal&quot;,
+        	totalColor: &quot;black&quot;,
+        	doneColor: &quot;green&quot;
+        }, config || {});
+    },
+    render: function() {
+        var h = this;
+
+    	h.percentageInfo = new Element(&quot;DIV&quot;, {
+    		style: &quot;font-size:12px; position:absolute; top:50%; margin-top:-35px; right:10px; height:15px; color:&quot; + h.config.totalColor
+    	});
+    	
+    	h.label = new Element(&quot;DIV&quot;, {
+    		style: &quot;font-size:12px; position:absolute; top:50%; margin-top:-35px; left:10px; height:15px; color:&quot; + h.config.totalColor
+    	});
+        
+    	h.total = new Element(&quot;DIV&quot;, {
+    		style: &quot;position:absolute; top:50%; left:10px; margin-top:-5px; right:10px; height:10px; background-color:&quot; + h.config.totalColor
+    	});
+    	
+    	h.done = new Element(&quot;DIV&quot;, {
+    		style: &quot;position:absolute; top:50%; left:10px; margin-top:-5px; width:0px; height:10px; background-color:&quot; + h.config.doneColor
+    	});
+
+    	h.getMaterial().insert(h.label);
+    	h.getMaterial().insert(h.percentageInfo);
+    	h.getMaterial().insert(h.total);
+    	h.getMaterial().insert(h.done);
+    },
+
+    setProgress: function(p) {
+    	var h = this;
+
+    	var progress = 0;
+    	try {
+    		progress = Math.max(0, Math.min(100, parseInt(p)));
+    	} catch (e) {
+    		progress = 10;
+    	}
+
+    	var width = h.total.getBoundingClientRect().right - h.total.getBoundingClientRect().left;    	
+    	var newWidth = ((width * progress) / 100).toFixed(0);
+    	
+		h.percentageInfo.update(progress + &quot; %&quot;);
+    	
+		var player = h.done.animate([
+ 		    {
+ 		       width: (h.done.getBoundingClientRect().right - h.done.getBoundingClientRect().left) + &quot;px&quot;
+ 		    },
+ 		    {
+  		       width: newWidth + &quot;px&quot;
+ 		    },
+ 		], {
+ 			direction: &#x27;normal&#x27;,
+ 		    duration: 3000,
+ 		    easing: &quot;ease&quot;,
+ 			iterations: 1,
+ 			fill: &quot;both&quot;
+		});
+    },
+
+    setLabel: function(label) {
+    	var h = this;
+    	
+    	h.label.update(label);;
+    },
+
+    failure: function() {
+    	var h = this;
+    		h.total.setStyle({
+    			backgroundColor: &quot;red&quot;
+    		});
+    		h.done.setStyle({
+    			backgroundColor: &quot;red&quot;
+    		});
+
+    		if (h.config.onFinish) {
+    			h.config.onFinish();
+    		}
+    },
+
+    finish: function() {
+    	var h = this;	
+    		if (h.config.onFinish) {
+    			h.config.onFinish();
+    		}
+    }
+});
+
+UI.Grid = Class.create(UI.MaterialComponent, {
+
+	initConfig: function(config) {
+        this.config = Object.extend({
+        }, config || {});
+	},
+
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            title: &quot;Insert title here ...&quot;,
+            columns: [
+                {
+                	name: &quot;&quot;,
+                	width: 100
+                }
+            ],
+            rows: [
+            ]
+        }, config || {});
+
+        this.render();
+    },
+
+    render: function() {
+    	var h = this;
+    		h.material = new Element(&quot;DIV&quot;, {
+    			style: &quot;position: absolute; top:0px; right:0px; bottom:0px; left:0px&quot;
+    		});
+    		h.config.inside.insert(h.material);
+
+    		h.rowsHeader = new Element(&quot;DIV&quot;, {
+    			class: &quot;grid_header bg_main&quot;
+    		});
+    		h.material.insert(h.rowsHeader);
+    		h.rowsHeader.insert(h.config.title);
+
+    		h.columnsContent = new Element(&quot;DIV&quot;, {
+    			class: &quot;list_content&quot;,
+    			style: &quot;height:50px; top:56px; left:5px&quot;
+    		});
+    		h.material.insert(h.columnsContent);
+    		
+    		h.rowsContent = new Element(&quot;DIV&quot;, {
+    			class: &quot;list_content&quot;,
+    			style: &quot;bottom:0px; top:110px; left:5px&quot;
+    		});
+    		h.rowsContent.on(&quot;scroll&quot;, function(e) {
+    			if (h.config.onScrollTop) {
+    				h.config.onScrollTop(e.target.scrollTop);
+    			}
+    		});
+    		h.material.insert(h.rowsContent);
+    		
+    		this.rowsContent.on(&quot;click&quot;, &quot;div.row&quot;, function(e, element) {
+    			if (h.config.onClick) {
+    				h.config.onClick(element);
+    			}
+    		});
+    		
+    	h.fetch({
+    		rows: []
+    	});
+    },
+    /**
+     * @method setScrollTop
+     */
+    setScrollTop: function(pixels) {
+    	var h = this;
+    		h.rowsContent.scrollTop = pixels;
+    },
+    /**
+     * @method fetch
+     * 
+     * Załadowanie grida wierszami z danymi
+     */
+    fetch: function(model) {
+    	var h = this;
+
+    	var rows = model.rows;
+
+    	h.columnsContent.update();
+    	h.rowsContent.update();
+
+		var head = new Element(&quot;DIV&quot;, {
+			style: &quot;background-color:white; position:absolute; top:0px; right:0px; left:0px; height:30px; overflow:hidden; margin:0px; height:49px; line-height:48px; padding:0px; border:1px solid lightRey; border-width:0px 0px 1px 0px;&quot;,			
+		});
+
+		var k=0;
+		for (k=0; k&lt;h.config.columns.length; k++) {
+			if (h.config.columns[k].width === undefined) {
+				h.config.columns[k].width = 100;
+			}
+
+			var div = new Element(&quot;P&quot;, {
+				style: &quot;display:inline-block; overflow:hidden; line-height:47px; height:47px; font-size:14px; margin:0px; padding:0px; padding-left:4px; border:0px solid black; border-width:0px 0px 0px 0px; width:&quot; + (h.config.columns[k].width) + &quot;px&quot;,
+				class: &quot;bg_white fg_main grid_column_head&quot;
+			});
+
+			div.update(h.config.columns[k].name);
+
+			head.insert(div);
+		}
+
+		h.columnsContent.insert(head);
+
+    	var i = 0;
+    	for (i=0; i&lt;rows.length; i++) {
+    		var row = new Element(&quot;DIV&quot;, {
+    			style: &quot;display:block; overflow:hidden; height:25px; margin:0px; padding:0px; border:0px solid lightGrey; background-color:white; border-width:0px 0px 1px 0px; color:grey&quot;,
+    			class: &quot;row&quot;
+    		});
+
+    		row.bean = rows[i];
+
+    		for (k=0; k&lt;h.config.columns.length; k++) {
+    			var config = h.config.columns[k];
+
+    			var cell = new Element(&quot;P&quot;, {
+    				style: &quot;opacity:0.7; display:inline-block; overflow:hidden; line-height:27px; height:27px; font-size:14px; margin:0px; padding:0px; padding-left:4px; border:0px solid #fcfcfc; border-width:0px 0px 1px 0px; width:&quot; + (config.width) + &quot;px&quot;,
+    				class: &quot;fg_main&quot;
+    			});
+
+    			row.insert(cell);
+
+    			if (config.render !== undefined) {
+    				cell.update(config.render(row, cell));
+    			} else {
+    				cell.update(eval(&quot;rows[i].&quot; + config.property));
+    			}
+    		}
+
+    		h.rowsContent.insert(row);
+    	}
+    }
+});
+UI.IconToolbar = Class.create(UI.MaterialComponent, {
+
+	initConfig : function(config) {
+		this.config = Object.extend({}, config || {});
+	},
+
+	render : function() {
+		var h = this;
+
+    	h.content = new Element(&quot;DIV&quot;, {
+    		style: &quot;position:absolute; overflow:visible; top:0px; left:0px; bottom:0px; right:0px; background-color:#ebf0ee; display:flex; border:1px solid #c9cece; border-width:0px 0px 1px 0px&quot;
+    	});
+    	
+    	h.getMaterial().setStyle({
+    		backgroundColor: &quot;#ebf0ee&quot;,
+    		overflow: &quot;visible&quot;
+    	});
+    	
+    	h.getMaterial().parentElement.setStyle({
+    		backgroundColor: &quot;#ebf0ee&quot;,
+    		overflow: &quot;visible&quot;
+    	});
+
+    	h.getMaterial().update(h.content);
+    	h.renderItems();
+	},
+
+	renderItems: function() {
+    	var h = this;
+
+    	var i=0;
+    	for (i=0; i&lt;h.config.items.length; i++) {
+    		var itemConfig = h.config.items[i];
+    		var item = new Element(&quot;DIV&quot;, {
+    			style: &quot;overflow:hidden; flex:1; line-height:65px; text-align:center; border:0px solid #c9cece; border-width:0px 1px 0px 0px; background-image:url(&#x27;&quot; + itemConfig.icon + &quot;&#x27;); background-repeat:no-repeat; background-position:center center; background-size:36px 36px;&quot;
+    		});
+    		item.onClick = itemConfig.onClick;
+    		item.config = itemConfig;
+    		
+    		item.title = itemConfig.name;
+
+			item.on(&quot;click&quot;, function(e) {
+				setTimeout(function() {
+					h.displayMarker(e.target);	
+				}, 0);
+				if (e.target.onClick !== undefined) {
+					e.target.onClick(e.target.config);
+				}
+			});
+
+    		h.content.insert(item);
+    		
+    		if (i==0) {
+    			item.click();
+    		}
+    	}
+	},
+
+	displayMarker: function(html) {
+		var h = this;
+		
+		var left = html.getBoundingClientRect().left - h.content.getBoundingClientRect().left + html.getBoundingClientRect().width / 2 - 8; 
+		
+		if (h.marker === undefined) {
+			h.marker = new Element(&quot;DIV&quot;, {
+				style: &quot;position:absolute; z-index:1000; overflow:visible; top:62px; left:&quot; + left + &quot;px; width:16px; height:16px; border:1px solid #c9cece; border-width:0px 1px 1px 0px; background-color:#ebf0ee; transform: rotate(45deg);&quot;
+			});
+			h.content.insert(h.marker);
+		} else {
+			var currentLeft = h.marker.getBoundingClientRect().left - h.content.getBoundingClientRect().left;
+			var player = h.marker.animate([
+   	  		    {
+   	  		       left: currentLeft + &quot;px&quot;
+   	  		    },
+   	  		    {
+   	   		       left: left + &quot;px&quot;
+   	  		    },
+   	  		], {
+   	  			direction: &#x27;normal&#x27;,
+   	  		    duration: 1000,
+   	  		    easing: &quot;ease&quot;,
+   	  			iterations: 1,
+   	  			fill: &quot;both&quot;
+   			});
+		}
+	}
+});
+	
+
+UI.BreadCrumb = Class.create(UI.MaterialComponent, {
+
+    initConfig: function(config) {
+        this.config = Object.extend({
+        	orientation: &quot;vertical&quot;
+        }, config || {});
+    },
+
+    render: function() {
+        var h = this;
+        
+    	h.content = new Element(&quot;DIV&quot;, {
+    		style: &quot;position:absolute; top:0px; left:0px; bottom:0px; right:0px; background-color:rgba(30, 29, 41, 0.9)&quot;
+    	});
+    	h.getMaterial().update(h.content);
+    	
+    	h.forItems = new Element(&quot;DIV&quot;, {
+    		style: &quot;position:absolute; top:0px; left:0px; bottom:0px; right:0px; background-color:transparent&quot;
+    	});
+    	h.getMaterial().insert(h.forItems);
+
+    	h.addItem(h.config.firstItem);
+    },
+
+    addItem: function(nextItem) {
+    	
+    	nextItem.removeNextItem = function() {
+    		if (this.nextItem) {
+
+	    		this.nextItem.removeNextItem();
+
+	    		if (this.nextItem.card) {
+	    			this.nextItem.card.remove();
+	    			delete this.nextItem.card;
+	    		}
+	    		
+	    		if (this.nextItem.divItem) {
+	    			this.nextItem.divItem.remove();
+	    			delete this.nextItem.divItem;
+	    		}
+	    		
+	    		//delete this.nextItem;
+    		}
+    	};
+    	
+    	var h = this;
+    		var item = new Element(&quot;DIV&quot;, {
+    			style: &quot;padding-left:15px; font-size:16px; padding-right:15px; display:inline-block; border-right:1px solid #1E1D29; line-height:70px; height:70px; color:#525160; overflow:hidden&quot;
+    		});
+    		item.bean = nextItem;
+    		nextItem.divItem = item;
+    		item.onClick = nextItem.onClick;
+
+    		item.update(nextItem.name);
+    		item.title = nextItem.description;
+
+    		item.addEventListener(&quot;click&quot;, function(e) {
+				setTimeout(function() {
+					h.displayMarker(e.target);	
+				}, 0);
+				
+				if (e.target.onClick !== undefined) {
+					e.target.onClick(e.target.bean);
+				}
+
+	        	h.displayMarker(e.target);
+	        	
+	        	e.target.bean.removeNextItem();
+	        	
+			}, false)
+
+    		h.forItems.insert(item);
+    		
+    		if (h.lastItem === undefined) {
+    			h.lastItem = nextItem;
+    		} else {
+    			h.lastItem.nextItem = nextItem;
+    			h.lastItem = nextItem;
+    		}
+
+        item.click();
+    },
+
+    displayMarker: function(html) {
+    	var h = this;
+
+    	var rightPosition = html.getBoundingClientRect().right - h.content.getBoundingClientRect().left - 6;
+
+    	if (h.marker === undefined) {
+    		h.marker = new Element(&quot;DIV&quot;, {
+    			style: &quot;position:absolute; opacity:0.0; top:10px; left:&quot; + rightPosition + &quot;px; width:5px; bottom:10px; background-color:#6dbbcf&quot;
+    		});
+    		h.content.insert(h.marker);
+    		
+    		h.bgMarker = new Element(&quot;DIV&quot;, {
+    			style: &quot;position:absolute; opacity:0.05; top:10px; left:0px; width:&quot; + (html.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + &quot;px; bottom:10px; background-color:#6dbbcf&quot;
+    		});
+    		h.content.insert(h.bgMarker);
+    		
+    		$PLAY(h.marker, [
+     		    {
+     		    	opacity: &quot;0.0&quot;
+     		    },
+     		    {
+     		    	opacity: &quot;1.0&quot;
+     		    },
+     		]);
+    	} else {
+			$PLAY(h.marker, [
+	  		    {
+	  		       left: (h.marker.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + &quot;px&quot;
+	  		    },
+	  		    {
+	   		       left: (html.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + &quot;px&quot;
+	  		    },
+	  		]);
+			
+			$PLAY(h.bgMarker, [
+ 	  		    {
+ 	  		       width: h.bgMarker.getBoundingClientRect().width + &quot;px&quot;
+ 	  		    },
+ 	  		    {
+ 	   		       width: (html.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + &quot;px&quot;
+ 	  		    },
+ 	  		]);
+    	}
+    }
+});
+
+UI.Toolbar = Class.create(UI.MaterialComponent, {
+
+    initConfig: function(config) {
+        this.config = Object.extend({
+        	orientation: &quot;vertical&quot;
+        }, config || {});
+    },
+
+    render: function() {
+        var h = this;
+
+    	h.content = new Element(&quot;DIV&quot;, {
+    		style: &quot;position:absolute; top:0px; left:0px; bottom:0px; right:0px;&quot;,
+    		class: &quot;toolbar_bg&quot;
+    	});
+
+    	h.getMaterial().update(h.content);
+
+    	if (h.config.orientation == &quot;vertical&quot;) {
+    		h.renderItemsVertically();
+    	} else {
+    		h.renderItemsHorizontally();
+    	}
+    },
+ 
+    renderItemsVertically: function() {
+    	var h = this;
+
+    	var i=0;
+    	for (i=0; i&lt;h.config.items.length; i++) {
+    		var t = h.config.items[i];
+    		
+        	if (t.access !== undefined &amp;&amp; t.access != UI.VISIBLE) {
+        		continue;
+        	}
+    		
+    		var item = new Element(&quot;DIV&quot;, {
+    			style: &quot;padding-left:15px; font-size:14px; border-bottom: 1px solid #1E1D29; line-height:70px; height:70px; overflow:hidden&quot;,
+    			class: &quot;toolbar_bg&quot;
+    		});
+    		item.onClick = h.config.items[i].onClick;
+
+    		item.update(h.config.items[i].name);
+    		item.title = h.config.items[i].description;
+
+			item.on(&quot;click&quot;, function(e) {
+				setTimeout(function() {
+					h.displayMarkerVertically(e.target);	
+				}, 0);
+				if (e.target.onClick !== undefined) {
+					e.target.onClick(t);
+				}
+			});
+
+    		h.content.insert(item);
+    		
+    		if (i == 0) {
+    			item.click();
+    		}
+    	}
+    },
+
+    renderItemsHorizontally: function() {
+    	var h = this;
+
+    	var i=0;
+    	for (i=0; i&lt;h.config.items.length; i++) {
+    		var t = h.config.items[i];
+    		
+        	if (t.access !== undefined &amp;&amp; t.access != UI.VISIBLE) {
+        		continue;
+        	}
+    		
+    		var item = new Element(&quot;DIV&quot;, {
+    			style: &quot;padding-left:15px; font-size:14px; padding-right:15px; display:inline-block; border-right:1px solid #1E1D29; line-height:70px; height:70px; overflow:hidden&quot;,
+    			class: &quot;toolbar_bg&quot;
+    		});
+    		item.bean = t;
+    		item.onClick = h.config.items[i].onClick;
+
+    		item.update(h.config.items[i].name);
+    		item.title = h.config.items[i].description;
+
+			item.on(&quot;click&quot;, function(e) {
+				setTimeout(function() {
+					h.displayMarkerHorizontally(e.target);	
+				}, 0);
+				if (e.target.onClick !== undefined) {
+					e.target.onClick(e.target.bean);
+				}
+			});
+
+    		h.content.insert(item);
+    		
+    		if (i == 0) {
+    			item.click();
+    		}
+    	}
+    },
+
+    displayMarkerVertically: function(html) {
+    	var h = this;
+
+    	var containerTop = h.content.getBoundingClientRect().top;
+
+    	if (h.marker === undefined) {
+    		h.marker = new Element(&quot;DIV&quot;, {
+    			style: &quot;position:absolute; opacity:0.0; width:5px; top: &quot; + (html.getBoundingClientRect().top - containerTop) + &quot;px; height:&quot; + (html.getBoundingClientRect().height - 1) + &quot;px;&quot;,
+    			class: &quot;toolbar_marker_bg&quot;
+    		});
+    		h.content.insert(h.marker);
+    		
+    		var player = h.marker.animate([
+	     		    {
+	     		    	opacity: &quot;0.0&quot;
+	     		    },
+	     		    {
+	     		    	opacity: &quot;1.0&quot;
+	     		    },
+	     		], {
+	     			direction: &#x27;normal&#x27;,
+	     		    duration: 1000,
+	     		    easing: &quot;ease&quot;,
+	     			iterations: 1,
+	     			fill: &quot;both&quot;
+		   		});
+    	} else {
+			var player = h.marker.animate([
+	  		    {
+	  		       top: (h.marker.getBoundingClientRect().top - h.marker.getBoundingClientRect().height + 1) + &quot;px&quot;
+	  		    },
+	  		    {
+	   		       top: (html.getBoundingClientRect().top - html.getBoundingClientRect().height + 1) + &quot;px&quot;
+	  		    },
+	  		], {
+	  			direction: &#x27;normal&#x27;,
+	  		    duration: 1000,
+	  		    easing: &quot;ease&quot;,
+	  			iterations: 1,
+	  			fill: &quot;both&quot;
+			});
+    	}
+    },
+
+    displayMarkerHorizontally: function(html) {
+    	var h = this;
+
+    	var containerLeft = h.content.getBoundingClientRect().left;
+    	
+    	if (h.marker === undefined) {
+    		
+    		h.marker = new Element(&quot;DIV&quot;, {
+    			style: &quot;position:absolute; opacity:0.0; top:65px; left:&quot; + (html.getBoundingClientRect().left - containerLeft) + &quot;px; width:&quot; + html.getBoundingClientRect().width + &quot;px; height:5px&quot;,
+    			class: &quot;toolbar_marker_bg&quot;
+    		});
+    		h.content.insert(h.marker);
+    		
+    		var player = h.marker.animate([
+	     		    {
+	     		    	opacity: &quot;0.0&quot;
+	     		    },
+	     		    {
+	     		    	opacity: &quot;1.0&quot;
+	     		    },
+	     		], {
+	     			direction: &#x27;normal&#x27;,
+	     		    duration: 1000,
+	     		    easing: &quot;ease&quot;,
+	     			iterations: 1,
+	     			fill: &quot;both&quot;
+		   		});
+    	} else {
+			var player = h.marker.animate([
+	  		    {
+	  		       left: (h.marker.getBoundingClientRect().left- containerLeft) + &quot;px&quot;,
+	  		       width: h.marker.getBoundingClientRect().width + &quot;px&quot;
+	  		    },
+	  		    {
+	   		       left: (html.getBoundingClientRect().left - containerLeft) + &quot;px&quot;,
+	   		       width: (html.getBoundingClientRect().width - 1) + &quot;px&quot;
+	  		    },
+	  		], {
+	  			direction: &#x27;normal&#x27;,
+	  		    duration: 1000,
+	  		    easing: &quot;ease&quot;,
+	  			iterations: 1,
+	  			fill: &quot;both&quot;
+			});
+    	}
+    }
+});
+UI.Tabs = Class.create(UI.MaterialComponent, {
+
+    initConfig: function(config) {
+        this.config = Object.extend({
+        	type: &quot;toolbar&quot;
+        }, config || {});
+    },
+
+    render: function() {
+        var h = this;
+        
+        h.layout = new UI.BorderLayout({
+        	inside: h.getMaterial(),
+        	north: {
+        		height:70
+        	}
+        });
+
+        var i = 0;
+        for (i=0; i&lt;h.config.tabs.length; i++) { 
+        	if (h.config.tabs[i].access !== undefined &amp;&amp; h.config.tabs[i].access != UI.VISIBLE) {
+        		continue;
+        	}
+        	h.addCard(h.config.tabs[i]);
+        }
+        
+        if (h.config.type == &quot;toolbar&quot;) {
+	        h.toolbar = new UI.Toolbar({
+	        	inside: h.layout.getNorth(),
+	        	orientation: &quot;horizontal&quot;,
+	        	items: h.config.tabs
+	        });
+        } else if (h.config.type == &quot;breadcrumb&quot;) {
+	        h.toolbar = new UI.BreadCrumb({
+	        	inside: h.layout.getNorth(),
+	        	orientation: &quot;horizontal&quot;,
+	        	firstItem: h.config.tabs[0]
+	        });
+        } else if (h.config.type == &quot;icon&quot;) {
+	        h.toolbar = new UI.IconToolbar({
+	        	inside: h.layout.getNorth(),
+	        	orientation: &quot;horizontal&quot;,
+	        	items: h.config.tabs
+	        });
+        }
+    },
+
+    addCard: function(tabItem) {
+    	var h = this;
+    	
+    	tabItem.onClick = function(tab) {
+    		if (tab.onActivate !== undefined) {
+    			if (h.activeCard !== undefined) {
+    				h.activeCard.hide();
+    			}
+
+    			var card = tab.card; 
+
+    			if (card === undefined) {
+    				card = new Element(&quot;DIV&quot;, {
+    					class: &quot;inside&quot;
+    				});
+    				h.layout.getDefault().insert(card);
+    				tab.card = card;
+
+    				tab.onActivate(card);
+    			} else {
+    				card.show();
+    			}
+    			h.activeCard = card;
+    		}
+    	}
+    },
+
+    addTab: function(tab) {
+    	var h = this;
+
+	    	h.addCard(tab);
+	    	h.toolbar.addItem(tab);
+    }
+});
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

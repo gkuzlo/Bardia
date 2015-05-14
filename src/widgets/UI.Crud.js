@@ -5,16 +5,12 @@
 * @constructor
 */
 UI.Crud = Class.create(UI.MaterialComponent, {
-	/**
-	 * 
-	 */
+
 	initConfig: function(config) {
         this.config = Object.extend({
         }, config || {});
 	},
-	/**
-	 * 
-	 */
+
 	render: function() {
 		var h = this;
 

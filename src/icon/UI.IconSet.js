@@ -2,9 +2,6 @@
  * @class UI.IconSet
  */
 UI.IconSet = Class.create({
-	/**
-	 * 
-	 */
     initialize: function(config) {
         this.config = Object.extend({
         	path: "",
@@ -28,9 +25,6 @@ UI.IconSet = Class.create({
         this.config.hash.set("import", "/ic_input_white_18dp.png");
         this.config.hash.set("arrow_right", "/ic_trending_neutral_white_18dp.png");
     },
-    /**
-     * 
-     */
     getIcon: function(iconId) {
     	var h = this;
 		

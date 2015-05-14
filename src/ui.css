@@ -12,12 +12,12 @@ div {
 }
 
 .header {
-    height:70px; position:absolute; top:0px; right:0px; left:0px; line-height:65px; overflow:hidden; float:left; font-size:20px; padding-left:70px;
+    height:60px; position:absolute; top:0px; right:0px; left:0px; line-height:60px; overflow:hidden; float:left; font-size:20px; padding-left:70px;
     background-color:#ebf0ee; color:#525070; border:0px
 }
 
 .content {
-    position:absolute; top:70px; bottom:0px; right:0px; left:0px; overflow:hidden;
+    position:absolute; top:60px; bottom:0px; right:0px; left:0px; overflow:hidden;
 }
 
 .bg_main {

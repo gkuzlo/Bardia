@@ -1,6 +1,4 @@
-/* --------------------------------------------------------------------------
- *  All rights reserved
- * -------------------------------------------------------------------------- */
+
 var UI = {
     version: 1.0,
     uploadAction: "http://localhost:8080/scheduler/file.upload",
@@ -12,25 +10,24 @@ var UI = {
     HIDDEN: 4
 }
 
-UI.play = function(html, config) {
-	html.animate(config, {
+UI.play = function(html, config, finishFun) {
+	var player = html.animate(config, {
 		direction: 'normal',
-	    duration: 1000,
+	    duration: 500,
 	    easing: "ease",
 		iterations: 1,
 		fill: "both"
 	});
+	
+	if (finishFun) {
+		player.onfinish = finishFun;
+	}
 }
 
 $PLAY = UI.play;
 
-/**
- * 
- */
 UI.Header = Class.create({
-	/**
-	 * 
-	 */
+
     initialize: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
@@ -40,9 +37,6 @@ UI.Header = Class.create({
 
         this.render();
     },
-    /**
-     * 
-     */
     render: function() {
         var h = this;
             h.header = new Element("DIV", {
@@ -51,9 +45,6 @@ UI.Header = Class.create({
             h.header.insert(h.config.title);
             h.config.inside.insert(h.header);
     },
-    /**
-     * 
-     */
     addHeaderElement: function(element) {
     	this.header.insert(element.getHTML());
     }
@@ -388,16 +379,10 @@ UI.ToastManager = Class.create({
  * @class UI.StringUtils
  */
 UI.StringUtils = Class.create({
-	/**
-	 * 
-	 */
 	initialize: function(config) {
         this.config = Object.extend({
         }, config || {});
 	},
-	/**
-	 * 
-	 */
 	compile: function(str, bean) {
 		var result = str;
 
@@ -436,9 +421,6 @@ UI.StringUtils = Class.create({
 
 var STRUTILS = new UI.StringUtils();
 
-/**
- * 
- */
 UI.CookieManager = Class.create({
     initialize: function(config) {
     },
@@ -464,13 +446,7 @@ UI.CookieManager = Class.create({
     }
 });
 
-/**
- * 
- */
 UI.Resources = Class.create({
-    /*
-     * 
-     */
     initialize: function(path, appName) {
         this.path = path;
 
@@ -483,9 +459,6 @@ UI.Resources = Class.create({
             }
         this.properties = new Hash();
     },
-    /*
-     * 
-     */
     load: function() {
         var handler = this;
 

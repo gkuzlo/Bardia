@@ -1,13 +1,20 @@
-/**
- * @class UI.Material
- *  
- * Jest to kontener na różne moduły
- * Za pomocą metod show i hide animujemy pokazywanie i chowanie
+/** 
+  sjlksjlksjlksjslkjsl 
+~~~javascript
+	var progress = new UI.ProgressBar({
+		inside: layout.getSouth()
+	});
+~~~
+  
+  @class UI.Material
+  @method
+  @example
+        jQuery.ajax({ 
+            url: 'foo/'
+        });
+
  */
 UI.Material = Class.create({
-	/**
-	 * 
-	 */
     initialize: function(config) {
     	    	
         this.config = Object.extend({
@@ -61,9 +68,7 @@ UI.Material = Class.create({
     	h.right = h.material.getBoundingClientRect().right;
     	h.bottom = parseInt(h.material.style.bottom);
     	h.top = h.material.getBoundingClientRect().top;
-    	    	
-    	h.parentWidth = h.config.inside.getBoundingClientRect().width;
-    	
+
     	if (h.config.effect == "from-left") {
     		h.material.setStyle({
     			left: (-h.width) + "px"
@@ -96,9 +101,6 @@ UI.Material = Class.create({
     	var h = this;
     	
     	h.curtainOn();
-    	
-    	var translateX = 0;
-    	var translateY = 0;
 
     	if (h.config.effect == "from-left") {
     		var player = h.material.animate([
@@ -155,7 +157,7 @@ UI.Material = Class.create({
 	    	if (h.config.onHeightChanged) {
 	    		h.config.onHeightChanged();
 	    	}
-		}
+		};
     },
     hide: function() {
     	var h = this;

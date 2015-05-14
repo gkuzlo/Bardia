@@ -2,17 +2,11 @@
  * @class UI.Panel
  */
 UI.Panel = Class.create(UI.MaterialComponent, {
-	/**
-	 * 
-	 */
     initConfig: function(config) {
         this.config = Object.extend({
         	className: "bg_main fg_white"
         }, config || {});
     },
-    /**
-     * 
-     */
     render: function() {
         var h = this;
 
@@ -26,9 +20,6 @@ UI.Panel = Class.create(UI.MaterialComponent, {
     		className: h.config.className
     	});
     },
-    /**
-     * 
-     */
     getContent: function() {
     	return this.content.getMaterial();
     }

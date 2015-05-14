@@ -1,13 +1,10 @@
-/**
- * Formularz
- * 
+/** 
  * @class UI.Form
- * @constructor
  */
 UI.Form = Class.create(UI.MaterialComponent, {
-    /**
-     * 
-     */
+	/** 
+	 * @param config
+	 */
     initConfig: function(config) {
         this.config = Object.extend({
             fields: [],
@@ -20,44 +17,34 @@ UI.Form = Class.create(UI.MaterialComponent, {
      */
     render: function() {
     	var h = this;
-
-		h.formContent = new Element("DIV", {
-			class: "form"
-		});
-		h.config.inside.update(h.formContent);
-		
-		var top = 60;
-		var bottom = 60;
-		
-		if (h.config.title == undefined) {
-			top = 0;
-		}
-		
-		if (h.config.buttons == undefined) {
-			bottom = 0;
-		}
-
-		h.fieldsContent = new Element("DIV", {
-			class: "form_fields_content",
-			style: "top:" + top + "px; bottom:" + bottom + "px"
-		});
-		h.formContent.insert(h.fieldsContent);
-
+	
+    	var layoutConfig = {
+    		inside: h.getMaterial()
+    	};
+    	
 		if (h.config.title !== undefined) {
-			h.formHeader = new Element("DIV", {
-				class: "form_header bg_main fg_white"
+			layoutConfig.north = {
+				height: 60
+			};
+		}
+
+		if (h.config.buttons !== undefined) {
+			layoutConfig.south = {
+				height: 60
+			};
+		}
+
+		var layout = new UI.BorderLayout(layoutConfig);
+		
+		if (h.config.title !== undefined) {
+			var titleDiv = new Element("DIV", {
+				class: "form_header"
 			});
-			h.formHeader.insert(h.config.title);
-			h.formContent.insert(h.formHeader);
+
+			layout.getNorth().update(titleDiv);
+			titleDiv.update(h.config.title);
 		}
         
-		if (h.config.buttons !== undefined) {
-			h.formFooter = new Element("DIV", {
-				class: "form_footer"
-			});
-			h.formContent.insert(h.formFooter);
-		}
-
     	if (h.config.fields !== undefined) {
     		var i=0;
     		for (i=0; i<h.config.fields.length; i++) {		
@@ -78,24 +65,20 @@ UI.Form = Class.create(UI.MaterialComponent, {
 
     					h.config.fieldControlls.push(field);
 
-    				h.fieldsContent.insert(field.getMaterial());
+    				layout.getDefault().insert(field.getMaterial());
     		}
     	}
 
     	if (h.config.buttons !== undefined) {
-	    	var i=0; 
-	    	for (i=0; i<h.config.buttons.length; i++) {
-	    		var fabConfig = h.config.buttons[i];
-	    			fabConfig.inside = h.formContent;
-	    			fabConfig.left = h.config.inside.getClientRects()[0].width - (60 * (i+1));
-	    			fabConfig.top = h.config.inside.getClientRects()[0].height - 80;
-	
-	    		new UI.Fab(fabConfig);
-	    	}
+	    	new UI.FabToolbar({
+	    		inside: layout.getSouth(),
+	    		buttons: h.config.buttons
+	    	});
     	}
     },
     /**
-     * 
+     * @method setTitle
+     * @param title
      */
     setTitle: function(title) {
     	var h = this;
@@ -152,5 +135,17 @@ UI.Form = Class.create(UI.MaterialComponent, {
     validate: function() {
     	var result = true;
     	return result;
+    },
+    /**
+     * 
+     * @param trueOrFalse
+     */
+    setReadOnly: function(trueOrFalse) {
+    	var h = this;
+    	
+    	var i=0;
+    	for (i=0; i<h.config.fields.length; i++) {
+    		h.config.fieldControlls[i].setReadOnly(trueOrFalse);
+    	}
     }
 });

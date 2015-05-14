@@ -1,9 +1,9 @@
 /**
- * @class UI.BorderLayout
+ * @constructor UI.BorderLayout
  */
 UI.BorderLayout = Class.create(UI.MaterialComponent, {
 	/**
-	 * @method
+	 * @method initConfig
 	 */
 	initConfig: function(config) {
         this.config = Object.extend({
@@ -11,7 +11,7 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
         }, config || {});
 	},
 	/**
-	 * @method 
+	 * @method render
 	 */
     render: function() {
         

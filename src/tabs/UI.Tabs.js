@@ -1,15 +1,11 @@
 UI.Tabs = Class.create(UI.MaterialComponent, {
-	/**
-	 * 
-	 */
+
     initConfig: function(config) {
         this.config = Object.extend({
         	type: "toolbar"
         }, config || {});
     },
-    /**
-     * 
-     */
+
     render: function() {
         var h = this;
         
@@ -48,9 +44,7 @@ UI.Tabs = Class.create(UI.MaterialComponent, {
 	        });
         }
     },
-    /**
-     * 
-     */
+
     addCard: function(tabItem) {
     	var h = this;
     	
@@ -77,9 +71,7 @@ UI.Tabs = Class.create(UI.MaterialComponent, {
     		}
     	}
     },
-    /**
-     * 
-     */
+
     addTab: function(tab) {
     	var h = this;
 

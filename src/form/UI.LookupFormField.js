@@ -51,9 +51,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		
 		h.fab = new UI.Fab({
 			inside: h.inside,
-			width: 20,
-			height: 20,
-			left: h.config.width + 20,
+			style: "position:absolute; left:" + h.config.width + "px; width:20px; height:20px; top:18px;",
 			fill: "green",
 			icon: "download",
 			bottom: 8,
@@ -80,9 +78,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
     		h.unanimateLabel();
     	}
     },
-    /**
-     * 
-     */
+
     setBeanValue: function(bean) {
     	var h = this;
 
@@ -104,9 +100,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
     		display: (ro==true)?"none":"block"
     	});
     },
-    /**
-     * 
-     */
+
     showLookupCard: function() {
     	var h = this;
     	
@@ -183,9 +177,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			}
 		}
     },
-    /**
-     * 
-     */
+
     removeLookupCard: function() {
     	var h = this;
     	

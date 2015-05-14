@@ -1,10 +1,6 @@
-/**
- * 
- */
+
 UI.GridInputCell = Class.create({
-	/**
-	 * 
-	 */
+
     initialize: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
@@ -17,9 +13,7 @@ UI.GridInputCell = Class.create({
         this.render();
         this.setReadOnly(this.config.readOnly);
     },
-    /**
-     * 
-     */
+
     render: function() {
     	var h = this;
     		h.input = new Element("INPUT", {
@@ -52,9 +46,7 @@ UI.GridInputCell = Class.create({
     	h.input.value = value;
     	eval("h.config.bean." + h.config.property + " = value");
     },
-    /**
-     * 
-     */
+
     setReadOnly: function(readOnly) {
     	var h = this;
     	
@@ -70,9 +62,7 @@ UI.GridInputCell = Class.create({
     		});
     	}
     },
-    /**
-     * 
-     */
+
     getMaterial: function() {
     	return this.input;
     }

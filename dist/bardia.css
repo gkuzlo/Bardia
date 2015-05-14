@@ -2,7 +2,7 @@
 	position:absolute; top:0px; right:0px; left:0px; bottom:0px; 
 }
 .form_header {
-	position:absolute; top:0px; right:0px; left:0px; height:55px; line-height:55px; font-size:16px; font-weight:bold; padding-left:10px;
+	position:absolute; top:0px; right:0px; left:0px; height:59px; line-height:59px; font-size:16px; font-weight:bold; padding-left:10px;
 	background-color:#ebf0ee; color:#525070; border:0px solid #c9cece; border-width:0px 0px 1px 0px; 
 }
 .form_fields_content {
@@ -15,24 +15,19 @@
 .list {
 	position:absolute; top:0px; right:0px; left:0px; bottom:0px; 
 }
-
 .list_header {
-	position:absolute; top:0px; right:0px; left:0px; height:55px; line-height:55px; font-size:16px; font-weight:bold; padding-left:70px;
+	position:absolute; top:0px; right:0px; left:0px; height:59px; line-height:59px; font-size:16px; font-weight:bold; padding-left:10px;
 	background-color:#ebf0ee; color:#525070; border:0px solid #c9cece; border-width:0px 0px 1px 0px; 
 }
-
 .list_content {
-	position:absolute; top:20px; right:0px; left:0px; bottom:60px; overflow:auto 
+	position:absolute; top:0px; right:50px; left:0px; bottom:0px; overflow:auto;
 }
-
 .list_footer {
 	position:absolute; right:0px; left:0px; bottom:0px; height:60px; border:0px solid #cdcdcf; border-width:1px 0px 0px 0px;
 }
-
 .list_content div {
-	position:relative; background-color:white; height:40px; border:0px solid #cdcdcf; border-width:0px 0px 1px 0px; overflow:auto; text-align:left
+	background-color:white; height:40px; border:0px solid #cdcdcf; border-width:0px 0px 1px 0px; overflow:auto; text-align:left
 }
-
 .list_content div div {
 	background-color:transparent; height:20px; border:0px solid #cdcdcf; font-size:12px; line-height:20px; padding-left:70px; color:#535270; 
 }
@@ -50,12 +45,12 @@ div {
 }
 
 .header {
-    height:70px; position:absolute; top:0px; right:0px; left:0px; line-height:65px; overflow:hidden; float:left; font-size:20px; padding-left:70px;
+    height:60px; position:absolute; top:0px; right:0px; left:0px; line-height:60px; overflow:hidden; float:left; font-size:20px; padding-left:70px;
     background-color:#ebf0ee; color:#525070; border:0px
 }
 
 .content {
-    position:absolute; top:70px; bottom:0px; right:0px; left:0px; overflow:hidden;
+    position:absolute; top:60px; bottom:0px; right:0px; left:0px; overflow:hidden;
 }
 
 .bg_main {

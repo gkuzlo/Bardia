@@ -18,41 +18,63 @@ UI.List = Class.create(UI.MaterialComponent, {
 	render: function() {
 		var h = this;
 
-		h.config.inside.on("mousedown", function(e) {
+		h.getMaterial().on("mousedown", function(e) {
 			e.cancelBubble = true;
 			e.returnValue = false;
 		});
 		
-		h.config.inside.on("click", function(e) {
+		h.getMaterial().on("click", function(e) {
 			e.cancelBubble = true;
 			e.returnValue = false;
 		});
 		
-		h.config.inside.on("DOMMouseScroll", function(e) {
+		h.getMaterial().on("DOMMouseScroll", function(e) {
 			e.cancelBubble = true;
 			e.returnValue = false;
 		});
 
-		h.panel = new UI.Panel({
+		h.mainLayout = new UI.BorderLayout({
 			inside: h.getMaterial(),
-			title: h.config.title,
-			className: "list_header"
-		});
-
-		h.rowsContent = new Element("DIV", {
-			class: "list_content"
+			north: {
+				height: 60
+			}
 		});
 		
-		h.rowsFooter = new Element("DIV", {
-			class: "list_footer"
+		var titleDiv = new Element("DIV", {
+			class: "list_header"
 		});
+
+		h.mainLayout.getNorth().update(titleDiv);
+		titleDiv.update(h.config.title);
+
+		h.layout = null;
+		if (h.config.buttons && h.config.buttons.length > 0) {
+			h.layout = new UI.BorderLayout({
+				inside: h.mainLayout.getDefault(),
+				north: {
+					height: 60
+				},
+				south: {
+					height: 60
+				}
+			});
+		} else {
+			h.layout = new UI.BorderLayout({
+				inside: h.mainLayout.getDefault(),
+				south: {
+					height: 60
+				}
+			});
+		}
 		
 		h.listContent = new Element("DIV", {
-			class: "list"
+			style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; overflow:auto",
+			class: "list_content"
 		});
+		h.layout.getDefault().update(h.listContent);
 				
 		new UI.Form({
-			inside: h.rowsFooter,
+			inside: h.layout.getSouth(),
 			fields: [
 		         {
 		        	 property: "search",
@@ -68,24 +90,30 @@ UI.List = Class.create(UI.MaterialComponent, {
 			]
 		});
 		
-		h.listContent.insert(h.rowsContent);
-		h.listContent.insert(h.rowsFooter);
-
-		h.panel.getContent().update(h.listContent);
-
-		this.rowsContent.on("click", "div.row", function(e, element) {
+		h.listContent.on("click", "div.row", function(e, element) {
 			if (h.config.onClick) {
 				h.config.onClick(element);
 			}
 		});
 		
-		var b = 0;
-		for (b=0; b < h.config.buttons.length; b++) {
-			h.config.buttons[b].inside = h.getMaterial(); 
-			h.config.buttons[b].top = 35;
-			h.config.buttons[b].left = 10 + 50 * (b);
-			
-			var fab = new UI.Fab(h.config.buttons[b]);
+		h.listContent.on("mouseover", "div.row", function(e, element) {
+			if (h.config.onMouseOver) {
+				h.config.onMouseOver(element);
+			}
+		});
+		
+		h.listContent.on("mouseout", "div.row", function(e, element) {
+			if (h.config.onMouseOut) {
+				h.config.onMouseOut(element);
+			}
+		});
+
+		if (h.layout.getNorth()) {
+			new UI.FabToolbar({
+				inside: h.layout.getNorth(),
+				orientation: "left",
+				buttons: h.config.buttons
+			});
 		}
 	},
 	/*
@@ -104,7 +132,7 @@ UI.List = Class.create(UI.MaterialComponent, {
 		var h = this;
 
 		h.config.rows = data.rows || [];
-		h.rowsContent.update("");
+		h.listContent.update("");
 
 		var i=0;
 		for (i=0; i<h.config.rows.length; i++) {
@@ -143,10 +171,8 @@ UI.List = Class.create(UI.MaterialComponent, {
 				row.insert(_footer);				
 			}
 
-			h.rowsContent.insert(row);
+			h.listContent.insert(row);
 			
-			var rr = row;
-
 			if (h.config.removable === true) {
 				new UI.Fab({
 					inside: row,
@@ -159,7 +185,6 @@ UI.List = Class.create(UI.MaterialComponent, {
 					top: 12,
 					title: "Usuń",
 					icon: "close",
-					zHeight: 3,
 					onClick: function(fab) {
 						if (h.config.onRemove) {
 							h.config.onRemove(fab.config.inside);
@@ -174,10 +199,10 @@ UI.List = Class.create(UI.MaterialComponent, {
 	 */
 	filter: function(v) {
 		var h = this;
-				
+
 		var i=0;
-		for (i=0; i<h.rowsContent.childElements().length; i++) {
-			var child = h.rowsContent.childElements()[i];
+		for (i=0; i<h.listContent.childElements().length; i++) {
+			var child = h.listContent.childElements()[i];
 			if (child.innerHTML.toLowerCase().indexOf(v.toLowerCase()) >= 0) {
 				child.show();
 			} else {

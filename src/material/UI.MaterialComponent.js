@@ -1,9 +1,10 @@
 /**
- * @class SPR.MaterialComponent
+ * @class UI.MaterialComponent
  */
 UI.MaterialComponent = Class.create({
 	/**
-	 * 
+	 * @constructor
+	 * @param config
 	 */
     initialize: function(config) {
 		try {
@@ -14,15 +15,9 @@ UI.MaterialComponent = Class.create({
 			alert("--------" + e);
 		}
     },
-    /**
-     * 
-     */
     initConfig: function(config) {
     	alert("initConfig() not implemeted");
     },
-    /**
-     * 
-     */
     renderMaterial: function() {    	
     	var h = this;
     	
@@ -39,9 +34,6 @@ UI.MaterialComponent = Class.create({
 				e.returnValue = false;
 			});
     },
-    /**
-     * 
-     */
     render: function() {
     	alert("render() not implemeted");
     },

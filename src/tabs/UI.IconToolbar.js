@@ -1,13 +1,9 @@
 UI.IconToolbar = Class.create(UI.MaterialComponent, {
-	/**
-	 * 
-	 */
+
 	initConfig : function(config) {
 		this.config = Object.extend({}, config || {});
 	},
-	/**
-	 * 
-	 */
+
 	render : function() {
 		var h = this;
 
@@ -28,9 +24,7 @@ UI.IconToolbar = Class.create(UI.MaterialComponent, {
     	h.getMaterial().update(h.content);
     	h.renderItems();
 	},
-	/**
-	 * 
-	 */
+
 	renderItems: function() {
     	var h = this;
 
@@ -61,9 +55,7 @@ UI.IconToolbar = Class.create(UI.MaterialComponent, {
     		}
     	}
 	},
-	/**
-	 * 
-	 */
+
 	displayMarker: function(html) {
 		var h = this;
 		

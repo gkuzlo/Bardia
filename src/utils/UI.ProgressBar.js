@@ -1,10 +1,6 @@
-/**
- * 
- */
+
 UI.ProgressBar = Class.create(UI.MaterialComponent, {
-	/**
-	 * 
-	 */
+
     initConfig: function(config) {
         this.config = Object.extend({
         	orientation: "horizontal",
@@ -12,9 +8,6 @@ UI.ProgressBar = Class.create(UI.MaterialComponent, {
         	doneColor: "green"
         }, config || {});
     },
-    /**
-     * 
-     */
     render: function() {
         var h = this;
 
@@ -39,9 +32,7 @@ UI.ProgressBar = Class.create(UI.MaterialComponent, {
     	h.getMaterial().insert(h.total);
     	h.getMaterial().insert(h.done);
     },
-    /**
-     * 
-     */
+
     setProgress: function(p) {
     	var h = this;
 
@@ -72,17 +63,13 @@ UI.ProgressBar = Class.create(UI.MaterialComponent, {
  			fill: "both"
 		});
     },
-    /**
-     * 
-     */
+
     setLabel: function(label) {
     	var h = this;
     	
     	h.label.update(label);;
     },
-    /**
-     * 
-     */
+
     failure: function() {
     	var h = this;
     		h.total.setStyle({
@@ -96,9 +83,7 @@ UI.ProgressBar = Class.create(UI.MaterialComponent, {
     			h.config.onFinish();
     		}
     },
-    /**
-     * 
-     */
+
     finish: function() {
     	var h = this;	
     		if (h.config.onFinish) {

@@ -27,9 +27,7 @@
  * form.setBean(bean);
  */
 UI.FileFormField = Class.create(UI.TextFormField, {
-	/**
-	 * 
-	 */
+
     initialize: function(config) {    
         this.config = Object.extend({
         	property: "$",
@@ -39,9 +37,7 @@ UI.FileFormField = Class.create(UI.TextFormField, {
         	bean: {}        	
         }, config || {});
     },
-    /**
-     * 
-     */
+
     initConfig: function(config) {
         this.config = Object.extend({
         	property: "$",
@@ -56,9 +52,7 @@ UI.FileFormField = Class.create(UI.TextFormField, {
         this.render();
         this.setReadOnly(this.config.readOnly);
     },
-    /**
-     * 
-     */
+
 	render: function() {
     	var h = this;
     	
@@ -109,9 +103,7 @@ UI.FileFormField = Class.create(UI.TextFormField, {
 
 		h.fab = new UI.Fab({
 			inside: h.inside,
-			width: 20,
-			height: 20,
-			left: h.config.width + 20,
+			style: "position:absolute; left:" + (h.config.width - 10) + "px; width:20px; height:20px; top:18px;",
 			fill: "green",
 			icon: "download",
 			bottom: 8,
@@ -177,9 +169,7 @@ UI.FileFormField = Class.create(UI.TextFormField, {
 			xhr.send(form);
 		});
 	},
-	/**
-	 * 
-	 */
+
     setInputValue: function(bean) {
     	var h = this;
     	
@@ -199,16 +189,12 @@ UI.FileFormField = Class.create(UI.TextFormField, {
     		h.unanimateLabel();
     	}
     },
-    /**
-     * 
-     */
+
     setBeanValue: function(bean) {
     	var h = this;
     	eval("h.config.bean." + h.config.property + " = bean;");
     },
-    /**
-     * 
-     */
+
     showUploadFile: function() {
     	var h = this;    		
     }

@@ -1,18 +1,12 @@
-/**
- * 
- */
+
 UI.Toolbar = Class.create(UI.MaterialComponent, {
-	/**
-	 * 
-	 */
+
     initConfig: function(config) {
         this.config = Object.extend({
         	orientation: "vertical"
         }, config || {});
     },
-    /**
-     * 
-     */
+
     render: function() {
         var h = this;
 
@@ -29,9 +23,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     		h.renderItemsHorizontally();
     	}
     },
-    /**
-     * 
-     */
+ 
     renderItemsVertically: function() {
     	var h = this;
 
@@ -44,7 +36,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
         	}
     		
     		var item = new Element("DIV", {
-    			style: "padding-left:15px; font-size:14px; border-bottom: 1px solid #1E1D29; line-height:70px; height:70px; overflow:hidden",
+    			style: "padding-left:15px; font-size:14px; border-bottom: 1px solid #1E1D29; line-height:60px; height:60px; overflow:hidden",
     			class: "toolbar_bg"
     		});
     		item.onClick = h.config.items[i].onClick;
@@ -68,9 +60,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     		}
     	}
     },
-    /**
-     * 
-     */
+
     renderItemsHorizontally: function() {
     	var h = this;
 
@@ -108,9 +98,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     		}
     	}
     },
-    /**
-     * 
-     */
+
     displayMarkerVertically: function(html) {
     	var h = this;
 
@@ -154,9 +142,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
 			});
     	}
     },
-    /**
-     * 
-     */
+
     displayMarkerHorizontally: function(html) {
     	var h = this;
 

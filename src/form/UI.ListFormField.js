@@ -22,9 +22,7 @@ UI.ListFormField = Class.create(UI.LookupFormField, {
     		h.unanimateLabel();
     	}
     },
-    /**
-     * 
-     */
+
     setBeanValue: function(str) {
     	var h = this;
 
@@ -124,9 +122,7 @@ UI.ListFormField = Class.create(UI.LookupFormField, {
 			}
 		}
     },
-    /**
-     * 
-     */
+
     removeLookupCard: function() {
     	var h = this;
     	
