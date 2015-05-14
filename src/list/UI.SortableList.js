@@ -103,6 +103,12 @@ UI.SortableList = Class.create(UI.MaterialComponent, {
 		rowDiv.update(h.config.renderer(rowDiv));
 		rowDiv.draggable = true;
 
+		rowDiv.on("click", function(e) {
+			if (h.config.onClick) {
+				h.config.onClick(e.target);
+			}
+		});
+		
 		rowDiv.on("dragover", function(e) {
 			e.target.setStyle({
 				borderBottomColor: "#525070"

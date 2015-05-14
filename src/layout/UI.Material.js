@@ -1,22 +1,12 @@
 /** 
-  sjlksjlksjlksjslkjsl 
-~~~javascript
-	var progress = new UI.ProgressBar({
-		inside: layout.getSouth()
-	});
-~~~
-  
-  @class UI.Material
-  @method
-  @example
-        jQuery.ajax({ 
-            url: 'foo/'
-        });
-
+ * 
  */
 UI.Material = Class.create({
+	/**
+	 * 
+	 * @param config
+	 */
     initialize: function(config) {
-    	    	
         this.config = Object.extend({
             inside: window.document.body,
             effect: "from-left",

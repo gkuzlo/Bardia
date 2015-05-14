@@ -117,10 +117,12 @@ UI.TextFormField = Class.create({
     	h.input.readOnly = ro;
     	h.input.disabled = ro;
     	
-    	if (ro === true) {
-    		h.curtain.show();
-    	} else {
-    		h.curtain.hide();
+    	if (h.curtain) {
+	    	if (ro === true) {
+	    		h.curtain.show();
+	    	} else {
+	    		h.curtain.hide();
+	    	}
     	}
     },
     /**

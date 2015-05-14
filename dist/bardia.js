@@ -1525,24 +1525,14 @@ UI.FabToolbar = Class.create({
     }
 });
 /** 
-  sjlksjlksjlksjslkjsl 
-~~~javascript
-	var progress = new UI.ProgressBar({
-		inside: layout.getSouth()
-	});
-~~~
-  
-  @class UI.Material
-  @method
-  @example
-        jQuery.ajax({ 
-            url: 'foo/'
-        });
-
+ * 
  */
 UI.Material = Class.create({
+	/**
+	 * 
+	 * @param config
+	 */
     initialize: function(config) {
-    	    	
         this.config = Object.extend({
             inside: window.document.body,
             effect: "from-left",
@@ -2089,6 +2079,12 @@ UI.SortableList = Class.create(UI.MaterialComponent, {
 		rowDiv.update(h.config.renderer(rowDiv));
 		rowDiv.draggable = true;
 
+		rowDiv.on("click", function(e) {
+			if (h.config.onClick) {
+				h.config.onClick(e.target);
+			}
+		});
+		
 		rowDiv.on("dragover", function(e) {
 			e.target.setStyle({
 				borderBottomColor: "#525070"
@@ -2414,10 +2410,12 @@ UI.TextFormField = Class.create({
     	h.input.readOnly = ro;
     	h.input.disabled = ro;
     	
-    	if (ro === true) {
-    		h.curtain.show();
-    	} else {
-    		h.curtain.hide();
+    	if (h.curtain) {
+	    	if (ro === true) {
+	    		h.curtain.show();
+	    	} else {
+	    		h.curtain.hide();
+	    	}
     	}
     },
     /**
