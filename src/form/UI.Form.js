@@ -142,7 +142,7 @@ UI.Form = Class.create(UI.MaterialComponent, {
      */
     setReadOnly: function(trueOrFalse) {
     	var h = this;
-    	
+
     	var i=0;
     	for (i=0; i<h.config.fields.length; i++) {
     		h.config.fieldControlls[i].setReadOnly(trueOrFalse);

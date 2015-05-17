@@ -48,7 +48,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		h.inside.insert(h.underline);
 		h.inside.insert(h.label);
 		h.inside.insert(h.input);
-		
+
 		h.fab = new UI.Fab({
 			inside: h.inside,
 			style: "position:absolute; left:" + h.config.width + "px; width:20px; height:20px; top:18px;",
@@ -100,11 +100,13 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
     		display: (ro==true)?"none":"block"
     	});
     },
-
+    /**
+     * @method showLookupCard
+     */
     showLookupCard: function() {
     	var h = this;
     	
-		var f = h.form.formContent;
+		var f = h.form.getMaterial();
 		var formOffset = f.cumulativeOffset();
 		var fieldOffset = h.fab.material.cumulativeOffset(); 
 						
@@ -115,7 +117,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			left: (fieldOffset.left - formOffset.left) + "px",
 			overflow: "hidden"
 		});
-		h.form.formContent.insert(h.tmpFab);
+		f.insert(h.tmpFab);
 
 		h.list = new UI.List({
 			inside: h.tmpFab,
@@ -125,11 +127,9 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 				return h.config.patternRenderer(row.bean);
 			},
 			onClick: function(row) {
-				if (h.config.onChange) {
-					h.setBeanValue(row.bean);
-					h.setInputValue(row.bean);
-					h.removeLookupCard();
-				}
+				h.setBeanValue(row.bean);
+				h.setInputValue(row.bean);
+				h.removeLookupCard();
 			}
 		});
 
@@ -175,13 +175,17 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			if (h.config.fetchList) {
 				h.config.fetchList(h.list);
 			}
-		}
+		};
+    },
+    
+    getList: function() {
+    	return this.list;
     },
 
     removeLookupCard: function() {
     	var h = this;
     	
-		var f = h.form.formContent;
+		var f = h.form.getMaterial();
 		var formOffset = f.cumulativeOffset();
 		var fieldOffset = h.fab.material.cumulativeOffset(); 
 
