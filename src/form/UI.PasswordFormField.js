@@ -39,9 +39,9 @@ UI.PasswordFormField = Class.create(UI.TextFormField, {
     		});
     		
     		h.label = new Element("DIV", {
-    			style: "position:absolute; top:20px; left:10px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;"
+    			style: "position:absolute; top:20px; left:10px; border:0px; height:10px; color:#999999; font-weight:bold; font-size:14px;"
     		});
-    		h.label.insert(h.config.label);
+    		h.label.insert(h.config.label + " " + ((h.config.required)?"*":""));
 
 	    	h.underline = new Element("DIV", {
 	    		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:" + h.config.width + "px"

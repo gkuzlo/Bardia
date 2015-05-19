@@ -17,7 +17,8 @@ UI.TextFormField = Class.create({
         	readOnly: false,
         	width: 200,
         	bean: {},
-        	mask: new Input(null)
+        	mask: new Input(null),
+        	required: false
         }, config || {});
 
         this.render();
@@ -79,9 +80,9 @@ UI.TextFormField = Class.create({
 		}
 		    		
 		h.label = new Element("DIV", {
-			style: "position:absolute; top:10px; left:10px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;"
+			style: "position:absolute; top:10px; left:10px; border:0px; height:10px; color:#999999; font-weight:bold; font-size:14px;"
 		});
-		h.label.insert(h.config.label);
+		h.label.insert(h.config.label + " " + ((h.config.required)?"*":""));
 
     	h.underline = new Element("DIV", {
     		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:" + h.config.width + "px"
@@ -130,8 +131,8 @@ UI.TextFormField = Class.create({
      */
     animateLabel: function() {
     	$PLAY(this.label, [
-    	    {opacity: 1.0, transform: "translate(0px, 0px)", color:"#cdcdcf", fontSize: "14px"},
-    	    {opacity: 1.0, transform: "translate(0px, -18px)", color:"#999999", fontSize: "11px"},
+    	    {opacity: 1.0, transform: "translate(0px, 0px)", fontSize: "14px"},
+    	    {opacity: 1.0, transform: "translate(0px, -18px)", fontSize: "11px"},
     	]);
     },
     /**
@@ -139,9 +140,9 @@ UI.TextFormField = Class.create({
      */
     unanimateLabel: function() {
     	$PLAY(this.label, [
-    	    {opacity: 1.0, transform: "translate(0px, -18px)", color:"#cdcdcf", fontSize: "11px"},
-    	    {opacity: 1.0, transform: "translate(0px, 0px)", color:"#cdcdcf", fontSize: "14px"},
-    	])
+    	    {opacity: 1.0, transform: "translate(0px, -18px)", fontSize: "11px"},
+    	    {opacity: 1.0, transform: "translate(0px, 0px)", fontSize: "14px"},
+    	]);
     },
     /**
      * @method getMaterial
@@ -221,6 +222,13 @@ UI.TextFormField = Class.create({
     	return val;
     },
     /**
+     * 
+     * @returns
+     */
+    getRequired: function() {
+    	return this.config.required;
+    },
+    /**
      * walidacja po wpisaniu (na onblur)
      * 
      * @method validate
@@ -234,5 +242,25 @@ UI.TextFormField = Class.create({
      * @method preValidate
      */
     preValidate: function() {
+    },
+    /**
+     * 
+     */
+    markError: function() {
+    	var h = this;
+
+    	h.label.setStyle({
+    		color: "#cf6d6d"
+    	});
+    },
+    /**
+     * 
+     */
+    unmarkError: function() {
+    	var h = this;
+
+    	h.label.setStyle({
+    		color: "#cdcdcf"
+    	});
     }
 });

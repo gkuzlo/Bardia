@@ -134,6 +134,24 @@ UI.Form = Class.create(UI.MaterialComponent, {
      */
     validate: function() {
     	var result = true;
+    	
+    	var h = this;
+    	
+    	var i=0;
+    	for (i=0; i<h.config.fields.length; i++) {
+    		try {
+				var fieldControl = h.config.fieldControlls[i];
+
+				if (fieldControl.getRequired() === true && (fieldControl.getBeanValue() == null || fieldControl.getBeanValue() == "" || fieldControl.getBeanValue() === undefined)) {
+					fieldControl.markError();
+					result = false;
+				} else {
+					fieldControl.unmarkError();
+				}
+    		} catch (e) {
+    			alert("Couldn't validate: " + fieldControl.config.property);
+    		}
+    	}
     	return result;
     },
     /**

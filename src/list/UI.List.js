@@ -83,7 +83,7 @@ UI.List = Class.create(UI.MaterialComponent, {
 		        	 onChanging: function(v) {
 		        		 var f = function() {
 		        			 h.filter(v);	 
-		        		 }
+		        		 };
 		        		 setTimeout(f, 0);
 		        	 }
 		         }

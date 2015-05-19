@@ -8,7 +8,8 @@ UI.BooleanFormField = Class.create({
         	property: "$",
         	readOnly: false,
         	width: 200,
-        	value: false
+        	value: false,
+        	required: false
         }, config || {});
     },
     /**
@@ -20,7 +21,8 @@ UI.BooleanFormField = Class.create({
         	disableTab: false,
         	readOnly: false,
         	width: 200,
-        	bean: {}
+        	bean: {},
+        	required: false
         }, config || {});
 
         this.render();
@@ -192,5 +194,32 @@ UI.BooleanFormField = Class.create({
      * @method preValidate
      */
     preValidate: function() {
+    },
+    /**
+     * 
+     * @returns
+     */
+    getRequired: function() {
+    	return this.config.required;
+    },
+    /**
+     * 
+     */
+    markError: function() {
+    	var h = this;
+
+    	h.label.setStyle({
+    		color: "#cf6d6d"
+    	});
+    },
+    /**
+     * 
+     */
+    unmarkError: function() {
+    	var h = this;
+
+    	h.label.setStyle({
+    		color: "#cdcdcf"
+    	});
     }
 });

@@ -12,6 +12,18 @@
 .form_footer {
 	position:absolute; right:0px; left:0px; bottom:0px; height:60px; border:0px solid #cdcdcf; border-width:0px 0px 0px 0px;
 }
+.grid_header {
+	position:absolute; top:0px; right:0px; left:0px; height:59px; line-height:55px; font-size:16px; font-weight:bold; padding-left:10px;
+	background-color:#ebf0ee; color:#525070; border:0px solid #c9cece; border-width:0px 0px 1px 0px; 
+}
+
+.grid-cell {
+	background-color:#00ff00
+}
+
+.grid_content {
+	position:absolute; top:0px; right:10px; left:0px; bottom:0px; overflow:auto;
+}
 .list {
 	position:absolute; top:0px; right:0px; left:0px; bottom:0px; 
 }
@@ -146,15 +158,6 @@ div {
 	width:17px; height:14px; border:1px solid transparent; overflow:hidden; 
 	-webkit-border-radius: 3px; border-radius:3px; cursor:pointer;
 	background-color:transparent;
-}
-
-.grid_header {
-	position:absolute; top:0px; right:0px; left:0px; height:55px; line-height:55px; font-size:16px; font-weight:bold; padding-left:70px;
-	background-color:#ebf0ee; color:#525070; border:0px solid #c9cece; border-width:0px 0px 1px 0px; 
-}
-
-.grid-cell {
-	background-color:#00ff00
 }
 
 .toolbar_bg {

@@ -77,5 +77,10 @@ UI.Tabs = Class.create(UI.MaterialComponent, {
 
 	    	h.addCard(tab);
 	    	h.toolbar.addItem(tab);
+    },
+    
+    removeLastItem: function() {
+    	var h = this;
+    	h.toolbar.removeLastItem();
     }
 });

@@ -115,15 +115,6 @@ div {
 	background-color:transparent;
 }
 
-.grid_header {
-	position:absolute; top:0px; right:0px; left:0px; height:55px; line-height:55px; font-size:16px; font-weight:bold; padding-left:70px;
-	background-color:#ebf0ee; color:#525070; border:0px solid #c9cece; border-width:0px 0px 1px 0px; 
-}
-
-.grid-cell {
-	background-color:#00ff00
-}
-
 .toolbar_bg {
 	background-color:rgba(30, 29, 41, 1); color:#525160
 }

@@ -56,32 +56,60 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
     		item.title = nextItem.description;
 
     		item.addEventListener("click", function(e) {
-				setTimeout(function() {
-					h.displayMarker(e.target);	
-				}, 0);
-				
-				if (e.target.onClick !== undefined) {
-					e.target.onClick(e.target.bean);
-				}
-
-	        	h.displayMarker(e.target);
-	        	
-	        	e.target.bean.removeNextItem();
-	        	
-			}, false)
+    			h.handleItemClick(e.target.bean);
+			}, false);
 
     		h.forItems.insert(item);
     		
     		if (h.lastItem === undefined) {
     			h.lastItem = nextItem;
     		} else {
+    			nextItem.previousItem = h.lastItem;
     			h.lastItem.nextItem = nextItem;
     			h.lastItem = nextItem;
     		}
 
         item.click();
     },
+    /**
+     * 
+     * @param item
+     */
+    handleItemClick: function(item) {
+    	var h = this;
+    	
+		setTimeout(function() {
+			h.displayMarker(item.divItem);	
+		}, 0);
+		
+		if (item.divItem.onClick !== undefined) {
+			item.divItem.onClick(item.divItem.bean);
+		}
 
+    	h.displayMarker(item.divItem);
+    	
+    	item.divItem.bean.removeNextItem();
+    	
+    	h.lastItem = item;
+    },
+    /**
+     * @metod removeLastItem
+     */
+    removeLastItem: function() {
+    	var h = this;
+
+    	try {
+	    	if (h.lastItem && h.lastItem.previousItem) {
+	    		h.handleItemClick(h.lastItem.previousItem);
+	    	}
+    	} catch (e) {
+    		alert("Error removing " + e);
+    	}
+    },
+    /**
+     * @method displayMarker
+     * @param html
+     */
     displayMarker: function(html) {
     	var h = this;
 
