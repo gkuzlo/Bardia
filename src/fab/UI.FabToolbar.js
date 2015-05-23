@@ -21,17 +21,18 @@ UI.FabToolbar = Class.create({
      */
     render: function() {
     	var h = this;
-
-    	h.config.inside.setStyle({
-    		position: "absolute",
-    		left: "0px",
+    	
+    	h.material = new Element("DIV", {
+    	});
+    	h.material.setStyle({
     		display: "flex",
     		flexDirection: (h.config.orientation=="right")?"row-reverse":"row",
-    		backgroundColor: "transparent",
     		textAlign: "right",
     		border: "1px solid lightGrey",
     		borderWidth: "1px 0px 0px 0px"
     	});
+    	
+    	h.config.inside.insert(h.material);
 
     	h.setButtons(h.config.buttons);
     },
@@ -42,7 +43,7 @@ UI.FabToolbar = Class.create({
     setButtons: function(buttons) {
     	var h = this;
     	
-    	h.config.inside.update();
+    	h.material.update();
     	
     	h.hashedFabs = new Hash();
 
@@ -51,12 +52,17 @@ UI.FabToolbar = Class.create({
 
     		var button = buttons[i];
     		
+        	if (button.access !== undefined && button.access != UI.VISIBLE) {
+        		continue;
+        	}
+
     		var fab = new UI.Fab({
-    			inside: h.config.inside,
+    			inside: h.material,
     			icon: buttons[i].icon,
     			title: buttons[i].title,
     			text: buttons[i].text,
     			fill: buttons[i].fill,
+    			access: button.access,
     			onClick: function(fab) {
     				fab.onClick();
     			}

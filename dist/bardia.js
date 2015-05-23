@@ -1186,6 +1186,7 @@ UI.Fab = Class.create({
             height: 40,
             fill: "orange",
             icon: "help",
+            access: UI.VISIBLE,
             title: "Insert title here ...",
             style: undefined
         }, config || {});
@@ -1456,17 +1457,18 @@ UI.FabToolbar = Class.create({
      */
     render: function() {
     	var h = this;
-
-    	h.config.inside.setStyle({
-    		position: "absolute",
-    		left: "0px",
+    	
+    	h.material = new Element("DIV", {
+    	});
+    	h.material.setStyle({
     		display: "flex",
     		flexDirection: (h.config.orientation=="right")?"row-reverse":"row",
-    		backgroundColor: "transparent",
     		textAlign: "right",
     		border: "1px solid lightGrey",
     		borderWidth: "1px 0px 0px 0px"
     	});
+    	
+    	h.config.inside.insert(h.material);
 
     	h.setButtons(h.config.buttons);
     },
@@ -1477,7 +1479,7 @@ UI.FabToolbar = Class.create({
     setButtons: function(buttons) {
     	var h = this;
     	
-    	h.config.inside.update();
+    	h.material.update();
     	
     	h.hashedFabs = new Hash();
 
@@ -1486,12 +1488,17 @@ UI.FabToolbar = Class.create({
 
     		var button = buttons[i];
     		
+        	if (button.access !== undefined && button.access != UI.VISIBLE) {
+        		continue;
+        	}
+
     		var fab = new UI.Fab({
-    			inside: h.config.inside,
+    			inside: h.material,
     			icon: buttons[i].icon,
     			title: buttons[i].title,
     			text: buttons[i].text,
     			fill: buttons[i].fill,
+    			access: button.access,
     			onClick: function(fab) {
     				fab.onClick();
     			}
@@ -2307,6 +2314,13 @@ UI.Form = Class.create(UI.MaterialComponent, {
     	for (i=0; i<h.config.fields.length; i++) {
     		h.config.fieldControlls[i].setReadOnly(trueOrFalse);
     	}
+    },
+    /**
+     * 
+     */
+    resetBean: function() {
+    	var h = this;
+    		h.setBean(h.config.bean);
     }
 });
 /**
@@ -2353,26 +2367,32 @@ UI.TextFormField = Class.create({
 		});
 		    		    		
 		if (h.config.mask) {
-			var mask = new InputMask(h.config.mask, h.input)
-				mask.blurFunction = function() {
+			var mask = new InputMask(h.config.mask, h.input);
+				mask.blurFunction = function(e) {
 					if (h.config.onChange !== undefined) {
 						h.config.onChange(h.getBeanValue());
 					}
         			if (h.isEmpty(h.input.value)) {
-        				h.unanimateLabel()
+        				h.unanimateLabel();
         			}
-				}
-    			mask.keyUpFunction = function() {
+				};
+    			mask.keyUpFunction = function(e) {
         			h.setBeanValue();
 
+        			if (13 == e.keyCode) {
+        				if (h.config.onEnter) {
+        					h.config.onEnter();
+        				}
+        			}
+        			
         			if (h.config.onChanging !== undefined) {
         				h.config.onChanging(h.getBeanValue());
         			}    				
-    			}
+    			};
 		} else {
     		h.input.on("blur", function(e) {
     			if (h.isEmpty(h.input.value)) {
-    				h.unanimateLabel()
+    				h.unanimateLabel();
     			}
     			if (h.config.onChange !== undefined) {
     				h.config.onChange(h.getBeanValue());
@@ -2386,6 +2406,13 @@ UI.TextFormField = Class.create({
     			}
     		});
     		h.input.on("keydown", function(e) {
+    			
+    			if (13 == e.keyCode) {
+    				if (h.config.onEnter) {
+    					h.config.onEnter();
+    				}
+    			}
+    			
     			e.cancelBubble = true;
     		});
 		}
@@ -3569,6 +3596,13 @@ UI.PasswordFormField = Class.create(UI.TextFormField, {
     			}
     		});
     		h.input.on("keydown", function(e) {
+    			
+    			if (13 == e.keyCode) {
+    				if (h.config.onEnter) {
+    					h.config.onEnter();
+    				}
+    			}
+    			
     			e.cancelBubble = true;
     		});
     		
@@ -4100,26 +4134,44 @@ UI.ProgressBar = Class.create(UI.MaterialComponent, {
     render: function() {
         var h = this;
 
-    	h.percentageInfo = new Element("DIV", {
-    		style: "font-size:12px; position:absolute; top:50%; margin-top:-35px; right:10px; height:15px; color:" + h.config.totalColor
-    	});
-    	
-    	h.label = new Element("DIV", {
-    		style: "font-size:12px; position:absolute; top:50%; margin-top:-35px; left:10px; height:15px; color:" + h.config.totalColor
-    	});
+        h.getMaterial().setStyle({
+        	position: "relative",
+        	display: "flex",
+        	flexDirection: "column",
+        	overflow: "hidden"
+        });
         
+        h.info = new Element("DIV", {
+        	style: "height:30px; line-height:30px; display:flex"
+        });
+        h.getMaterial().insert(h.info);
+
+    	h.label = new Element("DIV", {
+    		style: "font-size:12px; flex:1; height:15px; line-height:30px; padding-left:10px; color:" + h.config.totalColor
+    	});
+    	h.info.insert(h.label);
+        
+    	h.percentageInfo = new Element("DIV", {
+    		style: "font-size:12px; flex:1; height:15px; line-height:30px; padding-right:10px; text-align:right; color:" + h.config.totalColor
+    	});
+    	h.info.insert(h.percentageInfo);
+
+        h.progress = new Element("DIV", {
+        	style: "position:relative; height:10px; line:height:10px; display:flex;"
+        });
+        h.getMaterial().insert(h.progress);
+
+    	
     	h.total = new Element("DIV", {
-    		style: "position:absolute; top:50%; left:10px; margin-top:-5px; right:10px; height:10px; background-color:" + h.config.totalColor
+    		style: "position:absolute; top:0px; left:10px; right:10px; height:10px; background-color:" + h.config.totalColor
     	});
     	
     	h.done = new Element("DIV", {
-    		style: "position:absolute; top:50%; left:10px; margin-top:-5px; width:0px; height:10px; background-color:" + h.config.doneColor
+    		style: "position:absolute; top:0px; left:10px; width:0px; height:10px; background-color:" + h.config.doneColor
     	});
 
-    	h.getMaterial().insert(h.label);
-    	h.getMaterial().insert(h.percentageInfo);
-    	h.getMaterial().insert(h.total);
-    	h.getMaterial().insert(h.done);
+    	h.progress.insert(h.total);
+    	h.progress.insert(h.done);
     },
 
     setProgress: function(p) {
@@ -4136,21 +4188,11 @@ UI.ProgressBar = Class.create(UI.MaterialComponent, {
     	var newWidth = ((width * progress) / 100).toFixed(0);
     	
 		h.percentageInfo.update(progress + " %");
-    	
-		var player = h.done.animate([
- 		    {
- 		       width: (h.done.getBoundingClientRect().right - h.done.getBoundingClientRect().left) + "px"
- 		    },
- 		    {
-  		       width: newWidth + "px"
- 		    },
- 		], {
- 			direction: 'normal',
- 		    duration: 3000,
- 		    easing: "ease",
- 			iterations: 1,
- 			fill: "both"
-		});
+
+		$PLAY(h.done, [
+ 		    { width: (h.done.getBoundingClientRect().right - h.done.getBoundingClientRect().left) + "px" },
+ 		    { width: newWidth + "px" },
+ 		]);
     },
 
     setLabel: function(label) {

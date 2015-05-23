@@ -8,6 +8,7 @@ UI.Fab = Class.create({
             height: 40,
             fill: "orange",
             icon: "help",
+            access: UI.VISIBLE,
             title: "Insert title here ...",
             style: undefined
         }, config || {});

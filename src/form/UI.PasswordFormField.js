@@ -35,6 +35,13 @@ UI.PasswordFormField = Class.create(UI.TextFormField, {
     			}
     		});
     		h.input.on("keydown", function(e) {
+    			
+    			if (13 == e.keyCode) {
+    				if (h.config.onEnter) {
+    					h.config.onEnter();
+    				}
+    			}
+    			
     			e.cancelBubble = true;
     		});
     		

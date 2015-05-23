@@ -42,26 +42,32 @@ UI.TextFormField = Class.create({
 		});
 		    		    		
 		if (h.config.mask) {
-			var mask = new InputMask(h.config.mask, h.input)
-				mask.blurFunction = function() {
+			var mask = new InputMask(h.config.mask, h.input);
+				mask.blurFunction = function(e) {
 					if (h.config.onChange !== undefined) {
 						h.config.onChange(h.getBeanValue());
 					}
         			if (h.isEmpty(h.input.value)) {
-        				h.unanimateLabel()
+        				h.unanimateLabel();
         			}
-				}
-    			mask.keyUpFunction = function() {
+				};
+    			mask.keyUpFunction = function(e) {
         			h.setBeanValue();
 
+        			if (13 == e.keyCode) {
+        				if (h.config.onEnter) {
+        					h.config.onEnter();
+        				}
+        			}
+        			
         			if (h.config.onChanging !== undefined) {
         				h.config.onChanging(h.getBeanValue());
         			}    				
-    			}
+    			};
 		} else {
     		h.input.on("blur", function(e) {
     			if (h.isEmpty(h.input.value)) {
-    				h.unanimateLabel()
+    				h.unanimateLabel();
     			}
     			if (h.config.onChange !== undefined) {
     				h.config.onChange(h.getBeanValue());
@@ -75,6 +81,13 @@ UI.TextFormField = Class.create({
     			}
     		});
     		h.input.on("keydown", function(e) {
+    			
+    			if (13 == e.keyCode) {
+    				if (h.config.onEnter) {
+    					h.config.onEnter();
+    				}
+    			}
+    			
     			e.cancelBubble = true;
     		});
 		}

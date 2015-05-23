@@ -165,5 +165,12 @@ UI.Form = Class.create(UI.MaterialComponent, {
     	for (i=0; i<h.config.fields.length; i++) {
     		h.config.fieldControlls[i].setReadOnly(trueOrFalse);
     	}
+    },
+    /**
+     * 
+     */
+    resetBean: function() {
+    	var h = this;
+    		h.setBean(h.config.bean);
     }
 });

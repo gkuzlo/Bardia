@@ -11,26 +11,44 @@ UI.ProgressBar = Class.create(UI.MaterialComponent, {
     render: function() {
         var h = this;
 
-    	h.percentageInfo = new Element("DIV", {
-    		style: "font-size:12px; position:absolute; top:50%; margin-top:-35px; right:10px; height:15px; color:" + h.config.totalColor
-    	});
-    	
-    	h.label = new Element("DIV", {
-    		style: "font-size:12px; position:absolute; top:50%; margin-top:-35px; left:10px; height:15px; color:" + h.config.totalColor
-    	});
+        h.getMaterial().setStyle({
+        	position: "relative",
+        	display: "flex",
+        	flexDirection: "column",
+        	overflow: "hidden"
+        });
         
+        h.info = new Element("DIV", {
+        	style: "height:30px; line-height:30px; display:flex"
+        });
+        h.getMaterial().insert(h.info);
+
+    	h.label = new Element("DIV", {
+    		style: "font-size:12px; flex:1; height:15px; line-height:30px; padding-left:10px; color:" + h.config.totalColor
+    	});
+    	h.info.insert(h.label);
+        
+    	h.percentageInfo = new Element("DIV", {
+    		style: "font-size:12px; flex:1; height:15px; line-height:30px; padding-right:10px; text-align:right; color:" + h.config.totalColor
+    	});
+    	h.info.insert(h.percentageInfo);
+
+        h.progress = new Element("DIV", {
+        	style: "position:relative; height:10px; line:height:10px; display:flex;"
+        });
+        h.getMaterial().insert(h.progress);
+
+    	
     	h.total = new Element("DIV", {
-    		style: "position:absolute; top:50%; left:10px; margin-top:-5px; right:10px; height:10px; background-color:" + h.config.totalColor
+    		style: "position:absolute; top:0px; left:10px; right:10px; height:10px; background-color:" + h.config.totalColor
     	});
     	
     	h.done = new Element("DIV", {
-    		style: "position:absolute; top:50%; left:10px; margin-top:-5px; width:0px; height:10px; background-color:" + h.config.doneColor
+    		style: "position:absolute; top:0px; left:10px; width:0px; height:10px; background-color:" + h.config.doneColor
     	});
 
-    	h.getMaterial().insert(h.label);
-    	h.getMaterial().insert(h.percentageInfo);
-    	h.getMaterial().insert(h.total);
-    	h.getMaterial().insert(h.done);
+    	h.progress.insert(h.total);
+    	h.progress.insert(h.done);
     },
 
     setProgress: function(p) {
@@ -47,21 +65,11 @@ UI.ProgressBar = Class.create(UI.MaterialComponent, {
     	var newWidth = ((width * progress) / 100).toFixed(0);
     	
 		h.percentageInfo.update(progress + " %");
-    	
-		var player = h.done.animate([
- 		    {
- 		       width: (h.done.getBoundingClientRect().right - h.done.getBoundingClientRect().left) + "px"
- 		    },
- 		    {
-  		       width: newWidth + "px"
- 		    },
- 		], {
- 			direction: 'normal',
- 		    duration: 3000,
- 		    easing: "ease",
- 			iterations: 1,
- 			fill: "both"
-		});
+
+		$PLAY(h.done, [
+ 		    { width: (h.done.getBoundingClientRect().right - h.done.getBoundingClientRect().left) + "px" },
+ 		    { width: newWidth + "px" },
+ 		]);
     },
 
     setLabel: function(label) {
