@@ -29,6 +29,7 @@ module.exports = function(grunt) {
                     "src/list/UI.SortableList.js",
                     "src/form/UI.Form.js",
                     "src/form/UI.TextFormField.js",
+                    "src/form/UI.LongTextFormField.js",
                     "src/form/UI.LookupFormField.js",
                     "src/form/UI.ListFormField.js",
                     "src/form/UI.FileFormField.js",

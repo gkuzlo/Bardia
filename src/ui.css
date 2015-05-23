@@ -7,6 +7,14 @@ div {
     -o-user-select: none;
 }
 
+textarea {
+	margin:0px; padding:0px; border:0px; font-family:Arial; color:black; font-size:13px;
+}
+
+input {
+	margin:0px; padding:0px; border:0px; font-family:Arial; color:black; font-size:13px;
+}
+
 .inside {
 	position:absolute; top:0px; left:0px; bottom:0px; right:0px; background-color:white;
 }
