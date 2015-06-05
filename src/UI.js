@@ -26,8 +26,13 @@ UI.play = function(html, config, finishFun) {
 
 $PLAY = UI.play;
 
+/**
+ * 
+ */
 UI.Header = Class.create({
-
+	/**
+	 * 
+	 */
     initialize: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
@@ -37,6 +42,9 @@ UI.Header = Class.create({
 
         this.render();
     },
+    /**
+     * 
+     */
     render: function() {
         var h = this;
             h.header = new Element("DIV", {
@@ -45,8 +53,18 @@ UI.Header = Class.create({
             h.header.insert(h.config.title);
             h.config.inside.insert(h.header);
     },
+    /**
+     * 
+     */
     addHeaderElement: function(element) {
     	this.header.insert(element.getHTML());
+    },
+    /**
+     * 
+     */
+    setTitle: function(title) {
+    	var h = this;
+    		h.header.update(title);
     }
 });
 

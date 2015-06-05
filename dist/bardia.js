@@ -26,8 +26,13 @@ UI.play = function(html, config, finishFun) {
 
 $PLAY = UI.play;
 
+/**
+ * 
+ */
 UI.Header = Class.create({
-
+	/**
+	 * 
+	 */
     initialize: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
@@ -37,6 +42,9 @@ UI.Header = Class.create({
 
         this.render();
     },
+    /**
+     * 
+     */
     render: function() {
         var h = this;
             h.header = new Element("DIV", {
@@ -45,8 +53,18 @@ UI.Header = Class.create({
             h.header.insert(h.config.title);
             h.config.inside.insert(h.header);
     },
+    /**
+     * 
+     */
     addHeaderElement: function(element) {
     	this.header.insert(element.getHTML());
+    },
+    /**
+     * 
+     */
+    setTitle: function(title) {
+    	var h = this;
+    		h.header.update(title);
     }
 });
 
@@ -616,26 +634,45 @@ UI.MaterialComponent = Class.create({
  * @class UI.Panel
  */
 UI.Panel = Class.create(UI.MaterialComponent, {
+	/**
+	 * 
+	 * @param config
+	 */
     initConfig: function(config) {
         this.config = Object.extend({
         	className: "bg_main fg_white"
         }, config || {});
     },
+    /**
+     * 
+     */
     render: function() {
         var h = this;
 
-    	this.content = new UI.Content({
+    	h.content = new UI.Content({
     		inside: h.getMaterial()
     	});
         
-    	this.header = new UI.Header({
+    	h.header = new UI.Header({
     		inside: h.getMaterial(),
     		title: h.config.title,
     		className: h.config.className
     	});
     },
+    /**
+     * 
+     * @returns
+     */
     getContent: function() {
     	return this.content.getMaterial();
+    },
+    /**
+     * 
+     * @param title
+     */
+    setTitle: function(title) {
+    	var h = this;
+    		h.header.setTitle(title);
     }
 });
 
@@ -1198,7 +1235,7 @@ UI.Fab = Class.create({
     	var h = this;
     	
     	h.material = new Element("DIV", {
-    		"style": "margin:10px; box-shadow: 3px 3px 8px #666666; padding:0px; font-size:12px; color:white; text-align:center; line-height:40px; border-radius:50%; height:40px; width:40px; background-color:" + h.config.fill + "; overflow:hidden",
+    		"style": "margin:10px; box-shadow: 3px 3px 8px #666666; padding:0px; font-size:12px; color:white; text-align:center; line-height:40px; border-radius:50%; height:40px; width:40px; background-color:" + h.config.fill + "; overflow:hidden; opacity:1",
     		"title": h.config.title
     	});
     	
@@ -1318,7 +1355,9 @@ UI.Fab = Class.create({
     		h.material.show();
     }
 });
-
+/**
+ * @class UI.FabProgress
+ */
 UI.FabProgress = Class.create({
 
     initialize: function(config) {
@@ -1447,7 +1486,10 @@ UI.FabToolbar = Class.create({
             inside: window.document.body,
             orientation: "right",
             buttons: [
-            ]
+            ],
+            onClicked: function() {
+            	
+            }
         }, config || {});
 
         this.render();
@@ -1460,6 +1502,7 @@ UI.FabToolbar = Class.create({
     	
     	h.material = new Element("DIV", {
     	});
+
     	h.material.setStyle({
     		display: "flex",
     		flexDirection: (h.config.orientation=="right")?"row-reverse":"row",
@@ -1467,8 +1510,10 @@ UI.FabToolbar = Class.create({
     		border: "1px solid lightGrey",
     		borderWidth: "1px 0px 0px 0px"
     	});
-    	
-    	h.config.inside.insert(h.material);
+
+    	h.config.inside.insert({
+    		top: h.material
+    	});
 
     	h.setButtons(h.config.buttons);
     },
@@ -1501,6 +1546,7 @@ UI.FabToolbar = Class.create({
     			access: button.access,
     			onClick: function(fab) {
     				fab.onClick();
+    				h.config.onClicked();
     			}
     		});
     		fab.onClick = button.onClick;
@@ -4476,9 +4522,97 @@ UI.ProgressBar = Class.create(UI.MaterialComponent, {
     		}
     }
 });
+/**
+ * @class UI.GridButton
+ */
+UI.GridButton = Class.create({
+	/**
+	 * 
+	 * @param config
+	 */
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body
+        }, config || {});
 
+        this.render();
+    },
+    /**
+     * @method render
+     */ 
+    render: function() {
+    	var h = this;
+    	
+    	h.buttonDiv = new Element("DIV", {
+    		style: "border-radius:3px; width:26px; height:26px; line-height:26px; background-color:#525070; margin:2px; display:flex; justify-content:center; align-items:center",
+    		class: "hvr-radial-out"
+    	});
+    	h.config.inside.insert(h.buttonDiv);
+    	
+    	h.img = new Element("IMG", {
+    		src: $ICON(h.config.icon)
+    	});
+    	h.buttonDiv.insert(h.img);
+    	
+    	h.buttonDiv.on("click", function(e) {
+    		if (h.config.onClick) {
+    			h.config.onClick();
+    		}
+    	});
+    }
+});
+/**
+ * @class UI.GridToolbar
+ */
+UI.GridToolbar = Class.create({
+	/**
+	 * 
+	 * @param config
+	 */
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            buttons: []
+        }, config || {});
+
+        this.render();
+    },
+    /**
+     * @method render 
+     */ 
+    render: function() {
+    	var h = this;
+
+    	h.material = new Element("DIV", {
+    		style: "position:absolute; display:flex; flex-direction:row; top:0px; left:0px; right:0px; bottom:0px"
+    	});
+    	h.config.inside.insert(h.material);
+
+    	h.setButtons(h.config.buttons);
+    },
+    /**
+     * 
+     * @param buttons
+     */
+    setButtons: function(buttons) {
+    	var h = this;
+
+    	var i = 0;
+    	for (i=0; i<buttons.length; i++) {
+    		var buttonConfig = buttons[i];
+    			buttonConfig.inside = h.material; 
+
+    		var button = new UI.GridButton(buttonConfig);
+    	}
+    }
+});
+/**
+ * @class UI.Grid
+ */
 UI.Grid = Class.create(UI.MaterialComponent, {
-
+	/**
+	 * @param initConfig
+	 */
     initConfig: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
@@ -4493,36 +4627,65 @@ UI.Grid = Class.create(UI.MaterialComponent, {
             ]
         }, config || {});
     },
-
+    /**
+     * @method render
+     */
     render: function() {
     	var h = this;
+
     		h.mainLayout = new UI.BorderLayout({
     			inside: h.getMaterial(),
+    			north: {
+    				height: 60
+    			},
     			south: {
     				height: 60
     			}
     		});
-    		
+
+    		h.mainLayout.getNorth().addClassName("grid_header");
+
     		h.material = new Element("DIV", {
     			style: "position: absolute; top:0px; right:0px; bottom:0px; left:0px"
     		});
     		h.mainLayout.getDefault().insert(h.material);
 
-    		h.rowsHeader = new Element("DIV", {
-    			class: "grid_header"
+    		h.titleDiv = new Element("DIV", {
+    			style: "transform:scale(1.5); position:absolute; top:5px; left:10px; color:#525070; height:20px; width:300px; -moz-transform-origin: 0 0; font-size:12px"
     		});
-    		h.material.insert(h.rowsHeader);
-    		h.rowsHeader.insert(h.config.title);
+    		h.mainLayout.getNorth().insert(h.titleDiv);
+
+    		h.toolbarDiv = new Element("DIV", {
+    			style: "transform:scale(0.5); position:absolute; top:25px; height:30px; left:10px; background-color:transparent; width:100%; -moz-transform-origin: 0 0;",
+    			class: "grid-toolbar"
+    		});
+    		h.mainLayout.getNorth().insert(h.toolbarDiv);
+    		
+    		h.toolbarDiv.on("mouseover", function(e) {
+    			h.expandToolbar();
+    			e.cancelBubble = true;
+    			e.returnValue = false;
+    			return false;
+    		});
+    		
+    		h.mainLayout.getNorth().on("mouseover", function(e) {
+    			h.expandTitle();
+    		});
+    		
+    		h.toolbar = new UI.GridToolbar({
+    			inside: h.toolbarDiv,
+    			buttons: h.config.buttons || []
+    		});
 
     		h.columnsContent = new Element("DIV", {
     			class: "grid_content",
-    			style: "height:50px; top:61px; left:5px; border:2px solid lightGrey; border-width:0px 0px 2px 0px"
+    			style: "height:50px; top:2px; left:5px; border:2px solid lightGrey; border-width:0px 0px 2px 0px"
     		});
     		h.material.insert(h.columnsContent);
-    		
+
     		h.rowsContent = new Element("DIV", {
     			class: "grid_content",
-    			style: "bottom:0px; top:125px; left:5px"
+    			style: "bottom:0px; top:70px; left:5px"
     		});
     		h.rowsContent.on("scroll", function(e) {
     			if (h.config.onScrollTop) {
@@ -4530,7 +4693,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     			}
     		});
     		h.material.insert(h.rowsContent);
-    		
+
     		this.rowsContent.on("click", "div.row", function(e, element) {
     			if (h.config.onClick) {
     				h.config.onClick(element);
@@ -4553,10 +4716,66 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		         }
     			]
     		});
+
+    	h.setTitle(h.config.title);
     		
     	h.fetch({
     		rows: []
     	});
+    },
+    /**
+     * @method: expandToolbar
+     */
+    expandToolbar: function() {
+    	var h = this;
+    	
+    	if (!h.toolbarExpanded && !h.inProgress) {
+    		
+    		h.inProgress = true;
+	    	
+    		$PLAY(h.toolbarDiv, [
+	    	    {transform: "scale(0.5)"},
+	    	    {transform: "scale(1)"}
+	    	], function() {
+    			delete h.inProgress
+    		});
+	    	
+	    	$PLAY(h.titleDiv, [
+	     	    {transform: "scale(1.5)"},
+	     	    {transform: "scale(1)"}
+	     	], function() {
+    			delete h.inProgress
+    		});
+	    	
+	    	h.toolbarExpanded = true;
+    	}
+    },
+    /**
+     * 
+     */
+    expandTitle: function() {
+    	var h = this;
+    	
+    	if (h.toolbarExpanded && !h.inProgress) {
+    		
+    		h.inProgress = true;
+	    	
+    		$PLAY(h.toolbarDiv, [
+	    	    {transform: "scale(1)"},
+	    	    {transform: "scale(0.5)"}
+	    	], function() {
+    			delete h.inProgress
+    		});
+	    	
+	    	$PLAY(h.titleDiv, [
+	     	    {transform: "scale(1)"},
+	     	    {transform: "scale(1.5)"}
+	     	], function() {
+    			delete h.inProgress
+    		});
+	    	
+	    	delete h.toolbarExpanded;
+    	}
     },
     /**
      * @method setScrollTop
@@ -4564,6 +4783,11 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     setScrollTop: function(pixels) {
     	var h = this;
     		h.rowsContent.scrollTop = pixels;
+    },
+    setTitle: function(title) {
+    	var h = this;
+    	
+    	h.titleDiv.update(title);
     },
     /**
      * @method fetch

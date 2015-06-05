@@ -20,7 +20,7 @@ UI.Fab = Class.create({
     	var h = this;
     	
     	h.material = new Element("DIV", {
-    		"style": "margin:10px; box-shadow: 3px 3px 8px #666666; padding:0px; font-size:12px; color:white; text-align:center; line-height:40px; border-radius:50%; height:40px; width:40px; background-color:" + h.config.fill + "; overflow:hidden",
+    		"style": "margin:10px; box-shadow: 3px 3px 8px #666666; padding:0px; font-size:12px; color:white; text-align:center; line-height:40px; border-radius:50%; height:40px; width:40px; background-color:" + h.config.fill + "; overflow:hidden; opacity:1",
     		"title": h.config.title
     	});
     	

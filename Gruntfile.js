@@ -42,6 +42,8 @@ module.exports = function(grunt) {
                     "src/widgets/UI.Crud.js",
                     "src/menu/UI.Menu.js",
                     "src/utils/UI.ProgressBar.js",
+                    "src/grid/UI.GridButton.js",
+                    "src/grid/UI.GridToolbar.js",
                     "src/grid/UI.Grid.js",
                     "src/tabs/UI.IconToolbar.js",
                     "src/tabs/UI.BreadCrumb.js",

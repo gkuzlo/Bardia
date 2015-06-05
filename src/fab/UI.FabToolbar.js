@@ -11,7 +11,10 @@ UI.FabToolbar = Class.create({
             inside: window.document.body,
             orientation: "right",
             buttons: [
-            ]
+            ],
+            onClicked: function() {
+            	
+            }
         }, config || {});
 
         this.render();
@@ -24,6 +27,7 @@ UI.FabToolbar = Class.create({
     	
     	h.material = new Element("DIV", {
     	});
+
     	h.material.setStyle({
     		display: "flex",
     		flexDirection: (h.config.orientation=="right")?"row-reverse":"row",
@@ -31,8 +35,10 @@ UI.FabToolbar = Class.create({
     		border: "1px solid lightGrey",
     		borderWidth: "1px 0px 0px 0px"
     	});
-    	
-    	h.config.inside.insert(h.material);
+
+    	h.config.inside.insert({
+    		top: h.material
+    	});
 
     	h.setButtons(h.config.buttons);
     },
@@ -65,6 +71,7 @@ UI.FabToolbar = Class.create({
     			access: button.access,
     			onClick: function(fab) {
     				fab.onClick();
+    				h.config.onClicked();
     			}
     		});
     		fab.onClick = button.onClick;

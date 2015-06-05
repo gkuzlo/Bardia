@@ -1,4 +1,6 @@
-
+/**
+ * @class UI.FabProgress
+ */
 UI.FabProgress = Class.create({
 
     initialize: function(config) {
