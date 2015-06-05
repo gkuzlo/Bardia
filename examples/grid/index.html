@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+    <head>
+        <meta charset="utf-8">
+        <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">  
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+        <script src="../../prototype/prototype.js"></script>
+        <script src="../../web-animations/web-animations.min.js"></script>
+
+		<script src="../../jsu/JavaScriptUtil.js"></script>
+		<script src="../../jsu/Parsers.js"></script>
+		<script src="../../jsu/InputMask.js"></script>
+		
+		<script src="../../dist/bardia.js"></script>
+		<link rel="stylesheet" href="../../dist/bardia.css">
+
+		<script>
+
+			var IS = new UI.IconSet({
+	        	path: "../fabicons"
+	        });
+
+	        function $ICON(id) {
+	        	return IS.getIcon(id);
+	        }
+		
+			/**
+			 *
+			 */
+			function initPage() {
+				var grid = new UI.Grid({
+					inside: window.document.body,
+					title: "Lista użytkowników",
+					columns: [
+					    {
+					    	name: "Imię",
+					    	property: "name"
+					    }
+					]
+				});
+
+				grid.fetch({
+					rows: [
+						{
+							name: "Grzegorz"
+						},
+						{
+							name: "Paweł"
+						},
+						{
+							name: "Piotr"
+						},
+						{
+							name: "Jakub"
+						}
+					]
+				});
+			}
+		</script>
+		
+    </head>
+
+    <body onload="initPage()" style="background-color:lightGrey">
+    </body>
+
+</html>
