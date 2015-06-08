@@ -111,35 +111,15 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     		});
     		h.content.insert(h.marker);
     		
-    		var player = h.marker.animate([
-	     		    {
-	     		    	opacity: "0.0"
-	     		    },
-	     		    {
-	     		    	opacity: "1.0"
-	     		    },
-	     		], {
-	     			direction: 'normal',
-	     		    duration: 1000,
-	     		    easing: "ease",
-	     			iterations: 1,
-	     			fill: "both"
-		   		});
+    		$PLAY(h.marker, [
+    		    { opacity: "0.0" },
+	     		{ opacity: "1.0" },
+	     	]);
     	} else {
-			var player = h.marker.animate([
-	  		    {
-	  		       top: (h.marker.getBoundingClientRect().top - h.marker.getBoundingClientRect().height + 1) + "px"
-	  		    },
-	  		    {
-	   		       top: (html.getBoundingClientRect().top - html.getBoundingClientRect().height + 1) + "px"
-	  		    },
-	  		], {
-	  			direction: 'normal',
-	  		    duration: 1000,
-	  		    easing: "ease",
-	  			iterations: 1,
-	  			fill: "both"
-			});
+			$PLAY(h.marker, [
+	  		    { top: (h.marker.getBoundingClientRect().top - h.content.getBoundingClientRect().top + 1) + "px" },
+	  		    { top: (html.getBoundingClientRect().top - h.content.getBoundingClientRect().top + 1) + "px" },
+	  		]);
     	}
     },
 

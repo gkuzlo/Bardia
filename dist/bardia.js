@@ -1958,19 +1958,19 @@ UI.List = Class.create(UI.MaterialComponent, {
 				class: "row"				// row to jest klasa fake
 			});
 			row.bean = h.config.rows[i];
-						
-			if (h.config.header !== undefined) {
-				var _header = new Element("DIV", {
-					style: "font-weight:bold; overflow:hidden"
-				});
-				_header.update(STRUTILS.compile(h.config.header, h.config.rows[i]));
-				row.insert(_header);
-			} else if (h.config.headerRenderer !== undefined) {
+
+			if (h.config.headerRenderer !== undefined) {
 				var _header = new Element("DIV", {
 					style: "font-weight:bold; overflow:hidden"
 				});
 				_header.update(h.config.headerRenderer(row, _header));
 				row.insert(_header);				
+			} else if (h.config.header !== undefined) {
+				var _header = new Element("DIV", {
+					style: "font-weight:bold; overflow:hidden"
+				});
+				_header.update(STRUTILS.compile(h.config.header, h.config.rows[i]));
+				row.insert(_header);
 			}
 
 			if (h.config.footer !== undefined) {
@@ -2337,7 +2337,7 @@ UI.Form = Class.create(UI.MaterialComponent, {
     		try {
 				var fieldControl = h.config.fieldControlls[i];
 
-				if (fieldControl.getRequired() === true && (fieldControl.getBeanValue() == null || fieldControl.getBeanValue() == "" || fieldControl.getBeanValue() === undefined)) {
+				if (fieldControl.getRequired() === true && (fieldControl.getBeanValue() === null || fieldControl.getBeanValue() === "" || fieldControl.getBeanValue() === undefined)) {
 					fieldControl.markError();
 					result = false;
 				} else {
@@ -3026,9 +3026,14 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		h.list = new UI.List({
 			inside: h.tmpFab,
 			title: h.config.label,
-			header: h.config.pattern,
 			headerRenderer: function(row) {
-				return h.config.patternRenderer(row.bean);
+				var result = "";
+					if (h.config.patternRenderer) {
+						result = h.config.patternRenderer(row.bean);
+					} else {
+						result = STRUTILS.compile(h.config.pattern, row.bean);
+					}
+				return result;
 			},
 			onClick: function(row) {
 				h.setBeanValue(row.bean);
@@ -3794,11 +3799,12 @@ UI.BooleanFormField = Class.create({
     },
     getBeanValue: function() {
     	var h = this;
-    	return eval("h.config.bean." + h.config.property);
+    	var result = eval("h.config.bean." + h.config.property);
+    	return result;
     },
     setBeanValue: function(v) {
     	var h = this;
-    	eval("h.config.bean." + h.config.property + " = " + v + "");
+    	eval("h.config.bean." + h.config.property + " = " + v);
     },
     /**
      * @method setInputValue
@@ -4532,7 +4538,8 @@ UI.GridButton = Class.create({
 	 */
     initialize: function(config) {
         this.config = Object.extend({
-            inside: window.document.body
+            inside: window.document.body,
+            title: "..."
         }, config || {});
 
         this.render();
@@ -4544,13 +4551,14 @@ UI.GridButton = Class.create({
     	var h = this;
     	
     	h.buttonDiv = new Element("DIV", {
-    		style: "border-radius:3px; width:26px; height:26px; line-height:26px; background-color:#525070; margin:2px; display:flex; justify-content:center; align-items:center",
+    		style: "border-radius:50%; width:26px; height:26px; line-height:26px; background-color:#525070; margin:2px; display:flex; justify-content:center; align-items:center",
     		class: "hvr-radial-out"
     	});
     	h.config.inside.insert(h.buttonDiv);
     	
     	h.img = new Element("IMG", {
-    		src: $ICON(h.config.icon)
+    		src: $ICON(h.config.icon),
+    		title: h.config.title
     	});
     	h.buttonDiv.insert(h.img);
     	
@@ -5225,35 +5233,15 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     		});
     		h.content.insert(h.marker);
     		
-    		var player = h.marker.animate([
-	     		    {
-	     		    	opacity: "0.0"
-	     		    },
-	     		    {
-	     		    	opacity: "1.0"
-	     		    },
-	     		], {
-	     			direction: 'normal',
-	     		    duration: 1000,
-	     		    easing: "ease",
-	     			iterations: 1,
-	     			fill: "both"
-		   		});
+    		$PLAY(h.marker, [
+    		    { opacity: "0.0" },
+	     		{ opacity: "1.0" },
+	     	]);
     	} else {
-			var player = h.marker.animate([
-	  		    {
-	  		       top: (h.marker.getBoundingClientRect().top - h.marker.getBoundingClientRect().height + 1) + "px"
-	  		    },
-	  		    {
-	   		       top: (html.getBoundingClientRect().top - html.getBoundingClientRect().height + 1) + "px"
-	  		    },
-	  		], {
-	  			direction: 'normal',
-	  		    duration: 1000,
-	  		    easing: "ease",
-	  			iterations: 1,
-	  			fill: "both"
-			});
+			$PLAY(h.marker, [
+	  		    { top: (h.marker.getBoundingClientRect().top - h.content.getBoundingClientRect().top + 1) + "px" },
+	  		    { top: (html.getBoundingClientRect().top - h.content.getBoundingClientRect().top + 1) + "px" },
+	  		]);
     	}
     },
 

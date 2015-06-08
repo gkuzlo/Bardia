@@ -142,7 +142,7 @@ UI.Form = Class.create(UI.MaterialComponent, {
     		try {
 				var fieldControl = h.config.fieldControlls[i];
 
-				if (fieldControl.getRequired() === true && (fieldControl.getBeanValue() == null || fieldControl.getBeanValue() == "" || fieldControl.getBeanValue() === undefined)) {
+				if (fieldControl.getRequired() === true && (fieldControl.getBeanValue() === null || fieldControl.getBeanValue() === "" || fieldControl.getBeanValue() === undefined)) {
 					fieldControl.markError();
 					result = false;
 				} else {

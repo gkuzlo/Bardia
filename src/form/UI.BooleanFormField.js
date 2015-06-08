@@ -158,11 +158,12 @@ UI.BooleanFormField = Class.create({
     },
     getBeanValue: function() {
     	var h = this;
-    	return eval("h.config.bean." + h.config.property);
+    	var result = eval("h.config.bean." + h.config.property);
+    	return result;
     },
     setBeanValue: function(v) {
     	var h = this;
-    	eval("h.config.bean." + h.config.property + " = " + v + "");
+    	eval("h.config.bean." + h.config.property + " = " + v);
     },
     /**
      * @method setInputValue

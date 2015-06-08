@@ -122,9 +122,14 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		h.list = new UI.List({
 			inside: h.tmpFab,
 			title: h.config.label,
-			header: h.config.pattern,
 			headerRenderer: function(row) {
-				return h.config.patternRenderer(row.bean);
+				var result = "";
+					if (h.config.patternRenderer) {
+						result = h.config.patternRenderer(row.bean);
+					} else {
+						result = STRUTILS.compile(h.config.pattern, row.bean);
+					}
+				return result;
 			},
 			onClick: function(row) {
 				h.setBeanValue(row.bean);

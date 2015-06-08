@@ -37,6 +37,26 @@
 					    {
 					    	name: "Imię",
 					    	property: "name"
+					    },
+					    {
+					    	name: "Nazwisko",
+					    	property: "lastName"
+					    }
+					],
+					buttons: [
+					    {
+					    	name: "Dodaj",
+							icon: "done",
+							onClick: function() {
+								alert("Dodaj");
+							}
+					    },
+					    {
+					    	name: "Nowy",
+							icon: "cancel"
+					    }, 
+					    {
+					        name: "Usuń"
 					    }
 					]
 				});
@@ -44,13 +64,15 @@
 				grid.fetch({
 					rows: [
 						{
-							name: "Grzegorz"
+							name: "Grzegorz",
+							lastName: "Kuzło"
 						},
 						{
 							name: "Paweł"
 						},
 						{
-							name: "Piotr"
+							name: "Piotr",
+							lastName: "Wielki"
 						},
 						{
 							name: "Jakub"

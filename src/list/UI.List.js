@@ -142,19 +142,19 @@ UI.List = Class.create(UI.MaterialComponent, {
 				class: "row"				// row to jest klasa fake
 			});
 			row.bean = h.config.rows[i];
-						
-			if (h.config.header !== undefined) {
-				var _header = new Element("DIV", {
-					style: "font-weight:bold; overflow:hidden"
-				});
-				_header.update(STRUTILS.compile(h.config.header, h.config.rows[i]));
-				row.insert(_header);
-			} else if (h.config.headerRenderer !== undefined) {
+
+			if (h.config.headerRenderer !== undefined) {
 				var _header = new Element("DIV", {
 					style: "font-weight:bold; overflow:hidden"
 				});
 				_header.update(h.config.headerRenderer(row, _header));
 				row.insert(_header);				
+			} else if (h.config.header !== undefined) {
+				var _header = new Element("DIV", {
+					style: "font-weight:bold; overflow:hidden"
+				});
+				_header.update(STRUTILS.compile(h.config.header, h.config.rows[i]));
+				row.insert(_header);
 			}
 
 			if (h.config.footer !== undefined) {
