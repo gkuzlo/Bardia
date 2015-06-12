@@ -18,7 +18,7 @@
 }
 
 .grid-cell {
-	background-color:#00ff00
+	opacity:0.7; display:inline-block; overflow:hidden; line-height:27px; height:27px; font-size:14px; margin:0px; padding:0px; padding-left:4px; border:0px solid #fcfcfc; border-width:0px 0px 1px 0px;
 }
 
 .grid_content {
@@ -31,6 +31,26 @@
 
 .grid-toolbar:hover, .grid-toolbar:focus, .grid-toolbar:active {
     transform:scale(1); background-color:red
+}
+
+.grid-olumn-head {
+	background-color:white; 
+	position:absolute; top:0px; right:0px; left:0px; height:30px; 
+	overflow:hidden; margin:0px; height:49px; line-height:48px; 
+	padding:0px; border:1px solid lightRey; border-width:0px 0px 1px 0px;
+}
+
+.grid-column {
+	display:inline-block; font-weight:bold; 
+	overflow:hidden; line-height:47px; 
+	height:47px; font-size:14px; 
+	margin:0px; padding:0px; padding-left:4px; border:0px solid black; border-width:0px 0px 0px 0px;
+}
+
+.grid-row {
+	display:block; overflow:hidden; height:25px; margin:0px; padding:0px; 
+	border:0px solid lightGrey; background-color:white; border-width:0px 0px 1px 0px; color:grey;
+	word-wrap:no-wrap; 	text-overflow: ellipsis;
 }
 .list {
 	position:absolute; top:0px; right:0px; left:0px; bottom:0px; 
@@ -50,6 +70,68 @@
 }
 .list_content div div {
 	background-color:transparent; height:20px; border:0px solid #cdcdcf; font-size:12px; line-height:20px; padding-left:70px; color:#535270; 
+}
+
+.toolbar-bg-content-h {
+	position:absolute; top:0px; left:0px; bottom:0px; right:0px;
+}
+
+.toolbar-bg-content-h::before {
+	content: "";
+	position: absolute;
+	bottom:0px; height:5px;
+	left:0px; width:0px;
+	background-color:#6dbbcf;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
+.toolbar-bg-content-v {
+	position:absolute; top:0px; left:0px; bottom:0px; right:0px;
+}
+
+.toolbar-bg-content-v::before {
+	content: "";
+	position: absolute;
+	bottom:0px; top:0px;
+	height:0px; width:5px;
+	background-color:#6dbbcf;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
+.toolbar-bg-color {
+	background-color:rgba(30, 29, 41, 1);
+}
+
+.toolbar-text-color {
+	color:#525160;
+}
+
+.toolbar-item-horizontal {
+	padding-left:15px; font-size:14px; padding-right:15px; display:inline-block; 
+	border-right:1px solid #1E1D29; line-height:70px; height:70px; overflow:hidden;
+}
+
+.toolbar-item-horizontal:hover {
+    background-color:rgba(255, 255, 255, 0.1);
+}
+
+.toolbar-item-vertical {
+	padding-left:15px; font-size:14px; 
+	border-bottom: 1px solid #1E1D29; line-height:60px; height:60px; overflow:hidden;
+}
+
+.toolbar-item-vertical:hover {
+    background-color:rgba(255, 255, 255, 0.1);
 }
 
 div {
@@ -174,14 +256,6 @@ input {
 	width:17px; height:14px; border:1px solid transparent; overflow:hidden; 
 	-webkit-border-radius: 3px; border-radius:3px; cursor:pointer;
 	background-color:transparent;
-}
-
-.toolbar_bg {
-	background-color:rgba(30, 29, 41, 1); color:#525160
-}
-
-.toolbar_marker_bg {
-	background-color:#6dbbcf
 }
 
 /* Radial Out */

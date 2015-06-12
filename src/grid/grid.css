@@ -4,7 +4,7 @@
 }
 
 .grid-cell {
-	background-color:#00ff00
+	opacity:0.7; display:inline-block; overflow:hidden; line-height:27px; height:27px; font-size:14px; margin:0px; padding:0px; padding-left:4px; border:0px solid #fcfcfc; border-width:0px 0px 1px 0px;
 }
 
 .grid_content {
@@ -17,4 +17,24 @@
 
 .grid-toolbar:hover, .grid-toolbar:focus, .grid-toolbar:active {
     transform:scale(1); background-color:red
+}
+
+.grid-olumn-head {
+	background-color:white; 
+	position:absolute; top:0px; right:0px; left:0px; height:30px; 
+	overflow:hidden; margin:0px; height:49px; line-height:48px; 
+	padding:0px; border:1px solid lightRey; border-width:0px 0px 1px 0px;
+}
+
+.grid-column {
+	display:inline-block; font-weight:bold; 
+	overflow:hidden; line-height:47px; 
+	height:47px; font-size:14px; 
+	margin:0px; padding:0px; padding-left:4px; border:0px solid black; border-width:0px 0px 0px 0px;
+}
+
+.grid-row {
+	display:block; overflow:hidden; height:25px; margin:0px; padding:0px; 
+	border:0px solid lightGrey; background-color:white; border-width:0px 0px 1px 0px; color:grey;
+	word-wrap:no-wrap; 	text-overflow: ellipsis;
 }

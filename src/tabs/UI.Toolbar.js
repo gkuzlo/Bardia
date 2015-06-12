@@ -1,21 +1,17 @@
-
+/**
+ * @class UI.Toolbar
+ */
 UI.Toolbar = Class.create(UI.MaterialComponent, {
 
     initConfig: function(config) {
         this.config = Object.extend({
-        	orientation: "vertical"
+        	orientation: "vertical",
+        	items: []
         }, config || {});
     },
 
     render: function() {
         var h = this;
-
-    	h.content = new Element("DIV", {
-    		style: "position:absolute; top:0px; left:0px; bottom:0px; right:0px;",
-    		class: "toolbar_bg"
-    	});
-
-    	h.getMaterial().update(h.content);
 
     	if (h.config.orientation == "vertical") {
     		h.renderItemsVertically();
@@ -26,43 +22,68 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
  
     renderItemsVertically: function() {
     	var h = this;
+    	
+    	h.content = new Element("DIV", {
+    		class: "toolbar-bg-content-v toolbar-bg-color"
+    	});
 
-    	var i=0;
-    	for (i=0; i<h.config.items.length; i++) {
-    		var t = h.config.items[i];
-    		
-        	if (t.access !== undefined && t.access != UI.VISIBLE) {
-        		continue;
-        	}
-    		
-    		var item = new Element("DIV", {
-    			style: "padding-left:15px; font-size:14px; border-bottom: 1px solid #1E1D29; line-height:60px; height:60px; overflow:hidden",
-    			class: "toolbar_bg"
-    		});
-    		item.onClick = h.config.items[i].onClick;
-
-    		item.update(h.config.items[i].name);
-    		item.title = h.config.items[i].description;
-
-			item.on("click", function(e) {
-				setTimeout(function() {
+    	h.getMaterial().update(h.content);
+    	
+    	h.items = [];
+    	
+    	h.config.items.
+	    	filter(function(t) {
+	    		return !(t.access !== undefined && t.access != UI.VISIBLE);
+	    	}).
+	    	map(function(t) {    		
+	    		var item = new Element("DIV", {
+	    			class: "toolbar-item-vertical toolbar-text-color"
+	    		});
+	    		item.bean = t;
+	
+	    		h.items.push(item);
+	
+	    		if (!t.customIcon) {
+	    			item.update(t.name);
+	    		} else {
+	    			item.setStyle({
+	    				backgroundImage: "url('" + t.customIcon + "')",
+	    				backgroundRepeat: "no-repeat",
+	    				backgroundPosition: "center center"
+	    			});
+	    		}
+	    		item.title = t.description;
+	
+				item.on("click", function(e) {
 					h.displayMarkerVertically(e.target);	
-				}, 0);
-				if (e.target.onClick !== undefined) {
-					e.target.onClick(t);
-				}
-			});
+	
+					if (e.target.bean.onClick !== undefined) {
+						e.target.bean.onClick(t);
+					}
+				});
 
-    		h.content.insert(item);
-    		
-    		if (i == 0) {
-    			item.click();
-    		}
-    	}
+	    		return item;
+	    	}).
+	    	forEach(function(item, index) {
+	    		h.content.insert(item);
+	    		if (index == 0) {
+	    			item.click();
+	    		}
+	    	});
     },
-
+    /**
+     * @method renderItemsHorizontally
+     */
     renderItemsHorizontally: function() {
     	var h = this;
+    	
+    	h.content = new Element("DIV", {
+    		class: "toolbar-bg-content-h toolbar-bg-color"
+    	});
+
+    	h.getMaterial().update(h.content);
+    	
+    	h.items = [];
 
     	var i=0;
     	for (i=0; i<h.config.items.length; i++) {
@@ -71,23 +92,31 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
         	if (t.access !== undefined && t.access != UI.VISIBLE) {
         		continue;
         	}
-    		
+
     		var item = new Element("DIV", {
-    			style: "padding-left:15px; font-size:14px; padding-right:15px; display:inline-block; border-right:1px solid #1E1D29; line-height:70px; height:70px; overflow:hidden",
-    			class: "toolbar_bg"
+    			class: "toolbar-item-horizontal toolbar-text-color"
     		});
     		item.bean = t;
+    		h.items.push(item);
+
     		item.onClick = h.config.items[i].onClick;
 
-    		item.update(h.config.items[i].name);
+    		if (!t.customIcon) {
+    			item.update(t.name);
+    		} else {
+    			item.setStyle({
+    				backgroundImage: "url('" + t.customIcon + "')",
+    				backgroundRepeat: "no-repeat",
+    				backgroundPosition: "center center"
+    			});
+    		}
     		item.title = h.config.items[i].description;
 
 			item.on("click", function(e) {
-				setTimeout(function() {
-					h.displayMarkerHorizontally(e.target);	
-				}, 0);
-				if (e.target.onClick !== undefined) {
-					e.target.onClick(e.target.bean);
+				h.displayMarkerHorizontally(e.target);	
+
+				if (e.target.bean.onClick !== undefined) {
+					e.target.bean.onClick(e.target.bean);
 				}
 			});
 
@@ -96,30 +125,6 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     		if (i == 0) {
     			item.click();
     		}
-    	}
-    },
-
-    displayMarkerVertically: function(html) {
-    	var h = this;
-
-    	var containerTop = h.content.getBoundingClientRect().top;
-
-    	if (h.marker === undefined) {
-    		h.marker = new Element("DIV", {
-    			style: "position:absolute; opacity:0.0; width:5px; top: " + (html.getBoundingClientRect().top - containerTop) + "px; height:" + (html.getBoundingClientRect().height - 1) + "px;",
-    			class: "toolbar_marker_bg"
-    		});
-    		h.content.insert(h.marker);
-    		
-    		$PLAY(h.marker, [
-    		    { opacity: "0.0" },
-	     		{ opacity: "1.0" },
-	     	]);
-    	} else {
-			$PLAY(h.marker, [
-	  		    { top: (h.marker.getBoundingClientRect().top - h.content.getBoundingClientRect().top + 1) + "px" },
-	  		    { top: (html.getBoundingClientRect().top - h.content.getBoundingClientRect().top + 1) + "px" },
-	  		]);
     	}
     },
 
@@ -128,45 +133,39 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
 
     	var containerLeft = h.content.getBoundingClientRect().left;
     	
-    	if (h.marker === undefined) {
-    		
-    		h.marker = new Element("DIV", {
-    			style: "position:absolute; opacity:0.0; top:65px; left:" + (html.getBoundingClientRect().left - containerLeft) + "px; width:" + html.getBoundingClientRect().width + "px; height:5px",
-    			class: "toolbar_marker_bg"
-    		});
-    		h.content.insert(h.marker);
-    		
-    		var player = h.marker.animate([
-	     		    {
-	     		    	opacity: "0.0"
-	     		    },
-	     		    {
-	     		    	opacity: "1.0"
-	     		    },
-	     		], {
-	     			direction: 'normal',
-	     		    duration: 1000,
-	     		    easing: "ease",
-	     			iterations: 1,
-	     			fill: "both"
-		   		});
-    	} else {
-			var player = h.marker.animate([
-	  		    {
-	  		       left: (h.marker.getBoundingClientRect().left- containerLeft) + "px",
-	  		       width: h.marker.getBoundingClientRect().width + "px"
-	  		    },
-	  		    {
-	   		       left: (html.getBoundingClientRect().left - containerLeft) + "px",
-	   		       width: (html.getBoundingClientRect().width - 1) + "px"
-	  		    },
-	  		], {
-	  			direction: 'normal',
-	  		    duration: 1000,
-	  		    easing: "ease",
-	  			iterations: 1,
-	  			fill: "both"
-			});
+    	h.content.pseudoStyle("before", "width",  (html.getBoundingClientRect().width - 1) + "px");
+    	h.content.pseudoStyle("before", "transform", "translateX(" + (html.getBoundingClientRect().left - containerLeft) + "px)");
+    },
+    
+    displayMarkerVertically: function(html) {
+    	var h = this;
+
+    	var containerTop = h.content.getBoundingClientRect().top;
+
+    	h.content.pseudoStyle("before", "height",  (html.getBoundingClientRect().height - 1) + "px");
+    	h.content.pseudoStyle("before", "transform", "translateY(" + (html.getBoundingClientRect().top -containerTop) + "px)");
+    },
+    
+    selectItemByName: function(name) {
+    	var h = this;
+    	
+    	var item = h.findItemByName(name);
+    	if (item && item != null) {
+    		item.click();
     	}
-    }
+    },
+    
+    findItemByName: function(name) {
+    	var h = this;
+    	
+    	var result = null;
+    	var i=0;
+    	for (i=0; i<h.items.length; i++) {
+    		if (h.items[i].bean.name == name) {
+    			result = h.items[i];
+    			break;
+    		}
+    	}
+    	return result;
+    },
 });

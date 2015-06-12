@@ -123,14 +123,6 @@ input {
 	background-color:transparent;
 }
 
-.toolbar_bg {
-	background-color:rgba(30, 29, 41, 1); color:#525160
-}
-
-.toolbar_marker_bg {
-	background-color:#6dbbcf
-}
-
 /* Radial Out */
 .hvr-radial-out {
   display: inline-block;
