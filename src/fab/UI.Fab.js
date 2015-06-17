@@ -51,7 +51,7 @@ UI.Fab = Class.create({
     	});
 
     	h.config.inside.insert(h.material);
-    	
+
     	if (h.config.targetFill !== undefined) {
     		h.material.on("mouseover", function() {
     			var player = h.material.animate([

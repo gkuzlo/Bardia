@@ -1,7 +1,7 @@
 /**
- * @class UI.GridToolbar
+ * @class UI.PanelToolbar
  */
-UI.GridToolbar = Class.create({
+UI.PanelToolbar = Class.create({
 	/**
 	 * 
 	 * @param config
@@ -39,7 +39,7 @@ UI.GridToolbar = Class.create({
     		var buttonConfig = buttons[i];
     			buttonConfig.inside = h.material; 
 
-    		var button = new UI.GridButton(buttonConfig);
+    		var button = new UI.PanelButton(buttonConfig);
     	}
     }
 });

@@ -654,6 +654,98 @@ UI.MaterialComponent = Class.create({
     }
 });
 /**
+ * @class UI.PanelButton
+ */
+UI.PanelButton = Class.create({
+	/**
+	 * 
+	 * @param config
+	 */
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            title: "...",
+            fill: "black",
+            icon: "done"
+        }, config || {});
+
+        this.render();
+    },
+    /**
+     * @method render
+     */ 
+    render: function() {
+    	var h = this;
+    	
+    	h.buttonDiv = new Element("DIV", {
+    		style: "border-radius:50%; width:26px; height:26px; line-height:26px; margin:2px; display:flex; justify-content:center; align-items:center",
+    		class: "panel-button"
+    	});
+    	h.config.inside.insert(h.buttonDiv);
+    	
+    	h.buttonDiv.setStyle({
+    		backgroundColor: h.config.fill 
+    	});
+    	
+    	h.img = new Element("IMG", {
+    		src: $ICON(h.config.icon),
+    		title: h.config.title
+    	});
+    	h.buttonDiv.insert(h.img);
+    	
+    	h.buttonDiv.on("click", function(e) {
+    		if (h.config.onClick) {
+    			h.config.onClick();
+    		}
+    	});
+    }
+});
+/**
+ * @class UI.PanelToolbar
+ */
+UI.PanelToolbar = Class.create({
+	/**
+	 * 
+	 * @param config
+	 */
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            buttons: []
+        }, config || {});
+
+        this.render();
+    },
+    /**
+     * @method render 
+     */ 
+    render: function() {
+    	var h = this;
+
+    	h.material = new Element("DIV", {
+    		style: "position:absolute; display:flex; flex-direction:row; top:0px; left:0px; right:0px; bottom:0px"
+    	});
+    	h.config.inside.insert(h.material);
+
+    	h.setButtons(h.config.buttons);
+    },
+    /**
+     * 
+     * @param buttons
+     */
+    setButtons: function(buttons) {
+    	var h = this;
+
+    	var i = 0;
+    	for (i=0; i<buttons.length; i++) {
+    		var buttonConfig = buttons[i];
+    			buttonConfig.inside = h.material; 
+
+    		var button = new UI.PanelButton(buttonConfig);
+    	}
+    }
+});
+/**
  * @class UI.Panel
  */
 UI.Panel = Class.create(UI.MaterialComponent, {
@@ -663,7 +755,6 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 	 */
     initConfig: function(config) {
         this.config = Object.extend({
-        	className: "bg_main fg_white"
         }, config || {});
     },
     /**
@@ -672,22 +763,63 @@ UI.Panel = Class.create(UI.MaterialComponent, {
     render: function() {
         var h = this;
 
-    	h.content = new UI.Content({
-    		inside: h.getMaterial()
-    	});
-        
-    	h.header = new UI.Header({
-    		inside: h.getMaterial(),
-    		title: h.config.title,
-    		className: h.config.className
-    	});
+        if (h.config.title || h.config.buttons) {
+			h.mainLayout = new UI.BorderLayout({
+				inside: h.getMaterial(),
+				north: {
+					height: 59
+				}
+			});
+			
+			h.mainLayout.getNorth().addClassName("panel-header");
+			
+			h.material = new Element("DIV", {
+				style: "position: absolute; top:0px; right:0px; bottom:0px; left:0px"
+			});
+			h.mainLayout.getDefault().insert(h.material);
+
+			h.titleDiv = new Element("DIV", {
+				style: "transform:scale(1.5); position:absolute; top:5px; left:10px; height:20px; width:300px; -moz-transform-origin: 0 0; font-size:12px",
+				class: "panel-title"
+			});
+			h.mainLayout.getNorth().insert(h.titleDiv);
+
+			h.toolbarDiv = new Element("DIV", {
+				style: "transform:scale(0.5); position:absolute; top:25px; height:30px; left:10px; background-color:transparent; width:100%; -moz-transform-origin: 0 0;",
+				class: "panel-toolbar"
+			});
+			h.mainLayout.getNorth().insert(h.toolbarDiv);
+			
+			h.toolbarDiv.on("mouseover", function(e) {
+				h.expandToolbar();
+				e.cancelBubble = true;
+				e.returnValue = false;
+				return false;
+			});
+
+			h.mainLayout.getNorth().on("mouseover", function(e) {
+				h.expandTitle();
+			});
+
+			h.toolbar = new UI.PanelToolbar({
+				inside: h.toolbarDiv,
+				buttons: h.config.buttons || []
+			});
+
+			h.setTitle(h.config.title);
+        } else {
+			h.mainLayout = new UI.BorderLayout({
+				inside: h.getMaterial()
+			});
+        }
     },
     /**
      * 
      * @returns
      */
     getContent: function() {
-    	return this.content.getMaterial();
+    	var h = this;
+    	return h.mainLayout.getDefault();
     },
     /**
      * 
@@ -695,8 +827,62 @@ UI.Panel = Class.create(UI.MaterialComponent, {
      */
     setTitle: function(title) {
     	var h = this;
-    		h.header.setTitle(title);
-    }
+    		h.titleDiv.update(title);
+    },
+    /**
+     * @method: expandToolbar
+     */
+    expandToolbar: function() {
+    	var h = this;
+    	
+    	if (!h.toolbarExpanded && !h.inProgress) {
+    		
+    		h.inProgress = true;
+	    	
+    		$PLAY(h.toolbarDiv, [
+	    	    {transform: "scale(0.5)"},
+	    	    {transform: "scale(1)"}
+	    	], function() {
+    			delete h.inProgress;
+    		});
+	    	
+	    	$PLAY(h.titleDiv, [
+	     	    {transform: "scale(1.5)"},
+	     	    {transform: "scale(1)"}
+	     	], function() {
+    			delete h.inProgress;
+    		});
+	    	
+	    	h.toolbarExpanded = true;
+    	}
+    },
+    /**
+     * @method expandTitle 
+     */
+    expandTitle: function() {
+    	var h = this;
+
+    	if (h.toolbarExpanded && !h.inProgress) {
+
+    		h.inProgress = true;
+
+    		$PLAY(h.toolbarDiv, [
+	    	    {transform: "scale(1)"},
+	    	    {transform: "scale(0.5)"}
+	    	], function() {
+    			delete h.inProgress;
+    		});
+	    	
+	    	$PLAY(h.titleDiv, [
+	     	    {transform: "scale(1)"},
+	     	    {transform: "scale(1.5)"}
+	     	], function() {
+    			delete h.inProgress;
+    		});
+	    	
+	    	delete h.toolbarExpanded;
+    	}
+    },
 });
 
 
@@ -795,6 +981,13 @@ UI.DateUtils = Class.create({
        var minutes = num % 60;
 
        return this.formatNumber(hours, 2) + ":" + this.formatNumber(minutes, 2);
+   },
+   formatNumberToTimeSec: function(num) {
+	  var hours   = Math.floor(num / 3600);
+	  var minutes = Math.floor((num - (hours * 3600)) / 60);
+	  var seconds = num - (hours * 3600) - (minutes * 60);
+
+      return this.formatNumber(hours, 2) + ":" + this.formatNumber(minutes, 2) + ":" + this.formatNumber(seconds, 2);
    },
    formatNumber: function(num, len) {
        var result = null;
@@ -1289,7 +1482,7 @@ UI.Fab = Class.create({
     	});
 
     	h.config.inside.insert(h.material);
-    	
+
     	if (h.config.targetFill !== undefined) {
     		h.material.on("mouseover", function() {
     			var player = h.material.animate([
@@ -1511,7 +1704,7 @@ UI.FabToolbar = Class.create({
             buttons: [
             ],
             onClicked: function() {
-            	
+
             }
         }, config || {});
 
@@ -1520,18 +1713,11 @@ UI.FabToolbar = Class.create({
     /**
      * @method render
      */
-    render: function() {
+    render: function() { 
     	var h = this;
-    	
-    	h.material = new Element("DIV", {
-    	});
 
-    	h.material.setStyle({
-    		display: "flex",
-    		flexDirection: (h.config.orientation=="right")?"row-reverse":"row",
-    		textAlign: "right",
-    		border: "1px solid lightGrey",
-    		borderWidth: "1px 0px 0px 0px"
+    	h.material = new Element("DIV", {
+    		style: "position:absolute; top:0px; left:0px; right:0px; height:60px; display:flex; flex-direction:row-reverse; background-color:rgba(200, 200, 200,0.1); ",
     	});
 
     	h.config.inside.insert({
@@ -1546,36 +1732,27 @@ UI.FabToolbar = Class.create({
      */
     setButtons: function(buttons) {
     	var h = this;
-    	
+
     	h.material.update();
-    	
-    	h.hashedFabs = new Hash();
 
-    	var i=0;
-    	for (i=0; i<buttons.length; i++) {
+    	h.fabs = [];
 
-    		var button = buttons[i];
-    		
-        	if (button.access !== undefined && button.access != UI.VISIBLE) {
-        		continue;
-        	}
+    	buttons
+	    	.filter(function(button) {
+	    		return !(button.access !== undefined && button.access != UI.VISIBLE)
+	    	})
+	    	.forEach(function(button) {
+	        	var conf = Object.extend({}, button);
+	        		conf.inside = h.material;
+	        		conf.onClick = function() {
+	        			button.onClick(fab);
+	        			h.config.onClicked(fab);
+	        		};
 
-    		var fab = new UI.Fab({
-    			inside: h.material,
-    			icon: buttons[i].icon,
-    			title: buttons[i].title,
-    			text: buttons[i].text,
-    			fill: buttons[i].fill,
-    			access: button.access,
-    			onClick: function(fab) {
-    				fab.onClick();
-    				h.config.onClicked();
-    			}
-    		});
-    		fab.onClick = button.onClick;
+	    		var fab = new UI.Fab(conf);
 
-    		h.hashedFabs.set(buttons[i].id, fab);
-    	}    	
+	    		h.fabs.push(fab);
+	    	});
     },
     hide: function() {
     	var h = this;
@@ -1585,21 +1762,22 @@ UI.FabToolbar = Class.create({
     	var h = this;
     		h.hideOrShow(true);
     },
-    /** 
+    /**
      * @param display
      */
     hideOrShow: function(display) {
-    	var i=0;
-    	for (i=0; i<this.hashedFabs.keys().length; i++) {
-    		var fab = this.hashedFabs.get(this.hashedFabs.keys()[i]);
-    			if (!display) {
-    				fab.getMaterial().hide();
-    			} else {
-    				fab.getMaterial().show();
-    			}
-    	}
+    	var h = this;
+
+    	h.fabs.forEach(function(fab) {
+			if (!display) {
+				fab.hide();
+			} else {
+				fab.show();
+			}
+    	});
     }
 });
+
 /** 
  * 
  */
@@ -2235,34 +2413,13 @@ UI.Form = Class.create(UI.MaterialComponent, {
      */
     render: function() {
     	var h = this;
-	
-    	var layoutConfig = {
-    		inside: h.getMaterial()
-    	};
-    	
-		if (h.config.title !== undefined) {
-			layoutConfig.north = {
-				height: 60
-			};
-		}
 
-		if (h.config.buttons !== undefined) {
-			layoutConfig.south = {
-				height: 60
-			};
-		}
+    	h.panel = new UI.Panel({
+    		inside: h.getMaterial(),
+    		title: h.config.title,
+    		buttons: h.config.buttons
+    	});
 
-		var layout = new UI.BorderLayout(layoutConfig);
-		
-		if (h.config.title !== undefined) {
-			var titleDiv = new Element("DIV", {
-				class: "form_header"
-			});
-
-			layout.getNorth().update(titleDiv);
-			titleDiv.update(h.config.title);
-		}
-        
     	if (h.config.fields !== undefined) {
     		var i=0;
     		for (i=0; i<h.config.fields.length; i++) {		
@@ -2283,15 +2440,8 @@ UI.Form = Class.create(UI.MaterialComponent, {
 
     					h.config.fieldControlls.push(field);
 
-    				layout.getDefault().insert(field.getMaterial());
+    				h.panel.getContent().insert(field.getMaterial());
     		}
-    	}
-
-    	if (h.config.buttons !== undefined) {
-	    	new UI.FabToolbar({
-	    		inside: layout.getSouth(),
-	    		buttons: h.config.buttons
-	    	});
     	}
     },
     /**
@@ -2300,7 +2450,7 @@ UI.Form = Class.create(UI.MaterialComponent, {
      */
     setTitle: function(title) {
     	var h = this;
-    		h.formHeader.update(title);
+    		h.panel.setTitle(title);
     },
     /**
      * Metoda zwraca pole formularza dla zadanej właściwości
@@ -4552,92 +4702,6 @@ UI.ProgressBar = Class.create(UI.MaterialComponent, {
     }
 });
 /**
- * @class UI.GridButton
- */
-UI.GridButton = Class.create({
-	/**
-	 * 
-	 * @param config
-	 */
-    initialize: function(config) {
-        this.config = Object.extend({
-            inside: window.document.body,
-            title: "..."
-        }, config || {});
-
-        this.render();
-    },
-    /**
-     * @method render
-     */ 
-    render: function() {
-    	var h = this;
-    	
-    	h.buttonDiv = new Element("DIV", {
-    		style: "border-radius:50%; width:26px; height:26px; line-height:26px; background-color:#525070; margin:2px; display:flex; justify-content:center; align-items:center",
-    		class: "hvr-radial-out"
-    	});
-    	h.config.inside.insert(h.buttonDiv);
-    	
-    	h.img = new Element("IMG", {
-    		src: $ICON(h.config.icon),
-    		title: h.config.title
-    	});
-    	h.buttonDiv.insert(h.img);
-    	
-    	h.buttonDiv.on("click", function(e) {
-    		if (h.config.onClick) {
-    			h.config.onClick();
-    		}
-    	});
-    }
-});
-/**
- * @class UI.GridToolbar
- */
-UI.GridToolbar = Class.create({
-	/**
-	 * 
-	 * @param config
-	 */
-    initialize: function(config) {
-        this.config = Object.extend({
-            inside: window.document.body,
-            buttons: []
-        }, config || {});
-
-        this.render();
-    },
-    /**
-     * @method render 
-     */ 
-    render: function() {
-    	var h = this;
-
-    	h.material = new Element("DIV", {
-    		style: "position:absolute; display:flex; flex-direction:row; top:0px; left:0px; right:0px; bottom:0px"
-    	});
-    	h.config.inside.insert(h.material);
-
-    	h.setButtons(h.config.buttons);
-    },
-    /**
-     * 
-     * @param buttons
-     */
-    setButtons: function(buttons) {
-    	var h = this;
-
-    	var i = 0;
-    	for (i=0; i<buttons.length; i++) {
-    		var buttonConfig = buttons[i];
-    			buttonConfig.inside = h.material; 
-
-    		var button = new UI.GridButton(buttonConfig);
-    	}
-    }
-});
-/**
  * @class UI.Grid
  */
 UI.Grid = Class.create(UI.MaterialComponent, {
@@ -4666,53 +4730,22 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
     		h.mainLayout = new UI.BorderLayout({
     			inside: h.getMaterial(),
-    			north: {
-    				height: 60
-    			},
     			south: {
     				height: 60
     			}
     		});
-
-    		h.mainLayout.getNorth().addClassName("grid_header");
-
-    		h.material = new Element("DIV", {
-    			style: "position: absolute; top:0px; right:0px; bottom:0px; left:0px"
-    		});
-    		h.mainLayout.getDefault().insert(h.material);
-
-    		h.titleDiv = new Element("DIV", {
-    			style: "transform:scale(1.5); position:absolute; top:5px; left:10px; color:#525070; height:20px; width:300px; -moz-transform-origin: 0 0; font-size:12px"
-    		});
-    		h.mainLayout.getNorth().insert(h.titleDiv);
-
-    		h.toolbarDiv = new Element("DIV", {
-    			style: "transform:scale(0.5); position:absolute; top:25px; height:30px; left:10px; background-color:transparent; width:100%; -moz-transform-origin: 0 0;",
-    			class: "grid-toolbar"
-    		});
-    		h.mainLayout.getNorth().insert(h.toolbarDiv);
     		
-    		h.toolbarDiv.on("mouseover", function(e) {
-    			h.expandToolbar();
-    			e.cancelBubble = true;
-    			e.returnValue = false;
-    			return false;
-    		});
-    		
-    		h.mainLayout.getNorth().on("mouseover", function(e) {
-    			h.expandTitle();
-    		});
-    		
-    		h.toolbar = new UI.GridToolbar({
-    			inside: h.toolbarDiv,
-    			buttons: h.config.buttons || []
+    		h.panel = new UI.Panel({
+    			inside: h.mainLayout.getDefault(),
+    			buttons: h.config.buttons || [],
+    			title: h.config.title
     		});
 
     		h.columnsContent = new Element("DIV", {
     			class: "grid_content",
-    			style: "height:50px; top:2px; left:5px; border:2px solid lightGrey; border-width:0px 0px 2px 0px"
+    			style: "height:50px; top:2px; left:5px; border:2px solid lightGrey; border-width:0px 0px 2px 0px; overflow:hidden"
     		});
-    		h.material.insert(h.columnsContent);
+    		h.panel.getContent().insert(h.columnsContent);
 
     		h.rowsContent = new Element("DIV", {
     			class: "grid_content",
@@ -4723,7 +4756,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     				h.config.onScrollTop(e.target.scrollTop);
     			}
     		});
-    		h.material.insert(h.rowsContent);
+    		h.panel.getContent().insert(h.rowsContent);
 
     		this.rowsContent.on("click", "div.row", function(e, element) {
     			if (h.config.onClick) {
@@ -4741,72 +4774,18 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		        	 onChanging: function(v) {
     		        		 var f = function() {
     		        			 h.filter(v);	 
-    		        		 }
+    		        		 };
     		        		 setTimeout(f, 0);
     		        	 }
     		         }
     			]
     		});
 
-    	h.setTitle(h.config.title);
+    	h.panel.setTitle(h.config.title);
     		
     	h.fetch({
     		rows: []
     	});
-    },
-    /**
-     * @method: expandToolbar
-     */
-    expandToolbar: function() {
-    	var h = this;
-    	
-    	if (!h.toolbarExpanded && !h.inProgress) {
-    		
-    		h.inProgress = true;
-	    	
-    		$PLAY(h.toolbarDiv, [
-	    	    {transform: "scale(0.5)"},
-	    	    {transform: "scale(1)"}
-	    	], function() {
-    			delete h.inProgress
-    		});
-	    	
-	    	$PLAY(h.titleDiv, [
-	     	    {transform: "scale(1.5)"},
-	     	    {transform: "scale(1)"}
-	     	], function() {
-    			delete h.inProgress
-    		});
-	    	
-	    	h.toolbarExpanded = true;
-    	}
-    },
-    /**
-     * 
-     */
-    expandTitle: function() {
-    	var h = this;
-    	
-    	if (h.toolbarExpanded && !h.inProgress) {
-    		
-    		h.inProgress = true;
-	    	
-    		$PLAY(h.toolbarDiv, [
-	    	    {transform: "scale(1)"},
-	    	    {transform: "scale(0.5)"}
-	    	], function() {
-    			delete h.inProgress
-    		});
-	    	
-	    	$PLAY(h.titleDiv, [
-	     	    {transform: "scale(1)"},
-	     	    {transform: "scale(1.5)"}
-	     	], function() {
-    			delete h.inProgress
-    		});
-	    	
-	    	delete h.toolbarExpanded;
-    	}
     },
     /**
      * @method setScrollTop
@@ -4815,10 +4794,12 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     	var h = this;
     		h.rowsContent.scrollTop = pixels;
     },
+    /**
+     * @method setTitle
+     */
     setTitle: function(title) {
     	var h = this;
-    	
-    	h.titleDiv.update(title);
+    		h.panel.setTitle(title);
     },
     /**
      * @method fetch
@@ -4841,7 +4822,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 				
 				var div = new Element("P", {
 					style: "width:" + (column.width) + "px",
-					class: "grid-column bg_white fg_main grid_column_head"
+					class: "grid-column bg_white fg_main"
 				});
 	
 				div.update(column.name);
@@ -4882,6 +4863,10 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		h.rowsContent.insert(row);	
 		});
     },
+    /**
+     * @method filter
+     * @param v
+     */
 	filter: function(v) {
 		var h = this;
 
@@ -4895,6 +4880,162 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 			}
 		}
 	}
+});
+
+UI.GridCell = Class.create({
+
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            input: null,
+            readOnly: true,
+            width: 100,
+            bean: {}
+        }, config || {});
+
+        this.render();
+    },
+
+    render: function() {
+    	var h = this;
+
+		h.material = new Element("DIV", {
+			style: "position:relative; display:inline; overflow:hidden; font-size:14px; height:26px; margin:0px; padding:0px; border:0px solid grey; border-width:0px 0px 0px 0px; width:" + h.config.width + "px",
+			class: "grid-cell"
+		});
+    	
+		h.input = new Element("INPUT", {
+			style: "font-size:14px; height:25px; margin:0px; padding:0px; padding-left:4px; border:0px solid grey; border-width:0px 1px 0px 0px; width:" + h.config.width + "px",
+			class: "grid-cell"
+		});
+		
+		h.material.update(h.input);
+		
+		h.input.on("keydown", function(e) {
+			e.cancelBubble = true;
+		});
+
+		h.input.on("change", function(e) {
+			h.updateValue();
+		});
+
+		h.setReadOnly(h.config.readOnly);
+
+		h.setBean(h.config.bean);
+
+		if (h.config.render !== undefined) {
+			h.config.render(h);
+		}
+    },
+    getMaterial: function() {
+    	return this.material;
+    },
+    getInput: function() {
+    	return this.input;
+    },
+    getBean: function() {
+    	return this.config.bean;
+    },
+    setReadOnly: function(readOnly) {
+    	var h = this;
+
+    	var ro = readOnly;
+    		if (ro === true) {
+    			h.input.setStyle({
+    				backgroundColor: "white"
+    			});	
+    		} else {
+    			h.input.setStyle({
+    				backgroundColor: "#f8f8ba"
+    			});
+    		}
+    		h.input.readOnly = ro;
+    },
+    updateValue: function() {
+    	var h = this;
+
+    	eval("h.config.bean." + h.config.property + " = '" + h.input.value + "'");
+
+    	if (h.config.onChange) {
+    		h.config.onChange(h);
+    	}
+    },
+    setBean: function(bean) {
+    	var h = this;
+    		var val = eval("bean." + h.config.property);
+    		if (val !== undefined) {
+    			h.input.value = val;
+    		}
+    }
+});
+
+UI.GridInputCell = Class.create({
+
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body,
+            bean: {name:""},
+            property: "name",
+            mask: new Input(null),
+            readOnly: false
+        }, config || {});
+
+        this.render();
+        this.setReadOnly(this.config.readOnly);
+    },
+
+    render: function() {
+    	var h = this;
+    		h.input = new Element("INPUT", {
+    			style: "background-color:transaprent; border:0px solid grey; border-width:0px 0px 2px 0px; margin:0px; position:relative; top:3px; left:-4px; width:100%; line-height:18px"
+    		});
+    		h.config.inside.insert(h.input);
+
+    		if (h.config.mask) {
+    			var mask = new InputMask(h.config.mask, h.input)
+    				mask.blurFunction = function() {
+    					eval("h.config.bean." + h.config.property + " = h.input.value");
+    					if (h.config.onChange !== undefined) {
+    						h.config.onChange(h.input.value);
+    					}
+    				}
+    		}
+
+    		try {
+    			var value = eval("h.config.bean." + h.config.property);
+    			if (value !== undefined) {
+    				h.input.value = value;
+    			}
+    		} catch (e) {
+
+    		}
+    },
+    setPropertyValue: function(value) {
+    	var h = this;
+
+    	h.input.value = value;
+    	eval("h.config.bean." + h.config.property + " = value");
+    },
+
+    setReadOnly: function(readOnly) {
+    	var h = this;
+    	
+    	if (readOnly == false) {
+    		h.input.disabled = false;
+    		h.input.setStyle({
+    			backgroundColor: "#F1DECC"
+    		});
+    	} else {
+    		h.input.disabled = true;
+    		h.input.setStyle({
+    			backgroundColor: "white"
+    		});
+    	}
+    },
+
+    getMaterial: function() {
+    	return this.input;
+    }
 });
 UI.IconToolbar = Class.create(UI.MaterialComponent, {
 
@@ -5167,7 +5308,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     	var h = this;
     	
     	h.content = new Element("DIV", {
-    		class: "toolbar-bg-content-v toolbar-bg-color"
+    		class: "toolbar-marker-v toolbar-bg-color"
     	});
 
     	h.getMaterial().update(h.content);
@@ -5221,7 +5362,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     	var h = this;
     	
     	h.content = new Element("DIV", {
-    		class: "toolbar-bg-content-h toolbar-bg-color"
+    		class: "toolbar-marker-h toolbar-bg-color"
     	});
 
     	h.getMaterial().update(h.content);

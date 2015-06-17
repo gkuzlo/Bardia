@@ -24,7 +24,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     	var h = this;
     	
     	h.content = new Element("DIV", {
-    		class: "toolbar-bg-content-v toolbar-bg-color"
+    		class: "toolbar-marker-v toolbar-bg-color"
     	});
 
     	h.getMaterial().update(h.content);
@@ -78,7 +78,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     	var h = this;
     	
     	h.content = new Element("DIV", {
-    		class: "toolbar-bg-content-h toolbar-bg-color"
+    		class: "toolbar-marker-h toolbar-bg-color"
     	});
 
     	h.getMaterial().update(h.content);

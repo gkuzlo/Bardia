@@ -17,34 +17,13 @@ UI.Form = Class.create(UI.MaterialComponent, {
      */
     render: function() {
     	var h = this;
-	
-    	var layoutConfig = {
-    		inside: h.getMaterial()
-    	};
-    	
-		if (h.config.title !== undefined) {
-			layoutConfig.north = {
-				height: 60
-			};
-		}
 
-		if (h.config.buttons !== undefined) {
-			layoutConfig.south = {
-				height: 60
-			};
-		}
+    	h.panel = new UI.Panel({
+    		inside: h.getMaterial(),
+    		title: h.config.title,
+    		buttons: h.config.buttons
+    	});
 
-		var layout = new UI.BorderLayout(layoutConfig);
-		
-		if (h.config.title !== undefined) {
-			var titleDiv = new Element("DIV", {
-				class: "form_header"
-			});
-
-			layout.getNorth().update(titleDiv);
-			titleDiv.update(h.config.title);
-		}
-        
     	if (h.config.fields !== undefined) {
     		var i=0;
     		for (i=0; i<h.config.fields.length; i++) {		
@@ -65,15 +44,8 @@ UI.Form = Class.create(UI.MaterialComponent, {
 
     					h.config.fieldControlls.push(field);
 
-    				layout.getDefault().insert(field.getMaterial());
+    				h.panel.getContent().insert(field.getMaterial());
     		}
-    	}
-
-    	if (h.config.buttons !== undefined) {
-	    	new UI.FabToolbar({
-	    		inside: layout.getSouth(),
-	    		buttons: h.config.buttons
-	    	});
     	}
     },
     /**
@@ -82,7 +54,7 @@ UI.Form = Class.create(UI.MaterialComponent, {
      */
     setTitle: function(title) {
     	var h = this;
-    		h.formHeader.update(title);
+    		h.panel.setTitle(title);
     },
     /**
      * Metoda zwraca pole formularza dla zadanej właściwości

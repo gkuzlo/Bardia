@@ -27,53 +27,22 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
     		h.mainLayout = new UI.BorderLayout({
     			inside: h.getMaterial(),
-    			north: {
-    				height: 60
-    			},
     			south: {
     				height: 60
     			}
     		});
-
-    		h.mainLayout.getNorth().addClassName("grid_header");
-
-    		h.material = new Element("DIV", {
-    			style: "position: absolute; top:0px; right:0px; bottom:0px; left:0px"
-    		});
-    		h.mainLayout.getDefault().insert(h.material);
-
-    		h.titleDiv = new Element("DIV", {
-    			style: "transform:scale(1.5); position:absolute; top:5px; left:10px; color:#525070; height:20px; width:300px; -moz-transform-origin: 0 0; font-size:12px"
-    		});
-    		h.mainLayout.getNorth().insert(h.titleDiv);
-
-    		h.toolbarDiv = new Element("DIV", {
-    			style: "transform:scale(0.5); position:absolute; top:25px; height:30px; left:10px; background-color:transparent; width:100%; -moz-transform-origin: 0 0;",
-    			class: "grid-toolbar"
-    		});
-    		h.mainLayout.getNorth().insert(h.toolbarDiv);
     		
-    		h.toolbarDiv.on("mouseover", function(e) {
-    			h.expandToolbar();
-    			e.cancelBubble = true;
-    			e.returnValue = false;
-    			return false;
-    		});
-    		
-    		h.mainLayout.getNorth().on("mouseover", function(e) {
-    			h.expandTitle();
-    		});
-    		
-    		h.toolbar = new UI.GridToolbar({
-    			inside: h.toolbarDiv,
-    			buttons: h.config.buttons || []
+    		h.panel = new UI.Panel({
+    			inside: h.mainLayout.getDefault(),
+    			buttons: h.config.buttons || [],
+    			title: h.config.title
     		});
 
     		h.columnsContent = new Element("DIV", {
     			class: "grid_content",
-    			style: "height:50px; top:2px; left:5px; border:2px solid lightGrey; border-width:0px 0px 2px 0px"
+    			style: "height:50px; top:2px; left:5px; border:2px solid lightGrey; border-width:0px 0px 2px 0px; overflow:hidden"
     		});
-    		h.material.insert(h.columnsContent);
+    		h.panel.getContent().insert(h.columnsContent);
 
     		h.rowsContent = new Element("DIV", {
     			class: "grid_content",
@@ -84,7 +53,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     				h.config.onScrollTop(e.target.scrollTop);
     			}
     		});
-    		h.material.insert(h.rowsContent);
+    		h.panel.getContent().insert(h.rowsContent);
 
     		this.rowsContent.on("click", "div.row", function(e, element) {
     			if (h.config.onClick) {
@@ -102,72 +71,18 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		        	 onChanging: function(v) {
     		        		 var f = function() {
     		        			 h.filter(v);	 
-    		        		 }
+    		        		 };
     		        		 setTimeout(f, 0);
     		        	 }
     		         }
     			]
     		});
 
-    	h.setTitle(h.config.title);
+    	h.panel.setTitle(h.config.title);
     		
     	h.fetch({
     		rows: []
     	});
-    },
-    /**
-     * @method: expandToolbar
-     */
-    expandToolbar: function() {
-    	var h = this;
-    	
-    	if (!h.toolbarExpanded && !h.inProgress) {
-    		
-    		h.inProgress = true;
-	    	
-    		$PLAY(h.toolbarDiv, [
-	    	    {transform: "scale(0.5)"},
-	    	    {transform: "scale(1)"}
-	    	], function() {
-    			delete h.inProgress
-    		});
-	    	
-	    	$PLAY(h.titleDiv, [
-	     	    {transform: "scale(1.5)"},
-	     	    {transform: "scale(1)"}
-	     	], function() {
-    			delete h.inProgress
-    		});
-	    	
-	    	h.toolbarExpanded = true;
-    	}
-    },
-    /**
-     * 
-     */
-    expandTitle: function() {
-    	var h = this;
-    	
-    	if (h.toolbarExpanded && !h.inProgress) {
-    		
-    		h.inProgress = true;
-	    	
-    		$PLAY(h.toolbarDiv, [
-	    	    {transform: "scale(1)"},
-	    	    {transform: "scale(0.5)"}
-	    	], function() {
-    			delete h.inProgress
-    		});
-	    	
-	    	$PLAY(h.titleDiv, [
-	     	    {transform: "scale(1)"},
-	     	    {transform: "scale(1.5)"}
-	     	], function() {
-    			delete h.inProgress
-    		});
-	    	
-	    	delete h.toolbarExpanded;
-    	}
     },
     /**
      * @method setScrollTop
@@ -176,10 +91,12 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     	var h = this;
     		h.rowsContent.scrollTop = pixels;
     },
+    /**
+     * @method setTitle
+     */
     setTitle: function(title) {
     	var h = this;
-    	
-    	h.titleDiv.update(title);
+    		h.panel.setTitle(title);
     },
     /**
      * @method fetch
@@ -202,7 +119,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 				
 				var div = new Element("P", {
 					style: "width:" + (column.width) + "px",
-					class: "grid-column bg_white fg_main grid_column_head"
+					class: "grid-column bg_white fg_main"
 				});
 	
 				div.update(column.name);
@@ -243,6 +160,10 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		h.rowsContent.insert(row);	
 		});
     },
+    /**
+     * @method filter
+     * @param v
+     */
 	filter: function(v) {
 		var h = this;
 

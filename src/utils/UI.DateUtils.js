@@ -95,6 +95,13 @@ UI.DateUtils = Class.create({
 
        return this.formatNumber(hours, 2) + ":" + this.formatNumber(minutes, 2);
    },
+   formatNumberToTimeSec: function(num) {
+	  var hours   = Math.floor(num / 3600);
+	  var minutes = Math.floor((num - (hours * 3600)) / 60);
+	  var seconds = num - (hours * 3600) - (minutes * 60);
+
+      return this.formatNumber(hours, 2) + ":" + this.formatNumber(minutes, 2) + ":" + this.formatNumber(seconds, 2);
+   },
    formatNumber: function(num, len) {
        var result = null;
        try {
