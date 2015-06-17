@@ -1,0 +1,41 @@
+/*
+ * 000000
+ * 005BAA
+ * BCBEC0
+ * 79B4E8
+ * FFFFFF
+ */
+ 
+ /*
+  * toolbar
+  */
+ .toolbar-bg-color {
+	background-color:#000000
+}
+
+.toolbar-text-color {
+	color:#BCBEC0;
+}
+
+.toolbar-marker-h::before {
+	background-color:#BCBEC0;
+}
+
+.toolbar-marker-v::before {
+	background-color:#BCBEC0;
+}
+
+/*
+ * Panel
+ */
+ .panel-header {
+	background-color:#005BAA;
+}
+
+ .panel-button::before {
+ 	background-color:#79B4E8
+ }
+ 
+ .panel-title {
+	color:#ffffff; 
+}

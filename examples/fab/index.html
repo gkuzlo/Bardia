@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+    <head>
+        <meta charset="utf-8">
+        <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">  
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+        <script src="../../prototype/prototype.js"></script>
+        <script src="../../web-animations/web-animations.min.js"></script>
+
+		<script src="../../jsu/JavaScriptUtil.js"></script>
+		<script src="../../jsu/Parsers.js"></script>
+		<script src="../../jsu/InputMask.js"></script>
+		
+		<script src="../../dist/bardia.js"></script>
+		<link rel="stylesheet" href="../../dist/bardia.css">
+
+		<script>
+
+			var IS = new UI.IconSet({
+	        	path: "../fabicons"
+	        });
+
+	        function $ICON(id) {
+	        	return IS.getIcon(id);
+	        }
+		
+			/**
+			 *
+			 */
+			function initPage() {
+
+				try {
+					var layout = new UI.BorderLayout({
+						inside: $("main_div"),
+						north: {
+							height: 60
+						}
+					});
+				} catch (e) {
+					alert(e);
+				}
+							
+				layout.getNorth().setStyle({
+					backgroundColor: "#f0f0f0"
+				});
+				
+				var fabToolbar = new UI.FabToolbar({
+					inside: layout.getNorth(),
+					buttons: [
+					    {
+					    	name: "Add",
+							icon: "done",
+							onClick: function() {
+								alert("Add");
+							}
+					    },
+					    {
+					    	name: "New",
+							icon: "cancel",
+							onClick: function() {
+								alert("New");
+							}
+					    }, 
+					    {
+					        name: "Delete",
+							onClick: function() {
+								alert("Delete");
+							}
+					    }
+					],
+					onClicked: function() {
+						alert("Global clicked");
+					}
+				});
+			}
+		</script>
+		
+    </head>
+
+    <body onload="initPage()" style="background-color:lightGrey">
+    	<div style="position:absolute; top:0px; left:0px; right:0px; bottom:0px" id="main_div">
+    	</div>
+    </body>
+
+</html>
