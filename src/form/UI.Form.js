@@ -139,10 +139,17 @@ UI.Form = Class.create(UI.MaterialComponent, {
     	}
     },
     /**
-     * 
+     * @resetBean
      */
     resetBean: function() {
     	var h = this;
     		h.setBean(h.config.bean);
+    },
+    /**
+     * @method getContent
+     * @returns
+     */
+    getContent: function() {
+    	return this.panel.getContent();
     }
 });

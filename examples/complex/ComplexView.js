@@ -132,6 +132,9 @@ ComplexView = Class.create({
 			},
 			west: {
 				width: 60
+			},
+			east: {
+				width: 400
 			}
 		});
 		
@@ -165,6 +168,40 @@ ComplexView = Class.create({
 				},
 				{
 					name: "Customization"
+				}
+			]
+		});
+		
+		var list = new UI.List({
+			inside: topLayout.getEast(),
+			title: "UI.List",
+			header: "{val1}",
+			footer: "{val2}",
+			removable: true,
+			onRemove: function(row) {
+				alert(Object.toJSON(row.bean));
+			},
+			buttons: [
+				{
+					name: "Button 1",
+					title: "Button 1"
+				},
+				{
+					name: "Button 2",
+					title: "Button 2"
+				}
+			]
+		});
+		
+		list.fetch({
+			rows: [
+				{
+					val1: "value 1",
+					val2: "value 2"
+				},
+				{
+					val1: "value 3",
+					val2: "value 4"
 				}
 			]
 		});

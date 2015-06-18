@@ -33,45 +33,24 @@ UI.List = Class.create(UI.MaterialComponent, {
 			e.returnValue = false;
 		});
 
-		h.mainLayout = new UI.BorderLayout({
+		h.layout = new UI.BorderLayout({
 			inside: h.getMaterial(),
-			north: {
+			south: {
 				height: 60
 			}
 		});
 		
-		var titleDiv = new Element("DIV", {
-			class: "list_header"
+		h.panel = new UI.Panel({
+			inside: h.layout.getDefault(),
+			buttons: h.config.buttons,
+			title: h.config.title
 		});
-
-		h.mainLayout.getNorth().update(titleDiv);
-		titleDiv.update(h.config.title);
-
-		h.layout = null;
-		if (h.config.buttons && h.config.buttons.length > 0) {
-			h.layout = new UI.BorderLayout({
-				inside: h.mainLayout.getDefault(),
-				north: {
-					height: 60
-				},
-				south: {
-					height: 60
-				}
-			});
-		} else {
-			h.layout = new UI.BorderLayout({
-				inside: h.mainLayout.getDefault(),
-				south: {
-					height: 60
-				}
-			});
-		}
 		
 		h.listContent = new Element("DIV", {
 			style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; overflow:auto",
 			class: "list_content"
 		});
-		h.layout.getDefault().update(h.listContent);
+		h.panel.getContent().update(h.listContent);
 				
 		new UI.Form({
 			inside: h.layout.getSouth(),
@@ -107,14 +86,6 @@ UI.List = Class.create(UI.MaterialComponent, {
 				h.config.onMouseOut(element);
 			}
 		});
-
-		if (h.layout.getNorth()) {
-			new UI.FabToolbar({
-				inside: h.layout.getNorth(),
-				orientation: "left",
-				buttons: h.config.buttons
-			});
-		}
 	},
 	/*
 	 *  parametr data powinien zawsze zawierac kolekcję rows.
@@ -138,7 +109,7 @@ UI.List = Class.create(UI.MaterialComponent, {
 		for (i=0; i<h.config.rows.length; i++) {
 
 			var row = new Element("DIV", {
-				style: "overflow:hidden",
+				style: "position:relative; overflow:hidden",
 				class: "row"				// row to jest klasa fake
 			});
 			row.bean = h.config.rows[i];
@@ -172,23 +143,18 @@ UI.List = Class.create(UI.MaterialComponent, {
 			}
 
 			h.listContent.insert(row);
-			
+
 			if (h.config.removable === true) {
-				new UI.Fab({
-					inside: row,
-					text: "",
-					fill: "#ffffff",
-					targetFill: "red",
-					width: 18,
-					height: 18,
-					left: 21,
-					top: 12,
-					title: "Usuń",
-					icon: "close",
-					onClick: function(fab) {
-						if (h.config.onRemove) {
-							h.config.onRemove(fab.config.inside);
-						}
+				var removeFab = new Element("P", {
+					style: "position:absolute; padding:0px; border-radius:50%; margin:0px; top:10px; right:10px; width:18px; height:18px; background-image:url('" + $ICON("close") + "'); overflow:hidden",
+					className: "list-remove-button",
+				});
+				row.insert(removeFab);
+				removeFab.row = row;
+				
+				removeFab.on("click", function(e) {
+					if (h.config.onRemove) {
+						h.config.onRemove(e.target.row);
 					}
 				});
 			}

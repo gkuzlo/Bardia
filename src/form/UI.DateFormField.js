@@ -1,5 +1,10 @@
-
+/**
+ * @class UI.DateFormField
+ */
 UI.DateFormField = Class.create(UI.LookupFormField, {
+	/**
+	 * @method render
+	 */
 	render: function() {
     	var h = this;
     	
@@ -17,7 +22,7 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 		});
 		h.input.on("blur", function(e) {
 			if (h.isEmpty(h.input.value)) {
-				h.unanimateLabel()
+				h.unanimateLabel();
 			}
 		});
 		h.input.on("change", function(e) {
@@ -50,7 +55,10 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 			}
 		});
 	},
-
+	/**
+	 * 
+	 * @param date
+	 */
     setInputValue: function(date) {
     	var h = this;
     	
@@ -64,7 +72,10 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
     		h.unanimateLabel();
     	}
     },
-
+    /**
+     * 
+     * @param date
+     */
     setBeanValue: function(date) {
     	var h = this;
 
@@ -96,7 +107,7 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 		h.calendarDiv = new Element("DIV", {
 			style: "position:absolute; top:0px; left:0px; bottom:0px; right:0px; opacity:0.0; background-color:white"
 		});
-		h.form.getMaterial().insert(h.calendarDiv);
+		h.form.getContent().insert(h.calendarDiv);
 
 		new UI.DatePicker({
 			inside: h.calendarDiv,
