@@ -56,8 +56,7 @@
  *
  */
 .panel-header {
-	position:absolute; top:0px; right:0px; left:0px; height:59px; line-height:15px; font-size:14px; font-weight:bold; padding-left:10px;
-	background-color:#ebf0ee; color:#525070; border:0px solid #c9cece; border-width:0px 0px 1px 0px; 
+	background-color:#ebf0ee; color:#525070; 
 }
 
 .panel-toolbar {
@@ -82,6 +81,7 @@
   -webkit-transition-duration: 0.3s;
   transition-duration: 0.3s;
 }
+
 .panel-button:before {
   content: "";
   position: absolute;

@@ -14,6 +14,7 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
 	 * @method render
 	 */
     render: function() {
+    	var h = this;
         
         var centerTop = 0;
         var centerBottom = 0;
@@ -23,18 +24,20 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
         if (this.config.north !== undefined) {
             var height = 50;
 
-                if (this.config.north.height) {
-                    height = this.config.north.height;
+                if (h.config.north.height) {
+                    height = h.config.north.height;
                 } else {
-                    this.config.north.height = height;
+                    h.config.north.height = height;
                 }
                 
-                centerTop = this.config.north.height;
+                centerTop = h.config.north.height;
+                var fill = h.config.north.fill || "transparent";
 
-                this.north = document.createElement("DIV");
-                    this.north.style = "position:absolute; overflow:hidden; top:0px; left:0px; right:0px; height:" + height + "px;";
+                h.north = new Element("DIV", {
+                    style: "position:absolute; overflow:hidden; top:0px; left:0px; right:0px; height:" + height + "px; background-color:" + fill
+                });
 
-            this.config.inside.appendChild(this.north);
+            this.config.inside.insert(this.north);
         }
         
         if (this.config.south !== undefined) {
@@ -47,11 +50,13 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
                 }
                 
                 centerBottom = height;
+                var fill = h.config.south.fill || "transparent";
 
-                this.south = document.createElement("DIV");
-                    this.south.style = "position:absolute; overflow:hidden; height:" + height + "px; left:0px; right:0px; bottom:0px;";
+                this.south = new Element("DIV", {
+                    style: "position:absolute; overflow:hidden; height:" + height + "px; left:0px; right:0px; bottom:0px; background-color:" + fill
+                });
             
-            this.config.inside.appendChild(this.south);
+            this.config.inside.insert(this.south);
         }
         
         if (this.config.west !== undefined) {
@@ -64,11 +69,13 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
             }
             
             centerLeft = width;
+            var fill = h.config.west.fill || "transparent";
             
-            this.west = document.createElement("DIV");
-                this.west.style = "position:absolute; overflow:hidden; top:" + centerTop + "px; left:0px; width:" + width + "px; bottom:" + centerBottom + "px";
+            this.west = new Element("DIV", {
+                style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:0px; width:" + width + "px; bottom:" + centerBottom + "px; background-color:" + fill
+            });
 
-            this.config.inside.appendChild(this.west);
+            this.config.inside.insert(this.west);
         }
         
         if (this.config.east !== undefined) {
@@ -81,17 +88,21 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
             }
             
             centerRight = width;
+            var fill = h.config.east.fill || "transparent";
             
-            this.east = document.createElement("DIV");
-                this.east.style = "position:absolute; overflow:hidden; top:" + centerTop + "px; right:0px; width:" + width + "px; bottom:" + centerBottom + "px";
+            this.east = new Element("DIV", {
+                style: "position:absolute; overflow:hidden; top:" + centerTop + "px; right:0px; width:" + width + "px; bottom:" + centerBottom + "px; background-color:" + fill
+            });
 
-            this.config.inside.appendChild(this.east);
+            this.config.inside.insert(this.east);
         }
 
-        this.center = document.createElement("DIV");
-            this.center.style = "position:absolute; overflow:hidden; top:" + centerTop + "px; left:" + centerLeft + "px; right:" + centerRight + "px; bottom:" + centerBottom + "px";
+        var fill = h.config.fill || "transparent";
+        h.center = new Element("DIV", {
+            style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:" + centerLeft + "px; right:" + centerRight + "px; bottom:" + centerBottom + "px; background-color:" + fill
+        });
 
-        this.config.inside.appendChild(this.center);
+        h.config.inside.insert(h.center);
     },
     getNorth: function() {
         return this.north;

@@ -676,22 +676,31 @@ UI.PanelButton = Class.create({
      */ 
     render: function() {
     	var h = this;
-    	
+
     	h.buttonDiv = new Element("DIV", {
     		style: "border-radius:50%; width:26px; height:26px; line-height:26px; margin:2px; display:flex; justify-content:center; align-items:center",
     		class: "panel-button"
     	});
     	h.config.inside.insert(h.buttonDiv);
-    	
+
     	h.buttonDiv.setStyle({
     		backgroundColor: h.config.fill 
     	});
-    	
-    	h.img = new Element("IMG", {
-    		src: $ICON(h.config.icon),
-    		title: h.config.title
-    	});
-    	h.buttonDiv.insert(h.img);
+
+    	if (h.config.customIcon !== undefined) {
+	    	h.img = new Element("IMG", {
+	    		src: h.config.customIcon,
+	    		title: h.config.title,
+	    		style: "width:18px",
+	    	});
+	    	h.buttonDiv.insert(h.img);
+    	} else if (h.config.icon) {
+	    	h.img = new Element("IMG", {
+	    		src: $ICON(h.config.icon),
+	    		title: h.config.title
+	    	});
+	    	h.buttonDiv.insert(h.img);
+    	}
     	
     	h.buttonDiv.on("click", function(e) {
     		if (h.config.onClick) {
@@ -771,25 +780,24 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 				}
 			});
 			
-			h.mainLayout.getNorth().addClassName("panel-header");
-			
 			h.material = new Element("DIV", {
-				style: "position: absolute; top:0px; right:0px; bottom:0px; left:0px"
+				style: "position:absolute; top:0px; right:0px; top:0px; bottom:0px; left:0px"
 			});
-			h.mainLayout.getDefault().insert(h.material);
+			h.material.addClassName("panel-header");
+			h.mainLayout.getNorth().insert(h.material);
 
 			h.titleDiv = new Element("DIV", {
-				style: "transform:scale(1.5); position:absolute; top:5px; left:10px; height:20px; width:300px; -moz-transform-origin: 0 0; font-size:12px",
+				style: "font-size:130px; font-weight:bold; position:absolute; top:-40px; left:0px; opacity:0.1",
 				class: "panel-title"
 			});
-			h.mainLayout.getNorth().insert(h.titleDiv);
+			h.material.insert(h.titleDiv);
 
 			h.toolbarDiv = new Element("DIV", {
-				style: "transform:scale(0.5); position:absolute; top:25px; height:30px; left:10px; background-color:transparent; width:100%; -moz-transform-origin: 0 0;",
+				style: "position:absolute; top:15px; height:30px; left:10px; background-color:transparent; width:100%;",
 				class: "panel-toolbar"
 			});
-			h.mainLayout.getNorth().insert(h.toolbarDiv);
-			
+			h.material.insert(h.toolbarDiv);
+			/*
 			h.toolbarDiv.on("mouseover", function(e) {
 				h.expandToolbar();
 				e.cancelBubble = true;
@@ -797,9 +805,10 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 				return false;
 			});
 
-			h.mainLayout.getNorth().on("mouseover", function(e) {
+			h.material.on("mouseover", function(e) {
 				h.expandTitle();
 			});
+			*/
 
 			h.toolbar = new UI.PanelToolbar({
 				inside: h.toolbarDiv,
@@ -1469,7 +1478,11 @@ UI.Fab = Class.create({
 			e.returnValue = false;
 		});
     	
-    	if (h.config.icon !== undefined) {
+    	if (h.config.customIcon !== undefined) {
+    		h.material.setStyle({
+    			background: "url('" + h.config.customIcon + "') no-repeat center center " + h.config.fill
+    		});
+    	} else if (h.config.icon !== undefined) {
     		h.material.setStyle({
     			background: "url('" + $ICON(h.config.icon) + "') no-repeat center center " + h.config.fill
     		});
@@ -4263,6 +4276,7 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
 	 * @method render
 	 */
     render: function() {
+    	var h = this;
         
         var centerTop = 0;
         var centerBottom = 0;
@@ -4272,18 +4286,20 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
         if (this.config.north !== undefined) {
             var height = 50;
 
-                if (this.config.north.height) {
-                    height = this.config.north.height;
+                if (h.config.north.height) {
+                    height = h.config.north.height;
                 } else {
-                    this.config.north.height = height;
+                    h.config.north.height = height;
                 }
                 
-                centerTop = this.config.north.height;
+                centerTop = h.config.north.height;
+                var fill = h.config.north.fill || "transparent";
 
-                this.north = document.createElement("DIV");
-                    this.north.style = "position:absolute; overflow:hidden; top:0px; left:0px; right:0px; height:" + height + "px;";
+                h.north = new Element("DIV", {
+                    style: "position:absolute; overflow:hidden; top:0px; left:0px; right:0px; height:" + height + "px; background-color:" + fill
+                });
 
-            this.config.inside.appendChild(this.north);
+            this.config.inside.insert(this.north);
         }
         
         if (this.config.south !== undefined) {
@@ -4296,11 +4312,13 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
                 }
                 
                 centerBottom = height;
+                var fill = h.config.south.fill || "transparent";
 
-                this.south = document.createElement("DIV");
-                    this.south.style = "position:absolute; overflow:hidden; height:" + height + "px; left:0px; right:0px; bottom:0px;";
+                this.south = new Element("DIV", {
+                    style: "position:absolute; overflow:hidden; height:" + height + "px; left:0px; right:0px; bottom:0px; background-color:" + fill
+                });
             
-            this.config.inside.appendChild(this.south);
+            this.config.inside.insert(this.south);
         }
         
         if (this.config.west !== undefined) {
@@ -4313,11 +4331,13 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
             }
             
             centerLeft = width;
+            var fill = h.config.west.fill || "transparent";
             
-            this.west = document.createElement("DIV");
-                this.west.style = "position:absolute; overflow:hidden; top:" + centerTop + "px; left:0px; width:" + width + "px; bottom:" + centerBottom + "px";
+            this.west = new Element("DIV", {
+                style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:0px; width:" + width + "px; bottom:" + centerBottom + "px; background-color:" + fill
+            });
 
-            this.config.inside.appendChild(this.west);
+            this.config.inside.insert(this.west);
         }
         
         if (this.config.east !== undefined) {
@@ -4330,17 +4350,21 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
             }
             
             centerRight = width;
+            var fill = h.config.east.fill || "transparent";
             
-            this.east = document.createElement("DIV");
-                this.east.style = "position:absolute; overflow:hidden; top:" + centerTop + "px; right:0px; width:" + width + "px; bottom:" + centerBottom + "px";
+            this.east = new Element("DIV", {
+                style: "position:absolute; overflow:hidden; top:" + centerTop + "px; right:0px; width:" + width + "px; bottom:" + centerBottom + "px; background-color:" + fill
+            });
 
-            this.config.inside.appendChild(this.east);
+            this.config.inside.insert(this.east);
         }
 
-        this.center = document.createElement("DIV");
-            this.center.style = "position:absolute; overflow:hidden; top:" + centerTop + "px; left:" + centerLeft + "px; right:" + centerRight + "px; bottom:" + centerBottom + "px";
+        var fill = h.config.fill || "transparent";
+        h.center = new Element("DIV", {
+            style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:" + centerLeft + "px; right:" + centerRight + "px; bottom:" + centerBottom + "px; background-color:" + fill
+        });
 
-        this.config.inside.appendChild(this.center);
+        h.config.inside.insert(h.center);
     },
     getNorth: function() {
         return this.north;

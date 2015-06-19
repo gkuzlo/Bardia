@@ -28,13 +28,13 @@
 /*
  * Panel
  */
- .panel-header {
+.panel-header {
 	background-color:#005BAA;
 }
 
- .panel-button::before {
- 	background-color:#79B4E8
- }
+.panel-button::before {
+	background-color:#79B4E8
+}
  
  .panel-title {
 	color:#ffffff; 

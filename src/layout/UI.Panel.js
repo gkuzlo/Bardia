@@ -24,25 +24,24 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 				}
 			});
 			
-			h.mainLayout.getNorth().addClassName("panel-header");
-			
 			h.material = new Element("DIV", {
-				style: "position: absolute; top:0px; right:0px; bottom:0px; left:0px"
+				style: "position:absolute; top:0px; right:0px; top:0px; bottom:0px; left:0px"
 			});
-			h.mainLayout.getDefault().insert(h.material);
+			h.material.addClassName("panel-header");
+			h.mainLayout.getNorth().insert(h.material);
 
 			h.titleDiv = new Element("DIV", {
-				style: "transform:scale(1.5); position:absolute; top:5px; left:10px; height:20px; width:300px; -moz-transform-origin: 0 0; font-size:12px",
+				style: "font-size:130px; font-weight:bold; position:absolute; top:-40px; left:0px; opacity:0.1",
 				class: "panel-title"
 			});
-			h.mainLayout.getNorth().insert(h.titleDiv);
+			h.material.insert(h.titleDiv);
 
 			h.toolbarDiv = new Element("DIV", {
-				style: "transform:scale(0.5); position:absolute; top:25px; height:30px; left:10px; background-color:transparent; width:100%; -moz-transform-origin: 0 0;",
+				style: "position:absolute; top:15px; height:30px; left:10px; background-color:transparent; width:100%;",
 				class: "panel-toolbar"
 			});
-			h.mainLayout.getNorth().insert(h.toolbarDiv);
-			
+			h.material.insert(h.toolbarDiv);
+			/*
 			h.toolbarDiv.on("mouseover", function(e) {
 				h.expandToolbar();
 				e.cancelBubble = true;
@@ -50,9 +49,10 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 				return false;
 			});
 
-			h.mainLayout.getNorth().on("mouseover", function(e) {
+			h.material.on("mouseover", function(e) {
 				h.expandTitle();
 			});
+			*/
 
 			h.toolbar = new UI.PanelToolbar({
 				inside: h.toolbarDiv,

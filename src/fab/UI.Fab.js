@@ -38,7 +38,11 @@ UI.Fab = Class.create({
 			e.returnValue = false;
 		});
     	
-    	if (h.config.icon !== undefined) {
+    	if (h.config.customIcon !== undefined) {
+    		h.material.setStyle({
+    			background: "url('" + h.config.customIcon + "') no-repeat center center " + h.config.fill
+    		});
+    	} else if (h.config.icon !== undefined) {
     		h.material.setStyle({
     			background: "url('" + $ICON(h.config.icon) + "') no-repeat center center " + h.config.fill
     		});
