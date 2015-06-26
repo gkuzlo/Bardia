@@ -68,16 +68,18 @@ ComplexView = Class.create({
 		
 		form.setBean({
 			description: "We have to create description of the form bean",
-			city: "Warsaw"
+			city: "Warsaw",
+			name: ""
 		});
 		
 		var grid = new UI.Grid({
 			inside: layout.getDefault(),
 			title: "UI.Grid",
+			quickSearch: true,
 			columns: [
 				{
 					name: "Column 1",
-					property: "val1"
+					property: "user.name"
 				}, 
 				{
 					name: "Column 2",
@@ -93,19 +95,39 @@ ComplexView = Class.create({
 				{
 					name: "Button 2",
 					title: "Button 2"
+				},
+				{
+					name: "A",
+					title: "A"
 				}
-			]
+			],
+			onClick: function(row) {
+				alert(Object.toJSON(row.bean));
+			},
+			onMouseOver: function(row) {
+				//alert(Object.toJSON(row.bean));
+			}
 		});
 		
 		grid.fetch({
 			rows: [
 				{
-					val1: "value 1",
+					user: {
+						name: "GrzegorzGrzegorzGrzegorzGrzegorz"
+					},
 					val2: "value 2"
 				},
 				{
-					val1: "value 3",
+					user: {
+						name: "Grzegorz"
+					},
 					val2: "value 4"
+				},
+				{
+					user: {
+						name: "Grzegorz"
+					},
+					val2: "value 6"
 				}
 			]
 		});
@@ -156,7 +178,7 @@ ComplexView = Class.create({
 			]
 		});
 		
-		var horizontalToolbr = new UI.Toolbar({
+		var horizontalToolbar = new UI.Toolbar({
 			inside: topLayout.getNorth(),
 			orientation: "horizontal",
 			items: [

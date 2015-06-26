@@ -16,7 +16,8 @@ UI.Grid = Class.create(UI.MaterialComponent, {
                 }
             ],
             rows: [
-            ]
+            ],
+            quickSearch: true
         }, config || {});
     },
     /**
@@ -24,14 +25,19 @@ UI.Grid = Class.create(UI.MaterialComponent, {
      */
     render: function() {
     	var h = this;
-
-    		h.mainLayout = new UI.BorderLayout({
-    			inside: h.getMaterial(),
-    			south: {
+    	
+    		var mainLayoutConfig = {
+    			inside: h.getMaterial()	
+    		}
+    		
+    		if (h.config.quickSearch === true) {
+    			mainLayoutConfig.south = {
     				height: 60
     			}
-    		});
-    		
+    		}
+
+    		h.mainLayout = new UI.BorderLayout(mainLayoutConfig);
+
     		h.panel = new UI.Panel({
     			inside: h.mainLayout.getDefault(),
     			buttons: h.config.buttons || [],
@@ -55,31 +61,43 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		});
     		h.panel.getContent().insert(h.rowsContent);
 
-    		this.rowsContent.on("click", "div.row", function(e, element) {
+    		h.rowsContent.on("click", "div.grid-row", function(e, element) {
     			if (h.config.onClick) {
     				h.config.onClick(element);
     			}
     		});
     		
-    		new UI.Form({
-    			inside: h.mainLayout.getSouth(),
-    			fields: [
-    		         {
-    		        	 property: "search",
-    		        	 label: "Szukaj",
-    		        	 disableTab: true,
-    		        	 onChanging: function(v) {
-    		        		 var f = function() {
-    		        			 h.filter(v);	 
-    		        		 };
-    		        		 setTimeout(f, 0);
-    		        	 }
-    		         }
-    			]
+    		h.rowsContent.on("mouseover", "div.grid-row", function(e, element) {
+    			element.addClassName("grid-row-selected");
+    			if (h.config.onMouseOver) {
+    				h.config.onMouseOver(element);
+    			}
+    		});
+    		h.rowsContent.on("mouseout", "div.grid-row-selected", function(e, element) {
+    			element.removeClassName("grid-row-selected");
     		});
 
+    		if (h.config.quickSearch === true) {
+	    		new UI.Form({
+	    			inside: h.mainLayout.getSouth(),
+	    			fields: [
+						 {
+							 property: "search",
+							 label: "Szukaj",
+							 disableTab: true,
+							 onChanging: function(v) {
+								 var f = function() {
+									 h.filter(v);
+								 };
+								 setTimeout(f, 0);
+							 }
+						 }
+	    			]
+	    		});
+    		}
+
     	h.panel.setTitle(h.config.title);
-    		
+
     	h.fetch({
     		rows: []
     	});
@@ -100,7 +118,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     },
     /**
      * @method fetch
-     * 
+     *
      * Załadowanie grida wierszami z danymi
      */
     fetch: function(model) {
@@ -110,38 +128,39 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     	h.rowsContent.update();
 
 		var head = new Element("DIV", {
-			class: "grid-column-head",			
+			class: "grid-column-head",
 		});
-		
-		h.config.columns
-			.map(function(column) {
-				column.width = column.width || 100;
-				
-				var div = new Element("P", {
-					style: "width:" + (column.width) + "px",
-					class: "grid-column bg_white fg_main"
-				});
-	
-				div.update(column.name);
-	
-				return div;
-			})
-			.forEach(function(div) {
-				head.insert(div);
+
+		h.config.columns.map(function(column) {
+			column.width = column.width || 100;
+
+			var div = new Element("P", {
+				style: "width:" + (column.width) + "px",
+				class: "grid-column bg_white fg_main"
 			});
 
+			div.update(column.name);
+
+			return div;
+		})
+		.forEach(function(div) {
+			head.insert(div);
+		});
 		h.columnsContent.insert(head);
 
-		model.rows.forEach(function(bean) {
+		var i=0;
+		for (i=0; i<model.rows.length; i++) {
 
+			var bean = model.rows[i];
+			
     		var row = new Element("DIV", {
-    			class: "grid-row row"
+    			class: "grid-row"
     		});
 
     		row.bean = bean;
 
     		h.config.columns.forEach(function(config) {
-    			var cell = new Element("P", {
+    			var cell = new Element("DIV", {
     				style: "width:" + (config.width) + "px",
     				class: "grid-cell fg_main"
     			});
@@ -152,13 +171,11 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     				cell.update(config.render(row, cell));
     			} else {
     				cell.update(eval("bean." + config.property));
-    			}    			
+    			}
     		});
-    		
-    		setTimeout(function() {}, 10);
 
-    		h.rowsContent.insert(row);	
-		});
+    		h.rowsContent.insert(row);
+		};
     },
     /**
      * @method filter

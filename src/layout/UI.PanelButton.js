@@ -10,7 +10,6 @@ UI.PanelButton = Class.create({
         this.config = Object.extend({
             inside: window.document.body,
             title: "...",
-            fill: "black",
             icon: "done"
         }, config || {});
 
@@ -28,9 +27,11 @@ UI.PanelButton = Class.create({
     	});
     	h.config.inside.insert(h.buttonDiv);
 
-    	h.buttonDiv.setStyle({
-    		backgroundColor: h.config.fill 
-    	});
+    	if (h.config.fill) {
+	    	h.buttonDiv.setStyle({
+	    		backgroundColor: h.config.fill 
+	    	});
+    	}
 
     	if (h.config.customIcon !== undefined) {
 	    	h.img = new Element("IMG", {

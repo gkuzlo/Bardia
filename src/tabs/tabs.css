@@ -46,6 +46,7 @@
 .toolbar-item-horizontal {
 	padding-left:15px; font-size:14px; padding-right:15px; display:inline-block; 
 	border-right:1px solid #1E1D29; line-height:70px; height:70px; overflow:hidden;
+	cursor:pointer;
 }
 
 .toolbar-item-horizontal:hover {
@@ -55,6 +56,7 @@
 .toolbar-item-vertical {
 	padding-left:15px; font-size:14px; 
 	border-bottom: 1px solid #1E1D29; line-height:60px; height:60px; overflow:hidden;
+	cursor:pointer;
 }
 
 .toolbar-item-vertical:hover {

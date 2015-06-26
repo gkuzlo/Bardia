@@ -1,10 +1,18 @@
 .grid_header {
 	position:absolute; top:0px; right:0px; left:0px; height:59px; line-height:15px; font-size:14px; font-weight:bold; padding-left:10px;
-	background-color:#ebf0ee; color:#525070; border:0px solid #c9cece; border-width:0px 0px 1px 0px; 
+	background-color:#ebf0ee; color:#525070; border:0px solid #c9cece; border-width:0px 0px 1px 0px;
 }
 
 .grid-cell {
-	opacity:0.7; display:inline-block; overflow:hidden; line-height:27px; height:27px; font-size:14px; margin:0px; padding:0px; padding-left:4px; border:0px solid #fcfcfc; border-width:0px 0px 1px 0px;
+	opacity:0.7; display:inline-block; overflow:hidden; line-height:27px; height:27px; 
+	font-size:14px; margin:0px; padding:0px; padding-left:4px; 
+	border:0px solid #fcfcfc; border-width:0px 0px 1px 0px;
+	word-wrap:no-wrap; 	text-overflow: ellipsis;
+	 -moz-user-select: text;
+	 -khtml-user-select: text;
+	 -webkit-user-select: text;
+	 -ms-user-select: text;
+	 user-select: text;
 }
 
 .grid_content {
@@ -20,21 +28,28 @@
 }
 
 .grid-olumn-head {
-	background-color:white; 
-	position:absolute; top:0px; right:0px; left:0px; height:30px; 
-	overflow:hidden; margin:0px; height:49px; line-height:48px; 
+	background-color:white;
+	position:absolute; top:0px; right:0px; left:0px; height:30px;
+	overflow:hidden; margin:0px; height:49px; line-height:48px;
 	padding:0px; border:1px solid lightRey; border-width:0px 0px 1px 0px;
 }
 
 .grid-column {
-	display:inline-block; font-weight:bold; 
-	overflow:hidden; line-height:47px; 
-	height:47px; font-size:14px; 
+	display:inline-block; font-weight:bold;
+	overflow:hidden; line-height:47px;
+	height:47px; font-size:14px;
 	margin:0px; padding:0px; padding-left:4px; border:0px solid black; border-width:0px 0px 0px 0px;
 }
 
 .grid-row {
-	display:block; overflow:hidden; height:25px; margin:0px; padding:0px; 
+	display:block; overflow:hidden; height:25px; margin:0px; padding:0px;
 	border:0px solid lightGrey; background-color:white; border-width:0px 0px 1px 0px; color:grey;
-	word-wrap:no-wrap; 	text-overflow: ellipsis;
+	user-select:text;
+    -moz-user-select: -moz-text;
+    -khtml-user-select: text;
+    -webkit-user-select: text;
+    -o-user-select: text;
+}
+.grid-row-selected {
+	background:rgba(0,0,0,0.1);
 }

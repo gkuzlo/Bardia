@@ -665,7 +665,6 @@ UI.PanelButton = Class.create({
         this.config = Object.extend({
             inside: window.document.body,
             title: "...",
-            fill: "black",
             icon: "done"
         }, config || {});
 
@@ -683,9 +682,11 @@ UI.PanelButton = Class.create({
     	});
     	h.config.inside.insert(h.buttonDiv);
 
-    	h.buttonDiv.setStyle({
-    		backgroundColor: h.config.fill 
-    	});
+    	if (h.config.fill) {
+	    	h.buttonDiv.setStyle({
+	    		backgroundColor: h.config.fill 
+	    	});
+    	}
 
     	if (h.config.customIcon !== undefined) {
 	    	h.img = new Element("IMG", {
@@ -787,7 +788,6 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 			h.mainLayout.getNorth().insert(h.material);
 
 			h.titleDiv = new Element("DIV", {
-				style: "font-size:130px; font-weight:bold; position:absolute; top:-40px; left:0px; opacity:0.1",
 				class: "panel-title"
 			});
 			h.material.insert(h.titleDiv);
@@ -797,18 +797,6 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 				class: "panel-toolbar"
 			});
 			h.material.insert(h.toolbarDiv);
-			/*
-			h.toolbarDiv.on("mouseover", function(e) {
-				h.expandToolbar();
-				e.cancelBubble = true;
-				e.returnValue = false;
-				return false;
-			});
-
-			h.material.on("mouseover", function(e) {
-				h.expandTitle();
-			});
-			*/
 
 			h.toolbar = new UI.PanelToolbar({
 				inside: h.toolbarDiv,
@@ -837,61 +825,7 @@ UI.Panel = Class.create(UI.MaterialComponent, {
     setTitle: function(title) {
     	var h = this;
     		h.titleDiv.update(title);
-    },
-    /**
-     * @method: expandToolbar
-     */
-    expandToolbar: function() {
-    	var h = this;
-    	
-    	if (!h.toolbarExpanded && !h.inProgress) {
-    		
-    		h.inProgress = true;
-	    	
-    		$PLAY(h.toolbarDiv, [
-	    	    {transform: "scale(0.5)"},
-	    	    {transform: "scale(1)"}
-	    	], function() {
-    			delete h.inProgress;
-    		});
-	    	
-	    	$PLAY(h.titleDiv, [
-	     	    {transform: "scale(1.5)"},
-	     	    {transform: "scale(1)"}
-	     	], function() {
-    			delete h.inProgress;
-    		});
-	    	
-	    	h.toolbarExpanded = true;
-    	}
-    },
-    /**
-     * @method expandTitle 
-     */
-    expandTitle: function() {
-    	var h = this;
-
-    	if (h.toolbarExpanded && !h.inProgress) {
-
-    		h.inProgress = true;
-
-    		$PLAY(h.toolbarDiv, [
-	    	    {transform: "scale(1)"},
-	    	    {transform: "scale(0.5)"}
-	    	], function() {
-    			delete h.inProgress;
-    		});
-	    	
-	    	$PLAY(h.titleDiv, [
-	     	    {transform: "scale(1)"},
-	     	    {transform: "scale(1.5)"}
-	     	], function() {
-    			delete h.inProgress;
-    		});
-	    	
-	    	delete h.toolbarExpanded;
-    	}
-    },
+    }
 });
 
 
@@ -918,7 +852,7 @@ UI.DateUtils = Class.create({
            }
            try {
                var parser = new DateParser(UI.DATE_YYYMMMDDD_FORMAT);
-                   result = parser.format(date); 
+                   result = parser.format(date);
            } catch (e) {
                new UI.AlertDialog({message: e});
            }
@@ -931,7 +865,7 @@ UI.DateUtils = Class.create({
            }
            try {
                var parser = new DateParser(UI.DATE_FORMAT);
-                   result = parser.format(date); 
+                   result = parser.format(date);
            } catch (e) {
                new UI.AlertDialog({message: e});
            }
@@ -978,13 +912,13 @@ UI.DateUtils = Class.create({
            try {
                result = this.formatNumber(date.getHours(), 2) + ":" + this.formatNumber(date.getMinutes(), 2);
            } catch (e) {
-               result = ""; 
+               result = "";
            }
        return result;
    },
    formatTimeSec: function(date) {
        return this.formatNumber(date.getHours(), 2) + ":" + this.formatNumber(date.getMinutes(), 2) + ":" + this.formatNumber(date.getSeconds(), 2);
-   },  
+   },
    formatNumberToTime: function(num) {
        var hours = (num - (num % 60)) / 60;
        var minutes = num % 60;
@@ -1008,11 +942,11 @@ UI.DateUtils = Class.create({
        } catch (e) {
            new UI.AlertDialog({message: e});
        }
-       
+
        if (isNaN(parseInt(num))) {
            result = "";
        }
-       
+
        return result;
    },
    parseNumber: function(number) {
@@ -1051,7 +985,7 @@ UI.DateUtils = Class.create({
                sDate.setMinutes(0);
                sDate.setSeconds(0);
                sDate.setMilliseconds(0);
-               
+
            var eDate = new Date();
                eDate.setFullYear(endDate.getFullYear());
                eDate.setMonth(endDate.getMonth());
@@ -1060,9 +994,9 @@ UI.DateUtils = Class.create({
                eDate.setMinutes(0);
                eDate.setSeconds(0);
                eDate.setMilliseconds(0);
-               
+
            result = (eDate.getTime() - sDate.getTime()) / 1000 / 60 / 60 / 24;
-    
+
        return result;
    },
    hoursDiff: function(startDate, endDate) {
@@ -1075,7 +1009,7 @@ UI.DateUtils = Class.create({
                sDate.setMinutes(0);
                sDate.setSeconds(0);
                sDate.setMilliseconds(0);
-               
+
            var eDate = new Date();
                eDate.setFullYear(endDate.getFullYear());
                eDate.setMonth(endDate.getMonth());
@@ -1084,34 +1018,41 @@ UI.DateUtils = Class.create({
                eDate.setMinutes(0);
                eDate.setSeconds(0);
                eDate.setMilliseconds(0);
-               
+
            result = (eDate.getTime() - sDate.getTime()) / 1000 / 60 / 60;
 
        return result;
    },
+   minutesDiff: function(startDate, endDate) {
+       var result = 0;
+
+           result = ((endDate.getTime() - startDate.getTime()) / 1000 / 60).toFixed(0);
+
+       return result;
+   },
    yearDiff18: function(birthDate, currDate) {
-       
+
        var result = false;
-       
+
            var currDate = new Date (currDate);
            var birthDate = new Date (birthDate);
-           
+
            var currYear = new Date(currDate);
            var currMonth = new Date(currDate);
            var currDay = new Date(currDate);
-           
+
            var birthYear = new Date(birthDate);
            var birthMonth = new Date(birthDate);
            var birthDay = new Date(birthDate);
-           
+
            currYear = currYear.getFullYear();
            currMonth = currMonth.getMonth() + 1;
            currDay = currDay.getDate();
-           
+
            birthYear = birthYear.getFullYear(birthDate);
            birthMonth = birthMonth.getMonth(birthDate) + 1;
            birthDay = birthDay.getDate(birthDate);
-           
+
            if ( (currYear - birthYear > 18)   || ((currYear - birthYear >= 18) && (currMonth - birthMonth >= 0) && (currDay - birthDay >= 0))) {
                result = true;
            } else {
@@ -1120,7 +1061,7 @@ UI.DateUtils = Class.create({
        return result;
    },
    roundToDay: function(date) {
-       if(date === undefined || date ==""){
+       if(date === undefined || date ==+ ""){
            date = new Date();
        }
        var eDate = new Date();
@@ -1131,7 +1072,7 @@ UI.DateUtils = Class.create({
            eDate.setMinutes(0);
            eDate.setSeconds(0);
            eDate.setMilliseconds(0);
-           
+
        return eDate;
    },
    getNowMinutes: function() {
@@ -1150,7 +1091,7 @@ UI.DateUtils = Class.create({
 	    	   var sub = time.split(":");
 	    	   result = parseInt(sub[0]) * 60 + parseInt(sub[1]);
 	       } catch (e) {
-	           result = 0; 
+	           result = 0;
 	       }
 	   return result;
    },
@@ -1159,11 +1100,12 @@ UI.DateUtils = Class.create({
 	       try {
 	    	   this.formatNumber(((intValue - intValue % 60) / 60), 2) + ":" + this.formatNumber((intValue % 60), 2)
 	       } catch (e) {
-	    	   
+
 	       }
 	   return result;
    }
 });
+
 /**
  * @class UI.DatePicker
  */
@@ -4727,7 +4669,8 @@ UI.Grid = Class.create(UI.MaterialComponent, {
                 }
             ],
             rows: [
-            ]
+            ],
+            quickSearch: true
         }, config || {});
     },
     /**
@@ -4735,14 +4678,19 @@ UI.Grid = Class.create(UI.MaterialComponent, {
      */
     render: function() {
     	var h = this;
-
-    		h.mainLayout = new UI.BorderLayout({
-    			inside: h.getMaterial(),
-    			south: {
+    	
+    		var mainLayoutConfig = {
+    			inside: h.getMaterial()	
+    		}
+    		
+    		if (h.config.quickSearch === true) {
+    			mainLayoutConfig.south = {
     				height: 60
     			}
-    		});
-    		
+    		}
+
+    		h.mainLayout = new UI.BorderLayout(mainLayoutConfig);
+
     		h.panel = new UI.Panel({
     			inside: h.mainLayout.getDefault(),
     			buttons: h.config.buttons || [],
@@ -4766,31 +4714,43 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		});
     		h.panel.getContent().insert(h.rowsContent);
 
-    		this.rowsContent.on("click", "div.row", function(e, element) {
+    		h.rowsContent.on("click", "div.grid-row", function(e, element) {
     			if (h.config.onClick) {
     				h.config.onClick(element);
     			}
     		});
     		
-    		new UI.Form({
-    			inside: h.mainLayout.getSouth(),
-    			fields: [
-    		         {
-    		        	 property: "search",
-    		        	 label: "Szukaj",
-    		        	 disableTab: true,
-    		        	 onChanging: function(v) {
-    		        		 var f = function() {
-    		        			 h.filter(v);	 
-    		        		 };
-    		        		 setTimeout(f, 0);
-    		        	 }
-    		         }
-    			]
+    		h.rowsContent.on("mouseover", "div.grid-row", function(e, element) {
+    			element.addClassName("grid-row-selected");
+    			if (h.config.onMouseOver) {
+    				h.config.onMouseOver(element);
+    			}
+    		});
+    		h.rowsContent.on("mouseout", "div.grid-row-selected", function(e, element) {
+    			element.removeClassName("grid-row-selected");
     		});
 
+    		if (h.config.quickSearch === true) {
+	    		new UI.Form({
+	    			inside: h.mainLayout.getSouth(),
+	    			fields: [
+						 {
+							 property: "search",
+							 label: "Szukaj",
+							 disableTab: true,
+							 onChanging: function(v) {
+								 var f = function() {
+									 h.filter(v);
+								 };
+								 setTimeout(f, 0);
+							 }
+						 }
+	    			]
+	    		});
+    		}
+
     	h.panel.setTitle(h.config.title);
-    		
+
     	h.fetch({
     		rows: []
     	});
@@ -4811,7 +4771,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     },
     /**
      * @method fetch
-     * 
+     *
      * Załadowanie grida wierszami z danymi
      */
     fetch: function(model) {
@@ -4821,38 +4781,39 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     	h.rowsContent.update();
 
 		var head = new Element("DIV", {
-			class: "grid-column-head",			
+			class: "grid-column-head",
 		});
-		
-		h.config.columns
-			.map(function(column) {
-				column.width = column.width || 100;
-				
-				var div = new Element("P", {
-					style: "width:" + (column.width) + "px",
-					class: "grid-column bg_white fg_main"
-				});
-	
-				div.update(column.name);
-	
-				return div;
-			})
-			.forEach(function(div) {
-				head.insert(div);
+
+		h.config.columns.map(function(column) {
+			column.width = column.width || 100;
+
+			var div = new Element("P", {
+				style: "width:" + (column.width) + "px",
+				class: "grid-column bg_white fg_main"
 			});
 
+			div.update(column.name);
+
+			return div;
+		})
+		.forEach(function(div) {
+			head.insert(div);
+		});
 		h.columnsContent.insert(head);
 
-		model.rows.forEach(function(bean) {
+		var i=0;
+		for (i=0; i<model.rows.length; i++) {
 
+			var bean = model.rows[i];
+			
     		var row = new Element("DIV", {
-    			class: "grid-row row"
+    			class: "grid-row"
     		});
 
     		row.bean = bean;
 
     		h.config.columns.forEach(function(config) {
-    			var cell = new Element("P", {
+    			var cell = new Element("DIV", {
     				style: "width:" + (config.width) + "px",
     				class: "grid-cell fg_main"
     			});
@@ -4863,13 +4824,11 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     				cell.update(config.render(row, cell));
     			} else {
     				cell.update(eval("bean." + config.property));
-    			}    			
+    			}
     		});
-    		
-    		setTimeout(function() {}, 10);
 
-    		h.rowsContent.insert(row);	
-		});
+    		h.rowsContent.insert(row);
+		};
     },
     /**
      * @method filter
@@ -4889,6 +4848,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 		}
 	}
 });
+
 
 UI.GridCell = Class.create({
 

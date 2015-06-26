@@ -22,7 +22,7 @@ UI.DateUtils = Class.create({
            }
            try {
                var parser = new DateParser(UI.DATE_YYYMMMDDD_FORMAT);
-                   result = parser.format(date); 
+                   result = parser.format(date);
            } catch (e) {
                new UI.AlertDialog({message: e});
            }
@@ -35,7 +35,7 @@ UI.DateUtils = Class.create({
            }
            try {
                var parser = new DateParser(UI.DATE_FORMAT);
-                   result = parser.format(date); 
+                   result = parser.format(date);
            } catch (e) {
                new UI.AlertDialog({message: e});
            }
@@ -82,13 +82,13 @@ UI.DateUtils = Class.create({
            try {
                result = this.formatNumber(date.getHours(), 2) + ":" + this.formatNumber(date.getMinutes(), 2);
            } catch (e) {
-               result = ""; 
+               result = "";
            }
        return result;
    },
    formatTimeSec: function(date) {
        return this.formatNumber(date.getHours(), 2) + ":" + this.formatNumber(date.getMinutes(), 2) + ":" + this.formatNumber(date.getSeconds(), 2);
-   },  
+   },
    formatNumberToTime: function(num) {
        var hours = (num - (num % 60)) / 60;
        var minutes = num % 60;
@@ -112,11 +112,11 @@ UI.DateUtils = Class.create({
        } catch (e) {
            new UI.AlertDialog({message: e});
        }
-       
+
        if (isNaN(parseInt(num))) {
            result = "";
        }
-       
+
        return result;
    },
    parseNumber: function(number) {
@@ -155,7 +155,7 @@ UI.DateUtils = Class.create({
                sDate.setMinutes(0);
                sDate.setSeconds(0);
                sDate.setMilliseconds(0);
-               
+
            var eDate = new Date();
                eDate.setFullYear(endDate.getFullYear());
                eDate.setMonth(endDate.getMonth());
@@ -164,9 +164,9 @@ UI.DateUtils = Class.create({
                eDate.setMinutes(0);
                eDate.setSeconds(0);
                eDate.setMilliseconds(0);
-               
+
            result = (eDate.getTime() - sDate.getTime()) / 1000 / 60 / 60 / 24;
-    
+
        return result;
    },
    hoursDiff: function(startDate, endDate) {
@@ -179,7 +179,7 @@ UI.DateUtils = Class.create({
                sDate.setMinutes(0);
                sDate.setSeconds(0);
                sDate.setMilliseconds(0);
-               
+
            var eDate = new Date();
                eDate.setFullYear(endDate.getFullYear());
                eDate.setMonth(endDate.getMonth());
@@ -188,34 +188,41 @@ UI.DateUtils = Class.create({
                eDate.setMinutes(0);
                eDate.setSeconds(0);
                eDate.setMilliseconds(0);
-               
+
            result = (eDate.getTime() - sDate.getTime()) / 1000 / 60 / 60;
 
        return result;
    },
+   minutesDiff: function(startDate, endDate) {
+       var result = 0;
+
+           result = ((endDate.getTime() - startDate.getTime()) / 1000 / 60).toFixed(0);
+
+       return result;
+   },
    yearDiff18: function(birthDate, currDate) {
-       
+
        var result = false;
-       
+
            var currDate = new Date (currDate);
            var birthDate = new Date (birthDate);
-           
+
            var currYear = new Date(currDate);
            var currMonth = new Date(currDate);
            var currDay = new Date(currDate);
-           
+
            var birthYear = new Date(birthDate);
            var birthMonth = new Date(birthDate);
            var birthDay = new Date(birthDate);
-           
+
            currYear = currYear.getFullYear();
            currMonth = currMonth.getMonth() + 1;
            currDay = currDay.getDate();
-           
+
            birthYear = birthYear.getFullYear(birthDate);
            birthMonth = birthMonth.getMonth(birthDate) + 1;
            birthDay = birthDay.getDate(birthDate);
-           
+
            if ( (currYear - birthYear > 18)   || ((currYear - birthYear >= 18) && (currMonth - birthMonth >= 0) && (currDay - birthDay >= 0))) {
                result = true;
            } else {
@@ -224,7 +231,7 @@ UI.DateUtils = Class.create({
        return result;
    },
    roundToDay: function(date) {
-       if(date === undefined || date ==""){
+       if(date === undefined || date ==+ ""){
            date = new Date();
        }
        var eDate = new Date();
@@ -235,7 +242,7 @@ UI.DateUtils = Class.create({
            eDate.setMinutes(0);
            eDate.setSeconds(0);
            eDate.setMilliseconds(0);
-           
+
        return eDate;
    },
    getNowMinutes: function() {
@@ -254,7 +261,7 @@ UI.DateUtils = Class.create({
 	    	   var sub = time.split(":");
 	    	   result = parseInt(sub[0]) * 60 + parseInt(sub[1]);
 	       } catch (e) {
-	           result = 0; 
+	           result = 0;
 	       }
 	   return result;
    },
@@ -263,7 +270,7 @@ UI.DateUtils = Class.create({
 	       try {
 	    	   this.formatNumber(((intValue - intValue % 60) / 60), 2) + ":" + this.formatNumber((intValue % 60), 2)
 	       } catch (e) {
-	    	   
+
 	       }
 	   return result;
    }
