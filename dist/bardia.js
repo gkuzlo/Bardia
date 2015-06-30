@@ -824,7 +824,9 @@ UI.Panel = Class.create(UI.MaterialComponent, {
      */
     setTitle: function(title) {
     	var h = this;
+    	if (h.titleDiv) {
     		h.titleDiv.update(title);
+    	}
     }
 });
 
@@ -918,6 +920,13 @@ UI.DateUtils = Class.create({
    },
    formatTimeSec: function(date) {
        return this.formatNumber(date.getHours(), 2) + ":" + this.formatNumber(date.getMinutes(), 2) + ":" + this.formatNumber(date.getSeconds(), 2);
+   },
+   formatTimeSecNoZerosSec: function(date) {
+	   var result = this.formatNumber(date.getHours(), 2) + ":" + this.formatNumber(date.getMinutes(), 2);
+	   	if (date.getSeconds() > 0) {
+	   		result += ":" + this.formatNumber(date.getSeconds(), 2);
+	   	}
+       return result;
    },
    formatNumberToTime: function(num) {
        var hours = (num - (num % 60)) / 60;
@@ -1098,7 +1107,7 @@ UI.DateUtils = Class.create({
    convertIntToTime: function(intValue) {
 	   var result = "00:00";
 	       try {
-	    	   this.formatNumber(((intValue - intValue % 60) / 60), 2) + ":" + this.formatNumber((intValue % 60), 2)
+	    	   result = this.formatNumber(((intValue - intValue % 60) / 60), 2) + ":" + this.formatNumber((intValue % 60), 2)
 	       } catch (e) {
 
 	       }
@@ -4661,7 +4670,6 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     initConfig: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
-            title: "Insert title here ...",
             columns: [
                 {
                 	name: "",
@@ -4693,7 +4701,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
     		h.panel = new UI.Panel({
     			inside: h.mainLayout.getDefault(),
-    			buttons: h.config.buttons || [],
+    			buttons: h.config.buttons,
     			title: h.config.title
     		});
 
@@ -4801,6 +4809,8 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 		});
 		h.columnsContent.insert(head);
 
+		h.rows = [];
+		
 		var i=0;
 		for (i=0; i<model.rows.length; i++) {
 
@@ -4809,6 +4819,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		var row = new Element("DIV", {
     			class: "grid-row"
     		});
+    		h.rows.push(row);
 
     		row.bean = bean;
 
@@ -4829,6 +4840,14 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
     		h.rowsContent.insert(row);
 		};
+    },
+    selectRowByBean: function(bean) {
+    	var h = this;
+    	for(var i=0; i<h.rows.length; i++) {
+    		if (h.rows[i].bean === bean) {
+    			h.rows[i].click();
+    		}
+    	}
     },
     /**
      * @method filter

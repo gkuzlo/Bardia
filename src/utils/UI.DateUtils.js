@@ -89,6 +89,13 @@ UI.DateUtils = Class.create({
    formatTimeSec: function(date) {
        return this.formatNumber(date.getHours(), 2) + ":" + this.formatNumber(date.getMinutes(), 2) + ":" + this.formatNumber(date.getSeconds(), 2);
    },
+   formatTimeSecNoZerosSec: function(date) {
+	   var result = this.formatNumber(date.getHours(), 2) + ":" + this.formatNumber(date.getMinutes(), 2);
+	   	if (date.getSeconds() > 0) {
+	   		result += ":" + this.formatNumber(date.getSeconds(), 2);
+	   	}
+       return result;
+   },
    formatNumberToTime: function(num) {
        var hours = (num - (num % 60)) / 60;
        var minutes = num % 60;
@@ -268,7 +275,7 @@ UI.DateUtils = Class.create({
    convertIntToTime: function(intValue) {
 	   var result = "00:00";
 	       try {
-	    	   this.formatNumber(((intValue - intValue % 60) / 60), 2) + ":" + this.formatNumber((intValue % 60), 2)
+	    	   result = this.formatNumber(((intValue - intValue % 60) / 60), 2) + ":" + this.formatNumber((intValue % 60), 2)
 	       } catch (e) {
 
 	       }

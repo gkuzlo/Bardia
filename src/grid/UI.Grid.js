@@ -8,7 +8,6 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     initConfig: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
-            title: "Insert title here ...",
             columns: [
                 {
                 	name: "",
@@ -40,7 +39,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
     		h.panel = new UI.Panel({
     			inside: h.mainLayout.getDefault(),
-    			buttons: h.config.buttons || [],
+    			buttons: h.config.buttons,
     			title: h.config.title
     		});
 
@@ -148,6 +147,8 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 		});
 		h.columnsContent.insert(head);
 
+		h.rows = [];
+		
 		var i=0;
 		for (i=0; i<model.rows.length; i++) {
 
@@ -156,6 +157,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		var row = new Element("DIV", {
     			class: "grid-row"
     		});
+    		h.rows.push(row);
 
     		row.bean = bean;
 
@@ -176,6 +178,14 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
     		h.rowsContent.insert(row);
 		};
+    },
+    selectRowByBean: function(bean) {
+    	var h = this;
+    	for(var i=0; i<h.rows.length; i++) {
+    		if (h.rows[i].bean === bean) {
+    			h.rows[i].click();
+    		}
+    	}
     },
     /**
      * @method filter

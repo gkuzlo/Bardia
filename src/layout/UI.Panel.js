@@ -67,6 +67,8 @@ UI.Panel = Class.create(UI.MaterialComponent, {
      */
     setTitle: function(title) {
     	var h = this;
+    	if (h.titleDiv) {
     		h.titleDiv.update(title);
+    	}
     }
 });

@@ -74,7 +74,6 @@ ComplexView = Class.create({
 		
 		var grid = new UI.Grid({
 			inside: layout.getDefault(),
-			title: "UI.Grid",
 			quickSearch: true,
 			columns: [
 				{
@@ -86,21 +85,6 @@ ComplexView = Class.create({
 					property: "val2"
 				}
 			],
-			buttons: [
-				{
-					name: "Button 1",
-					title: "Button 1",
-					fill: "orange"
-				},
-				{
-					name: "Button 2",
-					title: "Button 2"
-				},
-				{
-					name: "A",
-					title: "A"
-				}
-			],
 			onClick: function(row) {
 				alert(Object.toJSON(row.bean));
 			},
@@ -109,28 +93,34 @@ ComplexView = Class.create({
 			}
 		});
 		
+		var beans = [
+			{
+				user: {
+					name: "GrzegorzGrzegorzGrzegorzGrzegorz"
+				},
+				val2: "value 2"
+			},
+			{
+				user: {
+					name: "Grzegorz"
+				},
+				val2: "value 4"
+			},
+			{
+				user: {
+					name: "Grzegorz"
+				},
+				val2: "value 6"
+			}
+		];
+		
 		grid.fetch({
-			rows: [
-				{
-					user: {
-						name: "GrzegorzGrzegorzGrzegorzGrzegorz"
-					},
-					val2: "value 2"
-				},
-				{
-					user: {
-						name: "Grzegorz"
-					},
-					val2: "value 4"
-				},
-				{
-					user: {
-						name: "Grzegorz"
-					},
-					val2: "value 6"
-				}
-			]
+			rows: beans,
+			onClick: function(row) {
+				alert(Object.toJSON(row.bean));
+			}
 		});
+		grid.selectRowByBean(beans[beans.length-1]);
 		
 		var panel = new UI.Panel({
 			inside: layout.getEast(),
