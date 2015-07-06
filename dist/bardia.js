@@ -782,15 +782,11 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 			});
 			
 			h.material = new Element("DIV", {
-				style: "position:absolute; top:0px; right:0px; top:0px; bottom:0px; left:0px"
+				style: "position:absolute; top:0px; right:0px; top:0px; bottom:0px; left:0px",
+				class: "panel-header"
 			});
-			h.material.addClassName("panel-header");
 			h.mainLayout.getNorth().insert(h.material);
-
-			h.titleDiv = new Element("DIV", {
-				class: "panel-title"
-			});
-			h.material.insert(h.titleDiv);
+			h.material.title = h.config.title;
 
 			h.toolbarDiv = new Element("DIV", {
 				style: "position:absolute; top:15px; height:30px; left:10px; background-color:transparent; width:100%;",
@@ -802,8 +798,6 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 				inside: h.toolbarDiv,
 				buttons: h.config.buttons || []
 			});
-
-			h.setTitle(h.config.title);
         } else {
 			h.mainLayout = new UI.BorderLayout({
 				inside: h.getMaterial()
@@ -824,9 +818,7 @@ UI.Panel = Class.create(UI.MaterialComponent, {
      */
     setTitle: function(title) {
     	var h = this;
-    	if (h.titleDiv) {
-    		h.titleDiv.update(title);
-    	}
+    		h.material.title = title;
     }
 });
 
@@ -5314,13 +5306,15 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
 	
 	    		h.items.push(item);
 	
-	    		if (!t.customIcon) {
+	    		if (t.name) {
 	    			item.update(t.name);
-	    		} else {
+	    		}
+
+	    		if (t.customIcon) {
 	    			item.setStyle({
 	    				backgroundImage: "url('" + t.customIcon + "')",
 	    				backgroundRepeat: "no-repeat",
-	    				backgroundPosition: "center center"
+	    				backgroundPosition: "right center"
 	    			});
 	    		}
 	    		item.title = t.description;

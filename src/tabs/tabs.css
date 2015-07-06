@@ -54,7 +54,7 @@
 }
 
 .toolbar-item-vertical {
-	padding-left:15px; font-size:14px; 
+	padding-left:15px; font-size:14px;
 	border-bottom: 1px solid #1E1D29; line-height:60px; height:60px; overflow:hidden;
 	cursor:pointer;
 }

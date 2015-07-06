@@ -43,13 +43,15 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
 	
 	    		h.items.push(item);
 	
-	    		if (!t.customIcon) {
+	    		if (t.name) {
 	    			item.update(t.name);
-	    		} else {
+	    		}
+
+	    		if (t.customIcon) {
 	    			item.setStyle({
 	    				backgroundImage: "url('" + t.customIcon + "')",
 	    				backgroundRepeat: "no-repeat",
-	    				backgroundPosition: "center center"
+	    				backgroundPosition: "right center"
 	    			});
 	    		}
 	    		item.title = t.description;

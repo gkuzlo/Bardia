@@ -73,6 +73,7 @@ ComplexView = Class.create({
 		});
 		
 		var grid = new UI.Grid({
+			title: "UI.Grid",
 			inside: layout.getDefault(),
 			quickSearch: true,
 			columns: [
@@ -92,6 +93,7 @@ ComplexView = Class.create({
 				//alert(Object.toJSON(row.bean));
 			}
 		});
+		grid.setTitle("changed title");
 		
 		var beans = [
 			{
@@ -115,12 +117,9 @@ ComplexView = Class.create({
 		];
 		
 		grid.fetch({
-			rows: beans,
-			onClick: function(row) {
-				alert(Object.toJSON(row.bean));
-			}
+			rows: beans
 		});
-		grid.selectRowByBean(beans[beans.length-1]);
+		//grid.selectRowByBean(beans[beans.length-1]);
 		
 		var panel = new UI.Panel({
 			inside: layout.getEast(),
