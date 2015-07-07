@@ -6,6 +6,7 @@
         <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">  
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
 
+
         <script src="../../prototype/prototype.js"></script>
         <script src="../../web-animations/web-animations.min.js"></script>
 
@@ -15,11 +16,18 @@
 		
 		<script src="../../dist/bardia.js"></script>
 		<link rel="stylesheet" href="../../dist/bardia.css">
-		
-		<link rel="stylesheet" href="red.css">
-		
-		<script src="ComplexView.js"></script>
-		
+
+        <script src="MBL.js"></script>
+        <script src="MBL.StopPointRow.js"></script>
+        <script src="MBL.DepartureRow.js"></script>
+        <script src="MBL.Departures.js"></script>
+		<script src="MBL.Stops.js"></script>
+		<script src="MBL.Menu.js"></script>
+		<script src="MBL.Mobile.js"></script>
+		<script src="MBL.MainView.js"></script>
+
+        <link rel="stylesheet" href="mobile.css">
+
 		<script>
 		
         	var IS = new UI.IconSet({
@@ -32,7 +40,7 @@
 		
 			function initPage() {
 
-				new ComplexView({
+				new MBL.MainView({
 					inside: window.document.body
 				});
 			}

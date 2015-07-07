@@ -1,9 +1,9 @@
 /**
  *
  */
-Menu = Class.create({
+MBL.MainView = Class.create({
 	/*
-	 *
+	 * 
 	 */
     initialize: function(config) {
         this.config = Object.extend({
@@ -16,27 +16,32 @@ Menu = Class.create({
      *
      */
     render: function() {
-        var h = this;
+    	var h = this;
 
-        h.material = new Element("DIV", {
-            style: "position:absolute; top:10px; left:10px; right:10px; bottom:10px; background:blue; overflow:hidden"
-        });
-        h.config.inside.update(h.material);
-
-        h.showMenu();
+		window.$mobile = new MBL.Mobile({
+			inside: h.config.inside,
+			onInit: function(html) {
+			    h.showMenu(html);
+			}
+		});
     },
     /**
      *
      */
-    showMenu: function() {
+    showMenu: function(html) {
         var h = this;
 
-        var toolbar = new UI.Toolbar({
-            inside: h.material,
+        new MBL.Menu({
+            inside: html,
             items: [
                 {
                     name: "PRZYSTANKI",
-                    customIcon: "images/stoppoint.png"
+                    customIcon: "images/stoppoint.png",
+                    onClick: function() {
+                        setTimeout(function() {
+                            h.showStops(html);
+                        }, 500);
+                    }
                 },
                 {
                     name: "LINIE",
@@ -63,6 +68,19 @@ Menu = Class.create({
                     customIcon: "images/settings.png"
                 }
             ]
+        });
+    },
+    /**
+     *
+     */
+    showStops: function(html) {
+        new MBL.Stops({
+            inside: html,
+            onSelect: function(stopPoint) {
+                new MBL.Departures({
+                    inside: html
+                });
+            }
         });
     }
 });

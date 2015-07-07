@@ -1,7 +1,7 @@
 /**
  *
  */
-Mobile = Class.create({
+MBL.Mobile = Class.create({
 	/*
 	 *
 	 */
@@ -24,9 +24,14 @@ Mobile = Class.create({
         h.config.inside.update(h.material);
 
         h.mat = new Element("DIV", {
-            style: "position:relative; width:324px; height:570px; border:5px solid grey;"
+            style: "position:relative; width:324px; height:570px; border:10px solid #444444; border-radius:7px"
         });
         h.material.insert(h.mat);
+
+        h.top = new Element("DIV", {
+            style: "position:absolute; width:100%; height:30px; left:0px; right:0px; top:0px; border:0px; background-color:black; display:flex; justify-content:space-around; align-items:center;"
+        });
+        h.mat.insert(h.top);
 
         h.div = new Element("DIV", {
             style: "position:absolute; width:100%; bottom:50px; left:0px; right:0px; top:30px; border:0px;"
@@ -50,35 +55,8 @@ Mobile = Class.create({
             src: "images/stop.png"
         }));
 
-        h.renderMenu();
-    },
-    renderMenu: function() {
-        var h = this;
-
-        try {
-            new Menu({
-                inside: h.div
-            });
-        } catch (e) {
-            alert(e);
+        if (h.config.onInit) {
+            h.config.onInit(h.div);
         }
-    },
-    /**
-     *
-     */
-    renderTabs: function() {
-        var h = this;
-
-        h.tabs = new UI.Tabs({
-            inside: h.div,
-            tabs: [
-                {
-                    name: "Odjazdy"
-                },
-                {
-                    name: "Rozkład"
-                }
-            ]
-        });
     }
 });

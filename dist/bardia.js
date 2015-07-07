@@ -1981,7 +1981,6 @@ UI.List = Class.create(UI.MaterialComponent, {
 	initConfig: function(config) {            	
         this.config = Object.extend({
         	removable: false,
-        	buttons: [],
         	rows: []
         }, config || {});
 	},
@@ -2042,19 +2041,19 @@ UI.List = Class.create(UI.MaterialComponent, {
 			]
 		});
 		
-		h.listContent.on("click", "div.row", function(e, element) {
+		h.listContent.on("click", "div.list-content-row", function(e, element) {
 			if (h.config.onClick) {
 				h.config.onClick(element);
 			}
 		});
 		
-		h.listContent.on("mouseover", "div.row", function(e, element) {
+		h.listContent.on("mouseover", "div.list-content-row", function(e, element) {
 			if (h.config.onMouseOver) {
 				h.config.onMouseOver(element);
 			}
 		});
 		
-		h.listContent.on("mouseout", "div.row", function(e, element) {
+		h.listContent.on("mouseout", "div.list-content-row", function(e, element) {
 			if (h.config.onMouseOut) {
 				h.config.onMouseOut(element);
 			}
@@ -2083,36 +2082,12 @@ UI.List = Class.create(UI.MaterialComponent, {
 
 			var row = new Element("DIV", {
 				style: "position:relative; overflow:hidden",
-				class: "row"				// row to jest klasa fake
+				class: "list-content-row"				// row to jest klasa fake
 			});
 			row.bean = h.config.rows[i];
 
-			if (h.config.headerRenderer !== undefined) {
-				var _header = new Element("DIV", {
-					style: "font-weight:bold; overflow:hidden"
-				});
-				_header.update(h.config.headerRenderer(row, _header));
-				row.insert(_header);				
-			} else if (h.config.header !== undefined) {
-				var _header = new Element("DIV", {
-					style: "font-weight:bold; overflow:hidden"
-				});
-				_header.update(STRUTILS.compile(h.config.header, h.config.rows[i]));
-				row.insert(_header);
-			}
-
-			if (h.config.footer !== undefined) {
-				var _footer = new Element("DIV", {
-					style: "overflow:hidden"
-				});
-				_footer.insert(STRUTILS.compile(h.config.footer, h.config.rows[i]));
-				row.insert(_footer);
-			} else if (h.config.footerRenderer !== undefined) {
-				var _footer = new Element("DIV", {
-					style: "overflow:hidden"
-				});
-				_footer.update(h.config.footerRenderer(row, _footer));
-				row.insert(_footer);				
+			if (h.config.render) {
+				row.update(h.config.render(row));
 			}
 
 			h.listContent.insert(row);
@@ -5269,7 +5244,8 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     initConfig: function(config) {
         this.config = Object.extend({
         	orientation: "vertical",
-        	items: []
+        	items: [],
+        	autoclick: true
         }, config || {});
     },
 
@@ -5331,7 +5307,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
 	    	}).
 	    	forEach(function(item, index) {
 	    		h.content.insert(item);
-	    		if (index == 0) {
+	    		if (index == 0 && h.config.autoclick) {
 	    			item.click();
 	    		}
 	    	});

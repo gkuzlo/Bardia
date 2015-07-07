@@ -1,0 +1,91 @@
+/*
+ * 000000
+ * 005BAA
+ * BCBEC0
+ * 79B4E8
+ * FFFFFF
+ */
+
+ @font-face {
+   font-family: Exo2;
+   src: url('exo-2/Exo2.0-Regular.otf')  format('truetype');
+ }
+
+ div {
+ 	font-family: 'Exo2', sans-serif;
+ }
+
+ input {
+ 	font-family: 'Exo2', sans-serif;
+ }
+ 
+ /*
+  * toolbar
+  */
+.toolbar-bg-color {
+	background-color:#e0e0e0;
+}
+
+.toolbar-text-color {
+	color:#BCBEC0;
+}
+
+.toolbar-marker-h::before {
+	background-color:#79B4E8; height:12px; border-radius:0px;
+}
+
+.toolbar-marker-v::before {
+	background-color:#79B4E8; width:12px; border-radius:0px;
+}
+
+/**
+ * toolbar item
+ */
+.toolbar-item-horizontal {
+	padding-left:15px; font-size:14px; padding-right:15px; display:inline-block; color:black;
+	border-right:1px solid #ffffff; line-height:70px; height:70px; overflow:hidden;
+	cursor:pointer;
+}
+
+.toolbar-item-horizontal:hover {
+    background-color:rgba(255, 255, 255, 0.1);
+}
+
+.toolbar-item-vertical {
+	padding-right:40px; font-size:16px; text-align:right; color:#707070; font-weight:bold;
+	border-bottom: 1px solid #f0f0f0; line-height:60px; height:60px; overflow:hidden;
+	cursor:pointer;
+}
+
+.toolbar-item-vertical:hover {
+    background-color:rgba(255, 255, 255, 0.1);
+}
+
+/*
+ * Panel
+ */
+.panel-header {
+	background-color:#6CA0CE; font-size:18px;
+}
+
+.panel-button::before {
+	background-color:#79B4E8
+}
+
+.panel-title {
+	color:#ffffff; 
+}
+
+/*
+ *
+ */
+.stop-point-symbol {
+	background-color:#79B4E8;
+	position:absolute; font-size:18px; color:white; text-align:right; padding:4px 4px 4px 4px; top:5px; left:10px;
+	border-radius:10px 0px 10px 5px;
+}
+
+.stop-point-name {
+	background-color:#f0f0f0;
+	position:absolute; line-height:32px; font-size:18px; left:55px; top:0px; right:0px; height:100%; text-align:left; padding:0px 0px 0px 10px
+}

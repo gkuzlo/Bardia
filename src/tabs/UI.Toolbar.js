@@ -6,7 +6,8 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     initConfig: function(config) {
         this.config = Object.extend({
         	orientation: "vertical",
-        	items: []
+        	items: [],
+        	autoclick: true
         }, config || {});
     },
 
@@ -68,7 +69,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
 	    	}).
 	    	forEach(function(item, index) {
 	    		h.content.insert(item);
-	    		if (index == 0) {
+	    		if (index == 0 && h.config.autoclick) {
 	    			item.click();
 	    		}
 	    	});

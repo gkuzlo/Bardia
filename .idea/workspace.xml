@@ -2,46 +2,65 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7e05b03c-85e3-4af1-957e-ac887a03d566" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-Black.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-BlackItalic.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-Bold.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-BoldItalic.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-ExtraBold.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-ExtraBoldItalic.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-ExtraLight.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-ExtraLightItalic.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-Italic.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-Light.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-LightItalic.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-Medium.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-MediumItalic.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/Exo2-Regular.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-Regular.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-SemiBold.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-SemiBoldItalic.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-Thin.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/Exo2-ThinItalic.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/images/bus.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/images/injury.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/images/map.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/images/message.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/images/route.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/images/settings.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/images/stoppoint.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/images/stopwhite.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Bardia.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/Menu.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/Mobile.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo2/OFL.txt" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/complex/ComplexView.js" afterPath="$PROJECT_DIR$/examples/complex/ComplexView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/layout/UI.Panel.js" afterPath="$PROJECT_DIR$/src/layout/UI.Panel.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-Black.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-BlackItalic.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-Bold.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-BoldItalic.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-ExtraBold.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-ExtraBoldItalic.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-ExtraLight.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-ExtraLightItalic.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-Italic.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-Light.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-LightItalic.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-Medium.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-MediumItalic.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-Regular.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-SemiBold.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-SemiBoldItalic.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-Thin.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/Exo2.0-ThinItalic.otf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/MBL.DepartureRow.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/MBL.Departures.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/MBL.StopPointRow.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/MBL.Stops.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/MBL.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/mobile/exo-2/SIL Open Font License.txt" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\Exo2-Regular.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-Black.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-BlackItalic.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-Bold.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-BoldItalic.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-ExtraBold.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-ExtraBoldItalic.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-ExtraLight.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-ExtraLightItalic.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-Italic.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-Light.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-LightItalic.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-Medium.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-MediumItalic.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-Regular.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-SemiBold.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-SemiBoldItalic.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-Thin.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\Exo2-ThinItalic.ttf" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\exo2\OFL.txt" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\red.css" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\red_theme.html" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\standard_theme.html" afterPath="" />
+      <change type="MOVED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\ComplexView.js" afterPath="$PROJECT_DIR$/examples/mobile/MBL.MainView.js" />
+      <change type="MOVED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\Menu.js" afterPath="$PROJECT_DIR$/examples/mobile/MBL.Menu.js" />
+      <change type="MOVED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\Mobile.js" afterPath="$PROJECT_DIR$/examples/mobile/MBL.Mobile.js" />
+      <change type="MOVED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\blue.css" afterPath="$PROJECT_DIR$/examples/mobile/mobile.css" />
+      <change type="MOVED" beforePath="C:\Users\grzegorz\workspace\Bardia\examples\mobile\blue_theme.html" afterPath="$PROJECT_DIR$/examples/mobile/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/list/UI.List.js" afterPath="$PROJECT_DIR$/src/list/UI.List.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tabs/UI.Toolbar.js" afterPath="$PROJECT_DIR$/src/tabs/UI.Toolbar.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/bardia.css" afterPath="$PROJECT_DIR$/dist/bardia.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/bardia.js" afterPath="$PROJECT_DIR$/dist/bardia.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/layout/layout.css" afterPath="$PROJECT_DIR$/src/layout/layout.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tabs/tabs.css" afterPath="$PROJECT_DIR$/src/tabs/tabs.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/list/list.css" afterPath="$PROJECT_DIR$/src/list/list.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Bardia.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -63,51 +82,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Mobile.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/examples/mobile/Mobile.js">
+      <file leaf-file-name="MBL.Mobile.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.Mobile.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8392652">
-              <caret line="49" column="34" selection-start-line="49" selection-start-column="34" selection-end-line="49" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="40" column="25" selection-start-line="40" selection-start-column="25" selection-end-line="40" selection-end-column="25" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Menu.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/mobile/Menu.js">
+      <file leaf-file-name="UI.List.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/list/UI.List.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="39" column="18" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
+            <state vertical-scroll-proportion="-5.6666665">
+              <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="blue.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/mobile/blue.css">
+      <file leaf-file-name="MBL.Departures.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.Departures.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="46" column="56" selection-start-line="46" selection-start-column="56" selection-end-line="46" selection-end-column="56" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OFL.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/mobile/exo2/OFL.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tabs.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tabs/tabs.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="38" column="41" selection-start-line="38" selection-start-column="41" selection-end-line="38" selection-end-column="41" />
+            <state vertical-scroll-proportion="0.66819745">
+              <caret line="57" column="11" selection-start-line="57" selection-start-column="11" selection-end-line="57" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -116,38 +115,68 @@
       <file leaf-file-name="UI.Toolbar.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tabs/UI.Toolbar.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-20.777779">
-              <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UI.Tabs.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tabs/UI.Tabs.js">
+      <file leaf-file-name="mobile.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/mobile/mobile.css">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="23" column="40" selection-start-line="23" selection-start-column="40" selection-end-line="23" selection-end-column="40" />
+              <caret line="67" column="28" selection-start-line="67" selection-start-column="28" selection-end-line="67" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="blue_theme.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/mobile/blue_theme.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.773585">
-              <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ComplexView.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/mobile/ComplexView.js">
+      <file leaf-file-name="MBL.DepartureRow.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.DepartureRow.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+              <caret line="28" column="29" selection-start-line="28" selection-start-column="29" selection-end-line="28" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MBL.StopPointRow.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.StopPointRow.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="29" column="46" selection-start-line="0" selection-start-column="0" selection-end-line="46" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MBL.Stops.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.Stops.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MBL.MainView.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.MainView.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="78" column="43" selection-start-line="78" selection-start-column="43" selection-end-line="78" selection-end-column="43" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/mobile/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-13.576923">
+              <caret line="24" column="43" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -173,12 +202,25 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/examples/mobile/ComplexView.js" />
-        <option value="$PROJECT_DIR$/examples/mobile/blue_theme.html" />
         <option value="$PROJECT_DIR$/src/tabs/tabs.css" />
+        <option value="$PROJECT_DIR$/examples/mobile/blue_theme.html" />
         <option value="$PROJECT_DIR$/src/tabs/UI.Toolbar.js" />
-        <option value="$PROJECT_DIR$/examples/mobile/Menu.js" />
         <option value="$PROJECT_DIR$/examples/mobile/blue.css" />
+        <option value="$PROJECT_DIR$/examples/mobile/Menu.js" />
         <option value="$PROJECT_DIR$/examples/mobile/Mobile.js" />
+        <option value="$PROJECT_DIR$/examples/mobile/Stops.js" />
+        <option value="$PROJECT_DIR$/examples/mobile/MBL.js" />
+        <option value="$PROJECT_DIR$/examples/mobile/MBL.Menu.js" />
+        <option value="$PROJECT_DIR$/examples/mobile/MBL.StopPointRow.js" />
+        <option value="$PROJECT_DIR$/src/list/list.css" />
+        <option value="$PROJECT_DIR$/examples/mobile/MBL.Mobile.js" />
+        <option value="$PROJECT_DIR$/examples/mobile/MBL.MainView.js" />
+        <option value="$PROJECT_DIR$/examples/mobile/MBL.Stops.js" />
+        <option value="$PROJECT_DIR$/src/list/UI.List.js" />
+        <option value="$PROJECT_DIR$/examples/mobile/mobile.css" />
+        <option value="$PROJECT_DIR$/examples/mobile/MBL.DepartureRow.js" />
+        <option value="$PROJECT_DIR$/examples/mobile/index.html" />
+        <option value="$PROJECT_DIR$/examples/mobile/MBL.Departures.js" />
       </list>
     </option>
   </component>
@@ -214,6 +256,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -274,6 +318,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="list" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Bardia" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Bardia" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="examples" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -293,35 +355,11 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="mobile" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Bardia" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Bardia" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="examples" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mobile" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="images" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -331,8 +369,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\grzegorz\workspace\Bardia\examples\mobile\images" />
       <recent name="C:\Users\grzegorz\workspace\Bardia\examples\mobile" />
+      <recent name="C:\Users\grzegorz\workspace\Bardia\examples\mobile\images" />
     </key>
   </component>
   <component name="RunManager">
@@ -509,29 +547,29 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -551,18 +589,26 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/tabs/UI.Tabs.js">
+    <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.Mobile.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="23" column="40" selection-start-line="23" selection-start-column="40" selection-end-line="23" selection-end-column="40" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/mobile/ComplexView.js">
+    <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.Menu.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <caret line="39" column="18" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/mobile/mobile.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="46" column="56" selection-start-line="46" selection-start-column="56" selection-end-line="46" selection-end-column="56" />
           <folding />
         </state>
       </provider>
@@ -577,32 +623,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tabs/UI.Toolbar.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-20.777779">
+        <state vertical-scroll-proportion="0.0">
           <caret line="48" column="0" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/mobile/exo2/OFL.txt">
+    <entry file="file://$PROJECT_DIR$/src/tabs/UI.Tabs.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
+          <caret line="23" column="40" selection-start-line="23" selection-start-column="40" selection-end-line="23" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/mobile/blue_theme.html">
+    <entry file="file://$PROJECT_DIR$/examples/mobile/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.773585">
+        <state vertical-scroll-proportion="0.0">
           <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/mobile/blue.css">
+    <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.MainView.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="46" column="56" selection-start-line="46" selection-start-column="56" selection-end-line="46" selection-end-column="56" />
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tabs/UI.Tabs.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="23" column="40" selection-start-line="23" selection-start-column="40" selection-end-line="23" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tabs/tabs.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="38" column="41" selection-start-line="38" selection-start-column="41" selection-end-line="38" selection-end-column="41" />
           <folding />
         </state>
       </provider>
@@ -612,18 +674,114 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/mobile/Menu.js">
+    <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="39" column="18" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/mobile/Mobile.js">
+    <entry file="file://$PROJECT_DIR$/src/menu/UI.Menu.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8392652">
-          <caret line="49" column="34" selection-start-line="49" selection-start-column="34" selection-end-line="49" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.Menu.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="28" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/list/list.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="23" column="1" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.Mobile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="40" column="25" selection-start-line="40" selection-start-column="25" selection-end-line="40" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.MainView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="78" column="43" selection-start-line="78" selection-start-column="43" selection-end-line="78" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tabs/UI.Toolbar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.Stops.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/list/UI.List.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.6666665">
+          <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/mobile/mobile.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="67" column="28" selection-start-line="67" selection-start-column="28" selection-end-line="67" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.StopPointRow.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="29" column="46" selection-start-line="0" selection-start-column="0" selection-end-line="46" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.DepartureRow.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="28" column="29" selection-start-line="28" selection-start-column="29" selection-end-line="28" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/mobile/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.576923">
+          <caret line="24" column="43" selection-start-line="24" selection-start-column="43" selection-end-line="24" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/mobile/MBL.Departures.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.66819745">
+          <caret line="57" column="11" selection-start-line="57" selection-start-column="11" selection-end-line="57" selection-end-column="11" />
           <folding />
         </state>
       </provider>
