@@ -48,12 +48,24 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
 	    			item.update(t.name);
 	    		}
 
+	    		if (t.title) {
+	    			item.title = t.title;
+	    		}
+
 	    		if (t.customIcon) {
-	    			item.setStyle({
-	    				backgroundImage: "url('" + t.customIcon + "')",
-	    				backgroundRepeat: "no-repeat",
-	    				backgroundPosition: "right center"
-	    			});
+	    		    if (t.name) {
+                        item.setStyle({
+                            backgroundImage: "url('" + t.customIcon + "')",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "right center"
+                        });
+	    			} else {
+                        item.setStyle({
+                            backgroundImage: "url('" + t.customIcon + "')",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center center"
+                        });
+	    			}
 	    		}
 	    		item.title = t.description;
 	

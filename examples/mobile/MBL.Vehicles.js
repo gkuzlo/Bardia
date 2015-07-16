@@ -1,7 +1,7 @@
 /**
  *
  */
-MBL.Stops = Class.create({
+MBL.Vehicles = Class.create({
 	/*
 	 *
 	 */
@@ -18,16 +18,11 @@ MBL.Stops = Class.create({
     render: function() {
         var h = this;
 
-        h.material = new Element("DIV", {
-            style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; overflow:hidden"
-        });
-        h.config.inside.update(h.material);
-
         h.list = new UI.List({
-            inside: h.material,
-            title: h.config.title || "PRZYSTANKI",
+            inside: h.config.inside,
+            title: h.config.title || "POJAZDY",
             render: function(row) {
-                return new MBL.StopPointRow({
+                return new MBL.VehicleRow({
                     inside: row,
                     bean: row.bean
                 }).getMaterial();
@@ -40,12 +35,12 @@ MBL.Stops = Class.create({
         h.list.fetch({
             rows: [
                 {
-                    symbol: "436",
-                    name: "Składowa"
+                    number: "123",
+                    description: "Autobus niskopodłogowy"
                 },
                 {
-                    symbol: "437",
-                    name: "Pogodna"
+                    number: "437",
+                    description: "Autobus niskopodłogowy"
                 }
             ]
         });

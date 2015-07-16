@@ -65,7 +65,13 @@
  * Panel
  */
 .panel-header {
-	background-color:#6CA0CE; font-size:18px;
+	background-color:#6CA0CE; border:1px solid white; border-width:0px 0px 1px 0px;
+}
+
+.panel-header::after {
+	content: attr(title);
+	font-size:18px; font-weight:bold; position:absolute; top:0px; right:0px; opacity:0.7;
+	color:white; line-height:60px; padding-right:15px;
 }
 
 .panel-button::before {
@@ -81,11 +87,61 @@
  */
 .stop-point-symbol {
 	background-color:#79B4E8;
-	position:absolute; font-size:18px; color:white; text-align:right; padding:4px 4px 4px 4px; top:5px; left:10px;
+	position:absolute; font-size:18px; color:white; text-align:right; padding:4px 4px 4px 4px; top:5px; left:30px;
 	border-radius:10px 0px 10px 5px;
 }
 
 .stop-point-name {
 	background-color:#f0f0f0;
-	position:absolute; line-height:32px; font-size:18px; left:55px; top:0px; right:0px; height:100%; text-align:left; padding:0px 0px 0px 10px
+	position:absolute; line-height:32px; font-size:18px; left:75px; top:0px; right:0px; height:100%; text-align:left; padding:0px 0px 0px 10px
+}
+
+/*
+ *
+ */
+.vehicle-number {
+	background-color:#79B4E8;
+	position:absolute; font-size:18px; color:white; text-align:right; padding:4px 4px 4px 4px; top:5px; left:30px; width:50px;
+	border-radius:10px 0px 10px 5px;
+}
+
+.vehicle-description {
+	background-color:#f0f0f0;
+	position:absolute; line-height:32px; font-size:12px; left:105px; top:0px; right:0px; height:100%; text-align:left; padding:0px 0px 0px 10px
+}
+
+/*
+ *
+ */
+.line-symbol {
+	background-color:#79B4E8;
+	position:absolute;
+	font-size:18px; color:white; padding:4px 4px 4px 4px; top:5px; left:10px;
+	border-radius:10px 0px 10px 5px;
+}
+
+.line-name {
+	background-color:#f0f0f0;
+	position:absolute; line-height:20px; font-size:12px; left:55px; top:3px; right:60px; height:100%; text-align:left; padding:0px 0px 0px 10px
+}
+
+.line-symbols {
+	background-color:#f0f0f0;
+	position:absolute; line-height:20px; font-size:14px; left:55px; top:20px; right:60px; height:100%; text-align:left; padding:0px 0px 0px 10px
+}
+
+.departure-real-time {
+	background-color:rgb(124, 191, 51);
+	position:absolute;
+	font-size:25px; color:white; padding:0px 4px 0px 4px; top:5px; right:5px; width:50px;
+	border-radius:0px 10px 5px 10px;
+	text-align:right;
+}
+
+.departure-schedule-time {
+	background-color:grey;
+	position:absolute;
+	font-size:25px; color:white; padding:0px 4px 0px 4px; top:5px; right:5px; width:50px;
+	border-radius:0px 10px 5px 10px;
+	text-align:right;
 }

@@ -100,7 +100,7 @@ ComplexView = Class.create({
 				user: {
 					name: "GrzegorzGrzegorzGrzegorzGrzegorz"
 				},
-				val2: "value 2"
+				val2: "value 7"
 			},
 			{
 				user: {
@@ -135,7 +135,7 @@ ComplexView = Class.create({
 				}
 			]
 		});
-		
+
 		var topLayout = new UI.BorderLayout({
 			inside: layout.getNorth(),
 			north: {
@@ -148,20 +148,20 @@ ComplexView = Class.create({
 				width: 400
 			}
 		});
-		
+
 		var verticalToolbar = new UI.Toolbar({
 			inside: topLayout.getWest(),
 			items: [
 				{
-					name: "Administration",
+					title: "Administration",
 					customIcon: "images/administration.png"
 				},
 				{
-					name: "Konfiguration",
+					title: "Konfiguration",
 					customIcon: "images/configuration.png"
 				},
 				{
-					name: "Customization",
+					title: "Customization",
 					customIcon: "images/customization.png"
 				}
 			]

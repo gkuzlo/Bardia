@@ -61,13 +61,19 @@ MBL.Departures = Class.create({
             rows: [
                 {
                     line: {
-                        name: "13"
-                    }
+                        name: "13",
+                        direction: "LINE DIRECTION 1"
+                    },
+                    departure: 1234,
+                    real: true
                 },
                 {
                     line: {
-                        name: "14"
-                    }
+                        name: "14",
+                        direction: "LINE DIRECTION 2"
+                    },
+                    departure: 675,
+                    real: false
                 }
             ]
         });

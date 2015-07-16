@@ -37,6 +37,21 @@
 
 }
 
+.heads-content {
+	position:absolute; top:0px; right:10px; left:0px; bottom:0px; overflow:auto;;
+}
+
+.heads-content::before {
+	content: "";
+	position:absolute; bottom:0px; left:0px; height:5px; width:0px; background:#525070;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
 .grid-toolbar:hover, .grid-toolbar:focus, .grid-toolbar:active {
     transform:scale(1); background-color:red
 }
@@ -50,9 +65,10 @@
 
 .grid-column {
 	display:inline-block; font-weight:bold;
-	overflow:hidden; line-height:47px;
-	height:47px; font-size:14px;
+	overflow:hidden; line-height:50px;
+	height:50px; font-size:14px;
 	margin:0px; padding:0px; padding-left:4px; border:0px solid black; border-width:0px 0px 0px 0px;
+	cursor:pointer;
 }
 
 .grid-row {

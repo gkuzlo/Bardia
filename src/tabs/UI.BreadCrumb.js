@@ -3,7 +3,6 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 
     initConfig: function(config) {
         this.config = Object.extend({
-        	orientation: "vertical"
         }, config || {});
     },
 

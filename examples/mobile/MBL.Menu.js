@@ -19,7 +19,7 @@ MBL.Menu = Class.create({
         var h = this;
 
         h.material = new Element("DIV", {
-            style: "position:absolute; top:10px; left:10px; right:10px; bottom:10px; background:blue; overflow:hidden"
+            style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; overflow:hidden"
         });
         h.config.inside.update(h.material);
 

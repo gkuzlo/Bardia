@@ -4645,7 +4645,8 @@ UI.Grid = Class.create(UI.MaterialComponent, {
             ],
             rows: [
             ],
-            quickSearch: true
+            quickSearch: true,
+            descriptor: {}
         }, config || {});
     },
     /**
@@ -4673,7 +4674,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		});
 
     		h.columnsContent = new Element("DIV", {
-    			class: "grid_content",
+    			class: "heads-content",
     			style: "height:50px; top:2px; left:5px; border:2px solid lightGrey; border-width:0px 0px 2px 0px; overflow:hidden"
     		});
     		h.panel.getContent().insert(h.columnsContent);
@@ -4768,10 +4769,15 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 			});
 
 			div.update(column.name);
+			div.columnBean = column;
 
 			return div;
 		})
 		.forEach(function(div) {
+		    div.on("click", function(e) {
+		        h.selectColumn(e.target);
+		    });
+
 			head.insert(div);
 		});
 		h.columnsContent.insert(head);
@@ -4832,9 +4838,72 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 				child.hide();
 			}
 		}
+	},
+	/**
+	 *
+	 */
+	selectColumn: function(columnDiv) {
+		var h = this;
+
+    	var containerLeft = h.columnsContent.getBoundingClientRect().left;
+
+    	h.columnsContent.pseudoStyle("before", "width",  (columnDiv.getBoundingClientRect().width - 1) + "px");
+    	h.columnsContent.pseudoStyle("before", "transform", "translateX(" + (columnDiv.getBoundingClientRect().left - containerLeft) + "px)");
+
+    	h.selectByColumn(columnDiv);
+	},
+	/**
+	 *
+	 */
+	selectByColumn: function(columnDiv) {
+	    var h = this;
+
+        var columnDefinition = columnDiv.columnBean;
+
+        var compareFunction = null;
+
+        if (!h.config.descriptor.sortByColumn || h.config.descriptor.sortByColumn !== columnDefinition) {
+            h.config.descriptor.sortByColumn = columnDefinition;
+            h.config.descriptor.asc = true;
+        } else {
+            h.config.descriptor.asc = !h.config.descriptor.asc;
+        }
+
+        var ascDesc = ">";
+        if (h.config.descriptor.asc == false) {
+            ascDesc = "<";
+        }
+
+//        if (columnDefinition.render) {
+//            compareFunction = function(row1, row2) {
+//                var str1 = eval("columnDefinition.render(row1)");
+//                var str2 = eval("columnDefinition.render(row2)");
+//
+//                return eval("str1" + ascDesc + "str2");
+//            }
+//        }
+
+        if (columnDefinition.property) {
+            compareFunction = function(row1, row2) {
+                var str1 = eval("row1.bean." + columnDefinition.property);
+                var str2 = eval("row2.bean." + columnDefinition.property);
+
+                return eval("str1" + ascDesc + "str2");
+            }
+        }
+
+	    h.rows.sort(function(row1, row2) {
+	        var result = compareFunction(row1, row2);
+	        return result;
+	    });
+
+	    h.rowsContent.update();
+
+	    h.rows.forEach(function(row) {
+	        h.rowsContent.insert(row);
+	    });
 	}
 });
-
 
 UI.GridCell = Class.create({
 
@@ -5084,7 +5153,6 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 
     initConfig: function(config) {
         this.config = Object.extend({
-        	orientation: "vertical"
         }, config || {});
     },
 
@@ -5286,12 +5354,24 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
 	    			item.update(t.name);
 	    		}
 
+	    		if (t.title) {
+	    			item.title = t.title;
+	    		}
+
 	    		if (t.customIcon) {
-	    			item.setStyle({
-	    				backgroundImage: "url('" + t.customIcon + "')",
-	    				backgroundRepeat: "no-repeat",
-	    				backgroundPosition: "right center"
-	    			});
+	    		    if (t.name) {
+                        item.setStyle({
+                            backgroundImage: "url('" + t.customIcon + "')",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "right center"
+                        });
+	    			} else {
+                        item.setStyle({
+                            backgroundImage: "url('" + t.customIcon + "')",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center center"
+                        });
+	    			}
 	    		}
 	    		item.title = t.description;
 	
