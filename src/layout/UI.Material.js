@@ -24,8 +24,7 @@ UI.Material = Class.create({
     	
     	if (h.config.modal == true) {
 			h.curtain = new Element("DIV", {
-				style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; opacity:0; display:none",
-				class: "bg_main"
+				style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; border:0px solid transparent; display:none; backgroun:rgba(0,0,0,0.8)"
 			});
 			h.config.inside.insert(h.curtain);
     	}
@@ -193,8 +192,8 @@ UI.Material = Class.create({
 		});
 		
 		var player = h.curtain.animate([
-  		    {opacity: 0},
-  		    {opacity: 0.8},
+  		    {background: "rgba(0,0,0,0.0)"},
+  		    {background: "rgba(0,0,0,0.8)"},
   		], {
   			direction: 'normal',
   		    duration: 200,
@@ -202,7 +201,6 @@ UI.Material = Class.create({
   			iterations: 1,
   			fill: "both"
   		});
-		
 	},
 	curtainOff: function() {
 		var h = this;
@@ -212,8 +210,8 @@ UI.Material = Class.create({
 		}
 
 		var player = h.curtain.animate([
-		    {opacity: 0.8},
-		    {opacity: 0},
+  		    {background: "rgba(0,0,0,0.8)"},
+  		    {background: "rgba(0,0,0,0.0)"},
 		], {
 			direction: 'normal',
 		    duration: 200,

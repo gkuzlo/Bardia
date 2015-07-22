@@ -8,7 +8,46 @@
 .form_fields_content {
 	position:absolute; top:80px; right:0px; left:0px; bottom:60px; overflow:auto
 }
-
 .form_footer {
 	position:absolute; right:0px; left:0px; bottom:0px; height:60px; border:0px solid #cdcdcf; border-width:0px 0px 0px 0px;
+}
+
+.text-form-field {
+}
+
+.text-form-field::before {
+	content: attr(title);
+	position:absolute; bottom:-10px; left:10px; font-size:14px; color:grey;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
+.boolean-fab {
+	box-shadow: 3px 3px 8px #666666; border-radius:3px; position:absolute; top:20px; left:20px; width:25px; height:15px;
+	border:1px solid grey; position:relative;
+	background-color:#f0f0f0;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
+.boolean-fab::after {
+	content: "";
+	position:absolute; width:11px; height:11px;
+	background-color:#aaaaaa;
+	top:2px; left:2px;
+	border-radius:2px;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
 }

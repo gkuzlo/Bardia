@@ -31,7 +31,8 @@ UI.TextFormField = Class.create({
     	var h = this;
     	
 		h.inside = new Element("DIV", {
-			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent"
+			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
+			class: "text-form-field"
 		});
 		h.input = new Element("INPUT", {
 			type: "text",
@@ -91,18 +92,14 @@ UI.TextFormField = Class.create({
     			e.cancelBubble = true;
     		});
 		}
-		    		
-		h.label = new Element("DIV", {
-			style: "position:absolute; top:10px; left:10px; border:0px; height:10px; color:#999999; font-weight:bold; font-size:14px;"
-		});
-		h.label.insert(h.config.label + " " + ((h.config.required)?"*":""));
+
+		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
 
     	h.underline = new Element("DIV", {
     		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:" + h.config.width + "px"
     	});
 
 		h.inside.insert(h.underline);
-		h.inside.insert(h.label);
 		h.inside.insert(h.input);
 		
 		h.curtain = new Element("DIV", {
@@ -143,19 +140,19 @@ UI.TextFormField = Class.create({
      * @method animateLabel
      */
     animateLabel: function() {
-    	$PLAY(this.label, [
-    	    {opacity: 1.0, transform: "translate(0px, 0px)", fontSize: "14px"},
-    	    {opacity: 1.0, transform: "translate(0px, -18px)", fontSize: "11px"},
-    	]);
+        var h = this;
+
+        h.inside.pseudoStyle("before", "transform", "translateY(-17px)");
+        h.inside.pseudoStyle("before", "font-size", "12px");
     },
     /**
      * @method unanimateLabel
      */
     unanimateLabel: function() {
-    	$PLAY(this.label, [
-    	    {opacity: 1.0, transform: "translate(0px, -18px)", fontSize: "11px"},
-    	    {opacity: 1.0, transform: "translate(0px, 0px)", fontSize: "14px"},
-    	]);
+        var h = this;
+
+        h.inside.pseudoStyle("before", "transform", "translateY(0px)");
+        h.inside.pseudoStyle("before", "font-size", "14px");
     },
     /**
      * @method getMaterial
@@ -262,9 +259,9 @@ UI.TextFormField = Class.create({
     markError: function() {
     	var h = this;
 
-    	h.label.setStyle({
-    		color: "#cf6d6d"
-    	});
+//    	h.label.setStyle({
+//    		color: "#cf6d6d"
+//    	});
     },
     /**
      * 
@@ -272,8 +269,8 @@ UI.TextFormField = Class.create({
     unmarkError: function() {
     	var h = this;
 
-    	h.label.setStyle({
-    		color: "#cdcdcf"
-    	});
+//    	h.label.setStyle({
+//    		color: "#cdcdcf"
+//    	});
     }
 });

@@ -44,7 +44,7 @@ UI.List = Class.create(UI.MaterialComponent, {
 			buttons: h.config.buttons,
 			title: h.config.title
 		});
-		
+
 		h.listContent = new Element("DIV", {
 			style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; overflow:auto",
 			class: "list_content"

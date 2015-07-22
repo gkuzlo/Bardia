@@ -37,33 +37,38 @@ UI.BooleanFormField = Class.create({
     			style: "position:relative; top:0px; height:40px; width:100%; line-height:20px;"
     		});
     		h.label = new Element("DIV", {
-    			style: "position:absolute; top:20px; left:50px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;"
+    			style: "position:absolute; top:20px; left:60px; border:0px; height:10px; color:grey; font-weight:bold; font-size:14px;"
     		});
     		h.label.insert(h.config.label);
     		
-    		h.falseFab = new Element("DIV", {
-    			style: "box-shadow: 3px 3px 8px #666666; position:absolute; border-radius:50%; top:20px; left:20px; width:20px; height:20px; background-color:grey; background-image:url('" + $ICON("done") + "')"
+    		h.fab = new Element("DIV", {
+    			class: "boolean-fab"
     		});
-    		h.falseFab.on("click", function() {
-				h.switchOn();
-				h.setBeanValue(true);
+    		h.fab.on("click", function() {
+				h.switchValue();
     		});
-    		h.inside.insert(h.falseFab);
-    		
-    		h.trueFab = new Element("DIV", {
-    			style: "position:absolute; border-radius:50%; top:20px; left:20px; width:20px; height:20px; background-color:green; background-image:url('" + $ICON("done") + "')"
-    		});
-    		h.trueFab.on("click", function() {
-				h.switchOff();
-				h.setBeanValue(false);
-    		});
-    		h.inside.insert(h.trueFab);
-    		
+    		h.inside.insert(h.fab);
+
     		if (this.config.value == false) {
-	    		h.trueFab.hide();
+	    		//h.trueFab.hide();
     		}
 
+    		h.switchValue();
+    		h.switchValue();
+
 		h.inside.insert(h.label);
+    },
+    switchValue: function() {
+        var h = this;
+
+    	var val = this.getBeanValue();
+    	if (val == undefined || val == false) {
+    	    h.setBeanValue(true);
+            h.switchOn();
+    	} else {
+    	    h.setBeanValue(false);
+    	    h.switchOff();
+    	}
     },
     /**
      * @method setReadOnly
@@ -77,32 +82,16 @@ UI.BooleanFormField = Class.create({
      */
     switchOn: function() {
     	var h = this;
-    	
-		h.trueFab.animate([
-		    {opacity: 0.0, transform: "scale(0)"},
-		    {opacity: 1.0, transform: "scale(1)"},
-		], {
-			direction: 'normal',
-		    duration: 500,
-		    easing: "ease",
-			iterations: 1,
-			fill: "both"
-		});
-		
-		h.label.animate([
-  		    {color: "#cdcdcf"},
-  		    {color: "#999999"},
-  		], {
-  			direction: 'normal',
-  		    duration: 500,
-  		    easing: "ease",
-  			iterations: 1,
-  			fill: "both"
-  		});
-		
+
+    	h.fab.pseudoStyle("after", "transform", "translateX(10px)");
+    	h.fab.pseudoStyle("after", "background-color", "green");
+    	h.fab.setStyle({
+    	    backgroundColor: "#e0ffe0",
+    	    "box-shadow": "3px 3px 8px green"
+    	});
+
 		if (h.config.onChange) {
 			h.config.onChange(true);
-			h.setBeanValue(true);
 		}
     },
     /**
@@ -110,32 +99,16 @@ UI.BooleanFormField = Class.create({
      */
     switchOff: function() {
     	var h = this;
-    	
-		h.trueFab.animate([
-		    {opacity: 1.0, transform: "scale(1)"},
-		    {opacity: 0.0, transform: "scale(0)"},
-		], {
-			direction: 'normal',
-		    duration: 500,
-		    easing: "ease",
-			iterations: 1,
-			fill: "both"
-		});
-		
-		h.label.animate([
-   		    {color: "#999999"},
-   		    {color: "#cdcdcf"},
-   		], {
-   			direction: 'normal',
-   		    duration: 500,
-   		    easing: "ease",
-   			iterations: 1,
-   			fill: "both"
-   		});
-		
+
+    	h.fab.pseudoStyle("after", "transform", "translateX(0px)");
+    	h.fab.pseudoStyle("after", "background-color", "#aaaaaa");
+    	h.fab.setStyle({
+    	    backgroundColor: "#f0f0f0",
+    	    "box-shadow": "3px 3px 8px #666666"
+    	});
+
 		if (h.config.onChange) {
 			h.config.onChange(false);
-			h.setBeanValue(false);
 		}
     },
     /**

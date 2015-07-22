@@ -9,9 +9,10 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
     	var h = this;
     	
 		h.inside = new Element("DIV", {
-			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent"
+			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
+			class: "text-form-field"
 		});
-		
+
 		h.input = new Element("INPUT", {
 			type: "text",
 			readOnly: true,
@@ -30,18 +31,14 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 				h.config.onChange(h.getBeanValue());
 			}
 		});
-		
-		h.label = new Element("DIV", {
-			style: "position:absolute; top:10px; left:10px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;"
-		});
-		h.label.insert(h.config.label);
+
+		h.inside.title = h.config.label;
 
     	h.underline = new Element("DIV", {
     		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:120px"
     	});
 
 		h.inside.insert(h.underline);
-		h.inside.insert(h.label);
 		h.inside.insert(h.input);
 		
 		h.fab = new UI.Fab({

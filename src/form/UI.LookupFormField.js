@@ -4,16 +4,17 @@
 UI.LookupFormField = Class.create(UI.TextFormField, {
 	render: function() {
     	var h = this;
-    	
+
 		h.inside = new Element("DIV", {
-			style: "position:relative; top:0px; height:40px; width:100%; line-height:20px;"
+			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
+			class: "text-form-field"
 		});
-		
 		h.input = new Element("INPUT", {
 			type: "text",
 			readOnly: true,
 			style: "position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px"
 		});
+
 		h.input.on("focus", function() {
 			h.animateLabel();
 		});
@@ -36,17 +37,13 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		});
 		h.input.disabled = true;
 
-		h.label = new Element("DIV", {
-			style: "position:absolute; top:20px; left:10px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;"
-		});
-		h.label.insert(h.config.label + " " + ((h.config.required)?"*":""));
+		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
 
     	h.underline = new Element("DIV", {
     		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:" + h.config.width + "px"
     	});
 
 		h.inside.insert(h.underline);
-		h.inside.insert(h.label);
 		h.inside.insert(h.input);
 
 		h.fab = new UI.Fab({
@@ -113,6 +110,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		h.tmpFab = h.fab.material.clone();
 		h.tmpFab.setStyle({
 			bottom: "",
+			border: "border: 1px solid transparent;",
 			top: (fieldOffset.top - formOffset.top) + "px",
 			left: (fieldOffset.left - formOffset.left) + "px",
 			overflow: "hidden"
@@ -122,7 +120,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		h.list = new UI.List({
 			inside: h.tmpFab,
 			title: h.config.label,
-			headerRenderer: function(row) {
+			render: function(row) {
 				var result = "";
 					if (h.config.patternRenderer) {
 						result = h.config.patternRenderer(row.bean);

@@ -52,12 +52,44 @@ ComplexView = Class.create({
 					label: "start",
 					property: "start",
 					type: "Date"
-				}
+				},
+                {
+                    label: "tarrifDiscountId",
+                    type: "Lookup",
+                    pattern: "{name}",
+                    patternRenderer: function(bean) {
+                        var result = new Element("DIV", {
+                            style: "color:#514f70; padding:0px 10px 0px 10px; position:absolute; top:0px; left:0px; bottom:0px; height:40px; width:100%; line-height:40px; font-size:12px;"
+                        });
+
+                        result.update(bean.name);
+
+                        return result;
+                    },
+                    fetchList: function(list) {
+                        list.fetch({
+                            rows: [
+                            	{
+                            		name: "A"
+                            	},
+                            	{
+                            		name: "B"
+                            	},
+                            	{
+                            		name: "C"
+                            	}
+                            ]
+                        });
+                    }
+                }
 			],
 			buttons: [
 				{
 					name: "Button 1",
-					title: "Button 1"
+					title: "Button 1",
+					onClick: function() {
+						alert(Object.toJSON(form.getBean()));
+					}
 				},
 				{
 					name: "Button 2",
@@ -91,7 +123,21 @@ ComplexView = Class.create({
 			},
 			onMouseOver: function(row) {
 				//alert(Object.toJSON(row.bean));
-			}
+			},
+			buttons: [
+				{
+					name: "Open material",
+					onClick: function() {
+						grid.openDetails();
+					}
+				},
+				{
+					name: "Close material",
+					onClick: function() {
+						grid.closeDetails();
+					}
+				}
+			]
 		});
 		grid.setTitle("changed title");
 		

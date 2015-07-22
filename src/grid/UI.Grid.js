@@ -245,15 +245,6 @@ UI.Grid = Class.create(UI.MaterialComponent, {
             ascDesc = "<";
         }
 
-//        if (columnDefinition.render) {
-//            compareFunction = function(row1, row2) {
-//                var str1 = eval("columnDefinition.render(row1)");
-//                var str2 = eval("columnDefinition.render(row2)");
-//
-//                return eval("str1" + ascDesc + "str2");
-//            }
-//        }
-
         if (columnDefinition.property) {
             compareFunction = function(row1, row2) {
                 var str1 = eval("row1.bean." + columnDefinition.property);
@@ -273,5 +264,30 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 	    h.rows.forEach(function(row) {
 	        h.rowsContent.insert(row);
 	    });
-	}
+	},
+    /**
+     *
+     */
+    openDetails: function() {
+        var h = this;
+
+        if (h.detailsMaterial === undefined) {
+            h.detailsMaterial = new UI.Material({
+                inside: h.getMaterial(),
+                modal: true,
+                position: "top:0px; left:0px; width:90%; bottom:0px"
+            });
+        }
+
+        h.detailsMaterial.show();
+
+        return h.detailsMaterial;
+    },
+    closeDetails: function() {
+        var h = this;
+
+        if (h.detailsMaterial !== undefined) {
+            h.detailsMaterial.hide();
+        }
+    }
 });

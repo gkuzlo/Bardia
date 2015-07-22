@@ -1760,8 +1760,7 @@ UI.Material = Class.create({
     	
     	if (h.config.modal == true) {
 			h.curtain = new Element("DIV", {
-				style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; opacity:0; display:none",
-				class: "bg_main"
+				style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; border:0px solid transparent; display:none; backgroun:rgba(0,0,0,0.8)"
 			});
 			h.config.inside.insert(h.curtain);
     	}
@@ -1929,8 +1928,8 @@ UI.Material = Class.create({
 		});
 		
 		var player = h.curtain.animate([
-  		    {opacity: 0},
-  		    {opacity: 0.8},
+  		    {background: "rgba(0,0,0,0.0)"},
+  		    {background: "rgba(0,0,0,0.8)"},
   		], {
   			direction: 'normal',
   		    duration: 200,
@@ -1938,7 +1937,6 @@ UI.Material = Class.create({
   			iterations: 1,
   			fill: "both"
   		});
-		
 	},
 	curtainOff: function() {
 		var h = this;
@@ -1948,8 +1946,8 @@ UI.Material = Class.create({
 		}
 
 		var player = h.curtain.animate([
-		    {opacity: 0.8},
-		    {opacity: 0},
+  		    {background: "rgba(0,0,0,0.8)"},
+  		    {background: "rgba(0,0,0,0.0)"},
 		], {
 			direction: 'normal',
 		    duration: 200,
@@ -2017,7 +2015,7 @@ UI.List = Class.create(UI.MaterialComponent, {
 			buttons: h.config.buttons,
 			title: h.config.title
 		});
-		
+
 		h.listContent = new Element("DIV", {
 			style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; overflow:auto",
 			class: "list_content"
@@ -2479,7 +2477,8 @@ UI.TextFormField = Class.create({
     	var h = this;
     	
 		h.inside = new Element("DIV", {
-			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent"
+			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
+			class: "text-form-field"
 		});
 		h.input = new Element("INPUT", {
 			type: "text",
@@ -2539,18 +2538,14 @@ UI.TextFormField = Class.create({
     			e.cancelBubble = true;
     		});
 		}
-		    		
-		h.label = new Element("DIV", {
-			style: "position:absolute; top:10px; left:10px; border:0px; height:10px; color:#999999; font-weight:bold; font-size:14px;"
-		});
-		h.label.insert(h.config.label + " " + ((h.config.required)?"*":""));
+
+		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
 
     	h.underline = new Element("DIV", {
     		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:" + h.config.width + "px"
     	});
 
 		h.inside.insert(h.underline);
-		h.inside.insert(h.label);
 		h.inside.insert(h.input);
 		
 		h.curtain = new Element("DIV", {
@@ -2591,19 +2586,19 @@ UI.TextFormField = Class.create({
      * @method animateLabel
      */
     animateLabel: function() {
-    	$PLAY(this.label, [
-    	    {opacity: 1.0, transform: "translate(0px, 0px)", fontSize: "14px"},
-    	    {opacity: 1.0, transform: "translate(0px, -18px)", fontSize: "11px"},
-    	]);
+        var h = this;
+
+        h.inside.pseudoStyle("before", "transform", "translateY(-17px)");
+        h.inside.pseudoStyle("before", "font-size", "12px");
     },
     /**
      * @method unanimateLabel
      */
     unanimateLabel: function() {
-    	$PLAY(this.label, [
-    	    {opacity: 1.0, transform: "translate(0px, -18px)", fontSize: "11px"},
-    	    {opacity: 1.0, transform: "translate(0px, 0px)", fontSize: "14px"},
-    	]);
+        var h = this;
+
+        h.inside.pseudoStyle("before", "transform", "translateY(0px)");
+        h.inside.pseudoStyle("before", "font-size", "14px");
     },
     /**
      * @method getMaterial
@@ -2710,9 +2705,9 @@ UI.TextFormField = Class.create({
     markError: function() {
     	var h = this;
 
-    	h.label.setStyle({
-    		color: "#cf6d6d"
-    	});
+//    	h.label.setStyle({
+//    		color: "#cf6d6d"
+//    	});
     },
     /**
      * 
@@ -2720,9 +2715,9 @@ UI.TextFormField = Class.create({
     unmarkError: function() {
     	var h = this;
 
-    	h.label.setStyle({
-    		color: "#cdcdcf"
-    	});
+//    	h.label.setStyle({
+//    		color: "#cdcdcf"
+//    	});
     }
 });
 /**
@@ -2985,16 +2980,17 @@ UI.LongTextFormField = Class.create({
 UI.LookupFormField = Class.create(UI.TextFormField, {
 	render: function() {
     	var h = this;
-    	
+
 		h.inside = new Element("DIV", {
-			style: "position:relative; top:0px; height:40px; width:100%; line-height:20px;"
+			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
+			class: "text-form-field"
 		});
-		
 		h.input = new Element("INPUT", {
 			type: "text",
 			readOnly: true,
 			style: "position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px"
 		});
+
 		h.input.on("focus", function() {
 			h.animateLabel();
 		});
@@ -3017,17 +3013,13 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		});
 		h.input.disabled = true;
 
-		h.label = new Element("DIV", {
-			style: "position:absolute; top:20px; left:10px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;"
-		});
-		h.label.insert(h.config.label + " " + ((h.config.required)?"*":""));
+		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
 
     	h.underline = new Element("DIV", {
     		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:" + h.config.width + "px"
     	});
 
 		h.inside.insert(h.underline);
-		h.inside.insert(h.label);
 		h.inside.insert(h.input);
 
 		h.fab = new UI.Fab({
@@ -3094,6 +3086,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		h.tmpFab = h.fab.material.clone();
 		h.tmpFab.setStyle({
 			bottom: "",
+			border: "border: 1px solid transparent;",
 			top: (fieldOffset.top - formOffset.top) + "px",
 			left: (fieldOffset.left - formOffset.left) + "px",
 			overflow: "hidden"
@@ -3103,7 +3096,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		h.list = new UI.List({
 			inside: h.tmpFab,
 			title: h.config.label,
-			headerRenderer: function(row) {
+			render: function(row) {
 				var result = "";
 					if (h.config.patternRenderer) {
 						result = h.config.patternRenderer(row.bean);
@@ -3583,9 +3576,10 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
     	var h = this;
     	
 		h.inside = new Element("DIV", {
-			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent"
+			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
+			class: "text-form-field"
 		});
-		
+
 		h.input = new Element("INPUT", {
 			type: "text",
 			readOnly: true,
@@ -3604,18 +3598,14 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 				h.config.onChange(h.getBeanValue());
 			}
 		});
-		
-		h.label = new Element("DIV", {
-			style: "position:absolute; top:10px; left:10px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;"
-		});
-		h.label.insert(h.config.label);
+
+		h.inside.title = h.config.label;
 
     	h.underline = new Element("DIV", {
     		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:120px"
     	});
 
 		h.inside.insert(h.underline);
-		h.inside.insert(h.label);
 		h.inside.insert(h.input);
 		
 		h.fab = new UI.Fab({
@@ -3766,33 +3756,38 @@ UI.BooleanFormField = Class.create({
     			style: "position:relative; top:0px; height:40px; width:100%; line-height:20px;"
     		});
     		h.label = new Element("DIV", {
-    			style: "position:absolute; top:20px; left:50px; border:0px; height:10px; color:#cdcdcf; font-weight:bold; font-size:14px;"
+    			style: "position:absolute; top:20px; left:60px; border:0px; height:10px; color:grey; font-weight:bold; font-size:14px;"
     		});
     		h.label.insert(h.config.label);
     		
-    		h.falseFab = new Element("DIV", {
-    			style: "box-shadow: 3px 3px 8px #666666; position:absolute; border-radius:50%; top:20px; left:20px; width:20px; height:20px; background-color:grey; background-image:url('" + $ICON("done") + "')"
+    		h.fab = new Element("DIV", {
+    			class: "boolean-fab"
     		});
-    		h.falseFab.on("click", function() {
-				h.switchOn();
-				h.setBeanValue(true);
+    		h.fab.on("click", function() {
+				h.switchValue();
     		});
-    		h.inside.insert(h.falseFab);
-    		
-    		h.trueFab = new Element("DIV", {
-    			style: "position:absolute; border-radius:50%; top:20px; left:20px; width:20px; height:20px; background-color:green; background-image:url('" + $ICON("done") + "')"
-    		});
-    		h.trueFab.on("click", function() {
-				h.switchOff();
-				h.setBeanValue(false);
-    		});
-    		h.inside.insert(h.trueFab);
-    		
+    		h.inside.insert(h.fab);
+
     		if (this.config.value == false) {
-	    		h.trueFab.hide();
+	    		//h.trueFab.hide();
     		}
 
+    		h.switchValue();
+    		h.switchValue();
+
 		h.inside.insert(h.label);
+    },
+    switchValue: function() {
+        var h = this;
+
+    	var val = this.getBeanValue();
+    	if (val == undefined || val == false) {
+    	    h.setBeanValue(true);
+            h.switchOn();
+    	} else {
+    	    h.setBeanValue(false);
+    	    h.switchOff();
+    	}
     },
     /**
      * @method setReadOnly
@@ -3806,32 +3801,16 @@ UI.BooleanFormField = Class.create({
      */
     switchOn: function() {
     	var h = this;
-    	
-		h.trueFab.animate([
-		    {opacity: 0.0, transform: "scale(0)"},
-		    {opacity: 1.0, transform: "scale(1)"},
-		], {
-			direction: 'normal',
-		    duration: 500,
-		    easing: "ease",
-			iterations: 1,
-			fill: "both"
-		});
-		
-		h.label.animate([
-  		    {color: "#cdcdcf"},
-  		    {color: "#999999"},
-  		], {
-  			direction: 'normal',
-  		    duration: 500,
-  		    easing: "ease",
-  			iterations: 1,
-  			fill: "both"
-  		});
-		
+
+    	h.fab.pseudoStyle("after", "transform", "translateX(10px)");
+    	h.fab.pseudoStyle("after", "background-color", "green");
+    	h.fab.setStyle({
+    	    backgroundColor: "#e0ffe0",
+    	    "box-shadow": "3px 3px 8px green"
+    	});
+
 		if (h.config.onChange) {
 			h.config.onChange(true);
-			h.setBeanValue(true);
 		}
     },
     /**
@@ -3839,32 +3818,16 @@ UI.BooleanFormField = Class.create({
      */
     switchOff: function() {
     	var h = this;
-    	
-		h.trueFab.animate([
-		    {opacity: 1.0, transform: "scale(1)"},
-		    {opacity: 0.0, transform: "scale(0)"},
-		], {
-			direction: 'normal',
-		    duration: 500,
-		    easing: "ease",
-			iterations: 1,
-			fill: "both"
-		});
-		
-		h.label.animate([
-   		    {color: "#999999"},
-   		    {color: "#cdcdcf"},
-   		], {
-   			direction: 'normal',
-   		    duration: 500,
-   		    easing: "ease",
-   			iterations: 1,
-   			fill: "both"
-   		});
-		
+
+    	h.fab.pseudoStyle("after", "transform", "translateX(0px)");
+    	h.fab.pseudoStyle("after", "background-color", "#aaaaaa");
+    	h.fab.setStyle({
+    	    backgroundColor: "#f0f0f0",
+    	    "box-shadow": "3px 3px 8px #666666"
+    	});
+
 		if (h.config.onChange) {
 			h.config.onChange(false);
-			h.setBeanValue(false);
 		}
     },
     /**
@@ -4874,15 +4837,6 @@ UI.Grid = Class.create(UI.MaterialComponent, {
             ascDesc = "<";
         }
 
-//        if (columnDefinition.render) {
-//            compareFunction = function(row1, row2) {
-//                var str1 = eval("columnDefinition.render(row1)");
-//                var str2 = eval("columnDefinition.render(row2)");
-//
-//                return eval("str1" + ascDesc + "str2");
-//            }
-//        }
-
         if (columnDefinition.property) {
             compareFunction = function(row1, row2) {
                 var str1 = eval("row1.bean." + columnDefinition.property);
@@ -4902,7 +4856,32 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 	    h.rows.forEach(function(row) {
 	        h.rowsContent.insert(row);
 	    });
-	}
+	},
+    /**
+     *
+     */
+    openDetails: function() {
+        var h = this;
+
+        if (h.detailsMaterial === undefined) {
+            h.detailsMaterial = new UI.Material({
+                inside: h.getMaterial(),
+                modal: true,
+                position: "top:0px; left:0px; width:90%; bottom:0px"
+            });
+        }
+
+        h.detailsMaterial.show();
+
+        return h.detailsMaterial;
+    },
+    closeDetails: function() {
+        var h = this;
+
+        if (h.detailsMaterial !== undefined) {
+            h.detailsMaterial.hide();
+        }
+    }
 });
 
 UI.GridCell = Class.create({
