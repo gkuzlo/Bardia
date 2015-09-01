@@ -1,3 +1,4 @@
+
 var UI = {
     version: "0.1.1",
     uploadAction: "http://localhost:8080/scheduler/file.upload",
@@ -530,6 +531,55 @@ UI.Resources = Class.create({
         return result; 
     }
 });
+
+UI.toHTML = function(json, _root) {
+    var result = null;
+    var root = _root || {};
+	if (json.tag) {
+	    var innerText = null;
+	    var attrs = {};
+	    var attrName = null;
+	    var subElements = null;
+
+	    for (attrName in json) {
+	        if ("$insert" !== attrName && "tag" !== attrName) {
+	            attrs[attrName] = json[attrName];
+	        } else if ("$insert" === attrName) {
+	            if (json["$insert"] && !(json["$insert"] instanceof Array)) {
+	                innerText = json["$insert"];
+	            } else if (json["$insert"] && json["$insert"] instanceof Array) {
+                    json["$insert"].forEach(function(element) {
+                        subElements = subElements || [];
+                        subElements.push(UI.toHTML(element, root));
+                    });
+                }
+	        }
+	    }
+	    result = new Element(json.tag, attrs);
+
+	    if (innerText !== null) {
+	        result.update(innerText);
+	    } else if (subElements !== null) {
+	        subElements.forEach(function(element) {
+	            result.insert(element);
+	        });
+	    }
+	}
+	return result;
+}
+
+UI.upgrade = function(root) {
+    componentHandler.upgradeElement(root);
+    for (var i=0; i<root.childNodes.length; i++) {
+        try {
+            if (root.childNodes[i] instanceof HTMLElement) {
+                UI.upgrade(root.childNodes[i]);
+            }
+        } catch (e) {
+            alert(e);
+        }
+    }
+}
 
 var UID = {
 		_current: 0,

@@ -1,3 +1,4 @@
+
 UI.Fab = Class.create({
 
     initialize: function(config) {

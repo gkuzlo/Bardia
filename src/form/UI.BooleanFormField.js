@@ -1,7 +1,7 @@
 /**
  * @class UI.BooleanFormField
  */
-UI.BooleanFormField = Class.create({
+UI.BooleanFormField = Class.create(UI.TextFormField, {
 
     initialize: function(config) {    	
         this.config = Object.extend({
@@ -22,7 +22,9 @@ UI.BooleanFormField = Class.create({
         	readOnly: false,
         	width: 200,
         	bean: {},
-        	required: false
+        	required: false,
+        	uniqueId: "" + Math.random(),
+        	type: "checkbox"
         }, config || {});
 
         this.render();
@@ -33,175 +35,39 @@ UI.BooleanFormField = Class.create({
      */
     render: function() {
     	var h = this;
-    		h.inside = new Element("DIV", {
-    			style: "position:relative; top:0px; height:40px; width:100%; line-height:20px;"
-    		});
-    		h.label = new Element("DIV", {
-    			style: "position:absolute; top:20px; left:60px; border:0px; height:10px; color:grey; font-weight:bold; font-size:14px;"
-    		});
-    		h.label.insert(h.config.label);
-    		
-    		h.fab = new Element("DIV", {
-    			class: "boolean-fab"
-    		});
 
-    		if (h.config.readOnly === true) {
-    			h.fab.addClassName("boolean-fab-read-only");
-    		}
+    	h.inside = new Element("DIV", {
+            style: "position:relative; height:30px; background:white; margin:0px 10px -10px 10px; display:flex; flex-direction:row; align-items:center;"
+    	});
 
-    		h.fab.on("click", function() {
-    			if (h.config.readOnly === true) {
-    				return;
-    			}
-				h.switchValue();
-    		});
-    		h.inside.insert(h.fab);
+        h.label = new Element("LABEL", {
+            class: "mdl-switch mdl-js-switch mdl-js-ripple-effect",
+            "for": h.config.uniqueId,
+        });
+        h.input = new Element("INPUT", {
+            class: "mdl-switch__input",
+            type: "checkbox",
+            id: h.config.uniqueId,
+            checked: true
+        });
+        h.input.on("change", function(e) {
+            h.changeProperty(e.target.checked);
+        });
+        h.span = new Element("SPAN", {
+            class: "mdl-switch__label",
+        });
+        h.span.update(h.config.label + " " + ((h.config.required)?"*":""));
 
-    		if (this.config.value == false) {
-	    		//h.trueFab.hide();
-    		}
-
-    		h.switchValue();
-    		h.switchValue();
-
+		h.label.insert(h.input);
+		h.label.insert(h.span);
 		h.inside.insert(h.label);
-    },
-    switchValue: function() {
-        var h = this;
 
-    	var val = this.getBeanValue();
-    	if (val == undefined || val == false) {
-    	    h.setBeanValue(true);
-            h.switchOn();
-    	} else {
-    	    h.setBeanValue(false);
-    	    h.switchOff();
-    	}
-    },
-    /**
-     * @method setReadOnly
-     */
-    setReadOnly: function(readOnly) {
-    	var h = this;
-    	var ro = readOnly || false;
-    },
-    /**
-     * @method animateLabel
-     */
-    switchOn: function() {
-    	var h = this;
-
-    	h.fab.pseudoStyle("after", "transform", "translateX(10px)");
-    	h.fab.pseudoStyle("after", "background-color", "green");
-    	h.fab.setStyle({
-    	    backgroundColor: "#e0ffe0",
-    	    "box-shadow": "3px 3px 8px green"
-    	});
-
-		if (h.config.onChange) {
-			h.config.onChange(true);
+		if (h.extendRender) {
+		    h.extendRender();
 		}
-    },
-    /**
-     * @method unanimateLabel
-     */
-    switchOff: function() {
-    	var h = this;
 
-    	h.fab.pseudoStyle("after", "transform", "translateX(0px)");
-    	h.fab.pseudoStyle("after", "background-color", "#aaaaaa");
-    	h.fab.setStyle({
-    	    backgroundColor: "#f0f0f0",
-    	    "box-shadow": "3px 3px 8px #666666"
-    	});
-
-		if (h.config.onChange) {
-			h.config.onChange(false);
-		}
+		componentHandler.upgradeElement(h.label);
+		componentHandler.upgradeElement(h.input);
+		componentHandler.upgradeElement(h.span);
     },
-    /**
-     * @method getMaterial
-     */
-    getMaterial: function() {
-    	return this.inside;
-    },
-    isEmpty: function(v) {
-    	var result = false;
-    		if (v === undefined || v.trim() == "") {
-    			result = true;
-    		}
-    	return result;
-    },
-    setBean: function(bean) {
-    	var h = this;
-    	h.config.bean = bean;
-		h.setInputValue(h.getBeanValue());
-    },
-    getBeanValue: function() {
-    	var h = this;
-    	var result = eval("h.config.bean." + h.config.property);
-    	return result;
-    },
-    setBeanValue: function(v) {
-    	var h = this;
-    	eval("h.config.bean." + h.config.property + " = " + v);
-    },
-    /**
-     * @method setInputValue
-     */
-    setInputValue: function(val) {
-    	if (val == true) {
-    		this.switchOn();
-    	} else {
-    		this.switchOff();
-    	}
-    },
-    /**
-     * @method getInputValue
-     */
-    getInputValue: function() {
-
-    },
-    /**
-     * walidacja po wpisaniu (na onblur)
-     * 
-     * @method validate
-     */
-    validate: function(v) {
-    	return v;
-    },
-    /**
-     * walidacja podczas wpisywania
-     * 
-     * @method preValidate
-     */
-    preValidate: function() {
-    },
-    /**
-     * 
-     * @returns
-     */
-    getRequired: function() {
-    	return this.config.required;
-    },
-    /**
-     * 
-     */
-    markError: function() {
-    	var h = this;
-
-    	h.label.setStyle({
-    		color: "#cf6d6d"
-    	});
-    },
-    /**
-     * 
-     */
-    unmarkError: function() {
-    	var h = this;
-
-    	h.label.setStyle({
-    		color: "#cdcdcf"
-    	});
-    }
 });

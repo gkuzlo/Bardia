@@ -26,21 +26,9 @@ UI.Grid = Class.create(UI.MaterialComponent, {
      */
     render: function() {
     	var h = this;
-    	
-    		var mainLayoutConfig = {
-    			inside: h.getMaterial()	
-    		}
-    		
-    		if (h.config.quickSearch === true) {
-    			mainLayoutConfig.south = {
-    				height: 60
-    			}
-    		}
-
-    		h.mainLayout = new UI.BorderLayout(mainLayoutConfig);
 
     		h.panel = new UI.Panel({
-    			inside: h.mainLayout.getDefault(),
+    			inside: h.getMaterial(),
     			buttons: h.config.buttons,
     			title: h.config.title
     		});
@@ -77,25 +65,6 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		h.rowsContent.on("mouseout", "div.grid-row-selected", function(e, element) {
     			element.removeClassName("grid-row-selected");
     		});
-
-    		if (h.config.quickSearch === true) {
-	    		new UI.Form({
-	    			inside: h.mainLayout.getSouth(),
-	    			fields: [
-						 {
-							 property: "search",
-							 label: "Szukaj",
-							 disableTab: true,
-							 onChanging: function(v) {
-								 var f = function() {
-									 h.filter(v);
-								 };
-								 setTimeout(f, 0);
-							 }
-						 }
-	    			]
-	    		});
-    		}
 
     	h.panel.setTitle(h.config.title);
 

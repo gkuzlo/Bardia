@@ -1,3 +1,4 @@
+
 var UI = {
     version: "0.1.1",
     uploadAction: "http://localhost:8080/scheduler/file.upload",
@@ -531,6 +532,55 @@ UI.Resources = Class.create({
     }
 });
 
+UI.toHTML = function(json, _root) {
+    var result = null;
+    var root = _root || {};
+	if (json.tag) {
+	    var innerText = null;
+	    var attrs = {};
+	    var attrName = null;
+	    var subElements = null;
+
+	    for (attrName in json) {
+	        if ("$insert" !== attrName && "tag" !== attrName) {
+	            attrs[attrName] = json[attrName];
+	        } else if ("$insert" === attrName) {
+	            if (json["$insert"] && !(json["$insert"] instanceof Array)) {
+	                innerText = json["$insert"];
+	            } else if (json["$insert"] && json["$insert"] instanceof Array) {
+                    json["$insert"].forEach(function(element) {
+                        subElements = subElements || [];
+                        subElements.push(UI.toHTML(element, root));
+                    });
+                }
+	        }
+	    }
+	    result = new Element(json.tag, attrs);
+
+	    if (innerText !== null) {
+	        result.update(innerText);
+	    } else if (subElements !== null) {
+	        subElements.forEach(function(element) {
+	            result.insert(element);
+	        });
+	    }
+	}
+	return result;
+}
+
+UI.upgrade = function(root) {
+    componentHandler.upgradeElement(root);
+    for (var i=0; i<root.childNodes.length; i++) {
+        try {
+            if (root.childNodes[i] instanceof HTMLElement) {
+                UI.upgrade(root.childNodes[i]);
+            }
+        } catch (e) {
+            alert(e);
+        }
+    }
+}
+
 var UID = {
 		_current: 0,
 		getNew: function(){
@@ -617,17 +667,17 @@ UI.MaterialComponent = Class.create({
     renderMaterial: function() {    	
     	var h = this;
     	
-			h.material = new Element("DIV", {class: "inside"});
+			h.material = new Element("DIV", {});
 			h.config.inside.insert(h.material);
 
 	    	h.material.on("mousedown", function(e) {
 				//e.cancelBubble = true;
-				e.returnValue = false;
+				//e.returnValue = false;
 			});
 			
 	    	h.material.on("click", function(e) {
 				//e.cancelBubble = true;
-				e.returnValue = false;
+				//e.returnValue = false;
 			});
     },
     render: function() {
@@ -753,77 +803,111 @@ UI.PanelToolbar = Class.create({
     	}
     }
 });
-/**
- * @class UI.Panel
- */
-UI.Panel = Class.create(UI.MaterialComponent, {
-	/**
-	 * 
-	 * @param config
-	 */
-    initConfig: function(config) {
+UI.Panel = Class.create({
+    initialize: function(config) {
         this.config = Object.extend({
+            inside: window.document.body
         }, config || {});
+
+        this.render();
     },
-    /**
-     * 
-     */
     render: function() {
         var h = this;
 
-        if (h.config.title || h.config.buttons) {
-			h.mainLayout = new UI.BorderLayout({
-				inside: h.getMaterial(),
-				north: {
-					height: 59
-				}
-			});
-			
-			h.material = new Element("DIV", {
-				style: "position:absolute; top:0px; right:0px; top:0px; bottom:0px; left:0px",
-				class: "panel-header"
-			});
-			h.mainLayout.getNorth().insert(h.material);
-			h.material.title = h.config.title;
+        h.root = h.prepareRoot();
+        h.config.inside.update(h.root);
 
-			h.toolbarDiv = new Element("DIV", {
-				style: "position:absolute; top:15px; height:30px; left:10px; background-color:transparent; width:100%;",
-				class: "panel-toolbar"
-			});
-			h.material.insert(h.toolbarDiv);
+        h.setTabs(h.config.tabs);
 
-			h.setButtons(h.config.buttons);
-        } else {
-			h.mainLayout = new UI.BorderLayout({
-				inside: h.getMaterial()
-			});
-        }
+        UI.upgrade(h.root);
     },
-    /**
-     * 
-     * @returns
-     */
     getContent: function() {
-    	var h = this;
-    	return h.mainLayout.getDefault();
+    	return this.root.querySelector("#contents");
     },
-    /**
-     * 
-     * @param title
-     */
     setTitle: function(title) {
-    	var h = this;
-    		h.material.title = title;
+    	this.root.querySelector("#title").update(title);
     },
-    setButtons: function(buttons) {
-    	var h = this;
+    setTabs: function(tabs) {
+        var h = this;
 
-		h.toolbar = new UI.PanelToolbar({
-			inside: h.toolbarDiv,
-			buttons: buttons || []
-		});
+        if (!tabs) return;
+
+        h.prepareHeaderTabs(tabs);
+        h.prepareContentTabs(tabs);
+    },
+    prepareHeaderTabs: function(tabs) {
+        var h = this;
+
+        if (h.root.querySelector("#header-tabs")) {
+            h.root.querySelector("#header-tabs").update();
+        } else {
+            h.root.querySelector("#header").insert(UI.toHTML({
+                tag: "div", class: "mdl-layout__tab-bar mdl-js-ripple-effect", id: "header-tabs",
+            }));
+        }
+
+        tabs.forEach(function(tab, index) {
+            var tabHeader = UI.toHTML({
+                tag: "a",
+                href: "#tab_" + index,
+                class: "mdl-layout__tab",
+                $insert: tab.name
+            });
+            h.root.querySelector("#header-tabs").insert(tabHeader);
+
+            tabHeader.on("click", function(e) {
+                if (tab.onActivate) {
+                    tab.onActivate(h.root.querySelector("#tab_" + index))
+                }
+            });
+        });
+    },
+    prepareContentTabs: function(tabs) {
+        var h = this;
+
+        h.root.querySelector("#contents").update();
+
+        tabs.forEach(function(tab, index) {
+            var json = {
+                tag: "section", class: "mdl-layout__tab-panel", id: "tab_" + index,
+                $insert: [{
+                    tag: "div", class: "page-content",
+                }]
+            }
+
+            var tabContent = UI.toHTML(json);
+            h.root.querySelector("#contents").insert(tabContent);
+        });
+    },
+    prepareRoot: function() {
+        var h = this;
+
+        var json = {
+            tag: "div", class: "mdl-layout mdl-js-layout mdl-layout--fixed-header",
+            $insert: [{
+                tag: "header", class: "mdl-layout__header", id: "header",
+                $insert: [{
+                    tag: "div", class: "mdl-layout__header-row",
+                    $insert: [{
+                        tag: "span", class: "mdl-layout-title", id: "title",
+                        $insert: h.config.title
+                    }]
+                }]
+            }, {
+                tag: "div", class: "mdl-layout__drawer", style: "max-width:600px",
+                $insert: [{
+                    tag: "span", class: "mdl-layout-title",
+                    $insert: h.config.title,
+                }]
+            }, {
+                tag: "main", class: "mdl-layout__content", id: "contents",
+            }]
+        };
+
+        return UI.toHTML(json);
     }
 });
+
 
 UI.DateUtils = Class.create({
    initialize: function() {
@@ -1383,6 +1467,7 @@ UI.DatePicker = Class.create({
 		}
 	}
 });
+
 UI.Fab = Class.create({
 
     initialize: function(config) {
@@ -1811,15 +1896,21 @@ UI.Material = Class.create({
 
     	}
     	
-//    	h.material.on("mousedown", function(e) {
-//			e.cancelBubble = true;
-//			e.returnValue = false;
-//		});
-//
-//    	h.material.on("click", function(e) {
-//			e.cancelBubble = true;
-//			e.returnValue = false;
-//		});
+    	h.material.on("mousedown", function(e) {
+    		if (e.cancelBubble) {
+    			e.cancelBubble = true;
+    		} else if (e.cancelPropagation) {
+    			e.cancelPropagation();
+    		}
+		});
+
+    	h.material.on("click", function(e) {
+    		if (e.cancelBubble) {
+    			e.cancelBubble = true;
+    		} else if (e.cancelPropagation) {
+    			e.cancelPropagation();
+    		}
+		});
 
     	h.config.inside.insert(h.material);
     },
@@ -2321,6 +2412,11 @@ UI.Form = Class.create(UI.MaterialComponent, {
     		buttons: h.config.buttons
     	});
 
+    	var fields = new Element("DIV", {
+    		style: "overflow:hidden; display:flex; flex-direction:column; align-content:flex-start; background:white"
+    	});
+    	h.panel.getContent().update(fields);
+
     	if (h.config.fields !== undefined) {
     		var i=0;
     		for (i=0; i<h.config.fields.length; i++) {		
@@ -2341,7 +2437,7 @@ UI.Form = Class.create(UI.MaterialComponent, {
 
     					h.config.fieldControlls.push(field);
 
-    				h.panel.getContent().insert(field.getMaterial());
+    				fields.insert(field.getMaterial());
     		}
     	}
     },
@@ -2352,6 +2448,13 @@ UI.Form = Class.create(UI.MaterialComponent, {
     setTitle: function(title) {
     	var h = this;
     		h.panel.setTitle(title);
+    },
+    propertyChanged: function(propertyName, propertyValue) {
+    	var h = this;
+
+    	if (h.config.onChange) {
+    		h.config.onChange(propertyName, propertyValue);
+    	}
     },
     /**
      * Metoda zwraca pole formularza dla zadanej właściwości
@@ -2451,17 +2554,11 @@ UI.Form = Class.create(UI.MaterialComponent, {
     }
 });
 /**
- * @class UI.TextFormField
+ *
  */
 UI.TextFormField = Class.create({
-	/**
-	 * @constructor 
-	 */
     initialize: function() {    	
     },
-    /**
-     * @method initConfig
-     */
     initConfig: function(config) {
         this.config = Object.extend({
         	property: "$",
@@ -2469,154 +2566,122 @@ UI.TextFormField = Class.create({
         	readOnly: false,
         	width: 200,
         	bean: {},
-        	mask: new Input(null),
-        	required: false
+        	required: false,
+        	type: "text",
+        	uniqueId: "" + Math.random(),
+        	pattern: ".*"
         }, config || {});
 
         this.render();
         this.setReadOnly(this.config.readOnly);
     },
-    /**
-     * @method render
-     */
+    setBean: function(bean) {
+    	var h = this;
+    	h.config.bean = bean;
+
+    	h.displayProperty(h.getProperty());
+    },
+    setProperty: function(propertyValue) {
+        var h = this;
+        eval("h.config.bean." + h.config.property + " = propertyValue;");
+    },
+    getProperty: function() {
+        var h = this;
+        return eval("h.config.bean." + h.config.property + ";");
+    },
+    displayProperty: function(propertyValue) {
+        var h = this;
+        h.validateProperty(propertyValue);
+        if (propertyValue !== undefined) {
+            h.input.value = h.formatValue(propertyValue);
+            h.insideDiv.addClassName("is-dirty");
+        }
+    },
+    formatValue: function(propertyValue) {
+        var h = this;
+        if (h.config.render) {
+            return h.config.render(propertyValue);
+        }
+        return propertyValue;
+    },
+    validateProperty: function(propertyValue) {
+        var h = this;
+        var result = true;
+        return result;
+    },
+    changeProperty: function(propertyValue) {
+        var h = this;
+        if (true === h.validateProperty(propertyValue)) {
+            h.setProperty(propertyValue);
+            h.form.propertyChanged(h.config.property, propertyValue);
+        }
+    },
+    changingProperty: function(propertyValue) {
+        var h = this;
+        if (true === h.validateProperty(propertyValue)) {
+
+        }
+    },
     render: function() {
     	var h = this;
 
-		h.inside = new Element("DIV", {
-			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
-			class: "text-form-field"
-		});
-		h.input = new Element("INPUT", {
-			type: "text",
-			style: "position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px"
-		});
-		h.input.on("focus", function() {
-			h.animateLabel();
-		});
-
-		if (h.config.mask) {
-			var mask = new InputMask(h.config.mask, h.input);
-				mask.blurFunction = function(e) {
-					if (h.config.onChange !== undefined) {
-						h.config.onChange(h.getBeanValue());
-					}
-        			if (h.isEmpty(h.input.value)) {
-        				h.unanimateLabel();
-        			}
-				};
-    			mask.keyUpFunction = function(e) {
-        			h.setBeanValue();
-
-        			if (13 == e.keyCode) {
-        				if (h.config.onEnter) {
-        					h.config.onEnter();
-        				}
-        			}
-        			
-        			if (h.config.onChanging !== undefined) {
-        				h.config.onChanging(h.getBeanValue());
-        			}    				
-    			};
-		} else {
-    		h.input.on("blur", function(e) {
-    			if (h.isEmpty(h.input.value)) {
-    				h.unanimateLabel();
-    			}
-    			if (h.config.onChange !== undefined) {
-    				h.config.onChange(h.getBeanValue());
-    			}
-    		});
-    		h.input.on("keyup", function(e) {
-    			h.setBeanValue();
-    			
-    			if (h.config.onChanging !== undefined) {
-    				h.config.onChanging(h.getBeanValue());
-    			}
-    		});
-    		h.input.on("keydown", function(e) {
-    			
-    			if (13 == e.keyCode) {
-    				if (h.config.onEnter) {
-    					h.config.onEnter();
-    				}
-    			}
-    			
-    			e.cancelBubble = true;
-    		});
-		}
-
-		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
-
-    	h.underline = new Element("DIV", {
-    		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:" + h.config.width + "px"
+    	h.inside = new Element("DIV", {
+            style: "position:relative; background:white; margin:0px 10px -15px 10px; display:flex; flex-direction:row; align-items:center;"
     	});
 
-		h.inside.insert(h.underline);
-		h.inside.insert(h.input);
-		
-		h.curtain = new Element("DIV", {
-			style: "position:absolute; top:20px; left:10px; height:21px; background-color:grey; opacity:0.1; width:" + h.config.width + "px"
-		});
-		h.inside.insert(h.curtain);
+        h.insideDiv = new Element("DIV", {
+            class: "mdl-textfield mdl-js-textfield mdl-textfield--floating-label",
+        });
+        h.input = new Element("INPUT", {
+            class: "mdl-textfield__input",
+            type: h.config.type,
+            id: h.config.uniqueId,
+            pattern: h.config.pattern
+        });
 
-		if (h.config.disableTab == true) {
-			var fakeInput = new Element("INPUT", {
-				style: "width:0px; border:0px; visible:false"
-			});
+        h.input.on("change", function(e) {
+            h.changeProperty(h.input.value);
+        });
+        h.input.on("keyup", function(e) {
+            h.changingProperty(h.input.value);
+        });
 
-			fakeInput.on("focus", function(e) {
-				h.input.focus();
-			});
-			h.inside.insert(fakeInput);
+        h.span = new Element("SPAN", {
+            class: "mdl-textfield__error",
+            style: "position:absolute; top:0px; right:0px"
+        });
+        h.span.update(h.config.pattern);
+
+        h.label = new Element("LABEL", {
+            class: "mdl-textfield__label",
+            "for": h.config.uniqueId,
+        });
+        h.label.update(h.config.label + " " + ((h.config.required)?"*":""));
+
+		h.insideDiv.insert(h.input);
+		h.insideDiv.insert(h.label);
+		h.insideDiv.insert(h.span);
+		h.inside.insert(h.insideDiv);
+
+		if (h.extendRender) {
+		    h.extendRender();
 		}
+
+		componentHandler.upgradeElement(h.insideDiv);
+		componentHandler.upgradeElement(h.input);
+		componentHandler.upgradeElement(h.label);
+		componentHandler.upgradeElement(h.span);
     },
-    /**
-     * @method setReadOnly
-     */
     setReadOnly: function(readOnly) {
     	var h = this;
     	var ro = readOnly || false;
 
     	h.input.readOnly = ro;
     	h.input.disabled = ro;
-    	
-    	if (h.curtain) {
-	    	if (ro === true) {
-	    		h.curtain.show();
-	    	} else {
-	    		h.curtain.hide();
-	    	}
-    	}
     },
-    /**
-     * @method animateLabel
-     */
-    animateLabel: function() {
-        var h = this;
-
-        h.inside.pseudoStyle("before", "transform", "translateY(-17px)");
-        h.inside.pseudoStyle("before", "font-size", "12px");
-    },
-    /**
-     * @method unanimateLabel
-     */
-    unanimateLabel: function() {
-        var h = this;
-
-        h.inside.pseudoStyle("before", "transform", "translateY(0px)");
-        h.inside.pseudoStyle("before", "font-size", "14px");
-    },
-    /**
-     * @method getMaterial
-     */
     getMaterial: function() {
     	return this.inside;
     },
-    /**
-     * 
-     * @param v
-     * @returns {Boolean}
-     */
     isEmpty: function(v) {
     	var result = false;
     		if (v === undefined || v.trim() == "") {
@@ -2624,101 +2689,9 @@ UI.TextFormField = Class.create({
     		}
     	return result;
     },
-    setBean: function(bean) {
-    	var h = this;
-    	h.config.bean = bean;
-    	
-    	var v = h.getBeanValue();
-		h.setInputValue(v);
-    },
-    getBeanValue: function() {
-    	var h = this;
-    	var r = undefined;
-    		try {
-    			r = eval("h.config.bean." + h.config.property);
-    		} catch (e) {
-    			
-    		}
-    	return r;
-    },
-    setBeanValue: function(v) {
-    	var h = this;
-    	
-    	var v = h.getInputValue();
-    	if (h.config.parse != undefined) {
-    		v = h.config.parse(v);
-    	}
-    	
-    	eval("h.config.bean." + h.config.property + " = v;");
-    },
-    /**
-     * @method setInputValue
-     */
-    setInputValue: function(val) {
-    	var h = this;
-    	
-    	if (val === undefined) {
-    		val = "";
-    	}
-    	
-    	var v = new String(val);
-
-    	if (v !== undefined && v.trim() !== "" && v.trim() !== '') {
-    		h.animateLabel();
-    		h.input.value = v;
-    	} else {
-    		h.input.value = "";
-    		h.unanimateLabel();
-    	}
-    },
-    /**
-     * @method getInputValue
-     */
-    getInputValue: function() {
-    	var h = this;
-    	var val = null;
-            val = h.input.value;
-            val = h.validate(val);
-    	return val;
-    },
-    /**
-     * 
-     * @returns
-     */
     getRequired: function() {
     	return this.config.required;
     },
-    /**
-     * walidacja po wpisaniu (na onblur)
-     * 
-     * @method validate
-     */
-    validate: function(v) {
-    	return v;
-    },
-    /**
-     * walidacja podczas wpisywania
-     * 
-     * @method preValidate
-     */
-    preValidate: function() {
-    },
-    /**
-     * 
-     */
-    markError: function() {
-    	var h = this;
-
-		h.inside.pseudoStyle("before", "color", "red");
-    },
-    /**
-     * 
-     */
-    unmarkError: function() {
-    	var h = this;
-
-		h.inside.pseudoStyle("before", "color", "grey");
-    }
 });
 /**
  * @class UI.LongTextFormField
@@ -2978,113 +2951,28 @@ UI.LongTextFormField = Class.create({
  * @class UI.LookupFormField
  */
 UI.LookupFormField = Class.create(UI.TextFormField, {
-	render: function() {
-    	var h = this;
-
-		h.inside = new Element("DIV", {
-			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
-			class: "text-form-field"
-		});
-		h.input = new Element("INPUT", {
-			type: "text",
-			readOnly: true,
-			style: "position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px"
-		});
-
-//		h.input.on("focus", function() {
-//			h.animateLabel();
-//		});
-//		h.input.on("blur", function(e) {
-//			if (h.isEmpty(h.input.value)) {
-//				h.unanimateLabel()
-//			}
-//		});
-//		h.input.on("change", function(e) {
-//			if (h.config.onChange !== undefined) {
-//				h.config.onChange(h.getBeanValue());
-//			}
-//		});
-//		h.input.on("keyup", function(e) {
-//			h.setBeanValue(h.getInputValue());
-//
-//			if (h.config.onChanging !== undefined) {
-//				h.config.onChanging(h.getBeanValue());
-//			}
-//		});
-		//h.input.disabled = true;
-
-		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
-
-    	h.underline = new Element("DIV", {
-    		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:" + h.config.width + "px"
-    	});
-
-		h.inside.insert(h.underline);
-		h.inside.insert(h.input);
-
-		h.fab = new UI.Fab({
-			inside: h.inside,
-			style: "position:absolute; left:" + h.config.width + "px; width:20px; height:20px; top:18px;",
-			fill: "green",
-			icon: "download",
-			bottom: 8,
-			onClick: function() {
-				h.showLookupCard();
-			}
-		});
-	},
-	/**
-	 * @method setInputValue
-	 */
-    setInputValue: function(bean) {
-    	var h = this;
-    	
-    	if (bean !== undefined) {
-    		h.animateLabel();
-    		if (h.config.pattern !== undefined) {
-    			h.input.value = STRUTILS.compile(h.config.pattern, bean);
-    		} else if (h.config.patternRenderer !== undefined) {
-    			h.input.value = h.config.patternRenderer(bean);
-    		} else if (h.config.render !== undefined) {
-    		    h.input.value = h.config.render(bean);
-    		}
-    	} else {
-    		h.input.value = "";
-    		h.unanimateLabel();
-    	}
-    },
-
-    setBeanValue: function(bean) {
-    	var h = this;
-
-    	eval("h.config.bean." + h.config.property + " = bean;");
-
-		if (h.config.onChange !== undefined) {
-			h.config.onChange(h.getBeanValue());
-		}
-    },
-
-    getBeanValue: function() {
-    	var h = this;
-    	var r = undefined;
-    		try {
-    			r = eval("h.config.bean." + h.config.property);
-    		} catch (e) {
-				alert(e);
-    		}
-    	return r;
-    },
     /**
-     * @method setReadOnly
+     *
      */
-    setReadOnly: function(readOnly) {
-    	var h = this;
+    extendRender: function() {
+        var h = this;
 
-    	var ro = readOnly || false;
+        h.fab = new Element("BUTTON", {
+            class: "mdl-button mdl-js-button mdl-button--icon",
+        });
+        h.icon = new Element("I", {
+            class: "material-icons"
+        });
+        h.icon.update("search");
+        h.fab.insert(h.icon);
 
-    	h.fab.getMaterial().setStyle({
-    		display: (ro==true)?"none":"block"
-    	});
+        componentHandler.upgradeElement(h.fab);
+
+        h.inside.insert(h.fab);
+
+        h.fab.on("click", function(e) {
+            h.showLookupCard();
+        });
     },
     /**
      * @method showLookupCard
@@ -3094,101 +2982,58 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
     	
 		var f = h.form.getMaterial();
 		var formOffset = f.cumulativeOffset();
-		var fieldOffset = h.fab.material.cumulativeOffset(); 
-						
-		h.tmpFab = h.fab.material.clone();
+		var fieldOffset = h.fab.cumulativeOffset();
+
+		h.tmpFab = new Element("DIV", {
+		});
+
 		h.tmpFab.setStyle({
 			bottom: "",
+			position: "absolute",
+			backgroundColor: "grey",
 			border: "border: 1px solid transparent;",
 			top: (fieldOffset.top - formOffset.top) + "px",
 			left: (fieldOffset.left - formOffset.left) + "px",
-			overflow: "hidden"
+			width: h.fab.getWidth() + "px",
+			height: h.fab.getHeight() + "px",
+			overflow: "hidden",
+			zIndex: 100000
 		});
+
 		f.insert(h.tmpFab);
 
-		h.list = new UI.List({
-			inside: h.tmpFab,
-			title: h.config.label,
-			render: function(row) {
-				var result = "";
-					if (h.config.patternRenderer) {
-						result = h.config.patternRenderer(row.bean);
-					} else {
-						result = STRUTILS.compile(h.config.pattern, row.bean);
-					}
-				return result;
-			},
-			onClick: function(row) {
-                h.setProperty(row.bean);
-			}
-		});
-
-		var fab = new UI.Fab({
-			inside: h.tmpFab,
-			top: 80,
-			title: "Zamknij list�",
-			fill: "red",
-			text: "<",
-			onClick: function() {
-				h.removeLookupCard();
-			}
-		});
-
-		var player = h.tmpFab.animate([
+		$PLAY(h.tmpFab, [
   		    {
-  		     opacity: 0.5, 
-  		     height: h.fab.material.getHeight() + "px", 
-  		     borderRadius: "0%", 
-  		     top: (fieldOffset.top - formOffset.top) + "px", 
-  		     left: (fieldOffset.left - formOffset.left) + "px", 
-  		     width: h.fab.material.getWidth() + "px", 
-  		     backgroundColor: h.fab.config.fill
+  		     opacity: 0.5,
+  		     height: h.fab.getHeight() + "px",
+  		     top: (fieldOffset.top - formOffset.top) + "px",
+  		     left: (fieldOffset.left - formOffset.left) + "px",
+  		     width: h.fab.getWidth() + "px",
+  		     backgroundColor: "grey",
   		    },
   		    {
-  		     opacity: 1.0, 
-  		     height: f.getHeight() + "px", 
-  		     borderRadius: "0%", 
-  		     top:"0px", 
-  		     left:"0px", 
-  		     width: f.getWidth() + "px", 
-  		     backgroundColor: "white"
+  		     opacity: 1.0,
+  		     height: f.getHeight() + "px",
+  		     top:"0px",
+  		     left:"0px",
+  		     width: f.getWidth() + "px",
+  		     backgroundColor: "white",
   		    },
-  		], {
-  			direction: 'normal',
-  		    duration: 450,
-  		    easing: "ease",
-  			iterations: 1,
-  			fill: "both"
+  		], function() {
+
   		});
 
-		player.onfinish = function() {
-			if (h.config.fetchList) {
-				h.config.fetchList(h.list);
-			}
-			if (h.config.onExpand) {
-			    h.config.onExpand(h, h.tmpFab);
-			}
-		};
+        if (h.config.onExpand) {
+            h.config.onExpand(h, h.tmpFab);
+        }
     },
 
-    setProperty: function(bean) {
+    setProperty: function(propertyValue) {
         var h = this;
 
-        h.setBeanValue(bean);
-        h.setInputValue(bean);
+        eval("h.config.bean." + h.config.property + " = propertyValue;");
+        h.displayProperty(propertyValue);
         h.removeLookupCard();
-    },
-
-    getInputValue: function() {
-    	var h = this;
-    	var val = null;
-		val = h.input.value;
-		val = h.validate(val);
-    	return val;
-    },
-
-    getList: function() {
-    	return this.list;
     },
 
     removeLookupCard: function() {
@@ -3196,7 +3041,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
     	
 		var f = h.form.getMaterial();
 		var formOffset = f.cumulativeOffset();
-		var fieldOffset = h.fab.material.cumulativeOffset(); 
+		var fieldOffset = h.fab.cumulativeOffset();
 
 		var player = h.tmpFab.animate([
 		    {
@@ -3215,7 +3060,7 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 	  		     top: (fieldOffset.top - formOffset.top) + "px", 
 	  		     left: (fieldOffset.left - formOffset.left) + "px", 
 	  		     width: "0px", 
-	  		     backgroundColor: h.fab.config.fill
+	  		     backgroundColor: "black"
 	  		    },
 	  		], {
 	  			direction: 'normal',
@@ -3759,7 +3604,7 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 /**
  * @class UI.BooleanFormField
  */
-UI.BooleanFormField = Class.create({
+UI.BooleanFormField = Class.create(UI.TextFormField, {
 
     initialize: function(config) {    	
         this.config = Object.extend({
@@ -3780,7 +3625,9 @@ UI.BooleanFormField = Class.create({
         	readOnly: false,
         	width: 200,
         	bean: {},
-        	required: false
+        	required: false,
+        	uniqueId: "" + Math.random(),
+        	type: "checkbox"
         }, config || {});
 
         this.render();
@@ -3791,316 +3638,88 @@ UI.BooleanFormField = Class.create({
      */
     render: function() {
     	var h = this;
-    		h.inside = new Element("DIV", {
-    			style: "position:relative; top:0px; height:40px; width:100%; line-height:20px;"
-    		});
-    		h.label = new Element("DIV", {
-    			style: "position:absolute; top:20px; left:60px; border:0px; height:10px; color:grey; font-weight:bold; font-size:14px;"
-    		});
-    		h.label.insert(h.config.label);
-    		
-    		h.fab = new Element("DIV", {
-    			class: "boolean-fab"
-    		});
 
-    		if (h.config.readOnly === true) {
-    			h.fab.addClassName("boolean-fab-read-only");
-    		}
+    	h.inside = new Element("DIV", {
+            style: "position:relative; height:30px; background:white; margin:0px 10px -10px 10px; display:flex; flex-direction:row; align-items:center;"
+    	});
 
-    		h.fab.on("click", function() {
-    			if (h.config.readOnly === true) {
-    				return;
-    			}
-				h.switchValue();
-    		});
-    		h.inside.insert(h.fab);
+        h.label = new Element("LABEL", {
+            class: "mdl-switch mdl-js-switch mdl-js-ripple-effect",
+            "for": h.config.uniqueId,
+        });
+        h.input = new Element("INPUT", {
+            class: "mdl-switch__input",
+            type: "checkbox",
+            id: h.config.uniqueId,
+            checked: true
+        });
+        h.input.on("change", function(e) {
+            h.changeProperty(e.target.checked);
+        });
+        h.span = new Element("SPAN", {
+            class: "mdl-switch__label",
+        });
+        h.span.update(h.config.label + " " + ((h.config.required)?"*":""));
 
-    		if (this.config.value == false) {
-	    		//h.trueFab.hide();
-    		}
-
-    		h.switchValue();
-    		h.switchValue();
-
+		h.label.insert(h.input);
+		h.label.insert(h.span);
 		h.inside.insert(h.label);
-    },
-    switchValue: function() {
-        var h = this;
 
-    	var val = this.getBeanValue();
-    	if (val == undefined || val == false) {
-    	    h.setBeanValue(true);
-            h.switchOn();
-    	} else {
-    	    h.setBeanValue(false);
-    	    h.switchOff();
-    	}
-    },
-    /**
-     * @method setReadOnly
-     */
-    setReadOnly: function(readOnly) {
-    	var h = this;
-    	var ro = readOnly || false;
-    },
-    /**
-     * @method animateLabel
-     */
-    switchOn: function() {
-    	var h = this;
-
-    	h.fab.pseudoStyle("after", "transform", "translateX(10px)");
-    	h.fab.pseudoStyle("after", "background-color", "green");
-    	h.fab.setStyle({
-    	    backgroundColor: "#e0ffe0",
-    	    "box-shadow": "3px 3px 8px green"
-    	});
-
-		if (h.config.onChange) {
-			h.config.onChange(true);
+		if (h.extendRender) {
+		    h.extendRender();
 		}
-    },
-    /**
-     * @method unanimateLabel
-     */
-    switchOff: function() {
-    	var h = this;
 
-    	h.fab.pseudoStyle("after", "transform", "translateX(0px)");
-    	h.fab.pseudoStyle("after", "background-color", "#aaaaaa");
-    	h.fab.setStyle({
-    	    backgroundColor: "#f0f0f0",
-    	    "box-shadow": "3px 3px 8px #666666"
-    	});
-
-		if (h.config.onChange) {
-			h.config.onChange(false);
-		}
+		componentHandler.upgradeElement(h.label);
+		componentHandler.upgradeElement(h.input);
+		componentHandler.upgradeElement(h.span);
     },
-    /**
-     * @method getMaterial
-     */
-    getMaterial: function() {
-    	return this.inside;
-    },
-    isEmpty: function(v) {
-    	var result = false;
-    		if (v === undefined || v.trim() == "") {
-    			result = true;
-    		}
-    	return result;
-    },
-    setBean: function(bean) {
-    	var h = this;
-    	h.config.bean = bean;
-		h.setInputValue(h.getBeanValue());
-    },
-    getBeanValue: function() {
-    	var h = this;
-    	var result = eval("h.config.bean." + h.config.property);
-    	return result;
-    },
-    setBeanValue: function(v) {
-    	var h = this;
-    	eval("h.config.bean." + h.config.property + " = " + v);
-    },
-    /**
-     * @method setInputValue
-     */
-    setInputValue: function(val) {
-    	if (val == true) {
-    		this.switchOn();
-    	} else {
-    		this.switchOff();
-    	}
-    },
-    /**
-     * @method getInputValue
-     */
-    getInputValue: function() {
-
-    },
-    /**
-     * walidacja po wpisaniu (na onblur)
-     * 
-     * @method validate
-     */
-    validate: function(v) {
-    	return v;
-    },
-    /**
-     * walidacja podczas wpisywania
-     * 
-     * @method preValidate
-     */
-    preValidate: function() {
-    },
-    /**
-     * 
-     * @returns
-     */
-    getRequired: function() {
-    	return this.config.required;
-    },
-    /**
-     * 
-     */
-    markError: function() {
-    	var h = this;
-
-    	h.label.setStyle({
-    		color: "#cf6d6d"
-    	});
-    },
-    /**
-     * 
-     */
-    unmarkError: function() {
-    	var h = this;
-
-    	h.label.setStyle({
-    		color: "#cdcdcf"
-    	});
-    }
 });
 UI.PasswordFormField = Class.create(UI.TextFormField, {
-    /**
-     * @method render
-     */
-    render: function() {
-    	var h = this;
-    	
-		h.inside = new Element("DIV", {
-			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
-			class: "text-form-field"
-		});
-
-    		h.input = new Element("INPUT", {
-    			type: "password",
-    			style: "position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px"
-    		});
-    		h.input.on("focus", function() {
-    			h.animateLabel();
-    		});
-    		    		
-    		h.input.on("blur", function(e) {
-    			if (h.isEmpty(h.input.value)) {
-    				h.unanimateLabel()
-    			}
-    		});
-    		h.input.on("change", function(e) {
-    			if (h.config.onChange !== undefined) {
-    				h.config.onChange(h.getBeanValue());
-    			}
-    		});
-    		h.input.on("keyup", function(e) {
-    			h.setBeanValue(h.getInputValue());
-    			
-    			if (h.config.onChanging !== undefined) {
-    				h.config.onChanging(h.getBeanValue());
-    			}
-    		});
-    		h.input.on("keydown", function(e) {
-    			
-    			if (13 == e.keyCode) {
-    				if (h.config.onEnter) {
-    					h.config.onEnter();
-    				}
-    			}
-    			
-    			e.cancelBubble = true;
-    		});
-
-    	h.underline = new Element("DIV", {
-    		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:" + h.config.width + "px"
-    	});
-
-	    	h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
-
-		h.inside.insert(h.underline);
-		h.inside.insert(h.input);
-
-		if (h.config.disableTab == true) {
-			var fakeInput = new Element("INPUT", {
-				style: "width:0px; border:0px; visible:false"
-			});
-
-			fakeInput.on("focus", function(e) {
-				h.input.focus();
-			});
-			h.inside.insert(fakeInput);
-		}
-    }
-});
-/**
- * 
- * 
- * @class UI.IntegerFormField
- */
-UI.IntegerFormField = Class.create(UI.TextFormField, {
-    /**
-     * @method setConfig
-     */
     initConfig: function(config) {
-    	
-    	var h = this;
-    	
-    	var numbers=new Input(JST_CHARS_NUMBERS);
-
-    	var UI_MASK_INTEGER=[numbers];
-    	    	
         this.config = Object.extend({
         	property: "$",
         	disableTab: false,
         	readOnly: false,
         	width: 200,
         	bean: {},
-        	mask: UI_MASK_INTEGER
-        }, config || {}); 
+        	required: false,
+        	type: "password",
+        	pattern: ".*"
+        }, config || {});
 
         this.render();
         this.setReadOnly(this.config.readOnly);
-        
-		h.input.on("paste", function(e) {
-			var val = e.clipboardData.getData("text/plain");
-				val = val.parseInt(val);
-
-			h.setInputValue(val);
-			e.preventDefault();
-			e.returnValue = false;
-			return false;
-		});
-		
-		h.input.setStyle({
-			textAlign: "right"
-		});
     },
-    setBeanValue: function(v) {
-    	var h = this;
-    	
-    	var v = h.getInputValue();
+});
 
-    	eval("h.config.bean." + h.config.property + " = parseInt(v);");
+UI.IntegerFormField = Class.create(UI.TextFormField, {
+    initConfig: function(config) {
+        this.config = Object.extend({
+        	property: "$",
+        	disableTab: false,
+        	readOnly: false,
+        	width: 200,
+        	bean: {},
+        	required: false,
+        	type: "text",
+        	uniqueId: "" + Math.random(),
+        	pattern: "-?[0-9]*(\.[0-9]+)?"
+        }, config || {});
+
+        this.render();
+        this.setReadOnly(this.config.readOnly);
     },
-    /**
-     * @method setInputValue
-     */
-    setInputValue: function(val) {
-    	var h = this;
-    	
-    	if (val === undefined) {
-    		val = "";
-    	}
-
-    	var v = new String(val);
-
-    	if (v !== undefined && v.trim() !== "" && v.trim() !== '') {
-    		h.animateLabel();
-    		h.input.value = v;
-    	} else {
-    		h.input.value = "";
-    		h.unanimateLabel();
-    	}
+    validateProperty: function(propertyValue) {
+        var h = this;
+        var result = true;
+            try {
+                if (propertyValue !== "" && propertyValue !== undefined && isNaN(parseInt(propertyValue))) {
+                    result = false;
+                }
+            } catch (e) {
+                result = false;
+            }
+        return result;
     },
 });
 /**
@@ -4308,6 +3927,47 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
     },
     getDefault: function() {
         return this.center;
+    }
+});
+
+UI.GridLayout = Class.create({
+    initialize: function(config) {
+        this.config = Object.extend({
+            inside: window.document.body
+        }, config || {});
+
+        this.render();
+    },
+    render: function() {
+        var h = this;
+
+        h.prepareRoot();
+        h.config.inside.update(h.root);
+
+        UI.upgrade(h.root);
+    },
+    prepareRoot: function() {
+        var h = this;
+
+        var json = {
+            tag: "div",
+            class: "mdl-grid",
+            $insert: [{
+                tag: "div",
+                class: "mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet",
+                style: "background-color:grey; padding:10px; height:100%"
+            }, {
+                tag: "div",
+                class: "mdl-cell mdl-cell--4-col mdl-cell--6-col-tablet",
+                style: "background-color:blue; padding:10px; height:100%"
+            }, {
+                tag: "div",
+                class: "mdl-cell mdl-cell--2-col mdl-cell--4-col-phone",
+                style: "background-color:red; padding:10px; height:100%"
+            }]
+        }
+
+        h.root = UI.toHTML(json);
     }
 });
 /**
@@ -4662,21 +4322,9 @@ UI.Grid = Class.create(UI.MaterialComponent, {
      */
     render: function() {
     	var h = this;
-    	
-    		var mainLayoutConfig = {
-    			inside: h.getMaterial()	
-    		}
-    		
-    		if (h.config.quickSearch === true) {
-    			mainLayoutConfig.south = {
-    				height: 60
-    			}
-    		}
-
-    		h.mainLayout = new UI.BorderLayout(mainLayoutConfig);
 
     		h.panel = new UI.Panel({
-    			inside: h.mainLayout.getDefault(),
+    			inside: h.getMaterial(),
     			buttons: h.config.buttons,
     			title: h.config.title
     		});
@@ -4713,25 +4361,6 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		h.rowsContent.on("mouseout", "div.grid-row-selected", function(e, element) {
     			element.removeClassName("grid-row-selected");
     		});
-
-    		if (h.config.quickSearch === true) {
-	    		new UI.Form({
-	    			inside: h.mainLayout.getSouth(),
-	    			fields: [
-						 {
-							 property: "search",
-							 label: "Szukaj",
-							 disableTab: true,
-							 onChanging: function(v) {
-								 var f = function() {
-									 h.filter(v);
-								 };
-								 setTimeout(f, 0);
-							 }
-						 }
-	    			]
-	    		});
-    		}
 
     	h.panel.setTitle(h.config.title);
 
@@ -5176,6 +4805,7 @@ UI.IconToolbar = Class.create(UI.MaterialComponent, {
 	}
 });
 	
+
 UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 
     initConfig: function(config) {
@@ -5598,3 +5228,14 @@ UI.Tabs = Class.create(UI.MaterialComponent, {
     	h.toolbar.removeLastItem();
     }
 });
+/**
+ * material-design-lite - Material Design Components in CSS, JS and HTML
+ * @version v1.0.3
+ * @license Apache-2.0
+ * @copyright 2015 Google, Inc.
+ * @link https://github.com/google/material-design-lite
+ */
+!function(){"use strict";function e(e,s){if(e){if(s.element_.classList.contains(s.CssClasses_.MDL_JS_RIPPLE_EFFECT)){var t=document.createElement("span");t.classList.add(s.CssClasses_.MDL_RIPPLE_CONTAINER),t.classList.add(s.CssClasses_.MDL_JS_RIPPLE_EFFECT);var i=document.createElement("span");i.classList.add(s.CssClasses_.MDL_RIPPLE),t.appendChild(i),e.appendChild(t)}e.addEventListener("click",function(t){t.preventDefault();var i=e.href.split("#")[1],n=s.element_.querySelector("#"+i);s.resetTabState_(),s.resetPanelState_(),e.classList.add(s.CssClasses_.ACTIVE_CLASS),n.classList.add(s.CssClasses_.ACTIVE_CLASS)})}}function s(e,s,t,i){if(e){if(i.tabBar_.classList.contains(i.CssClasses_.JS_RIPPLE_EFFECT)){var n=document.createElement("span");n.classList.add(i.CssClasses_.RIPPLE_CONTAINER),n.classList.add(i.CssClasses_.JS_RIPPLE_EFFECT);var a=document.createElement("span");a.classList.add(i.CssClasses_.RIPPLE),n.appendChild(a),e.appendChild(n)}e.addEventListener("click",function(n){n.preventDefault();var a=e.href.split("#")[1],l=i.content_.querySelector("#"+a);i.resetTabState_(s),i.resetPanelState_(t),e.classList.add(i.CssClasses_.IS_ACTIVE),l.classList.add(i.CssClasses_.IS_ACTIVE)})}}window.componentHandler=function(){function e(e,s){for(var t=0;t<c.length;t++)if(c[t].className===e)return void 0!==s&&(c[t]=s),c[t];return!1}function s(e){var s=e.getAttribute("data-upgraded");return null===s?[""]:s.split(",")}function t(e,t){var i=s(e);return-1!==i.indexOf(t)}function i(s,t){if(void 0===s&&void 0===t)for(var a=0;a<c.length;a++)i(c[a].className,c[a].cssClass);else{var l=s;if(void 0===t){var o=e(l);o&&(t=o.cssClass)}for(var r=document.querySelectorAll("."+t),_=0;_<r.length;_++)n(r[_],l)}}function n(i,n){if(!("object"==typeof i&&i instanceof Element))throw new Error("Invalid argument provided to upgrade MDL element.");var a=s(i),l=[];if(n)t(i,n)||l.push(e(n));else{var o=i.classList;c.forEach(function(e){o.contains(e.cssClass)&&-1===l.indexOf(e)&&!t(i,e.className)&&l.push(e)})}for(var r,_=0,d=l.length;d>_;_++){if(r=l[_],!r)throw new Error("Unable to find a registered component for the given class.");a.push(r.className),i.setAttribute("data-upgraded",a.join(","));var h=new r.classConstructor(i);h[C]=r,p.push(h);for(var u=0,m=r.callbacks.length;m>u;u++)r.callbacks[u](i);r.widget&&(i[r.className]=h);var E=document.createEvent("Events");E.initEvent("mdl-componentupgraded",!0,!0),i.dispatchEvent(E)}}function a(e){Array.isArray(e)||(e="function"==typeof e.item?Array.prototype.slice.call(e):[e]);for(var s,t=0,i=e.length;i>t;t++)s=e[t],s instanceof HTMLElement&&(s.children.length>0&&a(s.children),n(s))}function l(s){var t={classConstructor:s.constructor,className:s.classAsString,cssClass:s.cssClass,widget:void 0===s.widget?!0:s.widget,callbacks:[]};if(c.forEach(function(e){if(e.cssClass===t.cssClass)throw new Error("The provided cssClass has already been registered.");if(e.className===t.className)throw new Error("The provided className has already been registered")}),s.constructor.prototype.hasOwnProperty(C))throw new Error("MDL component classes must not have "+C+" defined as a property.");var i=e(s.classAsString,t);i||c.push(t)}function o(s,t){var i=e(s);i&&i.callbacks.push(t)}function r(){for(var e=0;e<c.length;e++)i(c[e].className)}function _(e){for(var s=0;s<p.length;s++){var t=p[s];if(t.element_===e)return t}}function d(e){if(e&&e[C].classConstructor.prototype.hasOwnProperty(u)){e[u]();var s=p.indexOf(e);p.splice(s,1);var t=e.element_.getAttribute("data-upgraded").split(","),i=t.indexOf(e[C].classAsString);t.splice(i,1),e.element_.setAttribute("data-upgraded",t.join(","));var n=document.createEvent("Events");n.initEvent("mdl-componentdowngraded",!0,!0),e.element_.dispatchEvent(n)}}function h(e){var s=function(e){d(_(e))};if(e instanceof Array||e instanceof NodeList)for(var t=0;t<e.length;t++)s(e[t]);else{if(!(e instanceof Node))throw new Error("Invalid argument provided to downgrade MDL nodes.");s(e)}}var c=[],p=[],u="mdlDowngrade_",C="mdlComponentConfigInternal_";return{upgradeDom:i,upgradeElement:n,upgradeElements:a,upgradeAllRegistered:r,registerUpgradedCallback:o,register:l,downgradeElements:h}}(),window.addEventListener("load",function(){"classList"in document.createElement("div")&&"querySelector"in document&&"addEventListener"in window&&Array.prototype.forEach?(document.documentElement.classList.add("mdl-js"),componentHandler.upgradeAllRegistered()):componentHandler.upgradeElement=componentHandler.register=function(){}}),componentHandler.ComponentConfig,componentHandler.Component,Date.now||(Date.now=function(){return(new Date).getTime()});for(var t=["webkit","moz"],i=0;i<t.length&&!window.requestAnimationFrame;++i){var n=t[i];window.requestAnimationFrame=window[n+"RequestAnimationFrame"],window.cancelAnimationFrame=window[n+"CancelAnimationFrame"]||window[n+"CancelRequestAnimationFrame"]}if(/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent)||!window.requestAnimationFrame||!window.cancelAnimationFrame){var a=0;window.requestAnimationFrame=function(e){var s=Date.now(),t=Math.max(a+16,s);return setTimeout(function(){e(a=t)},t-s)},window.cancelAnimationFrame=clearTimeout}var l=function(e){this.element_=e,this.init()};window.MaterialButton=l,l.prototype.Constant_={},l.prototype.CssClasses_={RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_CONTAINER:"mdl-button__ripple-container",RIPPLE:"mdl-ripple"},l.prototype.blurHandler_=function(e){e&&this.element_.blur()},l.prototype.disable=function(){this.element_.disabled=!0},l.prototype.enable=function(){this.element_.disabled=!1},l.prototype.init=function(){if(this.element_){if(this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)){var e=document.createElement("span");e.classList.add(this.CssClasses_.RIPPLE_CONTAINER),this.rippleElement_=document.createElement("span"),this.rippleElement_.classList.add(this.CssClasses_.RIPPLE),e.appendChild(this.rippleElement_),this.boundRippleBlurHandler=this.blurHandler_.bind(this),this.rippleElement_.addEventListener("mouseup",this.boundRippleBlurHandler),this.element_.appendChild(e)}this.boundButtonBlurHandler=this.blurHandler_.bind(this),this.element_.addEventListener("mouseup",this.boundButtonBlurHandler),this.element_.addEventListener("mouseleave",this.boundButtonBlurHandler)}},l.prototype.mdlDowngrade_=function(){this.rippleElement_&&this.rippleElement_.removeEventListener("mouseup",this.boundRippleBlurHandler),this.element_.removeEventListener("mouseup",this.boundButtonBlurHandler),this.element_.removeEventListener("mouseleave",this.boundButtonBlurHandler)},componentHandler.register({constructor:l,classAsString:"MaterialButton",cssClass:"mdl-js-button",widget:!0});var o=function(e){this.element_=e,this.init()};window.MaterialCheckbox=o,o.prototype.Constant_={TINY_TIMEOUT:.001},o.prototype.CssClasses_={INPUT:"mdl-checkbox__input",BOX_OUTLINE:"mdl-checkbox__box-outline",FOCUS_HELPER:"mdl-checkbox__focus-helper",TICK_OUTLINE:"mdl-checkbox__tick-outline",RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE_CONTAINER:"mdl-checkbox__ripple-container",RIPPLE_CENTER:"mdl-ripple--center",RIPPLE:"mdl-ripple",IS_FOCUSED:"is-focused",IS_DISABLED:"is-disabled",IS_CHECKED:"is-checked",IS_UPGRADED:"is-upgraded"},o.prototype.onChange_=function(e){this.updateClasses_()},o.prototype.onFocus_=function(e){this.element_.classList.add(this.CssClasses_.IS_FOCUSED)},o.prototype.onBlur_=function(e){this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)},o.prototype.onMouseUp_=function(e){this.blur_()},o.prototype.updateClasses_=function(){this.checkDisabled(),this.checkToggleState()},o.prototype.blur_=function(e){window.setTimeout(function(){this.inputElement_.blur()}.bind(this),this.Constant_.TINY_TIMEOUT)},o.prototype.checkToggleState=function(){this.inputElement_.checked?this.element_.classList.add(this.CssClasses_.IS_CHECKED):this.element_.classList.remove(this.CssClasses_.IS_CHECKED)},o.prototype.checkDisabled=function(){this.inputElement_.disabled?this.element_.classList.add(this.CssClasses_.IS_DISABLED):this.element_.classList.remove(this.CssClasses_.IS_DISABLED)},o.prototype.disable=function(){this.inputElement_.disabled=!0,this.updateClasses_()},o.prototype.enable=function(){this.inputElement_.disabled=!1,this.updateClasses_()},o.prototype.check=function(){this.inputElement_.checked=!0,this.updateClasses_()},o.prototype.uncheck=function(){this.inputElement_.checked=!1,this.updateClasses_()},o.prototype.init=function(){if(this.element_){this.inputElement_=this.element_.querySelector("."+this.CssClasses_.INPUT);var e=document.createElement("span");e.classList.add(this.CssClasses_.BOX_OUTLINE);var s=document.createElement("span");s.classList.add(this.CssClasses_.FOCUS_HELPER);var t=document.createElement("span");if(t.classList.add(this.CssClasses_.TICK_OUTLINE),e.appendChild(t),this.element_.appendChild(s),this.element_.appendChild(e),this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)){this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS),this.rippleContainerElement_=document.createElement("span"),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_EFFECT),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER),this.boundRippleMouseUp=this.onMouseUp_.bind(this),this.rippleContainerElement_.addEventListener("mouseup",this.boundRippleMouseUp);var i=document.createElement("span");i.classList.add(this.CssClasses_.RIPPLE),this.rippleContainerElement_.appendChild(i),this.element_.appendChild(this.rippleContainerElement_)}this.boundInputOnChange=this.onChange_.bind(this),this.boundInputOnFocus=this.onFocus_.bind(this),this.boundInputOnBlur=this.onBlur_.bind(this),this.boundElementMouseUp=this.onMouseUp_.bind(this),this.inputElement_.addEventListener("change",this.boundInputOnChange),this.inputElement_.addEventListener("focus",this.boundInputOnFocus),this.inputElement_.addEventListener("blur",this.boundInputOnBlur),this.element_.addEventListener("mouseup",this.boundElementMouseUp),this.updateClasses_(),this.element_.classList.add(this.CssClasses_.IS_UPGRADED)}},o.prototype.mdlDowngrade_=function(){this.rippleContainerElement_&&this.rippleContainerElement_.removeEventListener("mouseup",this.boundRippleMouseUp),this.inputElement_.removeEventListener("change",this.boundInputOnChange),this.inputElement_.removeEventListener("focus",this.boundInputOnFocus),this.inputElement_.removeEventListener("blur",this.boundInputOnBlur),this.element_.removeEventListener("mouseup",this.boundElementMouseUp)},componentHandler.register({constructor:o,classAsString:"MaterialCheckbox",cssClass:"mdl-js-checkbox",widget:!0});var r=function(e){this.element_=e,this.init()};window.MaterialIconToggle=r,r.prototype.Constant_={TINY_TIMEOUT:.001},r.prototype.CssClasses_={INPUT:"mdl-icon-toggle__input",JS_RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE_CONTAINER:"mdl-icon-toggle__ripple-container",RIPPLE_CENTER:"mdl-ripple--center",RIPPLE:"mdl-ripple",IS_FOCUSED:"is-focused",IS_DISABLED:"is-disabled",IS_CHECKED:"is-checked"},r.prototype.onChange_=function(e){this.updateClasses_()},r.prototype.onFocus_=function(e){this.element_.classList.add(this.CssClasses_.IS_FOCUSED)},r.prototype.onBlur_=function(e){this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)},r.prototype.onMouseUp_=function(e){this.blur_()},r.prototype.updateClasses_=function(){this.checkDisabled(),this.checkToggleState()},r.prototype.blur_=function(e){window.setTimeout(function(){this.inputElement_.blur()}.bind(this),this.Constant_.TINY_TIMEOUT)},r.prototype.checkToggleState=function(){this.inputElement_.checked?this.element_.classList.add(this.CssClasses_.IS_CHECKED):this.element_.classList.remove(this.CssClasses_.IS_CHECKED)},r.prototype.checkDisabled=function(){this.inputElement_.disabled?this.element_.classList.add(this.CssClasses_.IS_DISABLED):this.element_.classList.remove(this.CssClasses_.IS_DISABLED)},r.prototype.disable=function(){this.inputElement_.disabled=!0,this.updateClasses_()},r.prototype.enable=function(){this.inputElement_.disabled=!1,this.updateClasses_()},r.prototype.check=function(){this.inputElement_.checked=!0,this.updateClasses_()},r.prototype.uncheck=function(){this.inputElement_.checked=!1,this.updateClasses_()},r.prototype.init=function(){if(this.element_){if(this.inputElement_=this.element_.querySelector("."+this.CssClasses_.INPUT),this.element_.classList.contains(this.CssClasses_.JS_RIPPLE_EFFECT)){this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS),this.rippleContainerElement_=document.createElement("span"),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER),this.rippleContainerElement_.classList.add(this.CssClasses_.JS_RIPPLE_EFFECT),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER),this.boundRippleMouseUp=this.onMouseUp_.bind(this),this.rippleContainerElement_.addEventListener("mouseup",this.boundRippleMouseUp);var e=document.createElement("span");e.classList.add(this.CssClasses_.RIPPLE),this.rippleContainerElement_.appendChild(e),this.element_.appendChild(this.rippleContainerElement_)}this.boundInputOnChange=this.onChange_.bind(this),this.boundInputOnFocus=this.onFocus_.bind(this),this.boundInputOnBlur=this.onBlur_.bind(this),this.boundElementOnMouseUp=this.onMouseUp_.bind(this),this.inputElement_.addEventListener("change",this.boundInputOnChange),this.inputElement_.addEventListener("focus",this.boundInputOnFocus),this.inputElement_.addEventListener("blur",this.boundInputOnBlur),this.element_.addEventListener("mouseup",this.boundElementOnMouseUp),this.updateClasses_(),this.element_.classList.add("is-upgraded")}},r.prototype.mdlDowngrade_=function(){this.rippleContainerElement_&&this.rippleContainerElement_.removeEventListener("mouseup",this.boundRippleMouseUp),this.inputElement_.removeEventListener("change",this.boundInputOnChange),this.inputElement_.removeEventListener("focus",this.boundInputOnFocus),this.inputElement_.removeEventListener("blur",this.boundInputOnBlur),this.element_.removeEventListener("mouseup",this.boundElementOnMouseUp)},componentHandler.register({constructor:r,classAsString:"MaterialIconToggle",cssClass:"mdl-js-icon-toggle",widget:!0});var _=function(e){this.element_=e,this.init()};window.MaterialMenu=_,_.prototype.Constant_={TRANSITION_DURATION_SECONDS:.3,TRANSITION_DURATION_FRACTION:.8,CLOSE_TIMEOUT:150},_.prototype.Keycodes_={ENTER:13,ESCAPE:27,SPACE:32,UP_ARROW:38,DOWN_ARROW:40},_.prototype.CssClasses_={CONTAINER:"mdl-menu__container",OUTLINE:"mdl-menu__outline",ITEM:"mdl-menu__item",ITEM_RIPPLE_CONTAINER:"mdl-menu__item-ripple-container",RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE:"mdl-ripple",IS_UPGRADED:"is-upgraded",IS_VISIBLE:"is-visible",IS_ANIMATING:"is-animating",BOTTOM_LEFT:"mdl-menu--bottom-left",BOTTOM_RIGHT:"mdl-menu--bottom-right",TOP_LEFT:"mdl-menu--top-left",TOP_RIGHT:"mdl-menu--top-right",UNALIGNED:"mdl-menu--unaligned"},_.prototype.init=function(){if(this.element_){var e=document.createElement("div");e.classList.add(this.CssClasses_.CONTAINER),this.element_.parentElement.insertBefore(e,this.element_),this.element_.parentElement.removeChild(this.element_),e.appendChild(this.element_),this.container_=e;var s=document.createElement("div");s.classList.add(this.CssClasses_.OUTLINE),this.outline_=s,e.insertBefore(s,this.element_);var t=this.element_.getAttribute("for"),i=null;t&&(i=document.getElementById(t),i&&(this.forElement_=i,i.addEventListener("click",this.handleForClick_.bind(this)),i.addEventListener("keydown",this.handleForKeyboardEvent_.bind(this))));var n=this.element_.querySelectorAll("."+this.CssClasses_.ITEM);this.boundItemKeydown=this.handleItemKeyboardEvent_.bind(this),this.boundItemClick=this.handleItemClick_.bind(this);for(var a=0;a<n.length;a++)n[a].addEventListener("click",this.boundItemClick),n[a].tabIndex="-1",n[a].addEventListener("keydown",this.boundItemKeydown);if(this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT))for(this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS),a=0;a<n.length;a++){var l=n[a],o=document.createElement("span");o.classList.add(this.CssClasses_.ITEM_RIPPLE_CONTAINER);var r=document.createElement("span");r.classList.add(this.CssClasses_.RIPPLE),o.appendChild(r),l.appendChild(o),l.classList.add(this.CssClasses_.RIPPLE_EFFECT)}this.element_.classList.contains(this.CssClasses_.BOTTOM_LEFT)&&this.outline_.classList.add(this.CssClasses_.BOTTOM_LEFT),this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT)&&this.outline_.classList.add(this.CssClasses_.BOTTOM_RIGHT),this.element_.classList.contains(this.CssClasses_.TOP_LEFT)&&this.outline_.classList.add(this.CssClasses_.TOP_LEFT),this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)&&this.outline_.classList.add(this.CssClasses_.TOP_RIGHT),this.element_.classList.contains(this.CssClasses_.UNALIGNED)&&this.outline_.classList.add(this.CssClasses_.UNALIGNED),e.classList.add(this.CssClasses_.IS_UPGRADED)}},_.prototype.handleForClick_=function(e){if(this.element_&&this.forElement_){var s=this.forElement_.getBoundingClientRect(),t=this.forElement_.parentElement.getBoundingClientRect();this.element_.classList.contains(this.CssClasses_.UNALIGNED)||(this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT)?(this.container_.style.right=t.right-s.right+"px",this.container_.style.top=this.forElement_.offsetTop+this.forElement_.offsetHeight+"px"):this.element_.classList.contains(this.CssClasses_.TOP_LEFT)?(this.container_.style.left=this.forElement_.offsetLeft+"px",this.container_.style.bottom=t.bottom-s.top+"px"):this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)?(this.container_.style.right=t.right-s.right+"px",this.container_.style.bottom=t.bottom-s.top+"px"):(this.container_.style.left=this.forElement_.offsetLeft+"px",this.container_.style.top=this.forElement_.offsetTop+this.forElement_.offsetHeight+"px"))}this.toggle(e)},_.prototype.handleForKeyboardEvent_=function(e){if(this.element_&&this.container_&&this.forElement_){var s=this.element_.querySelectorAll("."+this.CssClasses_.ITEM+":not([disabled])");s&&s.length>0&&this.container_.classList.contains(this.CssClasses_.IS_VISIBLE)&&(e.keyCode===this.Keycodes_.UP_ARROW?(e.preventDefault(),s[s.length-1].focus()):e.keyCode===this.Keycodes_.DOWN_ARROW&&(e.preventDefault(),s[0].focus()))}},_.prototype.handleItemKeyboardEvent_=function(e){if(this.element_&&this.container_){var s=this.element_.querySelectorAll("."+this.CssClasses_.ITEM+":not([disabled])");if(s&&s.length>0&&this.container_.classList.contains(this.CssClasses_.IS_VISIBLE)){var t=Array.prototype.slice.call(s).indexOf(e.target);if(e.keyCode===this.Keycodes_.UP_ARROW)e.preventDefault(),t>0?s[t-1].focus():s[s.length-1].focus();else if(e.keyCode===this.Keycodes_.DOWN_ARROW)e.preventDefault(),s.length>t+1?s[t+1].focus():s[0].focus();else if(e.keyCode===this.Keycodes_.SPACE||e.keyCode===this.Keycodes_.ENTER){e.preventDefault();var i=new MouseEvent("mousedown");e.target.dispatchEvent(i),i=new MouseEvent("mouseup"),e.target.dispatchEvent(i),e.target.click()}else e.keyCode===this.Keycodes_.ESCAPE&&(e.preventDefault(),this.hide())}}},_.prototype.handleItemClick_=function(e){null!==e.target.getAttribute("disabled")?e.stopPropagation():(this.closing_=!0,window.setTimeout(function(e){this.hide(),this.closing_=!1}.bind(this),this.Constant_.CLOSE_TIMEOUT))},_.prototype.applyClip_=function(e,s){this.element_.style.clip=this.element_.classList.contains(this.CssClasses_.UNALIGNED)?null:this.element_.classList.contains(this.CssClasses_.BOTTOM_RIGHT)?"rect(0 "+s+"px 0 "+s+"px)":this.element_.classList.contains(this.CssClasses_.TOP_LEFT)?"rect("+e+"px 0 "+e+"px 0)":this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)?"rect("+e+"px "+s+"px "+e+"px "+s+"px)":null},_.prototype.addAnimationEndListener_=function(){var e=function(){this.element_.removeEventListener("transitionend",e),this.element_.removeEventListener("webkitTransitionEnd",e),this.element_.classList.remove(this.CssClasses_.IS_ANIMATING)}.bind(this);this.element_.addEventListener("transitionend",e),this.element_.addEventListener("webkitTransitionEnd",e)},_.prototype.show=function(e){if(this.element_&&this.container_&&this.outline_){var s=this.element_.getBoundingClientRect().height,t=this.element_.getBoundingClientRect().width;this.container_.style.width=t+"px",this.container_.style.height=s+"px",this.outline_.style.width=t+"px",this.outline_.style.height=s+"px";for(var i=this.Constant_.TRANSITION_DURATION_SECONDS*this.Constant_.TRANSITION_DURATION_FRACTION,n=this.element_.querySelectorAll("."+this.CssClasses_.ITEM),a=0;a<n.length;a++){var l=null;l=this.element_.classList.contains(this.CssClasses_.TOP_LEFT)||this.element_.classList.contains(this.CssClasses_.TOP_RIGHT)?(s-n[a].offsetTop-n[a].offsetHeight)/s*i+"s":n[a].offsetTop/s*i+"s",n[a].style.transitionDelay=l}this.applyClip_(s,t),window.requestAnimationFrame(function(){this.element_.classList.add(this.CssClasses_.IS_ANIMATING),this.element_.style.clip="rect(0 "+t+"px "+s+"px 0)",this.container_.classList.add(this.CssClasses_.IS_VISIBLE)}.bind(this)),this.addAnimationEndListener_();var o=function(s){s===e||this.closing_||(document.removeEventListener("click",o),this.hide())}.bind(this);document.addEventListener("click",o)}},_.prototype.hide=function(){if(this.element_&&this.container_&&this.outline_){for(var e=this.element_.querySelectorAll("."+this.CssClasses_.ITEM),s=0;s<e.length;s++)e[s].style.transitionDelay=null;var t=this.element_.getBoundingClientRect().height,i=this.element_.getBoundingClientRect().width;this.element_.classList.add(this.CssClasses_.IS_ANIMATING),this.applyClip_(t,i),this.container_.classList.remove(this.CssClasses_.IS_VISIBLE),this.addAnimationEndListener_()}},_.prototype.toggle=function(e){this.container_.classList.contains(this.CssClasses_.IS_VISIBLE)?this.hide():this.show(e)},_.prototype.mdlDowngrade_=function(){for(var e=this.element_.querySelectorAll("."+this.CssClasses_.ITEM),s=0;s<e.length;s++)e[s].removeEventListener("click",this.boundItemClick),e[s].removeEventListener("keydown",this.boundItemKeydown)},componentHandler.register({constructor:_,classAsString:"MaterialMenu",cssClass:"mdl-js-menu",widget:!0});var d=function(e){this.element_=e,this.init()};window.MaterialProgress=d,d.prototype.Constant_={},d.prototype.CssClasses_={INDETERMINATE_CLASS:"mdl-progress__indeterminate"},d.prototype.setProgress=function(e){this.element_.classList.contains(this.CssClasses_.INDETERMINATE_CLASS)||(this.progressbar_.style.width=e+"%")},d.prototype.setBuffer=function(e){this.bufferbar_.style.width=e+"%",this.auxbar_.style.width=100-e+"%"},d.prototype.init=function(){if(this.element_){var e=document.createElement("div");e.className="progressbar bar bar1",this.element_.appendChild(e),this.progressbar_=e,e=document.createElement("div"),e.className="bufferbar bar bar2",this.element_.appendChild(e),this.bufferbar_=e,e=document.createElement("div"),e.className="auxbar bar bar3",this.element_.appendChild(e),this.auxbar_=e,this.progressbar_.style.width="0%",this.bufferbar_.style.width="100%",this.auxbar_.style.width="0%",this.element_.classList.add("is-upgraded")}},d.prototype.mdlDowngrade_=function(){for(;this.element_.firstChild;)this.element_.removeChild(this.element_.firstChild)},componentHandler.register({constructor:d,classAsString:"MaterialProgress",cssClass:"mdl-js-progress",widget:!0});var h=function(e){this.element_=e,this.init()};window.MaterialRadio=h,h.prototype.Constant_={TINY_TIMEOUT:.001},h.prototype.CssClasses_={IS_FOCUSED:"is-focused",IS_DISABLED:"is-disabled",IS_CHECKED:"is-checked",IS_UPGRADED:"is-upgraded",JS_RADIO:"mdl-js-radio",RADIO_BTN:"mdl-radio__button",RADIO_OUTER_CIRCLE:"mdl-radio__outer-circle",RADIO_INNER_CIRCLE:"mdl-radio__inner-circle",RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE_CONTAINER:"mdl-radio__ripple-container",RIPPLE_CENTER:"mdl-ripple--center",RIPPLE:"mdl-ripple"},h.prototype.onChange_=function(e){for(var s=document.getElementsByClassName(this.CssClasses_.JS_RADIO),t=0;t<s.length;t++){var i=s[t].querySelector("."+this.CssClasses_.RADIO_BTN);i.getAttribute("name")===this.btnElement_.getAttribute("name")&&s[t].MaterialRadio.updateClasses_()}},h.prototype.onFocus_=function(e){this.element_.classList.add(this.CssClasses_.IS_FOCUSED)},h.prototype.onBlur_=function(e){this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)},h.prototype.onMouseup_=function(e){this.blur_()},h.prototype.updateClasses_=function(){this.checkDisabled(),this.checkToggleState()},h.prototype.blur_=function(e){window.setTimeout(function(){this.btnElement_.blur()}.bind(this),this.Constant_.TINY_TIMEOUT)},h.prototype.checkDisabled=function(){this.btnElement_.disabled?this.element_.classList.add(this.CssClasses_.IS_DISABLED):this.element_.classList.remove(this.CssClasses_.IS_DISABLED)},h.prototype.checkToggleState=function(){this.btnElement_.checked?this.element_.classList.add(this.CssClasses_.IS_CHECKED):this.element_.classList.remove(this.CssClasses_.IS_CHECKED)},h.prototype.disable=function(){this.btnElement_.disabled=!0,this.updateClasses_()},h.prototype.enable=function(){this.btnElement_.disabled=!1,this.updateClasses_()},h.prototype.check=function(){this.btnElement_.checked=!0,this.updateClasses_()},h.prototype.uncheck=function(){this.btnElement_.checked=!1,this.updateClasses_()},h.prototype.init=function(){if(this.element_){this.btnElement_=this.element_.querySelector("."+this.CssClasses_.RADIO_BTN);var e=document.createElement("span");e.classList.add(this.CssClasses_.RADIO_OUTER_CIRCLE);var s=document.createElement("span");s.classList.add(this.CssClasses_.RADIO_INNER_CIRCLE),this.element_.appendChild(e),this.element_.appendChild(s);var t;if(this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)){this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS),t=document.createElement("span"),t.classList.add(this.CssClasses_.RIPPLE_CONTAINER),t.classList.add(this.CssClasses_.RIPPLE_EFFECT),t.classList.add(this.CssClasses_.RIPPLE_CENTER),t.addEventListener("mouseup",this.onMouseup_.bind(this));var i=document.createElement("span");i.classList.add(this.CssClasses_.RIPPLE),t.appendChild(i),this.element_.appendChild(t)}this.btnElement_.addEventListener("change",this.onChange_.bind(this)),this.btnElement_.addEventListener("focus",this.onFocus_.bind(this)),this.btnElement_.addEventListener("blur",this.onBlur_.bind(this)),this.element_.addEventListener("mouseup",this.onMouseup_.bind(this)),this.updateClasses_(),this.element_.classList.add(this.CssClasses_.IS_UPGRADED)}},componentHandler.register({constructor:h,classAsString:"MaterialRadio",cssClass:"mdl-js-radio",widget:!0});var c=function(e){this.element_=e,this.isIE_=window.navigator.msPointerEnabled,this.init()};window.MaterialSlider=c,c.prototype.Constant_={},c.prototype.CssClasses_={IE_CONTAINER:"mdl-slider__ie-container",SLIDER_CONTAINER:"mdl-slider__container",BACKGROUND_FLEX:"mdl-slider__background-flex",BACKGROUND_LOWER:"mdl-slider__background-lower",BACKGROUND_UPPER:"mdl-slider__background-upper",IS_LOWEST_VALUE:"is-lowest-value",IS_UPGRADED:"is-upgraded"},c.prototype.onInput_=function(e){this.updateValueStyles_()},c.prototype.onChange_=function(e){this.updateValueStyles_()},c.prototype.onMouseUp_=function(e){e.target.blur()},c.prototype.onContainerMouseDown_=function(e){if(e.target===this.element_.parentElement){e.preventDefault();var s=new MouseEvent("mousedown",{target:e.target,buttons:e.buttons,clientX:e.clientX,clientY:this.element_.getBoundingClientRect().y});this.element_.dispatchEvent(s)}},c.prototype.updateValueStyles_=function(e){var s=(this.element_.value-this.element_.min)/(this.element_.max-this.element_.min);0===s?this.element_.classList.add(this.CssClasses_.IS_LOWEST_VALUE):this.element_.classList.remove(this.CssClasses_.IS_LOWEST_VALUE),this.isIE_||(this.backgroundLower_.style.flex=s,this.backgroundLower_.style.webkitFlex=s,this.backgroundUpper_.style.flex=1-s,this.backgroundUpper_.style.webkitFlex=1-s)},c.prototype.disable=function(){this.element_.disabled=!0},c.prototype.enable=function(){this.element_.disabled=!1},c.prototype.change=function(e){"undefined"!=typeof e&&(this.element_.value=e),this.updateValueStyles_()},c.prototype.init=function(){if(this.element_){if(this.isIE_){var e=document.createElement("div");e.classList.add(this.CssClasses_.IE_CONTAINER),this.element_.parentElement.insertBefore(e,this.element_),this.element_.parentElement.removeChild(this.element_),e.appendChild(this.element_)}else{var s=document.createElement("div");s.classList.add(this.CssClasses_.SLIDER_CONTAINER),this.element_.parentElement.insertBefore(s,this.element_),this.element_.parentElement.removeChild(this.element_),s.appendChild(this.element_);var t=document.createElement("div");t.classList.add(this.CssClasses_.BACKGROUND_FLEX),s.appendChild(t),this.backgroundLower_=document.createElement("div"),this.backgroundLower_.classList.add(this.CssClasses_.BACKGROUND_LOWER),t.appendChild(this.backgroundLower_),this.backgroundUpper_=document.createElement("div"),this.backgroundUpper_.classList.add(this.CssClasses_.BACKGROUND_UPPER),t.appendChild(this.backgroundUpper_)}this.boundInputHandler=this.onInput_.bind(this),this.boundChangeHandler=this.onChange_.bind(this),this.boundMouseUpHandler=this.onMouseUp_.bind(this),this.boundContainerMouseDownHandler=this.onContainerMouseDown_.bind(this),this.element_.addEventListener("input",this.boundInputHandler),this.element_.addEventListener("change",this.boundChangeHandler),this.element_.addEventListener("mouseup",this.boundMouseUpHandler),this.element_.parentElement.addEventListener("mousedown",this.boundContainerMouseDownHandler),this.updateValueStyles_(),this.element_.classList.add(this.CssClasses_.IS_UPGRADED)}},c.prototype.mdlDowngrade_=function(){this.element_.removeEventListener("input",this.boundInputHandler),this.element_.removeEventListener("change",this.boundChangeHandler),this.element_.removeEventListener("mouseup",this.boundMouseUpHandler),this.element_.parentElement.removeEventListener("mousedown",this.boundContainerMouseDownHandler)},componentHandler.register({constructor:c,classAsString:"MaterialSlider",cssClass:"mdl-js-slider",widget:!0});var p=function(e){this.element_=e,this.init()};window.MaterialSpinner=p,p.prototype.Constant_={MDL_SPINNER_LAYER_COUNT:4},p.prototype.CssClasses_={MDL_SPINNER_LAYER:"mdl-spinner__layer",MDL_SPINNER_CIRCLE_CLIPPER:"mdl-spinner__circle-clipper",MDL_SPINNER_CIRCLE:"mdl-spinner__circle",MDL_SPINNER_GAP_PATCH:"mdl-spinner__gap-patch",MDL_SPINNER_LEFT:"mdl-spinner__left",MDL_SPINNER_RIGHT:"mdl-spinner__right"},p.prototype.createLayer=function(e){var s=document.createElement("div");s.classList.add(this.CssClasses_.MDL_SPINNER_LAYER),s.classList.add(this.CssClasses_.MDL_SPINNER_LAYER+"-"+e);var t=document.createElement("div");t.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE_CLIPPER),t.classList.add(this.CssClasses_.MDL_SPINNER_LEFT);var i=document.createElement("div");i.classList.add(this.CssClasses_.MDL_SPINNER_GAP_PATCH);var n=document.createElement("div");n.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE_CLIPPER),n.classList.add(this.CssClasses_.MDL_SPINNER_RIGHT);for(var a=[t,i,n],l=0;l<a.length;l++){var o=document.createElement("div");o.classList.add(this.CssClasses_.MDL_SPINNER_CIRCLE),a[l].appendChild(o)}s.appendChild(t),s.appendChild(i),s.appendChild(n),this.element_.appendChild(s)},p.prototype.stop=function(){this.element_.classList.remove("is-active")},p.prototype.start=function(){this.element_.classList.add("is-active")},p.prototype.init=function(){if(this.element_){for(var e=1;e<=this.Constant_.MDL_SPINNER_LAYER_COUNT;e++)this.createLayer(e);this.element_.classList.add("is-upgraded");
+
+}},componentHandler.register({constructor:p,classAsString:"MaterialSpinner",cssClass:"mdl-js-spinner",widget:!0});var u=function(e){this.element_=e,this.init()};window.MaterialSwitch=u,u.prototype.Constant_={TINY_TIMEOUT:.001},u.prototype.CssClasses_={INPUT:"mdl-switch__input",TRACK:"mdl-switch__track",THUMB:"mdl-switch__thumb",FOCUS_HELPER:"mdl-switch__focus-helper",RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE_CONTAINER:"mdl-switch__ripple-container",RIPPLE_CENTER:"mdl-ripple--center",RIPPLE:"mdl-ripple",IS_FOCUSED:"is-focused",IS_DISABLED:"is-disabled",IS_CHECKED:"is-checked"},u.prototype.onChange_=function(e){this.updateClasses_()},u.prototype.onFocus_=function(e){this.element_.classList.add(this.CssClasses_.IS_FOCUSED)},u.prototype.onBlur_=function(e){this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)},u.prototype.onMouseUp_=function(e){this.blur_()},u.prototype.updateClasses_=function(){this.checkDisabled(),this.checkToggleState()},u.prototype.blur_=function(e){window.setTimeout(function(){this.inputElement_.blur()}.bind(this),this.Constant_.TINY_TIMEOUT)},u.prototype.checkDisabled=function(){this.inputElement_.disabled?this.element_.classList.add(this.CssClasses_.IS_DISABLED):this.element_.classList.remove(this.CssClasses_.IS_DISABLED)},u.prototype.checkToggleState=function(){this.inputElement_.checked?this.element_.classList.add(this.CssClasses_.IS_CHECKED):this.element_.classList.remove(this.CssClasses_.IS_CHECKED)},u.prototype.disable=function(){this.inputElement_.disabled=!0,this.updateClasses_()},u.prototype.enable=function(){this.inputElement_.disabled=!1,this.updateClasses_()},u.prototype.on=function(){this.inputElement_.checked=!0,this.updateClasses_()},u.prototype.off=function(){this.inputElement_.checked=!1,this.updateClasses_()},u.prototype.init=function(){if(this.element_){this.inputElement_=this.element_.querySelector("."+this.CssClasses_.INPUT);var e=document.createElement("div");e.classList.add(this.CssClasses_.TRACK);var s=document.createElement("div");s.classList.add(this.CssClasses_.THUMB);var t=document.createElement("span");if(t.classList.add(this.CssClasses_.FOCUS_HELPER),s.appendChild(t),this.element_.appendChild(e),this.element_.appendChild(s),this.boundMouseUpHandler=this.onMouseUp_.bind(this),this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)){this.element_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS),this.rippleContainerElement_=document.createElement("span"),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CONTAINER),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_EFFECT),this.rippleContainerElement_.classList.add(this.CssClasses_.RIPPLE_CENTER),this.rippleContainerElement_.addEventListener("mouseup",this.boundMouseUpHandler);var i=document.createElement("span");i.classList.add(this.CssClasses_.RIPPLE),this.rippleContainerElement_.appendChild(i),this.element_.appendChild(this.rippleContainerElement_)}this.boundChangeHandler=this.onChange_.bind(this),this.boundFocusHandler=this.onFocus_.bind(this),this.boundBlurHandler=this.onBlur_.bind(this),this.inputElement_.addEventListener("change",this.boundChangeHandler),this.inputElement_.addEventListener("focus",this.boundFocusHandler),this.inputElement_.addEventListener("blur",this.boundBlurHandler),this.element_.addEventListener("mouseup",this.boundMouseUpHandler),this.updateClasses_(),this.element_.classList.add("is-upgraded")}},u.prototype.mdlDowngrade_=function(){this.rippleContainerElement_&&this.rippleContainerElement_.removeEventListener("mouseup",this.boundMouseUpHandler),this.inputElement_.removeEventListener("change",this.boundChangeHandler),this.inputElement_.removeEventListener("focus",this.boundFocusHandler),this.inputElement_.removeEventListener("blur",this.boundBlurHandler),this.element_.removeEventListener("mouseup",this.boundMouseUpHandler)},componentHandler.register({constructor:u,classAsString:"MaterialSwitch",cssClass:"mdl-js-switch",widget:!0});var C=function(e){this.element_=e,this.init()};window.MaterialTabs=C,C.prototype.Constant_={},C.prototype.CssClasses_={TAB_CLASS:"mdl-tabs__tab",PANEL_CLASS:"mdl-tabs__panel",ACTIVE_CLASS:"is-active",UPGRADED_CLASS:"is-upgraded",MDL_JS_RIPPLE_EFFECT:"mdl-js-ripple-effect",MDL_RIPPLE_CONTAINER:"mdl-tabs__ripple-container",MDL_RIPPLE:"mdl-ripple",MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events"},C.prototype.initTabs_=function(){this.element_.classList.contains(this.CssClasses_.MDL_JS_RIPPLE_EFFECT)&&this.element_.classList.add(this.CssClasses_.MDL_JS_RIPPLE_EFFECT_IGNORE_EVENTS),this.tabs_=this.element_.querySelectorAll("."+this.CssClasses_.TAB_CLASS),this.panels_=this.element_.querySelectorAll("."+this.CssClasses_.PANEL_CLASS);for(var s=0;s<this.tabs_.length;s++)new e(this.tabs_[s],this);this.element_.classList.add(this.CssClasses_.UPGRADED_CLASS)},C.prototype.resetTabState_=function(){for(var e=0;e<this.tabs_.length;e++)this.tabs_[e].classList.remove(this.CssClasses_.ACTIVE_CLASS)},C.prototype.resetPanelState_=function(){for(var e=0;e<this.panels_.length;e++)this.panels_[e].classList.remove(this.CssClasses_.ACTIVE_CLASS)},C.prototype.init=function(){this.element_&&this.initTabs_()},componentHandler.register({constructor:C,classAsString:"MaterialTabs",cssClass:"mdl-js-tabs"});var m=function(e){this.element_=e,this.maxRows=this.Constant_.NO_MAX_ROWS,this.init()};window.MaterialTextfield=m,m.prototype.Constant_={NO_MAX_ROWS:-1,MAX_ROWS_ATTRIBUTE:"maxrows"},m.prototype.CssClasses_={LABEL:"mdl-textfield__label",INPUT:"mdl-textfield__input",IS_DIRTY:"is-dirty",IS_FOCUSED:"is-focused",IS_DISABLED:"is-disabled",IS_INVALID:"is-invalid",IS_UPGRADED:"is-upgraded"},m.prototype.onKeyDown_=function(e){var s=e.target.value.split("\n").length;13===e.keyCode&&s>=this.maxRows&&e.preventDefault()},m.prototype.onFocus_=function(e){this.element_.classList.add(this.CssClasses_.IS_FOCUSED)},m.prototype.onBlur_=function(e){this.element_.classList.remove(this.CssClasses_.IS_FOCUSED)},m.prototype.updateClasses_=function(){this.checkDisabled(),this.checkValidity(),this.checkDirty()},m.prototype.checkDisabled=function(){this.input_.disabled?this.element_.classList.add(this.CssClasses_.IS_DISABLED):this.element_.classList.remove(this.CssClasses_.IS_DISABLED)},m.prototype.checkValidity=function(){this.input_.validity.valid?this.element_.classList.remove(this.CssClasses_.IS_INVALID):this.element_.classList.add(this.CssClasses_.IS_INVALID)},m.prototype.checkDirty=function(){this.input_.value&&this.input_.value.length>0?this.element_.classList.add(this.CssClasses_.IS_DIRTY):this.element_.classList.remove(this.CssClasses_.IS_DIRTY)},m.prototype.disable=function(){this.input_.disabled=!0,this.updateClasses_()},m.prototype.enable=function(){this.input_.disabled=!1,this.updateClasses_()},m.prototype.change=function(e){e&&(this.input_.value=e),this.updateClasses_()},m.prototype.init=function(){this.element_&&(this.label_=this.element_.querySelector("."+this.CssClasses_.LABEL),this.input_=this.element_.querySelector("."+this.CssClasses_.INPUT),this.input_&&(this.input_.hasAttribute(this.Constant_.MAX_ROWS_ATTRIBUTE)&&(this.maxRows=parseInt(this.input_.getAttribute(this.Constant_.MAX_ROWS_ATTRIBUTE),10),isNaN(this.maxRows)&&(this.maxRows=this.Constant_.NO_MAX_ROWS)),this.boundUpdateClassesHandler=this.updateClasses_.bind(this),this.boundFocusHandler=this.onFocus_.bind(this),this.boundBlurHandler=this.onBlur_.bind(this),this.input_.addEventListener("input",this.boundUpdateClassesHandler),this.input_.addEventListener("focus",this.boundFocusHandler),this.input_.addEventListener("blur",this.boundBlurHandler),this.maxRows!==this.Constant_.NO_MAX_ROWS&&(this.boundKeyDownHandler=this.onKeyDown_.bind(this),this.input_.addEventListener("keydown",this.boundKeyDownHandler)),this.updateClasses_(),this.element_.classList.add(this.CssClasses_.IS_UPGRADED)))},m.prototype.mdlDowngrade_=function(){this.input_.removeEventListener("input",this.boundUpdateClassesHandler),this.input_.removeEventListener("focus",this.boundFocusHandler),this.input_.removeEventListener("blur",this.boundBlurHandler),this.boundKeyDownHandler&&this.input_.removeEventListener("keydown",this.boundKeyDownHandler)},componentHandler.register({constructor:m,classAsString:"MaterialTextfield",cssClass:"mdl-js-textfield",widget:!0});var E=function(e){this.element_=e,this.init()};window.MaterialTooltip=E,E.prototype.Constant_={},E.prototype.CssClasses_={IS_ACTIVE:"is-active"},E.prototype.handleMouseEnter_=function(e){e.stopPropagation();var s=e.target.getBoundingClientRect(),t=s.left+s.width/2,i=-1*(this.element_.offsetWidth/2);0>t+i?(this.element_.style.left=0,this.element_.style.marginLeft=0):(this.element_.style.left=t+"px",this.element_.style.marginLeft=i+"px"),this.element_.style.top=s.top+s.height+10+"px",this.element_.classList.add(this.CssClasses_.IS_ACTIVE),window.addEventListener("scroll",this.boundMouseLeaveHandler,!1),window.addEventListener("touchmove",this.boundMouseLeaveHandler,!1)},E.prototype.handleMouseLeave_=function(e){e.stopPropagation(),this.element_.classList.remove(this.CssClasses_.IS_ACTIVE),window.removeEventListener("scroll",this.boundMouseLeaveHandler),window.removeEventListener("touchmove",this.boundMouseLeaveHandler,!1)},E.prototype.init=function(){if(this.element_){var e=this.element_.getAttribute("for");e&&(this.forElement_=document.getElementById(e)),this.forElement_&&(this.forElement_.getAttribute("tabindex")||this.forElement_.setAttribute("tabindex","0"),this.boundMouseEnterHandler=this.handleMouseEnter_.bind(this),this.boundMouseLeaveHandler=this.handleMouseLeave_.bind(this),this.forElement_.addEventListener("mouseenter",this.boundMouseEnterHandler,!1),this.forElement_.addEventListener("click",this.boundMouseEnterHandler,!1),this.forElement_.addEventListener("blur",this.boundMouseLeaveHandler),this.forElement_.addEventListener("touchstart",this.boundMouseEnterHandler,!1),this.forElement_.addEventListener("mouseleave",this.boundMouseLeaveHandler))}},E.prototype.mdlDowngrade_=function(){this.forElement_&&(this.forElement_.removeEventListener("mouseenter",this.boundMouseEnterHandler,!1),this.forElement_.removeEventListener("click",this.boundMouseEnterHandler,!1),this.forElement_.removeEventListener("touchstart",this.boundMouseEnterHandler,!1),this.forElement_.removeEventListener("mouseleave",this.boundMouseLeaveHandler))},componentHandler.register({constructor:E,classAsString:"MaterialTooltip",cssClass:"mdl-tooltip"});var L=function(e){this.element_=e,this.init()};window.MaterialLayout=L,L.prototype.Constant_={MAX_WIDTH:"(max-width: 1024px)",TAB_SCROLL_PIXELS:100,MENU_ICON:"menu",CHEVRON_LEFT:"chevron_left",CHEVRON_RIGHT:"chevron_right"},L.prototype.Mode_={STANDARD:0,SEAMED:1,WATERFALL:2,SCROLL:3},L.prototype.CssClasses_={CONTAINER:"mdl-layout__container",HEADER:"mdl-layout__header",DRAWER:"mdl-layout__drawer",CONTENT:"mdl-layout__content",DRAWER_BTN:"mdl-layout__drawer-button",ICON:"material-icons",JS_RIPPLE_EFFECT:"mdl-js-ripple-effect",RIPPLE_CONTAINER:"mdl-layout__tab-ripple-container",RIPPLE:"mdl-ripple",RIPPLE_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",HEADER_SEAMED:"mdl-layout__header--seamed",HEADER_WATERFALL:"mdl-layout__header--waterfall",HEADER_SCROLL:"mdl-layout__header--scroll",FIXED_HEADER:"mdl-layout--fixed-header",OBFUSCATOR:"mdl-layout__obfuscator",TAB_BAR:"mdl-layout__tab-bar",TAB_CONTAINER:"mdl-layout__tab-bar-container",TAB:"mdl-layout__tab",TAB_BAR_BUTTON:"mdl-layout__tab-bar-button",TAB_BAR_LEFT_BUTTON:"mdl-layout__tab-bar-left-button",TAB_BAR_RIGHT_BUTTON:"mdl-layout__tab-bar-right-button",PANEL:"mdl-layout__tab-panel",HAS_DRAWER:"has-drawer",HAS_TABS:"has-tabs",HAS_SCROLLING_HEADER:"has-scrolling-header",CASTING_SHADOW:"is-casting-shadow",IS_COMPACT:"is-compact",IS_SMALL_SCREEN:"is-small-screen",IS_DRAWER_OPEN:"is-visible",IS_ACTIVE:"is-active",IS_UPGRADED:"is-upgraded",IS_ANIMATING:"is-animating",ON_LARGE_SCREEN:"mdl-layout--large-screen-only",ON_SMALL_SCREEN:"mdl-layout--small-screen-only"},L.prototype.contentScrollHandler_=function(){this.header_.classList.contains(this.CssClasses_.IS_ANIMATING)||(this.content_.scrollTop>0&&!this.header_.classList.contains(this.CssClasses_.IS_COMPACT)?(this.header_.classList.add(this.CssClasses_.CASTING_SHADOW),this.header_.classList.add(this.CssClasses_.IS_COMPACT),this.header_.classList.add(this.CssClasses_.IS_ANIMATING)):this.content_.scrollTop<=0&&this.header_.classList.contains(this.CssClasses_.IS_COMPACT)&&(this.header_.classList.remove(this.CssClasses_.CASTING_SHADOW),this.header_.classList.remove(this.CssClasses_.IS_COMPACT),this.header_.classList.add(this.CssClasses_.IS_ANIMATING)))},L.prototype.screenSizeHandler_=function(){this.screenSizeMediaQuery_.matches?this.element_.classList.add(this.CssClasses_.IS_SMALL_SCREEN):(this.element_.classList.remove(this.CssClasses_.IS_SMALL_SCREEN),this.drawer_&&this.drawer_.classList.remove(this.CssClasses_.IS_DRAWER_OPEN))},L.prototype.drawerToggleHandler_=function(){this.drawer_.classList.toggle(this.CssClasses_.IS_DRAWER_OPEN)},L.prototype.headerTransitionEndHandler_=function(){this.header_.classList.remove(this.CssClasses_.IS_ANIMATING)},L.prototype.headerClickHandler_=function(){this.header_.classList.contains(this.CssClasses_.IS_COMPACT)&&(this.header_.classList.remove(this.CssClasses_.IS_COMPACT),this.header_.classList.add(this.CssClasses_.IS_ANIMATING))},L.prototype.resetTabState_=function(e){for(var s=0;s<e.length;s++)e[s].classList.remove(this.CssClasses_.IS_ACTIVE)},L.prototype.resetPanelState_=function(e){for(var s=0;s<e.length;s++)e[s].classList.remove(this.CssClasses_.IS_ACTIVE)},L.prototype.init=function(){if(this.element_){var e=document.createElement("div");e.classList.add(this.CssClasses_.CONTAINER),this.element_.parentElement.insertBefore(e,this.element_),this.element_.parentElement.removeChild(this.element_),e.appendChild(this.element_);for(var t=this.element_.childNodes,i=0;i<t.length;i++){var n=t[i];n.classList&&n.classList.contains(this.CssClasses_.HEADER)&&(this.header_=n),n.classList&&n.classList.contains(this.CssClasses_.DRAWER)&&(this.drawer_=n),n.classList&&n.classList.contains(this.CssClasses_.CONTENT)&&(this.content_=n)}this.header_&&(this.tabBar_=this.header_.querySelector("."+this.CssClasses_.TAB_BAR));var a=this.Mode_.STANDARD;this.screenSizeMediaQuery_=window.matchMedia(this.Constant_.MAX_WIDTH),this.screenSizeMediaQuery_.addListener(this.screenSizeHandler_.bind(this)),this.screenSizeHandler_(),this.header_&&(this.header_.classList.contains(this.CssClasses_.HEADER_SEAMED)?a=this.Mode_.SEAMED:this.header_.classList.contains(this.CssClasses_.HEADER_WATERFALL)?(a=this.Mode_.WATERFALL,this.header_.addEventListener("transitionend",this.headerTransitionEndHandler_.bind(this)),this.header_.addEventListener("click",this.headerClickHandler_.bind(this))):this.header_.classList.contains(this.CssClasses_.HEADER_SCROLL)&&(a=this.Mode_.SCROLL,e.classList.add(this.CssClasses_.HAS_SCROLLING_HEADER)),a===this.Mode_.STANDARD?(this.header_.classList.add(this.CssClasses_.CASTING_SHADOW),this.tabBar_&&this.tabBar_.classList.add(this.CssClasses_.CASTING_SHADOW)):a===this.Mode_.SEAMED||a===this.Mode_.SCROLL?(this.header_.classList.remove(this.CssClasses_.CASTING_SHADOW),this.tabBar_&&this.tabBar_.classList.remove(this.CssClasses_.CASTING_SHADOW)):a===this.Mode_.WATERFALL&&(this.content_.addEventListener("scroll",this.contentScrollHandler_.bind(this)),this.contentScrollHandler_()));var l=function(e){e.preventDefault()};if(this.drawer_){var o=document.createElement("div");o.classList.add(this.CssClasses_.DRAWER_BTN),this.drawer_.classList.contains(this.CssClasses_.ON_LARGE_SCREEN)?o.classList.add(this.CssClasses_.ON_LARGE_SCREEN):this.drawer_.classList.contains(this.CssClasses_.ON_SMALL_SCREEN)&&o.classList.add(this.CssClasses_.ON_SMALL_SCREEN);var r=document.createElement("i");r.classList.add(this.CssClasses_.ICON),r.textContent=this.Constant_.MENU_ICON,o.appendChild(r),o.addEventListener("click",this.drawerToggleHandler_.bind(this)),this.element_.classList.add(this.CssClasses_.HAS_DRAWER),this.drawer_.addEventListener("mousewheel",l),this.element_.classList.contains(this.CssClasses_.FIXED_HEADER)?this.header_.insertBefore(o,this.header_.firstChild):this.element_.insertBefore(o,this.content_);var _=document.createElement("div");_.classList.add(this.CssClasses_.OBFUSCATOR),this.element_.appendChild(_),_.addEventListener("click",this.drawerToggleHandler_.bind(this)),_.addEventListener("mousewheel",l)}if(this.header_&&this.tabBar_){this.element_.classList.add(this.CssClasses_.HAS_TABS);var d=document.createElement("div");d.classList.add(this.CssClasses_.TAB_CONTAINER),this.header_.insertBefore(d,this.tabBar_),this.header_.removeChild(this.tabBar_);var h=document.createElement("div");h.classList.add(this.CssClasses_.TAB_BAR_BUTTON),h.classList.add(this.CssClasses_.TAB_BAR_LEFT_BUTTON);var c=document.createElement("i");c.classList.add(this.CssClasses_.ICON),c.textContent=this.Constant_.CHEVRON_LEFT,h.appendChild(c),h.addEventListener("click",function(){this.tabBar_.scrollLeft-=this.Constant_.TAB_SCROLL_PIXELS}.bind(this));var p=document.createElement("div");p.classList.add(this.CssClasses_.TAB_BAR_BUTTON),p.classList.add(this.CssClasses_.TAB_BAR_RIGHT_BUTTON);var u=document.createElement("i");u.classList.add(this.CssClasses_.ICON),u.textContent=this.Constant_.CHEVRON_RIGHT,p.appendChild(u),p.addEventListener("click",function(){this.tabBar_.scrollLeft+=this.Constant_.TAB_SCROLL_PIXELS}.bind(this)),d.appendChild(h),d.appendChild(this.tabBar_),d.appendChild(p);var C=function(){this.tabBar_.scrollLeft>0?h.classList.add(this.CssClasses_.IS_ACTIVE):h.classList.remove(this.CssClasses_.IS_ACTIVE),this.tabBar_.scrollLeft<this.tabBar_.scrollWidth-this.tabBar_.offsetWidth?p.classList.add(this.CssClasses_.IS_ACTIVE):p.classList.remove(this.CssClasses_.IS_ACTIVE)}.bind(this);this.tabBar_.addEventListener("scroll",C),C(),this.tabBar_.classList.contains(this.CssClasses_.JS_RIPPLE_EFFECT)&&this.tabBar_.classList.add(this.CssClasses_.RIPPLE_IGNORE_EVENTS);for(var m=this.tabBar_.querySelectorAll("."+this.CssClasses_.TAB),E=this.content_.querySelectorAll("."+this.CssClasses_.PANEL),L=0;L<m.length;L++)new s(m[L],m,E,this)}this.element_.classList.add(this.CssClasses_.IS_UPGRADED)}},componentHandler.register({constructor:L,classAsString:"MaterialLayout",cssClass:"mdl-js-layout"});var I=function(e){this.element_=e,this.init()};window.MaterialDataTable=I,I.prototype.Constant_={},I.prototype.CssClasses_={DATA_TABLE:"mdl-data-table",SELECTABLE:"mdl-data-table--selectable",IS_SELECTED:"is-selected",IS_UPGRADED:"is-upgraded"},I.prototype.selectRow_=function(e,s,t){return s?function(){e.checked?s.classList.add(this.CssClasses_.IS_SELECTED):s.classList.remove(this.CssClasses_.IS_SELECTED)}.bind(this):t?function(){var s,i;if(e.checked)for(s=0;s<t.length;s++)i=t[s].querySelector("td").querySelector(".mdl-checkbox"),i.MaterialCheckbox.check(),t[s].classList.add(this.CssClasses_.IS_SELECTED);else for(s=0;s<t.length;s++)i=t[s].querySelector("td").querySelector(".mdl-checkbox"),i.MaterialCheckbox.uncheck(),t[s].classList.remove(this.CssClasses_.IS_SELECTED)}.bind(this):void 0},I.prototype.createCheckbox_=function(e,s){var t=document.createElement("label");t.classList.add("mdl-checkbox"),t.classList.add("mdl-js-checkbox"),t.classList.add("mdl-js-ripple-effect"),t.classList.add("mdl-data-table__select");var i=document.createElement("input");return i.type="checkbox",i.classList.add("mdl-checkbox__input"),e?i.addEventListener("change",this.selectRow_(i,e)):s&&i.addEventListener("change",this.selectRow_(i,null,s)),t.appendChild(i),componentHandler.upgradeElement(t,"MaterialCheckbox"),t},I.prototype.init=function(){if(this.element_){var e=this.element_.querySelector("th"),s=this.element_.querySelector("tbody").querySelectorAll("tr");if(this.element_.classList.contains(this.CssClasses_.SELECTABLE)){var t=document.createElement("th"),i=this.createCheckbox_(null,s);t.appendChild(i),e.parentElement.insertBefore(t,e);for(var n=0;n<s.length;n++){var a=s[n].querySelector("td");if(a){var l=document.createElement("td"),o=this.createCheckbox_(s[n]);l.appendChild(o),s[n].insertBefore(l,a)}}}this.element_.classList.add(this.CssClasses_.IS_UPGRADED)}},componentHandler.register({constructor:I,classAsString:"MaterialDataTable",cssClass:"mdl-js-data-table"});var f=function(e){this.element_=e,this.init()};window.MaterialRipple=f,f.prototype.Constant_={INITIAL_SCALE:"scale(0.0001, 0.0001)",INITIAL_SIZE:"1px",INITIAL_OPACITY:"0.4",FINAL_OPACITY:"0",FINAL_SCALE:""},f.prototype.CssClasses_={RIPPLE_CENTER:"mdl-ripple--center",RIPPLE_EFFECT_IGNORE_EVENTS:"mdl-js-ripple-effect--ignore-events",RIPPLE:"mdl-ripple",IS_ANIMATING:"is-animating",IS_VISIBLE:"is-visible"},f.prototype.downHandler_=function(e){if(!this.rippleElement_.style.width&&!this.rippleElement_.style.height){var s=this.element_.getBoundingClientRect();this.boundHeight=s.height,this.boundWidth=s.width,this.rippleSize_=2*Math.sqrt(s.width*s.width+s.height*s.height)+2,this.rippleElement_.style.width=this.rippleSize_+"px",this.rippleElement_.style.height=this.rippleSize_+"px"}if(this.rippleElement_.classList.add(this.CssClasses_.IS_VISIBLE),"mousedown"===e.type&&this.ignoringMouseDown_)this.ignoringMouseDown_=!1;else{"touchstart"===e.type&&(this.ignoringMouseDown_=!0);var t=this.getFrameCount();if(t>0)return;this.setFrameCount(1);var i,n,a=e.currentTarget.getBoundingClientRect();if(0===e.clientX&&0===e.clientY)i=Math.round(a.width/2),n=Math.round(a.height/2);else{var l=e.clientX?e.clientX:e.touches[0].clientX,o=e.clientY?e.clientY:e.touches[0].clientY;i=Math.round(l-a.left),n=Math.round(o-a.top)}this.setRippleXY(i,n),this.setRippleStyles(!0),window.requestAnimationFrame(this.animFrameHandler.bind(this))}},f.prototype.upHandler_=function(e){e&&2!==e.detail&&this.rippleElement_.classList.remove(this.CssClasses_.IS_VISIBLE),window.setTimeout(function(){this.rippleElement_.classList.remove(this.CssClasses_.IS_VISIBLE)}.bind(this),0)},f.prototype.init=function(){if(this.element_){var e=this.element_.classList.contains(this.CssClasses_.RIPPLE_CENTER);this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT_IGNORE_EVENTS)||(this.rippleElement_=this.element_.querySelector("."+this.CssClasses_.RIPPLE),this.frameCount_=0,this.rippleSize_=0,this.x_=0,this.y_=0,this.ignoringMouseDown_=!1,this.boundDownHandler=this.downHandler_.bind(this),this.element_.addEventListener("mousedown",this.boundDownHandler),this.element_.addEventListener("touchstart",this.boundDownHandler),this.boundUpHandler=this.upHandler_.bind(this),this.element_.addEventListener("mouseup",this.boundUpHandler),this.element_.addEventListener("mouseleave",this.boundUpHandler),this.element_.addEventListener("touchend",this.boundUpHandler),this.element_.addEventListener("blur",this.boundUpHandler),this.getFrameCount=function(){return this.frameCount_},this.setFrameCount=function(e){this.frameCount_=e},this.getRippleElement=function(){return this.rippleElement_},this.setRippleXY=function(e,s){this.x_=e,this.y_=s},this.setRippleStyles=function(s){if(null!==this.rippleElement_){var t,i,n,a="translate("+this.x_+"px, "+this.y_+"px)";s?(i=this.Constant_.INITIAL_SCALE,n=this.Constant_.INITIAL_SIZE):(i=this.Constant_.FINAL_SCALE,n=this.rippleSize_+"px",e&&(a="translate("+this.boundWidth/2+"px, "+this.boundHeight/2+"px)")),t="translate(-50%, -50%) "+a+i,this.rippleElement_.style.webkitTransform=t,this.rippleElement_.style.msTransform=t,this.rippleElement_.style.transform=t,s?this.rippleElement_.classList.remove(this.CssClasses_.IS_ANIMATING):this.rippleElement_.classList.add(this.CssClasses_.IS_ANIMATING)}},this.animFrameHandler=function(){this.frameCount_-->0?window.requestAnimationFrame(this.animFrameHandler.bind(this)):this.setRippleStyles(!1)})}},f.prototype.mdlDowngrade_=function(){this.element_.removeEventListener("mousedown",this.boundDownHandler),this.element_.removeEventListener("touchstart",this.boundDownHandler),this.element_.removeEventListener("mouseup",this.boundUpHandler),this.element_.removeEventListener("mouseleave",this.boundUpHandler),this.element_.removeEventListener("touchend",this.boundUpHandler),this.element_.removeEventListener("blur",this.boundUpHandler)},componentHandler.register({constructor:f,classAsString:"MaterialRipple",cssClass:"mdl-js-ripple-effect",widget:!1})}();
+//# sourceMappingURL=material.min.js.map

@@ -74,15 +74,21 @@ UI.Material = Class.create({
 
     	}
     	
-//    	h.material.on("mousedown", function(e) {
-//			e.cancelBubble = true;
-//			e.returnValue = false;
-//		});
-//
-//    	h.material.on("click", function(e) {
-//			e.cancelBubble = true;
-//			e.returnValue = false;
-//		});
+    	h.material.on("mousedown", function(e) {
+    		if (e.cancelBubble) {
+    			e.cancelBubble = true;
+    		} else if (e.cancelPropagation) {
+    			e.cancelPropagation();
+    		}
+		});
+
+    	h.material.on("click", function(e) {
+    		if (e.cancelBubble) {
+    			e.cancelBubble = true;
+    		} else if (e.cancelPropagation) {
+    			e.cancelPropagation();
+    		}
+		});
 
     	h.config.inside.insert(h.material);
     },

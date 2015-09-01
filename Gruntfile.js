@@ -41,6 +41,7 @@ module.exports = function(grunt) {
                     "src/form/UI.IntegerFormField.js",
                     "src/form/UI.DecimalFormField.js",
                     "src/layout/UI.BorderLayout.js",
+                    "src/layout/UI.GridLayout.js",
                     "src/widgets/UI.Crud.js",
                     "src/menu/UI.Menu.js",
                     "src/utils/UI.ProgressBar.js",
@@ -51,6 +52,7 @@ module.exports = function(grunt) {
                     "src/tabs/UI.BreadCrumb.js",
                     "src/tabs/UI.Toolbar.js",
                     "src/tabs/UI.Tabs.js",
+					"mdl/material.min.js",
                 ], 
                 dest: 'dist/bardia.js'},
             ]
@@ -59,6 +61,7 @@ module.exports = function(grunt) {
             files: [{
             	src: [
                     "src/**/*.css",
+                    "mdl/material.min.css",
                 ],
                 dest: 'dist/bardia.css'},
             ]        	

@@ -21,17 +21,17 @@ UI.MaterialComponent = Class.create({
     renderMaterial: function() {    	
     	var h = this;
     	
-			h.material = new Element("DIV", {class: "inside"});
+			h.material = new Element("DIV", {});
 			h.config.inside.insert(h.material);
 
 	    	h.material.on("mousedown", function(e) {
 				//e.cancelBubble = true;
-				e.returnValue = false;
+				//e.returnValue = false;
 			});
 			
 	    	h.material.on("click", function(e) {
 				//e.cancelBubble = true;
-				e.returnValue = false;
+				//e.returnValue = false;
 			});
     },
     render: function() {

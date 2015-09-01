@@ -24,6 +24,11 @@ UI.Form = Class.create(UI.MaterialComponent, {
     		buttons: h.config.buttons
     	});
 
+    	var fields = new Element("DIV", {
+    		style: "overflow:hidden; display:flex; flex-direction:column; align-content:flex-start; background:white"
+    	});
+    	h.panel.getContent().update(fields);
+
     	if (h.config.fields !== undefined) {
     		var i=0;
     		for (i=0; i<h.config.fields.length; i++) {		
@@ -44,7 +49,7 @@ UI.Form = Class.create(UI.MaterialComponent, {
 
     					h.config.fieldControlls.push(field);
 
-    				h.panel.getContent().insert(field.getMaterial());
+    				fields.insert(field.getMaterial());
     		}
     	}
     },
@@ -55,6 +60,13 @@ UI.Form = Class.create(UI.MaterialComponent, {
     setTitle: function(title) {
     	var h = this;
     		h.panel.setTitle(title);
+    },
+    propertyChanged: function(propertyName, propertyValue) {
+    	var h = this;
+
+    	if (h.config.onChange) {
+    		h.config.onChange(propertyName, propertyValue);
+    	}
     },
     /**
      * Metoda zwraca pole formularza dla zadanej właściwości

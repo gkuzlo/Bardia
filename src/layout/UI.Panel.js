@@ -1,71 +1,104 @@
-/**
- * @class UI.Panel
- */
-UI.Panel = Class.create(UI.MaterialComponent, {
-	/**
-	 * 
-	 * @param config
-	 */
-    initConfig: function(config) {
+UI.Panel = Class.create({
+    initialize: function(config) {
         this.config = Object.extend({
+            inside: window.document.body
         }, config || {});
+
+        this.render();
     },
-    /**
-     * 
-     */
     render: function() {
         var h = this;
 
-        if (h.config.title || h.config.buttons) {
-			h.mainLayout = new UI.BorderLayout({
-				inside: h.getMaterial(),
-				north: {
-					height: 59
-				}
-			});
-			
-			h.material = new Element("DIV", {
-				style: "position:absolute; top:0px; right:0px; top:0px; bottom:0px; left:0px",
-				class: "panel-header"
-			});
-			h.mainLayout.getNorth().insert(h.material);
-			h.material.title = h.config.title;
+        h.root = h.prepareRoot();
+        h.config.inside.update(h.root);
 
-			h.toolbarDiv = new Element("DIV", {
-				style: "position:absolute; top:15px; height:30px; left:10px; background-color:transparent; width:100%;",
-				class: "panel-toolbar"
-			});
-			h.material.insert(h.toolbarDiv);
+        h.setTabs(h.config.tabs);
 
-			h.setButtons(h.config.buttons);
-        } else {
-			h.mainLayout = new UI.BorderLayout({
-				inside: h.getMaterial()
-			});
-        }
+        UI.upgrade(h.root);
     },
-    /**
-     * 
-     * @returns
-     */
     getContent: function() {
-    	var h = this;
-    	return h.mainLayout.getDefault();
+    	return this.root.querySelector("#contents");
     },
-    /**
-     * 
-     * @param title
-     */
     setTitle: function(title) {
-    	var h = this;
-    		h.material.title = title;
+    	this.root.querySelector("#title").update(title);
     },
-    setButtons: function(buttons) {
-    	var h = this;
+    setTabs: function(tabs) {
+        var h = this;
 
-		h.toolbar = new UI.PanelToolbar({
-			inside: h.toolbarDiv,
-			buttons: buttons || []
-		});
+        if (!tabs) return;
+
+        h.prepareHeaderTabs(tabs);
+        h.prepareContentTabs(tabs);
+    },
+    prepareHeaderTabs: function(tabs) {
+        var h = this;
+
+        if (h.root.querySelector("#header-tabs")) {
+            h.root.querySelector("#header-tabs").update();
+        } else {
+            h.root.querySelector("#header").insert(UI.toHTML({
+                tag: "div", class: "mdl-layout__tab-bar mdl-js-ripple-effect", id: "header-tabs",
+            }));
+        }
+
+        tabs.forEach(function(tab, index) {
+            var tabHeader = UI.toHTML({
+                tag: "a",
+                href: "#tab_" + index,
+                class: "mdl-layout__tab",
+                $insert: tab.name
+            });
+            h.root.querySelector("#header-tabs").insert(tabHeader);
+
+            tabHeader.on("click", function(e) {
+                if (tab.onActivate) {
+                    tab.onActivate(h.root.querySelector("#tab_" + index))
+                }
+            });
+        });
+    },
+    prepareContentTabs: function(tabs) {
+        var h = this;
+
+        h.root.querySelector("#contents").update();
+
+        tabs.forEach(function(tab, index) {
+            var json = {
+                tag: "section", class: "mdl-layout__tab-panel", id: "tab_" + index,
+                $insert: [{
+                    tag: "div", class: "page-content",
+                }]
+            }
+
+            var tabContent = UI.toHTML(json);
+            h.root.querySelector("#contents").insert(tabContent);
+        });
+    },
+    prepareRoot: function() {
+        var h = this;
+
+        var json = {
+            tag: "div", class: "mdl-layout mdl-js-layout mdl-layout--fixed-header",
+            $insert: [{
+                tag: "header", class: "mdl-layout__header", id: "header",
+                $insert: [{
+                    tag: "div", class: "mdl-layout__header-row",
+                    $insert: [{
+                        tag: "span", class: "mdl-layout-title", id: "title",
+                        $insert: h.config.title
+                    }]
+                }]
+            }, {
+                tag: "div", class: "mdl-layout__drawer", style: "max-width:600px",
+                $insert: [{
+                    tag: "span", class: "mdl-layout-title",
+                    $insert: h.config.title,
+                }]
+            }, {
+                tag: "main", class: "mdl-layout__content", id: "contents",
+            }]
+        };
+
+        return UI.toHTML(json);
     }
 });

@@ -1,3 +1,4 @@
+
 UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 
     initConfig: function(config) {
