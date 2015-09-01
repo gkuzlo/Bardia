@@ -2389,16 +2389,18 @@ UI.SortableList = Class.create(UI.MaterialComponent, {
 /** 
  * @class UI.Form
  */
-UI.Form = Class.create(UI.MaterialComponent, {
+UI.Form = Class.create({
 	/** 
 	 * @param config
 	 */
-    initConfig: function(config) {
+    initialize: function(config) {
         this.config = Object.extend({
             fields: [],
             fieldControlls: [],
             bean: {}
         }, config || {});
+
+        this.render();
     },
     /**
      * @method render
@@ -2406,16 +2408,12 @@ UI.Form = Class.create(UI.MaterialComponent, {
     render: function() {
     	var h = this;
 
-    	h.panel = new UI.Panel({
-    		inside: h.getMaterial(),
-    		title: h.config.title,
-    		buttons: h.config.buttons
-    	});
+    	h.prepareRoot();
 
     	var fields = new Element("DIV", {
     		style: "overflow:hidden; display:flex; flex-direction:column; align-content:flex-start; background:white"
     	});
-    	h.panel.getContent().update(fields);
+    	h.root.querySelector("#fields").update(fields);
 
     	if (h.config.fields !== undefined) {
     		var i=0;
@@ -2551,6 +2549,47 @@ UI.Form = Class.create(UI.MaterialComponent, {
      */
     getContent: function() {
     	return this.panel.getContent();
+    },
+    prepareRoot: function() {
+    	var h = this;
+
+    	var json = {
+    		tag: "div",
+    		class: "demo-card-wide mdl-card mdl-shadow--2dp",
+    		style: "width:100%",
+    		$insert: [{
+    			tag: "div",
+    			class: "mdl-card__title",
+    			style: "background-color:#f0f0f0",
+    			$insert: [{
+    				tag: "h2",
+    				class: "mdl-card__title-text",
+    				$insert: "Welcome"
+    			}]
+    		}, {
+    			tag: "div",
+    			id: "fields",
+    			class: "mdl-card__supporting-text",
+    			$insert: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis pellentesque lacus eleifend lacinia...",
+    		}, {
+    		    tag: "div",
+    		    class: "mdl-card__menu",
+    		    $insert: [{
+    		        tag: "button",
+    		        class: "mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect",
+    		        $insert: [{
+    		            tag: "i",
+    		            class: "material-icons",
+    		            $insert: "share"
+    		        }]
+    		    }]
+    		}]
+    	};
+
+		h.root = UI.toHTML(json);
+		h.config.inside.update(h.root);
+
+		UI.upgrade(h.root);
     }
 });
 /**
@@ -3933,7 +3972,8 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
 UI.GridLayout = Class.create({
     initialize: function(config) {
         this.config = Object.extend({
-            inside: window.document.body
+            inside: window.document.body,
+            cells: []
         }, config || {});
 
         this.render();
@@ -3941,33 +3981,37 @@ UI.GridLayout = Class.create({
     render: function() {
         var h = this;
 
+        h.config.inside.update();
         h.prepareRoot();
-        h.config.inside.update(h.root);
-
-        UI.upgrade(h.root);
     },
     prepareRoot: function() {
         var h = this;
 
-        var json = {
-            tag: "div",
-            class: "mdl-grid",
-            $insert: [{
-                tag: "div",
-                class: "mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet",
-                style: "background-color:grey; padding:10px; height:100%"
-            }, {
-                tag: "div",
-                class: "mdl-cell mdl-cell--4-col mdl-cell--6-col-tablet",
-                style: "background-color:blue; padding:10px; height:100%"
-            }, {
-                tag: "div",
-                class: "mdl-cell mdl-cell--2-col mdl-cell--4-col-phone",
-                style: "background-color:red; padding:10px; height:100%"
-            }]
-        }
+        h.root = h.config.inside;
 
-        h.root = UI.toHTML(json);
+        h.config.cells.forEach(function(_row, index) {
+            var row = {
+                tag: "div",
+                class: "mdl-grid"
+            };
+
+            var cells = _row.map(function(cell, index) {
+                return {
+                    tag: "div",
+                    id: cell.id,
+                    class: "mdl-cell mdl-cell--" + (cell.cols || 1) + "-col",
+                }
+            });
+
+            row.$insert = cells;
+            h.root.insert(UI.toHTML(row));
+        });
+
+        UI.upgrade(h.root);
+    },
+    getCell: function(cellId) {
+        var h = this;
+        return h.root.querySelector("#" + cellId);
     }
 });
 /**

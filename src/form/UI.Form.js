@@ -1,16 +1,18 @@
 /** 
  * @class UI.Form
  */
-UI.Form = Class.create(UI.MaterialComponent, {
+UI.Form = Class.create({
 	/** 
 	 * @param config
 	 */
-    initConfig: function(config) {
+    initialize: function(config) {
         this.config = Object.extend({
             fields: [],
             fieldControlls: [],
             bean: {}
         }, config || {});
+
+        this.render();
     },
     /**
      * @method render
@@ -18,16 +20,12 @@ UI.Form = Class.create(UI.MaterialComponent, {
     render: function() {
     	var h = this;
 
-    	h.panel = new UI.Panel({
-    		inside: h.getMaterial(),
-    		title: h.config.title,
-    		buttons: h.config.buttons
-    	});
+    	h.prepareRoot();
 
     	var fields = new Element("DIV", {
     		style: "overflow:hidden; display:flex; flex-direction:column; align-content:flex-start; background:white"
     	});
-    	h.panel.getContent().update(fields);
+    	h.root.querySelector("#fields").update(fields);
 
     	if (h.config.fields !== undefined) {
     		var i=0;
@@ -163,5 +161,46 @@ UI.Form = Class.create(UI.MaterialComponent, {
      */
     getContent: function() {
     	return this.panel.getContent();
+    },
+    prepareRoot: function() {
+    	var h = this;
+
+    	var json = {
+    		tag: "div",
+    		class: "demo-card-wide mdl-card mdl-shadow--2dp",
+    		style: "width:100%",
+    		$insert: [{
+    			tag: "div",
+    			class: "mdl-card__title",
+    			style: "background-color:#f0f0f0",
+    			$insert: [{
+    				tag: "h2",
+    				class: "mdl-card__title-text",
+    				$insert: "Welcome"
+    			}]
+    		}, {
+    			tag: "div",
+    			id: "fields",
+    			class: "mdl-card__supporting-text",
+    			$insert: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis pellentesque lacus eleifend lacinia...",
+    		}, {
+    		    tag: "div",
+    		    class: "mdl-card__menu",
+    		    $insert: [{
+    		        tag: "button",
+    		        class: "mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect",
+    		        $insert: [{
+    		            tag: "i",
+    		            class: "material-icons",
+    		            $insert: "share"
+    		        }]
+    		    }]
+    		}]
+    	};
+
+		h.root = UI.toHTML(json);
+		h.config.inside.update(h.root);
+
+		UI.upgrade(h.root);
     }
 });

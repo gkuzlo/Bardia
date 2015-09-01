@@ -23,15 +23,56 @@ ComplexView = Class.create({
 				{
 					name: "Tab 1",
 					onActivate: function(html) {
-						new UI.Form({
+
+						var gridLayout = new UI.GridLayout({
 							inside: html,
+							cells: [
+								[{
+									cols: 6,
+									id: "form1"
+								}, {
+									cols: 6,
+									id: "form2"
+								}]
+							]
+						});
+
+						new UI.Form({
+							inside: gridLayout.getCell("form1"),
 							title: "UI.Form",
 							fields: [{
 								label: "Imię",
 								property: "firstName"
+							},{
+								label: "Nazwisko",
+								property: "lastName"
+							},{
+								label: "Wiek",
+								property: "age",
+								type: "Integer"
 							}]
 						}).setBean({
-							firstName: "Grzegorz"
+							firstName: "Grzegorz",
+							lastName: "Kuzło"
+						});
+
+						new UI.Form({
+							inside: gridLayout.getCell("form2"),
+							title: "UI.Form",
+							fields: [{
+								label: "Imię",
+								property: "firstName"
+							},{
+								label: "Nazwisko",
+								property: "lastName"
+							},{
+								label: "Wiek",
+								property: "age",
+								type: "Integer"
+							}]
+						}).setBean({
+							firstName: "Grzegorz",
+							lastName: "Kuzło"
 						});
 					}
 				},
