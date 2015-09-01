@@ -14,7 +14,7 @@ module.exports = function(grunt) {
     concat: {
         js: {
           files: [{
-        	    src: [                    
+        	    src: [
                     "src/UI.js",
                     "src/icon/UI.IconSet.js",
                     "src/material/UI.MaterialComponent.js",
@@ -40,7 +40,7 @@ module.exports = function(grunt) {
                     "src/form/UI.PasswordFormField.js",
                     "src/form/UI.IntegerFormField.js",
                     "src/form/UI.DecimalFormField.js",
-                    "src/layout//UI.BorderLayout.js",
+                    "src/layout/UI.BorderLayout.js",
                     "src/widgets/UI.Crud.js",
                     "src/menu/UI.Menu.js",
                     "src/utils/UI.ProgressBar.js",
@@ -50,7 +50,7 @@ module.exports = function(grunt) {
                     "src/tabs/UI.IconToolbar.js",
                     "src/tabs/UI.BreadCrumb.js",
                     "src/tabs/UI.Toolbar.js",
-                    "src/tabs/UI.Tabs.js"
+                    "src/tabs/UI.Tabs.js",
                 ], 
                 dest: 'dist/bardia.js'},
             ]
@@ -58,11 +58,11 @@ module.exports = function(grunt) {
         css: {
             files: [{
             	src: [
-                    'src/**/*.css'
+                    "src/**/*.css",
                 ],
                 dest: 'dist/bardia.css'},
             ]        	
-        }
+        },
       },
       jsdoc : {
           dist : {

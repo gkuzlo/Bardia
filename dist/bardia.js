@@ -1,10 +1,8 @@
-
 var UI = {
-    version: 1.0,
+    version: "0.1.1",
     uploadAction: "http://localhost:8080/scheduler/file.upload",
     DATE_FORMAT: "yyyy-MM-ddTHH:mm:ss.SSSZ",
     DATE_YYYMMMDDD_FORMAT: "yyyy-MM-dd",
-    
     VISIBLE: 1,
     READONLY: 2,
     HIDDEN: 4
@@ -621,7 +619,7 @@ UI.MaterialComponent = Class.create({
     	
 			h.material = new Element("DIV", {class: "inside"});
 			h.config.inside.insert(h.material);
-			
+
 	    	h.material.on("mousedown", function(e) {
 				//e.cancelBubble = true;
 				e.returnValue = false;
@@ -735,7 +733,7 @@ UI.PanelToolbar = Class.create({
     	h.material = new Element("DIV", {
     		style: "position:absolute; display:flex; flex-direction:row; top:0px; left:0px; right:0px; bottom:0px"
     	});
-    	h.config.inside.insert(h.material);
+    	h.config.inside.update(h.material);
 
     	h.setButtons(h.config.buttons);
     },
@@ -794,10 +792,7 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 			});
 			h.material.insert(h.toolbarDiv);
 
-			h.toolbar = new UI.PanelToolbar({
-				inside: h.toolbarDiv,
-				buttons: h.config.buttons || []
-			});
+			h.setButtons(h.config.buttons);
         } else {
 			h.mainLayout = new UI.BorderLayout({
 				inside: h.getMaterial()
@@ -819,9 +814,16 @@ UI.Panel = Class.create(UI.MaterialComponent, {
     setTitle: function(title) {
     	var h = this;
     		h.material.title = title;
+    },
+    setButtons: function(buttons) {
+    	var h = this;
+
+		h.toolbar = new UI.PanelToolbar({
+			inside: h.toolbarDiv,
+			buttons: buttons || []
+		});
     }
 });
-
 
 UI.DateUtils = Class.create({
    initialize: function() {
@@ -1381,7 +1383,6 @@ UI.DatePicker = Class.create({
 		}
 	}
 });
-
 UI.Fab = Class.create({
 
     initialize: function(config) {
@@ -1392,7 +1393,7 @@ UI.Fab = Class.create({
             fill: "orange",
             icon: "help",
             access: UI.VISIBLE,
-            title: "Insert title here ...",
+            title: "",
             style: undefined
         }, config || {});
 
@@ -1770,20 +1771,20 @@ UI.Material = Class.create({
     		"class": "default_shadow"
     	});
     	
-    	h.material.on("mousedown", function(e) {
-			e.cancelBubble = true;
-			e.returnValue = false;
-		});
-		
-    	h.material.on("click", function(e) {
-			e.cancelBubble = true;
-			e.returnValue = false;
-		});
-    	
-    	h.material.on("dblclick", function(e) {
-			e.cancelBubble = true;
-			e.returnValue = false;
-		});
+//    	h.material.on("mousedown", function(e) {
+//			e.cancelBubble = true;
+//			e.returnValue = false;
+//		});
+//
+//    	h.material.on("click", function(e) {
+//			e.cancelBubble = true;
+//			e.returnValue = false;
+//		});
+//
+//    	h.material.on("dblclick", function(e) {
+//			e.cancelBubble = true;
+//			e.returnValue = false;
+//		});
 
     	h.config.inside.insert(h.material);
     	
@@ -1810,15 +1811,15 @@ UI.Material = Class.create({
 
     	}
     	
-    	h.material.on("mousedown", function(e) {
-			e.cancelBubble = true;
-			e.returnValue = false;
-		});
-		
-    	h.material.on("click", function(e) {
-			e.cancelBubble = true;
-			e.returnValue = false;
-		});
+//    	h.material.on("mousedown", function(e) {
+//			e.cancelBubble = true;
+//			e.returnValue = false;
+//		});
+//
+//    	h.material.on("click", function(e) {
+//			e.cancelBubble = true;
+//			e.returnValue = false;
+//		});
 
     	h.config.inside.insert(h.material);
     },
@@ -1861,6 +1862,10 @@ UI.Material = Class.create({
       			fill: "both"
       		});
     	}
+
+    	h.material.setStyle({
+    		"z-index": 1000000
+    	});
     },
     updateHeight: function(pixels) {
     	var h = this;
@@ -1922,11 +1927,12 @@ UI.Material = Class.create({
 		if (h.curtain === undefined) {
 			return;
 		}
-		
+
 		h.curtain.setStyle({
-			display: "block"
+			display: "block",
+			"z-index:": 10000000
 		});
-		
+
 		var player = h.curtain.animate([
   		    {background: "rgba(0,0,0,0.0)"},
   		    {background: "rgba(0,0,0,0.8)"},
@@ -2475,7 +2481,7 @@ UI.TextFormField = Class.create({
      */
     render: function() {
     	var h = this;
-    	
+
 		h.inside = new Element("DIV", {
 			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
 			class: "text-form-field"
@@ -2487,7 +2493,7 @@ UI.TextFormField = Class.create({
 		h.input.on("focus", function() {
 			h.animateLabel();
 		});
-		    		    		
+
 		if (h.config.mask) {
 			var mask = new InputMask(h.config.mask, h.input);
 				mask.blurFunction = function(e) {
@@ -2623,9 +2629,6 @@ UI.TextFormField = Class.create({
     	h.config.bean = bean;
     	
     	var v = h.getBeanValue();
-    	if (h.config.render !== undefined) {
-    		v = h.config.render(v);
-    	}
 		h.setInputValue(v);
     },
     getBeanValue: function() {
@@ -2673,8 +2676,9 @@ UI.TextFormField = Class.create({
      */
     getInputValue: function() {
     	var h = this;
-    	var val = h.input.value;
-    		val = h.validate(val);
+    	var val = null;
+            val = h.input.value;
+            val = h.validate(val);
     	return val;
     },
     /**
@@ -2705,9 +2709,7 @@ UI.TextFormField = Class.create({
     markError: function() {
     	var h = this;
 
-//    	h.label.setStyle({
-//    		color: "#cf6d6d"
-//    	});
+		h.inside.pseudoStyle("before", "color", "red");
     },
     /**
      * 
@@ -2715,9 +2717,7 @@ UI.TextFormField = Class.create({
     unmarkError: function() {
     	var h = this;
 
-//    	h.label.setStyle({
-//    		color: "#cdcdcf"
-//    	});
+		h.inside.pseudoStyle("before", "color", "grey");
     }
 });
 /**
@@ -2991,27 +2991,27 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			style: "position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px"
 		});
 
-		h.input.on("focus", function() {
-			h.animateLabel();
-		});
-		h.input.on("blur", function(e) {
-			if (h.isEmpty(h.input.value)) {
-				h.unanimateLabel()
-			}
-		});
-		h.input.on("change", function(e) {
-			if (h.config.onChange !== undefined) {
-				h.config.onChange(h.getBeanValue());
-			}
-		});
-		h.input.on("keyup", function(e) {
-			h.setBeanValue(h.getInputValue());
-
-			if (h.config.onChanging !== undefined) {
-				h.config.onChanging(h.getBeanValue());
-			}
-		});
-		h.input.disabled = true;
+//		h.input.on("focus", function() {
+//			h.animateLabel();
+//		});
+//		h.input.on("blur", function(e) {
+//			if (h.isEmpty(h.input.value)) {
+//				h.unanimateLabel()
+//			}
+//		});
+//		h.input.on("change", function(e) {
+//			if (h.config.onChange !== undefined) {
+//				h.config.onChange(h.getBeanValue());
+//			}
+//		});
+//		h.input.on("keyup", function(e) {
+//			h.setBeanValue(h.getInputValue());
+//
+//			if (h.config.onChanging !== undefined) {
+//				h.config.onChanging(h.getBeanValue());
+//			}
+//		});
+		//h.input.disabled = true;
 
 		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
 
@@ -3045,6 +3045,8 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
     			h.input.value = STRUTILS.compile(h.config.pattern, bean);
     		} else if (h.config.patternRenderer !== undefined) {
     			h.input.value = h.config.patternRenderer(bean);
+    		} else if (h.config.render !== undefined) {
+    		    h.input.value = h.config.render(bean);
     		}
     	} else {
     		h.input.value = "";
@@ -3060,6 +3062,17 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		if (h.config.onChange !== undefined) {
 			h.config.onChange(h.getBeanValue());
 		}
+    },
+
+    getBeanValue: function() {
+    	var h = this;
+    	var r = undefined;
+    		try {
+    			r = eval("h.config.bean." + h.config.property);
+    		} catch (e) {
+				alert(e);
+    		}
+    	return r;
     },
     /**
      * @method setReadOnly
@@ -3106,16 +3119,14 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 				return result;
 			},
 			onClick: function(row) {
-				h.setBeanValue(row.bean);
-				h.setInputValue(row.bean);
-				h.removeLookupCard();
+                h.setProperty(row.bean);
 			}
 		});
 
 		var fab = new UI.Fab({
 			inside: h.tmpFab,
 			top: 80,
-			title: "Zamknij listę",
+			title: "Zamknij list�",
 			fill: "red",
 			text: "<",
 			onClick: function() {
@@ -3154,9 +3165,28 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			if (h.config.fetchList) {
 				h.config.fetchList(h.list);
 			}
+			if (h.config.onExpand) {
+			    h.config.onExpand(h, h.tmpFab);
+			}
 		};
     },
-    
+
+    setProperty: function(bean) {
+        var h = this;
+
+        h.setBeanValue(bean);
+        h.setInputValue(bean);
+        h.removeLookupCard();
+    },
+
+    getInputValue: function() {
+    	var h = this;
+    	var val = null;
+		val = h.input.value;
+		val = h.validate(val);
+    	return val;
+    },
+
     getList: function() {
     	return this.list;
     },
@@ -3198,7 +3228,16 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			player.onfinish = function() {
 				h.tmpFab.remove();
 			};
-    }
+    },
+    markError: function() {
+    	var h = this;
+
+        try {
+		    h.inside.pseudoStyle("before", "color", "red");
+		} catch (e) {
+		    alert(e);
+		}
+    },
 });
 /**
  * @class UI.ListFormField
@@ -3599,7 +3638,7 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 			}
 		});
 
-		h.inside.title = h.config.label;
+		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
 
     	h.underline = new Element("DIV", {
     		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:120px"
@@ -3763,7 +3802,15 @@ UI.BooleanFormField = Class.create({
     		h.fab = new Element("DIV", {
     			class: "boolean-fab"
     		});
+
+    		if (h.config.readOnly === true) {
+    			h.fab.addClassName("boolean-fab-read-only");
+    		}
+
     		h.fab.on("click", function() {
+    			if (h.config.readOnly === true) {
+    				return;
+    			}
 				h.switchValue();
     		});
     		h.inside.insert(h.fab);
@@ -3923,9 +3970,10 @@ UI.PasswordFormField = Class.create(UI.TextFormField, {
     render: function() {
     	var h = this;
     	
-    		h.inside = new Element("DIV", {
-    			style: "position:relative; top:0px; height:40px; width:100%; line-height:20px;"
-    		});
+		h.inside = new Element("DIV", {
+			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
+			class: "text-form-field"
+		});
 
     		h.input = new Element("INPUT", {
     			type: "password",
@@ -3962,18 +4010,14 @@ UI.PasswordFormField = Class.create(UI.TextFormField, {
     			
     			e.cancelBubble = true;
     		});
-    		
-    		h.label = new Element("DIV", {
-    			style: "position:absolute; top:20px; left:10px; border:0px; height:10px; color:#999999; font-weight:bold; font-size:14px;"
-    		});
-    		h.label.insert(h.config.label + " " + ((h.config.required)?"*":""));
 
-	    	h.underline = new Element("DIV", {
-	    		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:" + h.config.width + "px"
-	    	});
+    	h.underline = new Element("DIV", {
+    		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:" + h.config.width + "px"
+    	});
+
+	    	h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
 
 		h.inside.insert(h.underline);
-		h.inside.insert(h.label);
 		h.inside.insert(h.input);
 
 		if (h.config.disableTab == true) {
@@ -4609,6 +4653,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
             rows: [
             ],
             quickSearch: true,
+            detailsWidth: "90%",
             descriptor: {}
         }, config || {});
     },
@@ -4727,7 +4772,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 			column.width = column.width || 100;
 
 			var div = new Element("P", {
-				style: "width:" + (column.width) + "px",
+				style: "width:" + (column.width) + "px; text-align:" + (column.align || "left"),
 				class: "grid-column bg_white fg_main"
 			});
 
@@ -4761,7 +4806,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
     		h.config.columns.forEach(function(config) {
     			var cell = new Element("DIV", {
-    				style: "width:" + (config.width) + "px",
+    				style: "width:" + (config.width) + "px; text-align:" + (config.align || "left"),
     				class: "grid-cell fg_main"
     			});
 
@@ -4867,7 +4912,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
             h.detailsMaterial = new UI.Material({
                 inside: h.getMaterial(),
                 modal: true,
-                position: "top:0px; left:0px; width:90%; bottom:0px"
+                position: "top:0px; left:0px; width:" + h.config.detailsWidth + "; bottom:0px"
             });
         }
 
@@ -4881,6 +4926,10 @@ UI.Grid = Class.create(UI.MaterialComponent, {
         if (h.detailsMaterial !== undefined) {
             h.detailsMaterial.hide();
         }
+    },
+    setButtons: function(buttons) {
+    	var h = this;
+    	h.panel.setButtons(buttons);
     }
 });
 
@@ -5127,7 +5176,6 @@ UI.IconToolbar = Class.create(UI.MaterialComponent, {
 	}
 });
 	
-
 UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 
     initConfig: function(config) {
@@ -5167,28 +5215,28 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 	    			this.nextItem.divItem.remove();
 	    			delete this.nextItem.divItem;
 	    		}
-	    		
+
 	    		//delete this.nextItem;
     		}
     	};
-    	
+
     	var h = this;
     		var item = new Element("DIV", {
-    			style: "padding-left:15px; font-size:16px; padding-right:15px; display:inline-block; border-right:1px solid #1E1D29; line-height:70px; height:70px; color:#525160; overflow:hidden"
+    			style: "padding-left:15px; font-size:16px; padding-right:15px; display:inline-block; border-right:1px solid #1E1D29; line-height:70px; height:70px; color:#525160; overflow:hidden; cursor:pointer"
     		});
     		item.bean = nextItem;
     		nextItem.divItem = item;
     		item.onClick = nextItem.onClick;
 
     		item.update(nextItem.name);
-    		item.title = nextItem.description;
+    		item.title = nextItem.description || nextItem.name;
 
     		item.addEventListener("click", function(e) {
     			h.handleItemClick(e.target.bean);
 			}, false);
 
     		h.forItems.insert(item);
-    		
+
     		if (h.lastItem === undefined) {
     			h.lastItem = nextItem;
     		} else {
@@ -5196,7 +5244,6 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
     			h.lastItem.nextItem = nextItem;
     			h.lastItem = nextItem;
     		}
-
         item.click();
     },
     /**
@@ -5333,10 +5380,6 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
 	    			item.update(t.name);
 	    		}
 
-	    		if (t.title) {
-	    			item.title = t.title;
-	    		}
-
 	    		if (t.customIcon) {
 	    		    if (t.name) {
                         item.setStyle({
@@ -5352,7 +5395,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
                         });
 	    			}
 	    		}
-	    		item.title = t.description;
+	    		item.title = t.title || t.name;
 	
 				item.on("click", function(e) {
 					h.displayMarkerVertically(e.target);	
@@ -5410,7 +5453,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     				backgroundPosition: "center center"
     			});
     		}
-    		item.title = h.config.items[i].description;
+    		item.title = t.description || t.name;
 
 			item.on("click", function(e) {
 				h.displayMarkerHorizontally(e.target);	

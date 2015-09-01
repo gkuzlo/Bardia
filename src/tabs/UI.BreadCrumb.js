@@ -1,4 +1,3 @@
-
 UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 
     initConfig: function(config) {
@@ -38,28 +37,28 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 	    			this.nextItem.divItem.remove();
 	    			delete this.nextItem.divItem;
 	    		}
-	    		
+
 	    		//delete this.nextItem;
     		}
     	};
-    	
+
     	var h = this;
     		var item = new Element("DIV", {
-    			style: "padding-left:15px; font-size:16px; padding-right:15px; display:inline-block; border-right:1px solid #1E1D29; line-height:70px; height:70px; color:#525160; overflow:hidden"
+    			style: "padding-left:15px; font-size:16px; padding-right:15px; display:inline-block; border-right:1px solid #1E1D29; line-height:70px; height:70px; color:#525160; overflow:hidden; cursor:pointer"
     		});
     		item.bean = nextItem;
     		nextItem.divItem = item;
     		item.onClick = nextItem.onClick;
 
     		item.update(nextItem.name);
-    		item.title = nextItem.description;
+    		item.title = nextItem.description || nextItem.name;
 
     		item.addEventListener("click", function(e) {
     			h.handleItemClick(e.target.bean);
 			}, false);
 
     		h.forItems.insert(item);
-    		
+
     		if (h.lastItem === undefined) {
     			h.lastItem = nextItem;
     		} else {
@@ -67,7 +66,6 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
     			h.lastItem.nextItem = nextItem;
     			h.lastItem = nextItem;
     		}
-
         item.click();
     },
     /**

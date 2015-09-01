@@ -15,27 +15,27 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			style: "position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px"
 		});
 
-		h.input.on("focus", function() {
-			h.animateLabel();
-		});
-		h.input.on("blur", function(e) {
-			if (h.isEmpty(h.input.value)) {
-				h.unanimateLabel()
-			}
-		});
-		h.input.on("change", function(e) {
-			if (h.config.onChange !== undefined) {
-				h.config.onChange(h.getBeanValue());
-			}
-		});
-		h.input.on("keyup", function(e) {
-			h.setBeanValue(h.getInputValue());
-
-			if (h.config.onChanging !== undefined) {
-				h.config.onChanging(h.getBeanValue());
-			}
-		});
-		h.input.disabled = true;
+//		h.input.on("focus", function() {
+//			h.animateLabel();
+//		});
+//		h.input.on("blur", function(e) {
+//			if (h.isEmpty(h.input.value)) {
+//				h.unanimateLabel()
+//			}
+//		});
+//		h.input.on("change", function(e) {
+//			if (h.config.onChange !== undefined) {
+//				h.config.onChange(h.getBeanValue());
+//			}
+//		});
+//		h.input.on("keyup", function(e) {
+//			h.setBeanValue(h.getInputValue());
+//
+//			if (h.config.onChanging !== undefined) {
+//				h.config.onChanging(h.getBeanValue());
+//			}
+//		});
+		//h.input.disabled = true;
 
 		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
 
@@ -69,6 +69,8 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
     			h.input.value = STRUTILS.compile(h.config.pattern, bean);
     		} else if (h.config.patternRenderer !== undefined) {
     			h.input.value = h.config.patternRenderer(bean);
+    		} else if (h.config.render !== undefined) {
+    		    h.input.value = h.config.render(bean);
     		}
     	} else {
     		h.input.value = "";
@@ -84,6 +86,17 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 		if (h.config.onChange !== undefined) {
 			h.config.onChange(h.getBeanValue());
 		}
+    },
+
+    getBeanValue: function() {
+    	var h = this;
+    	var r = undefined;
+    		try {
+    			r = eval("h.config.bean." + h.config.property);
+    		} catch (e) {
+				alert(e);
+    		}
+    	return r;
     },
     /**
      * @method setReadOnly
@@ -130,16 +143,14 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 				return result;
 			},
 			onClick: function(row) {
-				h.setBeanValue(row.bean);
-				h.setInputValue(row.bean);
-				h.removeLookupCard();
+                h.setProperty(row.bean);
 			}
 		});
 
 		var fab = new UI.Fab({
 			inside: h.tmpFab,
 			top: 80,
-			title: "Zamknij listÄ™",
+			title: "Zamknij listê",
 			fill: "red",
 			text: "<",
 			onClick: function() {
@@ -178,9 +189,28 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			if (h.config.fetchList) {
 				h.config.fetchList(h.list);
 			}
+			if (h.config.onExpand) {
+			    h.config.onExpand(h, h.tmpFab);
+			}
 		};
     },
-    
+
+    setProperty: function(bean) {
+        var h = this;
+
+        h.setBeanValue(bean);
+        h.setInputValue(bean);
+        h.removeLookupCard();
+    },
+
+    getInputValue: function() {
+    	var h = this;
+    	var val = null;
+		val = h.input.value;
+		val = h.validate(val);
+    	return val;
+    },
+
     getList: function() {
     	return this.list;
     },
@@ -222,5 +252,14 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			player.onfinish = function() {
 				h.tmpFab.remove();
 			};
-    }
+    },
+    markError: function() {
+    	var h = this;
+
+        try {
+		    h.inside.pseudoStyle("before", "color", "red");
+		} catch (e) {
+		    alert(e);
+		}
+    },
 });

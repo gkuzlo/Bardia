@@ -1,4 +1,3 @@
-
 UI.Fab = Class.create({
 
     initialize: function(config) {
@@ -9,7 +8,7 @@ UI.Fab = Class.create({
             fill: "orange",
             icon: "help",
             access: UI.VISIBLE,
-            title: "Insert title here ...",
+            title: "",
             style: undefined
         }, config || {});
 

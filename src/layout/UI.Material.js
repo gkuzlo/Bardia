@@ -34,20 +34,20 @@ UI.Material = Class.create({
     		"class": "default_shadow"
     	});
     	
-    	h.material.on("mousedown", function(e) {
-			e.cancelBubble = true;
-			e.returnValue = false;
-		});
-		
-    	h.material.on("click", function(e) {
-			e.cancelBubble = true;
-			e.returnValue = false;
-		});
-    	
-    	h.material.on("dblclick", function(e) {
-			e.cancelBubble = true;
-			e.returnValue = false;
-		});
+//    	h.material.on("mousedown", function(e) {
+//			e.cancelBubble = true;
+//			e.returnValue = false;
+//		});
+//
+//    	h.material.on("click", function(e) {
+//			e.cancelBubble = true;
+//			e.returnValue = false;
+//		});
+//
+//    	h.material.on("dblclick", function(e) {
+//			e.cancelBubble = true;
+//			e.returnValue = false;
+//		});
 
     	h.config.inside.insert(h.material);
     	
@@ -74,15 +74,15 @@ UI.Material = Class.create({
 
     	}
     	
-    	h.material.on("mousedown", function(e) {
-			e.cancelBubble = true;
-			e.returnValue = false;
-		});
-		
-    	h.material.on("click", function(e) {
-			e.cancelBubble = true;
-			e.returnValue = false;
-		});
+//    	h.material.on("mousedown", function(e) {
+//			e.cancelBubble = true;
+//			e.returnValue = false;
+//		});
+//
+//    	h.material.on("click", function(e) {
+//			e.cancelBubble = true;
+//			e.returnValue = false;
+//		});
 
     	h.config.inside.insert(h.material);
     },
@@ -125,6 +125,10 @@ UI.Material = Class.create({
       			fill: "both"
       		});
     	}
+
+    	h.material.setStyle({
+    		"z-index": 1000000
+    	});
     },
     updateHeight: function(pixels) {
     	var h = this;
@@ -186,11 +190,12 @@ UI.Material = Class.create({
 		if (h.curtain === undefined) {
 			return;
 		}
-		
+
 		h.curtain.setStyle({
-			display: "block"
+			display: "block",
+			"z-index:": 10000000
 		});
-		
+
 		var player = h.curtain.animate([
   		    {background: "rgba(0,0,0,0.0)"},
   		    {background: "rgba(0,0,0,0.8)"},

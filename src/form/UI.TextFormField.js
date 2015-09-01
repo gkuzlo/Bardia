@@ -29,7 +29,7 @@ UI.TextFormField = Class.create({
      */
     render: function() {
     	var h = this;
-    	
+
 		h.inside = new Element("DIV", {
 			style: "position:relative; display:block; height:40px; width:100%; line-height:40px; background-color:transparent",
 			class: "text-form-field"
@@ -41,7 +41,7 @@ UI.TextFormField = Class.create({
 		h.input.on("focus", function() {
 			h.animateLabel();
 		});
-		    		    		
+
 		if (h.config.mask) {
 			var mask = new InputMask(h.config.mask, h.input);
 				mask.blurFunction = function(e) {
@@ -177,9 +177,6 @@ UI.TextFormField = Class.create({
     	h.config.bean = bean;
     	
     	var v = h.getBeanValue();
-    	if (h.config.render !== undefined) {
-    		v = h.config.render(v);
-    	}
 		h.setInputValue(v);
     },
     getBeanValue: function() {
@@ -227,8 +224,9 @@ UI.TextFormField = Class.create({
      */
     getInputValue: function() {
     	var h = this;
-    	var val = h.input.value;
-    		val = h.validate(val);
+    	var val = null;
+            val = h.input.value;
+            val = h.validate(val);
     	return val;
     },
     /**
@@ -259,9 +257,7 @@ UI.TextFormField = Class.create({
     markError: function() {
     	var h = this;
 
-//    	h.label.setStyle({
-//    		color: "#cf6d6d"
-//    	});
+		h.inside.pseudoStyle("before", "color", "red");
     },
     /**
      * 
@@ -269,8 +265,6 @@ UI.TextFormField = Class.create({
     unmarkError: function() {
     	var h = this;
 
-//    	h.label.setStyle({
-//    		color: "#cdcdcf"
-//    	});
+		h.inside.pseudoStyle("before", "color", "grey");
     }
 });

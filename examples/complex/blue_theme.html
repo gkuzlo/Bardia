@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="pl">
 
-    <head>
-        <meta charset="utf-8">
-        <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">  
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+<head>
+    <meta charset="utf-8">
+    <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
-        <script src="../../prototype/prototype.js"></script>
-        <script src="../../web-animations/web-animations.min.js"></script>
+    <script src="../../prototype/prototype.js"></script>
+    <script src="../../web-animations/web-animations.min.js"></script>
 
-		<script src="../../jsu/JavaScriptUtil.js"></script>
-		<script src="../../jsu/Parsers.js"></script>
-		<script src="../../jsu/InputMask.js"></script>
-		
-		<script src="../../dist/bardia.js"></script>
-		<link rel="stylesheet" href="../../dist/bardia.css">
-		
-		<link rel="stylesheet" href="blue.css">
-		
-		<script src="ComplexView.js"></script>
-		
-		<script>
+    <script src="../../jsu/JavaScriptUtil.js"></script>
+    <script src="../../jsu/Parsers.js"></script>
+    <script src="../../jsu/InputMask.js"></script>
+
+    <script src="../../dist/bardia.js"></script>
+    <link rel="stylesheet" href="../../dist/bardia.css">
+
+    <link rel="stylesheet" href="blue.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet"
+          href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.blue_grey-orange.min.css"/>
+
+    <script src="ComplexView.js"></script>
+
+    <script>
 		
         	var IS = new UI.IconSet({
         		path: "../fabicons"
@@ -36,11 +40,86 @@
 					inside: window.document.body
 				});
 			}
-		</script>
-		
-    </head>
 
-    <body onload="initPage()" style="background-color:lightGrey">
-    </body>
+			function initPage2() {
+
+			    var layout = new UI.BorderLayout({
+			        inside: window.document.body,
+			        fill: "blue",
+			        north: {
+			            height: 300,
+			            fill: "yellow"
+			        }
+			    });
+
+			    var sublayout = new UI.BorderLayout({
+			        inside: layout.getDefault(),
+			        fill: "red",
+			        north: {
+			            height: 300,
+			            fill: "green"
+			        }
+			    });
+
+			    var panel = new UI.Panel({
+			        inside: sublayout.getDefault(),
+			    });
+
+                var div = new Element("DIV", {
+                    class: "mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                });
+
+                var input = new Element("INPUT", {
+                    class: "mdl-textfield__input",
+                    type: "text",
+                    "id": "l1"
+                });
+
+                var label = new Element("LABEL", {
+                    class: "mdl-textfield__label",
+                    "for": "l1"
+                });
+                label.update("Number");
+
+                div.insert(input);
+                div.insert(label);
+
+                panel.getContent().insert(div);
+
+                componentHandler.upgradeElement(div);
+			}
+
+            function initPage3() {
+            }
+
+
+
+
+
+
+
+    </script>
+
+</head>
+
+<body onload="initPage()">
+<!--
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">Title3333</span>
+        </div>
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+
+        </div>
+    </header>
+    <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">Title</span>
+    </div>
+    <main class="mdl-layout__content">
+    </main>
+</div>
+-->
+</body>
 
 </html>

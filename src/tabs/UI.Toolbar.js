@@ -48,10 +48,6 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
 	    			item.update(t.name);
 	    		}
 
-	    		if (t.title) {
-	    			item.title = t.title;
-	    		}
-
 	    		if (t.customIcon) {
 	    		    if (t.name) {
                         item.setStyle({
@@ -67,7 +63,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
                         });
 	    			}
 	    		}
-	    		item.title = t.description;
+	    		item.title = t.title || t.name;
 	
 				item.on("click", function(e) {
 					h.displayMarkerVertically(e.target);	
@@ -125,7 +121,7 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     				backgroundPosition: "center center"
     			});
     		}
-    		item.title = h.config.items[i].description;
+    		item.title = t.description || t.name;
 
 			item.on("click", function(e) {
 				h.displayMarkerHorizontally(e.target);	

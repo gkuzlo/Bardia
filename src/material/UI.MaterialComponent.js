@@ -23,7 +23,7 @@ UI.MaterialComponent = Class.create({
     	
 			h.material = new Element("DIV", {class: "inside"});
 			h.config.inside.insert(h.material);
-			
+
 	    	h.material.on("mousedown", function(e) {
 				//e.cancelBubble = true;
 				e.returnValue = false;

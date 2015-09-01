@@ -32,7 +32,7 @@ UI.DateFormField = Class.create(UI.LookupFormField, {
 			}
 		});
 
-		h.inside.title = h.config.label;
+		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
 
     	h.underline = new Element("DIV", {
     		style: "position:absolute; top:40px; left:10px; border:0px; height:2px; background-color:#cdcdcf; width:120px"

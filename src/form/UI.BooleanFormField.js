@@ -44,7 +44,15 @@ UI.BooleanFormField = Class.create({
     		h.fab = new Element("DIV", {
     			class: "boolean-fab"
     		});
+
+    		if (h.config.readOnly === true) {
+    			h.fab.addClassName("boolean-fab-read-only");
+    		}
+
     		h.fab.on("click", function() {
+    			if (h.config.readOnly === true) {
+    				return;
+    			}
 				h.switchValue();
     		});
     		h.inside.insert(h.fab);

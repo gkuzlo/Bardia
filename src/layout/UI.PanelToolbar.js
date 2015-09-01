@@ -23,7 +23,7 @@ UI.PanelToolbar = Class.create({
     	h.material = new Element("DIV", {
     		style: "position:absolute; display:flex; flex-direction:row; top:0px; left:0px; right:0px; bottom:0px"
     	});
-    	h.config.inside.insert(h.material);
+    	h.config.inside.update(h.material);
 
     	h.setButtons(h.config.buttons);
     },

@@ -37,10 +37,7 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 			});
 			h.material.insert(h.toolbarDiv);
 
-			h.toolbar = new UI.PanelToolbar({
-				inside: h.toolbarDiv,
-				buttons: h.config.buttons || []
-			});
+			h.setButtons(h.config.buttons);
         } else {
 			h.mainLayout = new UI.BorderLayout({
 				inside: h.getMaterial()
@@ -62,5 +59,13 @@ UI.Panel = Class.create(UI.MaterialComponent, {
     setTitle: function(title) {
     	var h = this;
     		h.material.title = title;
+    },
+    setButtons: function(buttons) {
+    	var h = this;
+
+		h.toolbar = new UI.PanelToolbar({
+			inside: h.toolbarDiv,
+			buttons: buttons || []
+		});
     }
 });

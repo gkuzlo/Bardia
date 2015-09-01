@@ -17,6 +17,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
             rows: [
             ],
             quickSearch: true,
+            detailsWidth: "90%",
             descriptor: {}
         }, config || {});
     },
@@ -135,7 +136,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 			column.width = column.width || 100;
 
 			var div = new Element("P", {
-				style: "width:" + (column.width) + "px",
+				style: "width:" + (column.width) + "px; text-align:" + (column.align || "left"),
 				class: "grid-column bg_white fg_main"
 			});
 
@@ -169,7 +170,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
     		h.config.columns.forEach(function(config) {
     			var cell = new Element("DIV", {
-    				style: "width:" + (config.width) + "px",
+    				style: "width:" + (config.width) + "px; text-align:" + (config.align || "left"),
     				class: "grid-cell fg_main"
     			});
 
@@ -275,7 +276,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
             h.detailsMaterial = new UI.Material({
                 inside: h.getMaterial(),
                 modal: true,
-                position: "top:0px; left:0px; width:90%; bottom:0px"
+                position: "top:0px; left:0px; width:" + h.config.detailsWidth + "; bottom:0px"
             });
         }
 
@@ -289,5 +290,9 @@ UI.Grid = Class.create(UI.MaterialComponent, {
         if (h.detailsMaterial !== undefined) {
             h.detailsMaterial.hide();
         }
+    },
+    setButtons: function(buttons) {
+    	var h = this;
+    	h.panel.setButtons(buttons);
     }
 });

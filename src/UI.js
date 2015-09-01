@@ -1,10 +1,8 @@
-
 var UI = {
-    version: 1.0,
+    version: "0.1.1",
     uploadAction: "http://localhost:8080/scheduler/file.upload",
     DATE_FORMAT: "yyyy-MM-ddTHH:mm:ss.SSSZ",
     DATE_YYYMMMDDD_FORMAT: "yyyy-MM-dd",
-    
     VISIBLE: 1,
     READONLY: 2,
     HIDDEN: 4

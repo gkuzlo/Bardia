@@ -51,3 +51,7 @@
     -webkit-transition-timing-function: ease-out;
     transition-timing-function: ease-out;
 }
+
+.boolean-fab-read-only {
+    opacity:0.3
+}
