@@ -4910,7 +4910,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
         if (h.detailsMaterial === undefined) {
             h.detailsMaterial = new UI.Material({
-                inside: h.getMaterial(),
+                inside: h.config.inside,
                 modal: true,
                 position: "top:0px; left:0px; width:" + h.config.detailsWidth + "; bottom:0px"
             });
