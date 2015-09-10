@@ -41,7 +41,6 @@ module.exports = function(grunt) {
                     "src/form/UI.IntegerFormField.js",
                     "src/form/UI.DecimalFormField.js",
                     "src/layout/UI.BorderLayout.js",
-                    "src/layout/UI.GridLayout.js",
                     "src/widgets/UI.Crud.js",
                     "src/menu/UI.Menu.js",
                     "src/utils/UI.ProgressBar.js",

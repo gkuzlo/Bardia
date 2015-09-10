@@ -857,7 +857,7 @@ UI.Panel = Class.create({
 
             tabHeader.on("click", function(e) {
                 if (tab.onActivate) {
-                    tab.onActivate(h.root.querySelector("#tab_" + index))
+                    tab.onActivate(h.root.querySelector("#tab_" + index));
                 }
             });
         });
@@ -870,11 +870,8 @@ UI.Panel = Class.create({
         tabs.forEach(function(tab, index) {
             var json = {
                 tag: "section", class: "mdl-layout__tab-panel", id: "tab_" + index,
-                $insert: [{
-                    tag: "div", class: "page-content",
-                }]
+                style: "position:absolute; height:100%; width:100%; background-color:pink"
             }
-
             var tabContent = UI.toHTML(json);
             h.root.querySelector("#contents").insert(tabContent);
         });
@@ -894,13 +891,14 @@ UI.Panel = Class.create({
                     }]
                 }]
             }, {
-                tag: "div", class: "mdl-layout__drawer", style: "max-width:600px",
+                tag: "div", class: "mdl-layout__drawer",
                 $insert: [{
                     tag: "span", class: "mdl-layout-title",
                     $insert: h.config.title,
                 }]
             }, {
                 tag: "main", class: "mdl-layout__content", id: "contents",
+                style: "background-color:green; position:relative"
             }]
         };
 
@@ -2475,23 +2473,19 @@ UI.Form = Class.create({
      * Metoda dynamicznie tworzy atrybuty w formularzu
      */
     setFields: function(fields) {
-    	var h = this;
-    		h.config.fields = fields;
-    		h.render();
-    		h.setBean(h.getBean());
+        this.config.fields = fields;
+        this.render();
+        this.setBean(h.getBean());
     },
     /**
      * @method setBean
      */
     setBean: function(bean) {
-    	var h = this;
-    	
-    	h.config.bean = bean;
-    	
-    	var i=0;
-    	for (i=0; i<h.config.fields.length; i++) {
-    		h.config.fieldControlls[i].setBean(bean);
-    	}
+    	this.config.bean = bean;
+    	this.config.fieldControlls.forEach(function(control) {
+    	    control.setBean(bean);
+    	});
+    	return this;
     },
     /**
      * @method getBean
@@ -2524,29 +2518,15 @@ UI.Form = Class.create({
     	}
     	return result;
     },
-    /**
-     * 
-     * @param trueOrFalse
-     */
     setReadOnly: function(trueOrFalse) {
-    	var h = this;
-
-    	var i=0;
-    	for (i=0; i<h.config.fields.length; i++) {
-    		h.config.fieldControlls[i].setReadOnly(trueOrFalse);
-    	}
+    	this.config.fieldControlls.forEach(function(control) {
+    	    control.setReadOnly(trueOrFalse);
+    	});
     },
-    /**
-     * @resetBean
-     */
     resetBean: function() {
     	var h = this;
     		h.setBean(h.config.bean);
     },
-    /**
-     * @method getContent
-     * @returns
-     */
     getContent: function() {
     	return this.panel.getContent();
     },
@@ -2556,7 +2536,7 @@ UI.Form = Class.create({
     	var json = {
     		tag: "div",
     		class: "demo-card-wide mdl-card mdl-shadow--2dp",
-    		style: "width:100%",
+    		style: "width:100%; height:100%",
     		$insert: [{
     			tag: "div",
     			class: "mdl-card__title",
@@ -3018,8 +2998,8 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
      */
     showLookupCard: function() {
     	var h = this;
-    	
-		var f = h.form.getMaterial();
+
+		var f = h.form.config.inside;
 		var formOffset = f.cumulativeOffset();
 		var fieldOffset = h.fab.cumulativeOffset();
 
@@ -3112,15 +3092,6 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			player.onfinish = function() {
 				h.tmpFab.remove();
 			};
-    },
-    markError: function() {
-    	var h = this;
-
-        try {
-		    h.inside.pseudoStyle("before", "color", "red");
-		} catch (e) {
-		    alert(e);
-		}
     },
 });
 /**
@@ -3852,7 +3823,7 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
 	 */
 	initConfig: function(config) {
         this.config = Object.extend({
-        	items: []
+        	northHeight: 50
         }, config || {});
 	},
 	/**
@@ -3867,22 +3838,18 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
         var centerRight = 0;
     
         if (this.config.north !== undefined) {
-            var height = 50;
+            var height = (h.config.north.height || h.config.northHeight);
+            h.config.north.height = height;
 
-                if (h.config.north.height) {
-                    height = h.config.north.height;
-                } else {
-                    h.config.north.height = height;
-                }
-                
-                centerTop = h.config.north.height;
-                var fill = h.config.north.fill || "transparent";
+            centerTop = height;
+            var fill = h.config.north.fill || "transparent";
 
-                h.north = new Element("DIV", {
-                    style: "position:absolute; overflow:hidden; top:0px; left:0px; right:0px; height:" + height + "px; background-color:" + fill
-                });
+            var north = {
+                tag: "div",
+                style: "position:absolute; overflow:hidden; top:0px; left:0px; right:0px; height:" + height + "px; background-color:" + fill
+            }
 
-            this.config.inside.insert(this.north);
+            this.config.inside.insert(UI.toHTML(north));
         }
         
         if (this.config.south !== undefined) {
@@ -3966,52 +3933,6 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
     },
     getDefault: function() {
         return this.center;
-    }
-});
-
-UI.GridLayout = Class.create({
-    initialize: function(config) {
-        this.config = Object.extend({
-            inside: window.document.body,
-            cells: []
-        }, config || {});
-
-        this.render();
-    },
-    render: function() {
-        var h = this;
-
-        h.config.inside.update();
-        h.prepareRoot();
-    },
-    prepareRoot: function() {
-        var h = this;
-
-        h.root = h.config.inside;
-
-        h.config.cells.forEach(function(_row, index) {
-            var row = {
-                tag: "div",
-                class: "mdl-grid"
-            };
-
-            var cells = _row.map(function(cell, index) {
-                return {
-                    tag: "div",
-                    id: cell.id,
-                    class: "mdl-cell mdl-cell--" + (cell.cols || 1) + "-col",
-                }
-            });
-
-            row.$insert = cells;
-            h.root.insert(UI.toHTML(row));
-        });
-
-        UI.upgrade(h.root);
-    },
-    getCell: function(cellId) {
-        var h = this;
-        return h.root.querySelector("#" + cellId);
     }
 });
 /**

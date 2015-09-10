@@ -7,7 +7,7 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
 	 */
 	initConfig: function(config) {
         this.config = Object.extend({
-        	items: []
+        	northHeight: 50
         }, config || {});
 	},
 	/**
@@ -22,22 +22,18 @@ UI.BorderLayout = Class.create(UI.MaterialComponent, {
         var centerRight = 0;
     
         if (this.config.north !== undefined) {
-            var height = 50;
+            var height = (h.config.north.height || h.config.northHeight);
+            h.config.north.height = height;
 
-                if (h.config.north.height) {
-                    height = h.config.north.height;
-                } else {
-                    h.config.north.height = height;
-                }
-                
-                centerTop = h.config.north.height;
-                var fill = h.config.north.fill || "transparent";
+            centerTop = height;
+            var fill = h.config.north.fill || "transparent";
 
-                h.north = new Element("DIV", {
-                    style: "position:absolute; overflow:hidden; top:0px; left:0px; right:0px; height:" + height + "px; background-color:" + fill
-                });
+            var north = {
+                tag: "div",
+                style: "position:absolute; overflow:hidden; top:0px; left:0px; right:0px; height:" + height + "px; background-color:" + fill
+            }
 
-            this.config.inside.insert(this.north);
+            this.config.inside.insert(UI.toHTML(north));
         }
         
         if (this.config.south !== undefined) {

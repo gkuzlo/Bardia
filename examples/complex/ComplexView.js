@@ -24,21 +24,15 @@ ComplexView = Class.create({
 					name: "Tab 1",
 					onActivate: function(html) {
 
-						var gridLayout = new UI.GridLayout({
+						var gridLayout = new UI.BorderLayout({
 							inside: html,
-							cells: [
-								[{
-									cols: 6,
-									id: "form1"
-								}, {
-									cols: 6,
-									id: "form2"
-								}]
-							]
+							west: {
+							    width: 500
+							}
 						});
 
 						new UI.Form({
-							inside: gridLayout.getCell("form1"),
+							inside: gridLayout.getWest(),
 							title: "UI.Form",
 							fields: [{
 								label: "Imię",
@@ -50,6 +44,15 @@ ComplexView = Class.create({
 								label: "Wiek",
 								property: "age",
 								type: "Integer"
+							}, {
+								label: "Firma",
+								property: "company",
+								type: "Lookup",
+								render: function(arg) {
+									return arg.name;
+								},
+								onExpand: function(html) {
+								}
 							}]
 						}).setBean({
 							firstName: "Grzegorz",
@@ -57,7 +60,7 @@ ComplexView = Class.create({
 						});
 
 						new UI.Form({
-							inside: gridLayout.getCell("form2"),
+							inside: gridLayout.getDefault(),
 							title: "UI.Form",
 							fields: [{
 								label: "Imię",
@@ -79,8 +82,30 @@ ComplexView = Class.create({
 				{
 					name: "Tab 2",
 					onActivate: function(html) {
-						new UI.GridLayout({
-							inside: html
+						var gridLayout = new UI.BorderLayout({
+							inside: html,
+							north: {
+							    height: 200
+							}
+						});
+
+						new UI.Form({
+							inside: gridLayout.getDefault(),
+							title: "UI.Form",
+							fields: [{
+								label: "Imię",
+								property: "firstName"
+							},{
+								label: "Nazwisko",
+								property: "lastName"
+							},{
+								label: "Wiek",
+								property: "age",
+								type: "Integer"
+							}]
+						}).setBean({
+							firstName: "Grzegorz",
+							lastName: "Kuzło"
 						});
 					}
 				},

@@ -30,8 +30,8 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
      */
     showLookupCard: function() {
     	var h = this;
-    	
-		var f = h.form.getMaterial();
+
+		var f = h.form.config.inside;
 		var formOffset = f.cumulativeOffset();
 		var fieldOffset = h.fab.cumulativeOffset();
 
@@ -124,14 +124,5 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			player.onfinish = function() {
 				h.tmpFab.remove();
 			};
-    },
-    markError: function() {
-    	var h = this;
-
-        try {
-		    h.inside.pseudoStyle("before", "color", "red");
-		} catch (e) {
-		    alert(e);
-		}
     },
 });

@@ -87,23 +87,19 @@ UI.Form = Class.create({
      * Metoda dynamicznie tworzy atrybuty w formularzu
      */
     setFields: function(fields) {
-    	var h = this;
-    		h.config.fields = fields;
-    		h.render();
-    		h.setBean(h.getBean());
+        this.config.fields = fields;
+        this.render();
+        this.setBean(h.getBean());
     },
     /**
      * @method setBean
      */
     setBean: function(bean) {
-    	var h = this;
-    	
-    	h.config.bean = bean;
-    	
-    	var i=0;
-    	for (i=0; i<h.config.fields.length; i++) {
-    		h.config.fieldControlls[i].setBean(bean);
-    	}
+    	this.config.bean = bean;
+    	this.config.fieldControlls.forEach(function(control) {
+    	    control.setBean(bean);
+    	});
+    	return this;
     },
     /**
      * @method getBean
@@ -136,29 +132,15 @@ UI.Form = Class.create({
     	}
     	return result;
     },
-    /**
-     * 
-     * @param trueOrFalse
-     */
     setReadOnly: function(trueOrFalse) {
-    	var h = this;
-
-    	var i=0;
-    	for (i=0; i<h.config.fields.length; i++) {
-    		h.config.fieldControlls[i].setReadOnly(trueOrFalse);
-    	}
+    	this.config.fieldControlls.forEach(function(control) {
+    	    control.setReadOnly(trueOrFalse);
+    	});
     },
-    /**
-     * @resetBean
-     */
     resetBean: function() {
     	var h = this;
     		h.setBean(h.config.bean);
     },
-    /**
-     * @method getContent
-     * @returns
-     */
     getContent: function() {
     	return this.panel.getContent();
     },
@@ -168,7 +150,7 @@ UI.Form = Class.create({
     	var json = {
     		tag: "div",
     		class: "demo-card-wide mdl-card mdl-shadow--2dp",
-    		style: "width:100%",
+    		style: "width:100%; height:100%",
     		$insert: [{
     			tag: "div",
     			class: "mdl-card__title",

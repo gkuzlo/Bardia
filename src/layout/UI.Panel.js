@@ -52,7 +52,7 @@ UI.Panel = Class.create({
 
             tabHeader.on("click", function(e) {
                 if (tab.onActivate) {
-                    tab.onActivate(h.root.querySelector("#tab_" + index))
+                    tab.onActivate(h.root.querySelector("#tab_" + index));
                 }
             });
         });
@@ -65,11 +65,8 @@ UI.Panel = Class.create({
         tabs.forEach(function(tab, index) {
             var json = {
                 tag: "section", class: "mdl-layout__tab-panel", id: "tab_" + index,
-                $insert: [{
-                    tag: "div", class: "page-content",
-                }]
+                style: "position:absolute; height:100%; width:100%; background-color:pink"
             }
-
             var tabContent = UI.toHTML(json);
             h.root.querySelector("#contents").insert(tabContent);
         });
@@ -89,13 +86,14 @@ UI.Panel = Class.create({
                     }]
                 }]
             }, {
-                tag: "div", class: "mdl-layout__drawer", style: "max-width:600px",
+                tag: "div", class: "mdl-layout__drawer",
                 $insert: [{
                     tag: "span", class: "mdl-layout-title",
                     $insert: h.config.title,
                 }]
             }, {
                 tag: "main", class: "mdl-layout__content", id: "contents",
+                style: "background-color:green; position:relative"
             }]
         };
 
