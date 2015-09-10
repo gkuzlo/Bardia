@@ -1,127 +1,123 @@
 ComplexView = Class.create({
-	/*
-	 * 
-	 */
     initialize: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
         }, config || {});
 
-        try {
-            this.render();
-        } catch (e) {
-            alert(e);
-        }
+        this.render();
     },
     render: function() {
     	var h = this;
 
-		var tabs = new UI.Panel({
-			inside: window.document.body,
-			title: "UI.Panel",
-			tabs: [
-				{
-					name: "Tab 1",
-					onActivate: function(html) {
-						new UI.Form({
-							inside: html,
-							title: "UI.Form",
-							fields: [{
-								label: "Imię",
-								property: "firstName"
-							}]
-						}).setBean({
-							firstName: "Grzegorz"
-						});
-					}
-				},
-				{
-					name: "Tab 2",
-					onActivate: function(html) {
-						new UI.GridLayout({
-							inside: html
-						});
-					}
-				},
-				{
-					name: "Tab 3"
-				}
-			]
-		});
+        h.mainLayout = new UI.BorderLayout({
+            inside: h.config.inside,
+            north: {
+                height: 600
+            },
+            west: {
+                width: 500
+            },
+            south: {
+                height: 100
+            }
+        });
 
+        h.mainGrid = new UI.Grid({
+            inside: h.mainLayout.getNorth(),
+            title: "Grid 1",
+            detailsWidth: "300px",
+            quickSearch: false,
+            columns: [{
+                name: "Imię",
+                property: "name",
+                width: 400
+            }, {
+                name: "Nazwisko"
+            }, {
+                name: "Wiek",
+                property: "age",
+                render: function(row) {
+                    return "Wiek: " + row.bean.age
+                }
+            }],
+            onClick: function(row) {
+                //alert(Object.toJSON(row.bean));
 
+                var material = h.mainGrid.openDetails();
 
-        /*
-		var form = new UI.Form({
-		    inside: layout.getWest(),
-		    title: "UI.Form",
-		    fields: [
-		        {
-		            label: "Imię",
-		            property: "firstName"
-		        },
-		        {
-		            label: "Hasło",
-		            property: "password",
-		            type: "Password"
-		        },
-		        {
-		        	label: "Wiek",
-		        	property: "age",
-		        	type: "Integer"
-		        },
-		        {
-		        	label: "Mężczyzna",
-		        	property: "female",
-		        	type: "Boolean"
-		        },
-		        {
-		            label: "Firma",
-		            property: "company",
-		            type: "Lookup",
-		            render: function(bean) {
-		                return bean.name;
-		            },
-		            onExpand: function(controler, html) {
-		                var grid = new UI.Grid({
-		                    inside: html,
-		                    title: "Firmy",
-		                    columns: [
-		                        {
-		                            name: "name",
-		                            property: "name"
-		                        }
-		                    ],
-		                    onClick: function(row) {
-		                        controler.setProperty(row.bean);
-		                    }
-		                });
+                h.showDetails(material.getMaterial(), row.bean);
+            }
+        });
 
-		                grid.fetch({
-		                    rows: [
-		                        {
-		                            name: "IBM"
-		                        },
-		                        {
-		                            name: "Google"
-		                        },
-		                        {
-		                            name: "Microsoft"
-		                        },
-		                    ]
-		                });
-		            }
-		        },
-		    ],
-		    onChange: function(propertyName, propertyValue) {
-		        layout.getEast().update(JSON.stringify(form.getBean(), null, 4));
-		    }
-		});
-		form.setBean({
-			firstName: "Grzegorz",
-			age: 123
-		});
+        h.mainGrid.fetch({
+            rows: [{
+                name: "Grzegorz"
+            }, {
+                name: "Wojciech",
+                age: 20
+            }]
+        });
 
-		*/
+        h.secGrid = new UI.Grid({
+            inside: h.mainLayout.getDefault(),
+            title: "Grid 2",
+            detailsWidth: "300px",
+            columns: [{
+                name: "Imię",
+                property: "name",
+                width: 400
+            }, {
+                name: "Nazwisko"
+            }],
+        });
+
+        var tabs = new UI.Tabs({
+            inside: h.mainLayout.getWest(),
+            tabs: [{
+                name: "A",
+                onActivate: function(html) {
+                    new UI.Grid({
+                        inside: html,
+                        title: "INSIDE",
+                        columns: [{
+                            name: "Zawód"
+                        }]
+                    });
+                }
+            }, {
+               name: "B",
+                onActivate: function(html) {
+                    new UI.Grid({
+                        inside: html,
+                        title: "OUTSIDE",
+                        columns: [{
+                            name: "Rodzice"
+                        }]
+                    });
+                }
+           }]
+        });
+    },
+    showDetails: function(html, person) {
+        var h = this;
+
+        var form = new UI.Form({
+            inside: html,
+            fields: [{
+                label: "Name",
+                property: "name",
+                required: true,
+                type: "Boolean"
+            }],
+            buttons: [{
+                customIcon: "dsf",
+                onClick: function() {
+                    form.validate();
+                    h.mainGrid.closeDetails();
+                }
+            }]
+        });
+
+        form.setBean(person);
     }
 });
