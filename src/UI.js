@@ -7,9 +7,9 @@ var UI = {
     VISIBLE: 1,
     READONLY: 2,
     HIDDEN: 4
-}
+};
 
-UI.play = function(html, config, finishFun) {
+UI.play = function (html, config, finishFun) {
 	var player = html.animate(config, {
 		direction: 'normal',
 	    duration: 500,
@@ -21,7 +21,7 @@ UI.play = function(html, config, finishFun) {
 	if (finishFun) {
 		player.onfinish = finishFun;
 	}
-}
+};
 
 $PLAY = UI.play;
 

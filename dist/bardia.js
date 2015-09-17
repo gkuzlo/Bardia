@@ -7,9 +7,9 @@ var UI = {
     VISIBLE: 1,
     READONLY: 2,
     HIDDEN: 4
-}
+};
 
-UI.play = function(html, config, finishFun) {
+UI.play = function (html, config, finishFun) {
 	var player = html.animate(config, {
 		direction: 'normal',
 	    duration: 500,
@@ -21,7 +21,7 @@ UI.play = function(html, config, finishFun) {
 	if (finishFun) {
 		player.onfinish = finishFun;
 	}
-}
+};
 
 $PLAY = UI.play;
 
@@ -3258,34 +3258,7 @@ UI.ListFormField = Class.create(UI.LookupFormField, {
 		}
     }
 });
-/*
- * File
- * 
- * Kontrolka File obsługuje atrybut beana formularza typu file, który ma loid i name
- * 
- * Przykład:
- * 
- * var bean = {
- * 		name: "Nazwa",
- *      age: 12,
- *      report: {
- *      	loid: 1234,
- *      	name: "raport.txt"
- *      }
- * }
- * 
- * var form = new UI.Form({
- * 		fields: [
- * 			{
- * 				property: "report",
- * 				type: "File"
- * 			}
- * 		]
- * 		....
- * });
- * 
- * form.setBean(bean);
- */
+
 UI.FileFormField = Class.create(UI.TextFormField, {
 
     initialize: function(config) {    
