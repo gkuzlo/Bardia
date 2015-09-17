@@ -1,0 +1,49 @@
+<html>
+    <head>
+        
+        <script src="../dist_mdl/bardia_mdl.js"></script>
+        
+        <script>
+            function renderLayout() {
+                
+                try {
+                    var ontime = {
+                    };
+                    
+                    ontime.View = bardia.oop.Class.create({
+
+                        initialize: function(config) {
+                            this.config = config;
+
+                            this.render();
+                        },
+
+                        render: function() {
+                            var h = this;
+
+                            h.layout = new bardia.layout.BorderLayout({
+                                inside: h.config.inside
+                            });
+                        }
+                    });
+                    alert(Element);
+                    new ontime.View({
+                        inside: window.document.body,
+                        north: {
+                            height: 300,
+                            fill: "red"
+                        }
+                    });
+                    
+                } catch (e) {
+                    alert(e);
+                }
+            }
+        </script>
+
+    </head>
+    
+    <body onload="renderLayout()">
+    </body>
+    
+</html>
