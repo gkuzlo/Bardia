@@ -1,26 +1,20 @@
 bardia.oop.Class = (function() {
     
     function create(body) {
-             
-        function _create(config) {
-            this.initialize(config);
+        
+        function klass(config) {
+            this.initialize(config); 
         }
         
-        for (attribute in body) {
-            _create.prototype[attribute] = body[attribute];
+        for (fun in body) {
+            klass.prototype[fun] = body[fun];
         }
         
-        //_class.prototype.constructor = _class;
-        return _create;
-    }
-    
-    function extend() {
-        return null;
+        return klass;
     }
         
     return {
         create: create,
-        extend: extend
     };
     
 })();

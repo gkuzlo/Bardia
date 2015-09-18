@@ -3,6 +3,8 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
 
 	initialize: function(config) {
         this.config = config;
+        
+        this.render();
 	},
 
     render: function() {
@@ -12,82 +14,56 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
         var centerBottom = 0;
         var centerLeft = 0;
         var centerRight = 0;
-    
-        if (this.config.north !== undefined) {
-            var height = (h.config.north.height || h.config.northHeight);
-            h.config.north.height = height;
 
-            centerTop = height;
-            var fill = h.config.north.fill || "transparent";
+        if (this.config.north !== undefined) {
+            centerTop = h.config.north.height || 50;
 
             var north = {
-                tag: "div",
-                style: "position:absolute; overflow:hidden; top:0px; left:0px; right:0px; height:" + height + "px; background-color:" + fill
+                $tag: "div",
+                class: "border-layout-north",
+                style: "height:" + centerTop + "px; background-color:" + (h.config.north.fill || "transparent")
             }
 
-            this.config.inside.insert(UI.toHTML(north));
+            this.config.inside.insert($element(north));
         }
         
         if (this.config.south !== undefined) {
-            var height = 50;
-            
-                if (this.config.south.height) {
-                    height = this.config.south.height;
-                } else {
-                    this.config.south.height = height;
-                }
-                
-                centerBottom = height;
-                var fill = h.config.south.fill || "transparent";
+            centerBottom = this.config.south.height || 50;
 
-                this.south = new Element("DIV", {
-                    style: "position:absolute; overflow:hidden; height:" + height + "px; left:0px; right:0px; bottom:0px; background-color:" + fill
-                });
+            var south = {
+                $tag: "div",
+                class: "border-layout-south",
+                style: "height:" + centerBottom + "px; background-color:" + (h.config.south.fill || "transparent")
+            };
             
-            this.config.inside.insert(this.south);
+            this.config.inside.insert($element(south));
         }
         
         if (this.config.west !== undefined) {
-            var width = 50;
-                        
-            if (this.config.west.width) {
-                width = this.config.west.width;
-            } else {
-                this.config.west.width = width;
-            }
+            centerLeft = this.config.west.width || 50;
             
-            centerLeft = width;
-            var fill = h.config.west.fill || "transparent";
-            
-            this.west = new Element("DIV", {
-                style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:0px; width:" + width + "px; bottom:" + centerBottom + "px; background-color:" + fill
+            h.west = $element({
+                $tag: "div",
+                style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:0px; width:" + centerLeft + "px; bottom:" + centerBottom + "px; background-color:" + (h.config.west.fill || "transparent")
             });
 
-            this.config.inside.insert(this.west);
+            h.config.inside.insert(h.west);
         }
         
         if (this.config.east !== undefined) {
-            var width = 50;
-                        
-            if (this.config.east.width) {
-                width = this.config.east.width;
-            } else {
-                this.config.east.width = width;
-            }
-            
-            centerRight = width;
-            var fill = h.config.east.fill || "transparent";
-            
-            this.east = new Element("DIV", {
-                style: "position:absolute; overflow:hidden; top:" + centerTop + "px; right:0px; width:" + width + "px; bottom:" + centerBottom + "px; background-color:" + fill
+            centerRight = this.config.east.width || 50;
+
+            h.east = $element({
+                $tag: "div",
+                style: "position:absolute; overflow:hidden; top:" + centerTop + "px; right:0px; width:" + centerRight + "px; bottom:" + centerBottom + "px; background-color:" + (h.config.east.fill || "transparent")
             });
 
-            this.config.inside.insert(this.east);
+            this.config.inside.insert(h.east);
         }
 
-        var fill = h.config.fill || "transparent";
-        h.center = new Element("DIV", {
-            style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:" + centerLeft + "px; right:" + centerRight + "px; bottom:" + centerBottom + "px; background-color:" + fill
+        h.center = $element({
+            $tag: "div",
+            style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:" + centerLeft + "px; right:" + centerRight + "px; bottom:" + centerBottom + "px; background-color:" + (h.config.fill || "transparent")
         });
 
         h.config.inside.insert(h.center);

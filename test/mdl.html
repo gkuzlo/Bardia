@@ -1,43 +1,71 @@
 <html>
     <head>
-        
+        <style>
+        </style>
+
+        <script src="../mdl/material.js"></script>
         <script src="../dist_mdl/bardia_mdl.js"></script>
-        
+        <link rel="stylesheet" href="../dist_mdl/bardia.css">
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.blue_grey-orange.min.css"/>
+
         <script>
+
             function renderLayout() {
-                
                 try {
-                    var ontime = {
-                    };
-                    
-                    ontime.View = bardia.oop.Class.create({
-
-                        initialize: function(config) {
-                            this.config = config;
-
-                            this.render();
-                        },
-
-                        render: function() {
-                            var h = this;
-
-                            h.layout = new bardia.layout.BorderLayout({
-                                inside: h.config.inside
-                            });
-                        }
-                    });
-                    alert(Element);
-                    new ontime.View({
-                        inside: window.document.body,
-                        north: {
-                            height: 300,
-                            fill: "red"
-                        }
-                    });
-                    
+                    doRender();
                 } catch (e) {
-                    alert(e);
+                    alert("2. " + e);
                 }
+            }
+
+            function doRender() {
+                var ontime = {
+                };
+
+                ontime.View = bardia.oop.Class.create({
+
+                    initialize: function(config) {
+                        this.config = config;
+
+                        this.render();
+                    },
+
+                    render: function() {
+                        var h = this;
+                        
+                        var layout = new bardia.layout.BorderLayout({
+                            inside: h.config.inside,
+                            north: {
+                                height: 200,
+                            },
+                            south: {
+                                height: 200,
+                            }
+                        });
+                        
+                        var panel = new bardia.layout.Panel({
+                            inside: layout.getDefault(),
+                            tabs: [{
+                                name: "A",
+                                onActivate: function(html) {
+                                    alert("A" + html);
+                                }
+                            }, {
+                                name: "B",
+                                onActivate: function(html) {
+                                    alert("B" + html);
+                                }
+                            }]
+                        });
+                    }
+                });
+
+                var mainView = new ontime.View({
+                    inside: $element(document.body),
+                });
+
             }
         </script>
 

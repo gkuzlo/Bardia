@@ -16,12 +16,18 @@ module.exports = function(grunt) {
           files: [{
         	    src: [
                     "src/bardia/bardia.js",
-                    
+
                     "src/bardia/oop/oop.js",
                     "src/bardia/oop/Class.js",
-                    
+
+                    "src/bardia/dom/dom.js",
+                    "src/bardia/dom/Element.js",
+                    "src/bardia/dom/dom-global.js",
+
                     "src/bardia/layout/layout.js",
                     "src/bardia/layout/BorderLayout.js",
+                    "src/bardia/layout/Panel.js",
+
                 ], 
                 dest: 'dist_mdl/bardia_mdl.js'},
             ]
@@ -29,7 +35,7 @@ module.exports = function(grunt) {
         css: {
             files: [{
             	src: [
-                    "src/**/*.css",
+                    "src/bardia/**/*.css",
                     "mdl/material.min.css",
                 ],
                 dest: 'dist_mdl/bardia.css'},
