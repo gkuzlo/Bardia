@@ -1,2 +1,0 @@
-bardia.oop = {
-}

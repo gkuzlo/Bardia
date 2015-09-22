@@ -19,31 +19,31 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
             centerTop = h.config.north.height || 50;
 
             var north = {
-                $tag: "div",
+                $_tag: "div",
                 class: "border-layout-north",
                 style: "height:" + centerTop + "px; background-color:" + (h.config.north.fill || "transparent")
             }
 
-            this.config.inside.insert($element(north));
+            this.config.inside.insert($_element(north));
         }
         
         if (this.config.south !== undefined) {
             centerBottom = this.config.south.height || 50;
 
             var south = {
-                $tag: "div",
+                $_tag: "div",
                 class: "border-layout-south",
                 style: "height:" + centerBottom + "px; background-color:" + (h.config.south.fill || "transparent")
             };
             
-            this.config.inside.insert($element(south));
+            this.config.inside.insert($_element(south));
         }
         
         if (this.config.west !== undefined) {
             centerLeft = this.config.west.width || 50;
             
-            h.west = $element({
-                $tag: "div",
+            h.west = $_element({
+                $_tag: "div",
                 style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:0px; width:" + centerLeft + "px; bottom:" + centerBottom + "px; background-color:" + (h.config.west.fill || "transparent")
             });
 
@@ -53,16 +53,16 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
         if (this.config.east !== undefined) {
             centerRight = this.config.east.width || 50;
 
-            h.east = $element({
-                $tag: "div",
+            h.east = $_element({
+                $_tag: "div",
                 style: "position:absolute; overflow:hidden; top:" + centerTop + "px; right:0px; width:" + centerRight + "px; bottom:" + centerBottom + "px; background-color:" + (h.config.east.fill || "transparent")
             });
 
             this.config.inside.insert(h.east);
         }
 
-        h.center = $element({
-            $tag: "div",
+        h.center = $_element({
+            $_tag: "div",
             style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:" + centerLeft + "px; right:" + centerRight + "px; bottom:" + centerBottom + "px; background-color:" + (h.config.fill || "transparent")
         });
 

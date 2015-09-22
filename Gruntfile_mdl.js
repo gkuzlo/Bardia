@@ -15,18 +15,21 @@ module.exports = function(grunt) {
         js: {
           files: [{
         	    src: [
-                    "src/bardia/bardia.js",
+                    "src/bardia/$_bardia.js",
 
-                    "src/bardia/oop/oop.js",
+                    "src/bardia/oop/$_oop.js",
                     "src/bardia/oop/Class.js",
 
-                    "src/bardia/dom/dom.js",
+                    "src/bardia/dom/$_dom.js",
                     "src/bardia/dom/Element.js",
                     "src/bardia/dom/dom-global.js",
 
-                    "src/bardia/layout/layout.js",
+                    "src/bardia/layout/$_layout.js",
                     "src/bardia/layout/BorderLayout.js",
                     "src/bardia/layout/Panel.js",
+                    
+                    "src/bardia/list/$_list.js",
+                    "src/bardia/list/List.js",
 
                 ], 
                 dest: 'dist_mdl/bardia_mdl.js'},
