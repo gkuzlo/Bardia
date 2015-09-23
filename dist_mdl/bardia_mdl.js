@@ -16,16 +16,35 @@ bardia.oop.Class = (function() {
         
         return klass;
     }
-        
+    
+    function inherit(source, target) {
+        for (prop in source) {
+            target[prop] = source[prop];
+        }
+    }
+
     return {
         create: create,
+        inherit: inherit
     };
     
 })();
-
+/**
+ *
+ */
 bardia.dom = {
 
 };
+
+/**
+ * creates an element
+ */
+$_element = (function() {
+    function create(jsonRoot) {
+        return new bardia.dom.Element(jsonRoot);
+    }
+    return create;
+})();
 /**
  *
  */
@@ -90,12 +109,13 @@ bardia.dom.Element = bardia.oop.Class.create({
     },
 
     update: function(element) {
-        this.children.splice(0, this.children.length);
+        (this.children || []).splice(0, this.children.length);
 
         while (this.domNode.childNodes.length > 0) {
             this.domNode.removeChild(this.domNode.childNodes[0]);
         }
 
+        if (element)
         this.insert(element);
     },
 
@@ -103,7 +123,7 @@ bardia.dom.Element = bardia.oop.Class.create({
         return this.domNode;
     },
 
-    findById: function(id) {
+    $_: function(id) {
         var result = null;
         result = this.domNode.querySelector("#" + id);
         if (result !== null) {
@@ -114,27 +134,14 @@ bardia.dom.Element = bardia.oop.Class.create({
     }
 });
 /**
- * 
- */
-$_element = (function() {
-
-    function create(jsonRoot) {
-        return new bardia.dom.Element(jsonRoot);
-    }
-
-    return create;
-    
-})();
-
-/**
  *
  */
-$_materialize = (function() {
+$_upgradeElement = (function() {
     
     function materialize(root) {
         componentHandler.upgradeElement(root.getDomNode());
         (root.children || []).forEach(function(node) {
-            $_materialize(node);
+            $_upgradeElement(node);
         });
     }
 
@@ -246,15 +253,15 @@ bardia.layout.Panel = bardia.oop.Class.create({
 
         h.setTabs(h.config.tabs);
 
-        $_materialize(h.root);
+        $_upgradeElement(h.root);
     },
     
     getContent: function() {
-    	return this.root.findById("contents");
+    	return this.root.$_("contents");
     },
     
     setTitle: function(title) {
-    	this.root.findById("title").update(title);
+    	this.root.$_("title").update(title);
     },
     
     setTabs: function(tabs) {
@@ -269,10 +276,10 @@ bardia.layout.Panel = bardia.oop.Class.create({
     prepareHeaderTabs: function(tabs) {
         var h = this;
         
-        if (h.root.findById("header-tabs") !== null) {
-            h.root.findById("header-tabs").update();
+        if (h.root.$_("header-tabs") !== null) {
+            h.root.$_("header-tabs").update();
         } else {
-            var header = h.root.findById("header")
+            var header = h.root.$_("header")
             header.insert($_element({
                 $_tag: "div", 
                 class: "mdl-layout__tab-bar mdl-js-ripple-effect", 
@@ -287,28 +294,28 @@ bardia.layout.Panel = bardia.oop.Class.create({
                 $_on: {
                     "click": function(e) {
                         if (tab.onActivate) {
-                            tab.onActivate(h.root.findById("tab_" + index));
+                            tab.onActivate(h.root.$_("tab_" + index));
                         }
                     }
                 },
                 href: "#tab_" + index,
                 class: "mdl-layout__tab",
             });
-            h.root.findById("header-tabs").insert(tabHeader);
+            h.root.$_("header-tabs").insert(tabHeader);
         });
     },
 
     prepareContentTabs: function(tabs) {
         var h = this;
 
-        h.root.findById("contents").update();
+        h.root.$_("contents").update();
 
         tabs.forEach(function(tab, index) {
             var tabContent = $_element({
                 $_tag: "section", class: "mdl-layout__tab-panel", id: "tab_" + index,
                 style: "position:absolute; height:100%; width:100%;"
             });
-            h.root.findById("contents").insert(tabContent);
+            h.root.$_("contents").insert(tabContent);
         });
     },
 
@@ -363,10 +370,12 @@ bardia.list.List = bardia.oop.Class.create({
      */
     render: function() {
         var h = this;
+        
+        h.config.inside.update();
 
         h.root = $_element({
             $_tag: "table",
-            class: "mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp",
+            class: "mdl-data-table mdl-js-data-table mdl-shadow--2dp",
             $_append: [{
                 $_tag: "thead",
                 $_append: [{
@@ -374,6 +383,7 @@ bardia.list.List = bardia.oop.Class.create({
                     $_append: [{
                         $_tag: "th",
                         class: "mdl-data-table__cell--non-numeric",
+                        style: "background-color:yellow",
                         $_append: "A"
                     }, {
                         $_tag: "th",
@@ -393,7 +403,10 @@ bardia.list.List = bardia.oop.Class.create({
                         $_append: "Grzegorz"
                     }, {
                         $_tag: "td",
-                        $_append: "Ania"
+                        $_append: [{
+                            $_tag: "INPUT",
+                            type: "number"
+                        }]
                     }, {
                         $_tag: "td",
                         $_append: "Julia"
@@ -417,16 +430,87 @@ bardia.list.List = bardia.oop.Class.create({
         
         h.config.inside.insert(h.root);
         
-        $_materialize(h.root);        
+        $_upgradeElement(h.root);
+    }
+});
+bardia.grid = {
 
-        /*
-<ul class="mdl-menu mdl-menu--top-left mdl-js-menu mdl-js-ripple-effect"
-    for="demo-menu-top-left">
-  <li class="mdl-menu__item">Some Action</li>
-  <li class="mdl-menu__item">Another Action</li>
-  <li disabled class="mdl-menu__item">Disabled Action</li>
-  <li class="mdl-menu__item">Yet Another Action</li>
-</ul>
-*/
+};
+/**
+ *
+ */
+bardia.grid.Grid = bardia.oop.Class.create({
+    /**
+     *
+     */
+    initialize: function(config) {        
+        bardia.oop.Class.inherit(config, this);
+        
+        this.render();
+    },
+    /**
+     *
+     */
+    render: function() {
+        var h = this;
+        
+        h.inside.update();
+
+        h.root = $_element({
+            $_tag: "table",
+            class: "mdl-data-table mdl-js-data-table mdl-shadow--2dp",
+            $_append: [{
+                $_tag: "thead",
+                id: "THHEAD",
+                $_append: (h.columns || []).map(function(column) {
+                    return {
+                        $_tag: "th",
+                        class: "mdl-data-table__cell--non-numeric",
+                        $_append: column.name
+                    }
+                })
+            }, {
+                $_tag: "tbody",
+                id: "TBODY",
+                $_append: [{
+                    $_tag: "tr",
+                    $_append: [{
+                        $_tag: "td",
+                        class: "mdl-data-table__cell--non-numeric",
+                        $_append: "Grzegorz"
+                    }, {
+                        $_tag: "td",
+                        $_append: [{
+                            $_tag: "INPUT",
+                            type: "number"
+                        }]
+                    }, {
+                        $_tag: "td",
+                        $_append: "Julia"
+                    }]
+                }, {
+                    $_tag: "tr",
+                    $_append: [{
+                        $_tag: "td",
+                        class: "mdl-data-table__cell--non-numeric",
+                        $_append: "Agnieszka"
+                    }, {
+                        $_tag: "td",
+                        $_append: "BBB"
+                    }, {
+                        $_tag: "td",
+                        $_append: "CCC"
+                    }]
+                }]
+            }]
+        });
+        
+        h.inside.insert(h.root);
+        
+        $_upgradeElement(h.root);
+    },
+    
+    fetch(model) {
+        var h = this;
     }
 });

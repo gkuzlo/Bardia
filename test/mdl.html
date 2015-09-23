@@ -52,8 +52,15 @@
                             tabs: [{
                                 name: "A",
                                 onActivate: function(html) {
-                                    new bardia.list.List({
-                                        inside: html
+                                    new bardia.grid.Grid({
+                                        inside: html,
+                                        columns: [{
+                                            name: "Imię"
+                                        }, {
+                                            name: "Nazwisko"
+                                        }]
+                                    }).fetch({
+                                        rows: [1,2,3,4]
                                     });
                                 }
                             }, {

@@ -12,63 +12,46 @@ module.exports = function(grunt) {
 	    }
     },
     concat: {
-        js: {
+        js_mdl: {
           files: [{
         	    src: [
-                    "src/UI.js",
-                    "src/icon/UI.IconSet.js",
-                    "src/material/UI.MaterialComponent.js",
-                    "src/layout/UI.PanelButton.js",
-                    "src/layout/UI.PanelToolbar.js",
-                    "src/layout/UI.Panel.js",
-                    "src/utils/UI.DateUtils.js",
-                    "src/utils/UI.DatePicker.js",
-                    "src/fab//UI.Fab.js",
-                    "src/fab/UI.FabProgress.js",
-                    "src/fab/UI.FabToolbar.js",
-                    "src/layout/UI.Material.js",
-                    "src/list/UI.List.js",
-                    "src/list/UI.SortableList.js",
-                    "src/form/UI.Form.js",
-                    "src/form/UI.TextFormField.js",
-                    "src/form/UI.LongTextFormField.js",
-                    "src/form/UI.LookupFormField.js",
-                    "src/form/UI.ListFormField.js",
-                    "src/form/UI.FileFormField.js",
-                    "src/form/UI.DateFormField.js",
-                    "src/form/UI.BooleanFormField.js",
-                    "src/form/UI.PasswordFormField.js",
-                    "src/form/UI.IntegerFormField.js",
-                    "src/form/UI.DecimalFormField.js",
-                    "src/layout/UI.BorderLayout.js",
-                    "src/widgets/UI.Crud.js",
-                    "src/menu/UI.Menu.js",
-                    "src/utils/UI.ProgressBar.js",
-                    "src/grid/UI.Grid.js",
-                    "src/grid/UI.GridCell.js",
-                    "src/grid/UI.GridInputCell.js",
-                    "src/tabs/UI.IconToolbar.js",
-                    "src/tabs/UI.BreadCrumb.js",
-                    "src/tabs/UI.Toolbar.js",
-                    "src/tabs/UI.Tabs.js",
-					"mdl/material.min.js",
+                    "src/bardia/$_bardia.js",
+
+                    "src/bardia/oop/$_oop.js",
+                    "src/bardia/oop/Class.js",
+
+                    "src/bardia/dom/$_dom.js",
+                    "src/bardia/dom/Element.js",
+
+                    "src/bardia/$_variants/$_mdl/$_mdl.js",
+                    
+                    "src/bardia/$_variants/$_mdl/layout/$_layout.js",
+                    "src/bardia/$_variants/$_mdl/layout/BorderLayout.js",
+                    "src/bardia/$_variants/$_mdl/layout/Panel.js",
+
+                    "src/bardia/$_variants/$_mdl/list/$_list.js",
+                    "src/bardia/$_variants/$_mdl/list/List.js",
+                    
+                    "src/bardia/$_variants/$_mdl/grid/$_grid.js",
+                    "src/bardia/$_variants/$_mdl/grid/Grid.js",
+
                 ], 
-                dest: 'dist/bardia.js'},
+                dest: 'dist_mdl/bardia_mdl.js'},
             ]
         },
-        css: {
+        css_mdl: {
             files: [{
             	src: [
-                    "src/**/*.css",
+                    "src/bardia/**/*.css",
                     "mdl/material.min.css",
                 ],
-                dest: 'dist/bardia.css'},
+                dest: 'dist_mdl/bardia.css'},
             ]        	
         },
       },
       jsdoc : {
           dist : {
-              src: ['dist/bardia.js'],
+              src: ['dist_mdl/bardia.js'],
               options: {
                   destination: 'doc'
               }
@@ -81,7 +64,7 @@ module.exports = function(grunt) {
               version: '1.0',
               url: '1.0',
               options: {
-                  paths: ['dist'],
+                  paths: ['dist_mdl'],
                   outdir: 'docs/'
               }
           }
@@ -95,6 +78,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-yuidoc");
 
   // Default task(s).
-  grunt.registerTask('default', ['uglify', 'concat']);
+  grunt.registerTask('mdl', ['concat:js_mdl', 'concat:css_mdl']);
 
 };
