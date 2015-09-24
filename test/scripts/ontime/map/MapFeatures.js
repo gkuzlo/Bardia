@@ -78,33 +78,27 @@ ontime.map.MapFeatures = bardia.oop.Class.create({
 			      color: 'rgba(255, 0, 255, 1)'
 			    })
 	    	})];
+            
+	    	styles['Point'] = [new ol.style.Style({
+                image: new ol.style.Icon({
+                    src: "images/marker.png"
+                }),
+                text: new ol.style.Text({
+                    textAlign: "center",
+                    textBaseline: "middle",
+                    font: "bold 14px Arial",
+                    text: "",
+                    fill: new ol.style.Fill({color: "black"}),
+                    stroke: null,
+                    offsetX: 0,
+                    offsetY: 10,
+                    rotation: 0
+                })
+            })];
 
 	    	return function(feature, resolution) {
-	    		if(feature.getGeometry().getType() == "Point") {
-	    			return [new ol.style.Style({
-		    				image: new ol.style.Circle({
-			  	    		    radius: 3,
-				    		    fill: new ol.style.Fill({
-				    		    	color: 'white'
-				    		    }),
-				    		    stroke: new ol.style.Stroke({color: '#000055', width: 2})
-				    		}),
-			    			text: new ol.style.Text({
-			    		    	textAlign: "center",
-			    		        textBaseline: "middle",
-			    		        font: "bold 14px Arial",
-			    		        text: feature.name,
-			    		        fill: new ol.style.Fill({color: "black"}),
-			    		        stroke: null,
-			    		        offsetX: 0,
-			    		        offsetY: 10,
-			    		        rotation: 0
-				    		})
-		    			})];
-	    			} else {
-	    				return styles[feature.getGeometry().getType()] || styles['default'];
-			  		}
-	    		};
+                return styles[feature.getGeometry().getType()] || styles['default'];
+            };
 	    })();
         
     	h.connectionVectors = new ol.layer.Vector({
@@ -165,6 +159,17 @@ ontime.map.MapFeatures = bardia.oop.Class.create({
                 zoom: 15
             })
     	});
+        
+        h.map.on("click", function(e) {
+            h.map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
+                alert(34);
+            });
+        });
+        
+        var coordinates = ol.proj.transform([23.225, 53.125], 'EPSG:4326', 'EPSG:3857');
+        var feature = new ol.Feature(new ol.geom.Point(coordinates));
+        h.connectionVectors.getSource().addFeature(feature);
+        
     },
 
 });
