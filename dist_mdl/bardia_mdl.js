@@ -100,7 +100,7 @@ bardia.dom.Element = bardia.oop.Class.create({
     insert: function(subElement) {
         try {
             if (subElement) {
-                this.domNode.appendChild(subElement.getDomNode());
+                this.domNode.appendChild(subElement.dom());
                 this.children.push(subElement);
             }
         } catch (e) {
@@ -119,11 +119,11 @@ bardia.dom.Element = bardia.oop.Class.create({
         this.insert(element);
     },
 
-    getDomNode: function() {
+    dom: function() {
         return this.domNode;
     },
 
-    $_: function(id) {
+    find: function(id) {
         var result = null;
         result = this.domNode.querySelector("#" + id);
         if (result !== null) {
@@ -139,7 +139,7 @@ bardia.dom.Element = bardia.oop.Class.create({
 $_upgradeElement = (function() {
     
     function materialize(root) {
-        componentHandler.upgradeElement(root.getDomNode());
+        componentHandler.upgradeElement(root.dom());
         (root.children || []).forEach(function(node) {
             $_upgradeElement(node);
         });
@@ -257,11 +257,11 @@ bardia.layout.Panel = bardia.oop.Class.create({
     },
     
     getContent: function() {
-    	return this.root.$_("contents");
+    	return this.root.find("contents");
     },
     
     setTitle: function(title) {
-    	this.root.$_("title").update(title);
+    	this.root.find("title").update(title);
     },
     
     setTabs: function(tabs) {
@@ -276,10 +276,10 @@ bardia.layout.Panel = bardia.oop.Class.create({
     prepareHeaderTabs: function(tabs) {
         var h = this;
         
-        if (h.root.$_("header-tabs") !== null) {
-            h.root.$_("header-tabs").update();
+        if (h.root.find("header-tabs") !== null) {
+            h.root.find("header-tabs").update();
         } else {
-            var header = h.root.$_("header")
+            var header = h.root.find("header")
             header.insert($_element({
                 $_tag: "div", 
                 class: "mdl-layout__tab-bar mdl-js-ripple-effect", 
@@ -293,29 +293,32 @@ bardia.layout.Panel = bardia.oop.Class.create({
                 $_append: tab.name,
                 $_on: {
                     "click": function(e) {
-                        if (tab.onActivate) {
-                            tab.onActivate(h.root.$_("tab_" + index));
+                        if (tab.onActivate && !tab.activated) {
+                            setTimeout(function() {
+                                tab.onActivate(h.root.find("tab_" + index));
+                                tab.activated = true;
+                            }, 500);
                         }
                     }
                 },
                 href: "#tab_" + index,
                 class: "mdl-layout__tab",
             });
-            h.root.$_("header-tabs").insert(tabHeader);
+            h.root.find("header-tabs").insert(tabHeader);
         });
     },
 
     prepareContentTabs: function(tabs) {
         var h = this;
 
-        h.root.$_("contents").update();
+        h.root.find("contents").update();
 
         tabs.forEach(function(tab, index) {
             var tabContent = $_element({
                 $_tag: "section", class: "mdl-layout__tab-panel", id: "tab_" + index,
                 style: "position:absolute; height:100%; width:100%;"
             });
-            h.root.$_("contents").insert(tabContent);
+            h.root.find("contents").insert(tabContent);
         });
     },
 
