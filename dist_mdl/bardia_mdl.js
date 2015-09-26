@@ -149,7 +149,20 @@ $_upgradeElement = (function() {
 })();
 bardia.layout = {
 }
-
+/**
+ * @class bardia.layout.BorderLayout
+ * @constructor
+ *
+@example
+~~~
+var layout = new bardia.layout.BorderLayout({
+   inside: $_element(document.body),
+   north: {
+        height: 20
+   }
+});
+~~~
+ */
 bardia.layout.BorderLayout = bardia.oop.Class.create({
 
 	initialize: function(config) {
@@ -219,6 +232,10 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
 
         h.config.inside.insert(h.center);
     },
+    /**
+     * @method getNorth()
+     * @return {bardia.dom.Element} instance of bradia dom element wrapper
+     */
     getNorth: function() {
         return this.north;
     },
@@ -238,6 +255,74 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
         return this.center;
     }
 });
+/**
+
+Materiał, który wysuwa się po wywołaniu metody show().
+Po wywołaniu metody hide() - ucieka.
+Może się wysuwać z róznych stron: left, right, top, button.
+Jeżeli jest modalny to podczas wysuwania pojawia sie pod nim półprzeźroczysta kurtyna, która sprawia,
+że kontet parenta jest lekko zasłonięty.
+
+Animacja odbywa się w ten sposób, że materiał się wysuwa z jednej ze stron parenta (na przykład na gridzie, parenta podajemy w inside) a w tym czasie kurtyna zasłania obaszar grida.
+Komponent jest appendowany do inside'a - czyli nie podmienia jego zawartości.
+
+@class bardia.layout.Material
+@constructor new bardia.lazout.Material();
+@param config {JSONObject}
+@param config.inside {bardia.dom.Element}
+@param config.size=30 {Integer}
+@param config.unit='%' {String -> 'px'|'%'}
+@param config.appearFrom='left' {String -> 'top'|'right'|'bottom'|'left'}
+@param config.modal=false {Boolean -> true|false}
+ 
+@example
+~~~
+var material = new bardia.layout.Material({
+   inside: $_element(document.body),
+   size: 90,
+   unit: "%",
+   appearFrom: "left"
+});
+
+material.show();
+
+material.getContent().insert($_element({
+    $_tag: "DIV",
+    $_append: "this is div content"
+}));
+
+~~~
+ */
+bardia.layout.Material = (function() {
+
+    var h = this;
+
+    function Material(config) {
+    }
+
+    /**
+     * @method show()
+     */
+    Material.prototype.show = function() {
+        
+    }
+    
+    /**
+     * @method hide()
+     */
+    Material.prototype.hide = function() {
+
+    }
+    
+    /**
+     * @method getMaterial()
+     */
+    Material.prototype.getContent = function() {
+
+    }
+    
+    return Material;
+})();
 bardia.layout.Panel = bardia.oop.Class.create({
     
     initialize: function(config) {

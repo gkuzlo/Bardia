@@ -6,21 +6,12 @@
         "url": "1.0"
     },
     "files": {
-        "dist\\bardia.js": {
-            "name": "dist\\bardia.js",
+        "dist_mdl\\bardia_mdl.js": {
+            "name": "dist_mdl\\bardia_mdl.js",
             "modules": {},
             "classes": {
-                "UI.StringUtils": 1,
-                "UI.IconSet": 1,
-                "UI.MaterialComponent": 1,
-                "UI.Panel": 1,
-                "UI.Material": 1,
-                "UI.Form": 1,
-                "UI.TextFormField": 1,
-                "UI.LookupFormField": 1,
-                "UI.ListFormField": 1,
-                "UI.BooleanFormField": 1,
-                "UI.Crud": 1
+                "bardia.layout.BorderLayout": 1,
+                "bardia.layout.Material": 1
             },
             "fors": {},
             "namespaces": {}
@@ -28,569 +19,197 @@
     },
     "modules": {},
     "classes": {
-        "UI.StringUtils": {
-            "name": "UI.StringUtils",
-            "shortname": "UI.StringUtils",
+        "bardia.layout.BorderLayout": {
+            "name": "bardia.layout.BorderLayout",
+            "shortname": "bardia.layout.BorderLayout",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "dist\\bardia.js",
-            "line": 374
-        },
-        "UI.IconSet": {
-            "name": "UI.IconSet",
-            "shortname": "UI.IconSet",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "dist\\bardia.js",
-            "line": 513
-        },
-        "UI.MaterialComponent": {
-            "name": "UI.MaterialComponent",
-            "shortname": "UI.MaterialComponent",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "dist\\bardia.js",
-            "line": 554
-        },
-        "UI.Panel": {
-            "name": "UI.Panel",
-            "shortname": "UI.Panel",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "dist\\bardia.js",
-            "line": 611
-        },
-        "UI.Material": {
-            "name": "UI.Material",
-            "shortname": "UI.Material",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "dist\\bardia.js",
-            "line": 1158,
-            "description": "sjlksjlksjlksjslkjsl \n~~~javascript\n\tvar progress = new UI.ProgressBar({\n\t\tinside: layout.getSouth()\n\t});\n~~~",
-            "itemtype": "method",
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 152,
+            "is_constructor": 1,
             "example": [
-                "\n      jQuery.ajax({ \n          url: 'foo/'\n      });\n"
+                "\n~~~\nvar layout = new bardia.layout.BorderLayout({\n  inside: $_element(document.body),\n  north: {\n       height: 20\n  }\n});\n~~~"
             ]
         },
-        "UI.Form": {
-            "name": "UI.Form",
-            "shortname": "UI.Form",
+        "bardia.layout.Material": {
+            "name": "bardia.layout.Material",
+            "shortname": "bardia.layout.Material",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "dist\\bardia.js",
-            "line": 1610,
-            "description": "Formularz",
-            "is_constructor": 1
-        },
-        "UI.TextFormField": {
-            "name": "UI.TextFormField",
-            "shortname": "UI.TextFormField",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "dist\\bardia.js",
-            "line": 1762
-        },
-        "UI.LookupFormField": {
-            "name": "UI.LookupFormField",
-            "shortname": "UI.LookupFormField",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "dist\\bardia.js",
-            "line": 1999
-        },
-        "UI.ListFormField": {
-            "name": "UI.ListFormField",
-            "shortname": "UI.ListFormField",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "dist\\bardia.js",
-            "line": 2220
-        },
-        "UI.BooleanFormField": {
-            "name": "UI.BooleanFormField",
-            "shortname": "UI.BooleanFormField",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "dist\\bardia.js",
-            "line": 2794
-        },
-        "UI.Crud": {
-            "name": "UI.Crud",
-            "shortname": "UI.Crud",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "file": "dist\\bardia.js",
-            "line": 3183,
-            "description": "This is the description for my class.",
-            "is_constructor": 1
-        }
-    },
-    "classitems": [
-        {
-            "file": "dist\\bardia.js",
-            "line": 558,
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 258,
+            "description": "Materiał, który wysuwa się po wywołaniu metody show().\nPo wywołaniu metody hide() - ucieka.\nMoże się wysuwać z róznych stron: left, right, top, button.\nJeżeli jest modalny to podczas wysuwania pojawia sie pod nim półprzeźroczysta kurtyna, która sprawia,\nże kontet parenta jest lekko zasłonięty.\nAnimacja odbywa się w ten sposób, że materiał się wysuwa z jednej ze stron parenta (na przykład na gridzie, parenta podajemy w inside) a w tym czasie kurtyna zasłania obaszar grida.\nKomponent jest appendowany do inside'a - czyli nie podmienia jego zawartości.",
             "is_constructor": 1,
             "params": [
                 {
                     "name": "config",
-                    "description": ""
-                }
-            ],
-            "class": "UI.MaterialComponent"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 593,
-            "methid": "getMaterial\n\nPobranie materiału, na którym będzie wyeysowany komponent",
-            "class": "UI.MaterialComponent"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 601,
-            "itemtype": "method",
-            "name": "destroy",
-            "class": "UI.MaterialComponent"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 877,
-            "description": "na wejsciu czas w formacie HH:MM\nna wyjściu liczba HH * 60 + MM",
-            "class": "UI.Panel"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 1186,
-            "description": "Use AJAX to retrieve data",
-            "itemtype": "method",
-            "name": "render",
-            "params": [
-                {
-                    "name": "options",
-                    "description": "The request options",
-                    "type": "Object",
+                    "description": "",
+                    "type": "JSONObject",
                     "props": [
                         {
-                            "name": "url",
-                            "description": "The url of the request.",
-                            "type": "String"
+                            "name": "inside",
+                            "description": "",
+                            "type": "bardia.dom.Element"
                         },
                         {
-                            "name": "type",
-                            "description": "The request type, defaults to `GET`.",
-                            "type": "String",
-                            "optional": true,
-                            "optdefault": "get"
+                            "name": "size=30",
+                            "description": "",
+                            "type": "Integer"
+                        },
+                        {
+                            "name": "unit='%'",
+                            "description": "",
+                            "type": "String -> 'px'|'%'"
+                        },
+                        {
+                            "name": "appearFrom='left'",
+                            "description": "",
+                            "type": "String -> 'top'|'right'|'bottom'|'left'"
+                        },
+                        {
+                            "name": "modal=false",
+                            "description": "",
+                            "type": "Boolean -> true|false"
                         }
                     ]
                 }
             ],
             "example": [
-                "\n   This accepts markdown syntax!\n\n       jQuery.ajax({ \n           url: 'foo/'\n       });"
-            ],
+                "\n~~~\nvar material = new bardia.layout.Material({\n   inside: $_element(document.body),\n   size: 90,\n   unit: \"%\",\n   appearFrom: \"left\"\n});\nmaterial.show();\nmaterial.getContent().insert($_element({\n    $_tag: \"DIV\",\n    $_append: \"this is div content\"\n}));\n~~~"
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 32,
+            "class": "bardia.layout.BorderLayout"
+        },
+        {
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 39,
+            "description": "creates an element",
+            "class": "bardia.layout.BorderLayout"
+        },
+        {
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 48,
+            "class": "bardia.layout.BorderLayout"
+        },
+        {
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 136,
+            "class": "bardia.layout.BorderLayout"
+        },
+        {
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 235,
+            "itemtype": "method",
+            "name": "getNorth()",
             "return": {
-                "description": "",
-                "type": "jQuery.Deferred"
+                "description": "instance of bradia dom element wrapper",
+                "type": "bardia.dom.Element"
             },
-            "class": "UI.Material"
+            "class": "bardia.layout.BorderLayout"
         },
         {
-            "file": "dist\\bardia.js",
-            "line": 1415,
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 303,
             "itemtype": "method",
-            "name": "getMaterial",
-            "class": "UI.Material"
+            "name": "show()",
+            "class": "bardia.layout.Material"
         },
         {
-            "file": "dist\\bardia.js",
-            "line": 1593,
-            "description": "odfiltrowanie wyświetlonych wierszy",
-            "class": "UI.Material"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 1625,
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 310,
             "itemtype": "method",
-            "name": "render",
-            "class": "UI.Form"
+            "name": "hide()",
+            "class": "bardia.layout.Material"
         },
         {
-            "file": "dist\\bardia.js",
-            "line": 1709,
-            "description": "Metoda zwraca pole formularza dla zadanej właściwości",
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 317,
             "itemtype": "method",
-            "name": "getField",
-            "class": "UI.Form"
+            "name": "getMaterial()",
+            "class": "bardia.layout.Material"
         },
         {
-            "file": "dist\\bardia.js",
-            "line": 1724,
-            "itemtype": "method",
-            "name": "setFields\n\nMetoda dynamicznie tworzy atrybuty w formularzu",
-            "class": "UI.Form"
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 444,
+            "class": "bardia.layout.Material"
         },
         {
-            "file": "dist\\bardia.js",
-            "line": 1735,
-            "itemtype": "method",
-            "name": "setBean",
-            "class": "UI.Form"
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 448,
+            "class": "bardia.layout.Material"
         },
         {
-            "file": "dist\\bardia.js",
-            "line": 1748,
-            "itemtype": "method",
-            "name": "getBean",
-            "class": "UI.Form"
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 456,
+            "class": "bardia.layout.Material"
         },
         {
-            "file": "dist\\bardia.js",
-            "line": 1754,
-            "description": "Walidacja wymaganych pól formularza",
-            "class": "UI.Form"
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 527,
+            "class": "bardia.layout.Material"
         },
         {
-            "file": "dist\\bardia.js",
-            "line": 1771,
-            "itemtype": "method",
-            "name": "setConfig",
-            "class": "UI.TextFormField"
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 531,
+            "class": "bardia.layout.Material"
         },
         {
-            "file": "dist\\bardia.js",
-            "line": 1787,
-            "itemtype": "method",
-            "name": "render",
-            "class": "UI.TextFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 1867,
-            "itemtype": "method",
-            "name": "setReadOnly",
-            "class": "UI.TextFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 1877,
-            "itemtype": "method",
-            "name": "animateLabel",
-            "class": "UI.TextFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 1894,
-            "itemtype": "method",
-            "name": "unanimateLabel",
-            "class": "UI.TextFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 1911,
-            "itemtype": "method",
-            "name": "getMaterial",
-            "class": "UI.TextFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 1954,
-            "itemtype": "method",
-            "name": "setInputValue",
-            "class": "UI.TextFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 1974,
-            "itemtype": "method",
-            "name": "getInputValue",
-            "class": "UI.TextFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 1983,
-            "description": "walidacja po wpisaniu (na onblur)",
-            "itemtype": "method",
-            "name": "validate",
-            "class": "UI.TextFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 1991,
-            "description": "walidacja podczas wpisywania",
-            "itemtype": "method",
-            "name": "preValidate",
-            "class": "UI.TextFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2063,
-            "itemtype": "method",
-            "name": "setInputValue",
-            "class": "UI.LookupFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2091,
-            "itemtype": "method",
-            "name": "setReadOnly",
-            "class": "UI.LookupFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2224,
-            "itemtype": "method",
-            "name": "setInputValue",
-            "class": "UI.ListFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2254,
-            "itemtype": "method",
-            "name": "setReadOnly",
-            "class": "UI.ListFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2266,
-            "itemtype": "method",
-            "name": "showLookupCard",
-            "class": "UI.ListFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2665,
-            "itemtype": "method",
-            "name": "setReadOnly",
-            "class": "UI.ListFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2807,
-            "itemtype": "method",
-            "name": "",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2822,
-            "itemtype": "method",
-            "name": "render",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2873,
-            "itemtype": "method",
-            "name": "setReadOnly",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2880,
-            "itemtype": "method",
-            "name": "animateLabel",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2913,
-            "itemtype": "method",
-            "name": "unanimateLabel",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2946,
-            "itemtype": "method",
-            "name": "getMaterial",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2972,
-            "itemtype": "method",
-            "name": "setInputValue",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2982,
-            "itemtype": "method",
-            "name": "getInputValue",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2988,
-            "description": "walidacja po wpisaniu (na onblur)",
-            "itemtype": "method",
-            "name": "validate",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 2996,
-            "description": "walidacja podczas wpisywania",
-            "itemtype": "method",
-            "name": "preValidate",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3005,
-            "itemtype": "method",
-            "name": "render",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3069,
-            "is_constructor": 1,
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3073,
-            "itemtype": "method",
-            "name": "initConfig",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3081,
-            "itemtype": "method",
-            "name": "render",
-            "class": "UI.BooleanFormField"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3221,
-            "itemtype": "method",
-            "name": "openForm",
-            "class": "UI.Crud"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3233,
-            "itemtype": "method",
-            "name": "closeForm",
-            "class": "UI.Crud"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3246,
-            "itemtype": "method",
-            "name": "updateForm",
-            "class": "UI.Crud"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3253,
-            "description": "Pobranie formularza z komponentu CRUD",
-            "itemtype": "method",
-            "name": "getForm",
-            "class": "UI.Crud"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3261,
-            "itemtype": "method",
-            "name": "getBean",
-            "class": "UI.Crud"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3307,
-            "itemtype": "method",
-            "name": "fetchList",
-            "class": "UI.Crud"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3355,
-            "description": "parametr data powinien zawsze zawierac kolekcję rows.\nrows to sa obiekty JSON",
-            "class": "UI.Crud"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3564,
-            "itemtype": "method",
-            "name": "setScrollTop",
-            "class": "UI.Crud"
-        },
-        {
-            "file": "dist\\bardia.js",
-            "line": 3571,
-            "itemtype": "method",
-            "name": "fetch\n\nZaładowanie grida wierszami z danymi",
-            "class": "UI.Crud"
+            "file": "dist_mdl\\bardia_mdl.js",
+            "line": 539,
+            "class": "bardia.layout.Material"
         }
     ],
     "warnings": [
         {
-            "message": "unknown tag: methid",
-            "line": " dist\\bardia.js:593"
+            "message": "Missing item type",
+            "line": " dist_mdl\\bardia_mdl.js:32"
+        },
+        {
+            "message": "Missing item type\ncreates an element",
+            "line": " dist_mdl\\bardia_mdl.js:39"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\bardia.js:558"
+            "line": " dist_mdl\\bardia_mdl.js:48"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\bardia.js:593"
-        },
-        {
-            "message": "Missing item type\nna wejsciu czas w formacie HH:MM\nna wyjściu liczba HH * 60 + MM",
-            "line": " dist\\bardia.js:877"
-        },
-        {
-            "message": "Missing item type\nodfiltrowanie wyświetlonych wierszy",
-            "line": " dist\\bardia.js:1593"
-        },
-        {
-            "message": "Missing item type\nWalidacja wymaganych pól formularza",
-            "line": " dist\\bardia.js:1754"
+            "line": " dist_mdl\\bardia_mdl.js:136"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\bardia.js:3069"
+            "line": " dist_mdl\\bardia_mdl.js:444"
         },
         {
-            "message": "Missing item type\nparametr data powinien zawsze zawierac kolekcję rows.\nrows to sa obiekty JSON",
-            "line": " dist\\bardia.js:3355"
+            "message": "Missing item type",
+            "line": " dist_mdl\\bardia_mdl.js:448"
+        },
+        {
+            "message": "Missing item type",
+            "line": " dist_mdl\\bardia_mdl.js:456"
+        },
+        {
+            "message": "Missing item type",
+            "line": " dist_mdl\\bardia_mdl.js:527"
+        },
+        {
+            "message": "Missing item type",
+            "line": " dist_mdl\\bardia_mdl.js:531"
+        },
+        {
+            "message": "Missing item type",
+            "line": " dist_mdl\\bardia_mdl.js:539"
         }
     ]
 }

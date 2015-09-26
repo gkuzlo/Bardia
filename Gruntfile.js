@@ -24,9 +24,10 @@ module.exports = function(grunt) {
                     "src/bardia/dom/Element.js",
 
                     "src/bardia/$_variants/$_mdl/$_mdl.js",
-                    
+
                     "src/bardia/$_variants/$_mdl/layout/$_layout.js",
                     "src/bardia/$_variants/$_mdl/layout/BorderLayout.js",
+                    "src/bardia/$_variants/$_mdl/layout/Material.js",
                     "src/bardia/$_variants/$_mdl/layout/Panel.js",
 
                     "src/bardia/$_variants/$_mdl/list/$_list.js",
@@ -51,7 +52,7 @@ module.exports = function(grunt) {
       },
       jsdoc : {
           dist : {
-              src: ['dist_mdl/bardia.js'],
+              src: ['dist_mdl/bardia_mdl.js'],
               options: {
                   destination: 'doc'
               }
@@ -78,6 +79,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-yuidoc");
 
   // Default task(s).
-  grunt.registerTask('mdl', ['concat:js_mdl', 'concat:css_mdl']);
+  grunt.registerTask('mdl', ['concat:js_mdl', 'concat:css_mdl', "yuidoc"]);
 
 };

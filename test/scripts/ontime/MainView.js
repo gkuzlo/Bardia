@@ -51,5 +51,11 @@ ontime.MainView = bardia.oop.Class.create({
                 }
             }]
         });
+        
+        var material = new bardia.layout.Material({
+            inside: document.body
+        });
+        
+        material.show();
     }
 });

@@ -1,4 +1,17 @@
-
+/**
+ * @class bardia.layout.BorderLayout
+ * @constructor
+ *
+@example
+~~~
+var layout = new bardia.layout.BorderLayout({
+   inside: $_element(document.body),
+   north: {
+        height: 20
+   }
+});
+~~~
+ */
 bardia.layout.BorderLayout = bardia.oop.Class.create({
 
 	initialize: function(config) {
@@ -68,6 +81,10 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
 
         h.config.inside.insert(h.center);
     },
+    /**
+     * @method getNorth()
+     * @return {bardia.dom.Element} instance of bradia dom element wrapper
+     */
     getNorth: function() {
         return this.north;
     },
