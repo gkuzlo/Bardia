@@ -14,12 +14,6 @@ ontime.MainView = bardia.oop.Class.create({
 
         var layout = new bardia.layout.BorderLayout({
             inside: h.config.inside,
-            north: {
-                height: 200,
-            },
-            south: {
-                height: 200,
-            }
         });
 
         var panel = new bardia.layout.Panel({
