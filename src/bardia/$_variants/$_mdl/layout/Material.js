@@ -58,7 +58,8 @@ bardia.layout.Material = (function() {
     }
     
     /**
-     * @method getMaterial()
+     * @method getContent()
+     * @return {bardia.dom.Element}
      */
     Material.prototype.getContent = function() {
 
