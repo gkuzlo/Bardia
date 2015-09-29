@@ -37,7 +37,7 @@ module.exports = function(grunt) {
                     "src/bardia/$_variants/$_mdl/grid/Grid.js",
 
                 ], 
-                dest: 'dist_mdl/bardia_mdl.js'},
+                dest: 'dist/bardia_mdl.js'},
             ]
         },
         css_mdl: {
@@ -46,17 +46,9 @@ module.exports = function(grunt) {
                     "src/bardia/**/*.css",
                     "mdl/material.min.css",
                 ],
-                dest: 'dist_mdl/bardia.css'},
+                dest: 'dist/bardia_mdl.css'},
             ]        	
         },
-      },
-      jsdoc : {
-          dist : {
-              src: ['dist_mdl/bardia_mdl.js'],
-              options: {
-                  destination: 'doc'
-              }
-          }
       },
       yuidoc: {
           all: {
@@ -75,7 +67,6 @@ module.exports = function(grunt) {
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-jsdoc');
   grunt.loadNpmTasks("grunt-contrib-yuidoc");
 
   // Default task(s).
