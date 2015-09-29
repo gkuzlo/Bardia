@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <style>
+        </style>
+        
+        <script src="../dist/bardia_materialize.js"></script>
+        <link rel="stylesheet" href="../dist/bardia_metarialize.css">
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <script src="scripts/ontime/$_ontime.js"></script>
+        <script src="scripts/ontime/MainView.js"></script>
+        <script src="scripts/ontime/map/$_map.js"></script>
+        <script src="scripts/ontime/map/MapFeatures.js"></script>
+        
+        <link rel="stylesheet" href="http://openlayers.org/en/v3.9.0/css/ol.css" type="text/css">
+        <script src="http://openlayers.org/en/v3.9.0/build/ol.js" type="text/javascript"></script>
+
+        <script>
+
+            function renderLayout() {
+                try {
+                    doRender();
+                } catch (e) {
+                    alert("2. " + e);
+                }
+            }
+
+            function doRender() {
+
+                var mainView = new ontime.MainView({
+                    inside: $_element(document.body),
+                });
+
+            }
+        </script>
+
+    </head>
+    
+    <body onload="renderLayout()">
+    </body>
+    
+</html>
