@@ -272,7 +272,7 @@ Komponent jest appendowany do inside'a - czyli nie podmienia jego zawartości.
 @param config.inside {bardia.dom.Element}
 @param config.size=30 {Integer}
 @param config.unit='%' {String -> 'px'|'%'}
-@param config.appearFrom='left' {String -> 'top'|'right'|'bottom'|'left'}
+@param config.edge='left' {String -> 'top'|'right'|'bottom'|'left'}
 @param config.modal=false {Boolean -> true|false}
  
 @example
@@ -281,7 +281,7 @@ var material = new bardia.layout.Material({
    inside: $_element(document.body),
    size: 90,
    unit: "%",
-   appearFrom: "left"
+   edge: "left"
 });
 
 material.show();

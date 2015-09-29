@@ -57,7 +57,7 @@ module.exports = function(grunt) {
               version: '1.0',
               url: '1.0',
               options: {
-                  paths: ['dist_mdl'],
+                  paths: ['dist'],
                   outdir: 'docs/'
               }
           }
