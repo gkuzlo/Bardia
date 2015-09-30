@@ -43,6 +43,17 @@ ontime.MainView = bardia.oop.Class.create({
                         alert(e);
                     }
                 }
+            }, {
+                name: "Mobile list",
+                onActivate: function(html) {
+                    try {
+                        new ontime.map.MapFeatures({
+                            inside: html
+                        });
+                    } catch (e) {
+                        alert(e);
+                    }
+                }
             }]
         });
         
