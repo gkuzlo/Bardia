@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>dist\mdl\bardia.js - Bardia</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="Bardia" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/bardia.layout.BorderLayout.html">bardia.layout.BorderLayout</a></li>
+                                <li><a href="../classes/bardia.layout.Material.html">bardia.layout.Material</a></li>
+                            </ul>
+                
+                            <ul id="api-modules" class="apis modules">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: dist\mdl\bardia.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+var bardia = {
+};
+bardia.oop = {
+}
+bardia.oop.Class = (function() {
+    
+    function create(body) {
+        
+        function klass(config) {
+            this.initialize(config); 
+        }
+        
+        for (fun in body) {
+            klass.prototype[fun] = body[fun];
+        }
+        
+        return klass;
+    }
+    
+    function inherit(source, target) {
+        for (prop in source) {
+            target[prop] = source[prop];
+        }
+    }
+
+    return {
+        create: create,
+        inherit: inherit
+    };
+    
+})();
+/**
+ *
+ */
+bardia.dom = {
+
+};
+
+/**
+ * creates an element
+ */
+$_element = (function() {
+    function create(jsonRoot) {
+        return new bardia.dom.Element(jsonRoot);
+    }
+    return create;
+})();
+/**
+ *
+ */
+bardia.dom.Element = bardia.oop.Class.create({
+
+    initialize: function(jsonRoot) {
+        this.children = [];
+
+        if (jsonRoot instanceof HTMLElement) {
+            this.wrapOnly(jsonRoot);
+        } else if (jsonRoot) {
+            this.createRoot(jsonRoot);
+        }
+    },
+
+    wrapOnly: function(jsonRoot) {
+        this.domNode = jsonRoot;
+        jsonRoot.wrapper = this;
+    },
+
+    createRoot: function(jsonRoot) {
+        var h = this;
+        
+        this.domNode = document.createElement(jsonRoot.$_tag);
+        this.domNode.wrapper = this;
+
+        for (attr in jsonRoot) {
+            if (!attr.startsWith(&quot;$_&quot;)) {
+                this.domNode.setAttribute(attr, jsonRoot[attr]);
+            }
+        }
+
+        if (jsonRoot.$_append &amp;&amp; jsonRoot.$_append.forEach) {
+            jsonRoot.$_append.forEach(function(child) {
+                h.createSubElement(child);
+            });
+        } else if (jsonRoot.$_append) {
+            this.domNode.innerHTML = jsonRoot.$_append;
+        }
+        
+        if (jsonRoot.$_on) {
+            for (eventName in jsonRoot.$_on) {
+                this.domNode.addEventListener(eventName, jsonRoot.$_on[eventName]);
+            }
+        }
+    },
+
+    createSubElement: function(jsonSubElement) {
+        var subElement = new bardia.dom.Element(jsonSubElement);
+        this.insert(subElement);
+    },
+
+    insert: function(subElement) {
+        try {
+            if (subElement) {
+                this.domNode.appendChild(subElement.dom());
+                this.children.push(subElement);
+            }
+        } catch (e) {
+            alert(&quot;insert: subElement=&quot; + subElement + &quot; &quot; + e);
+        }
+    },
+
+    update: function(element) {
+        (this.children || []).splice(0, this.children.length);
+
+        while (this.domNode.childNodes.length &gt; 0) {
+            this.domNode.removeChild(this.domNode.childNodes[0]);
+        }
+
+        if (element)
+        this.insert(element);
+    },
+
+    dom: function() {
+        return this.domNode;
+    },
+
+    find: function(id) {
+        var result = null;
+        result = this.domNode.querySelector(&quot;#&quot; + id);
+        if (result !== null) {
+            return result.wrapper;
+        } else {
+            return null;   
+        }
+    }
+});
+/**
+ *
+ */
+$_upgradeElement = (function() {
+    
+    function materialize(root) {
+        componentHandler.upgradeElement(root.dom());
+        (root.children || []).forEach(function(node) {
+            $_upgradeElement(node);
+        });
+    }
+
+    return materialize;
+})();
+bardia.layout = {
+}
+/**
+ * @class bardia.layout.BorderLayout
+ * @constructor
+ *
+@example
+~~~
+var layout = new bardia.layout.BorderLayout({
+   inside: $_element(document.body),
+   north: {
+        height: 20
+   }
+});
+~~~
+ */
+bardia.layout.BorderLayout = bardia.oop.Class.create({
+
+	initialize: function(config) {
+        this.config = config;
+        
+        this.render();
+	},
+
+    render: function() {
+    	var h = this;
+        
+        var centerTop = 0;
+        var centerBottom = 0;
+        var centerLeft = 0;
+        var centerRight = 0;
+
+        if (this.config.north !== undefined) {
+            centerTop = h.config.north.height || 50;
+
+            var north = {
+                $_tag: &quot;div&quot;,
+                class: &quot;border-layout-north&quot;,
+                style: &quot;height:&quot; + centerTop + &quot;px; background-color:&quot; + (h.config.north.fill || &quot;transparent&quot;)
+            }
+
+            this.config.inside.insert($_element(north));
+        }
+        
+        if (this.config.south !== undefined) {
+            centerBottom = this.config.south.height || 50;
+
+            var south = {
+                $_tag: &quot;div&quot;,
+                class: &quot;border-layout-south&quot;,
+                style: &quot;height:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.config.south.fill || &quot;transparent&quot;)
+            };
+            
+            this.config.inside.insert($_element(south));
+        }
+        
+        if (this.config.west !== undefined) {
+            centerLeft = this.config.west.width || 50;
+            
+            h.west = $_element({
+                $_tag: &quot;div&quot;,
+                style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; left:0px; width:&quot; + centerLeft + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.config.west.fill || &quot;transparent&quot;)
+            });
+
+            h.config.inside.insert(h.west);
+        }
+        
+        if (this.config.east !== undefined) {
+            centerRight = this.config.east.width || 50;
+
+            h.east = $_element({
+                $_tag: &quot;div&quot;,
+                style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; right:0px; width:&quot; + centerRight + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.config.east.fill || &quot;transparent&quot;)
+            });
+
+            this.config.inside.insert(h.east);
+        }
+
+        h.center = $_element({
+            $_tag: &quot;div&quot;,
+            style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; left:&quot; + centerLeft + &quot;px; right:&quot; + centerRight + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.config.fill || &quot;transparent&quot;)
+        });
+
+        h.config.inside.insert(h.center);
+    },
+    /**
+     * @method getNorth()
+     * @return {bardia.dom.Element} instance of bradia dom element wrapper
+     */
+    getNorth: function() {
+        return this.north;
+    },
+    getWest: function() {
+        return this.west;
+    },
+    getEast: function() {
+        return this.east;
+    },
+    getSouth: function() {
+        return this.south;
+    },
+    getCenter: function() {
+        return this.center;
+    },
+    getDefault: function() {
+        return this.center;
+    }
+});
+/**
+
+Materiał, który wysuwa się po wywołaniu metody show().
+Po wywołaniu metody hide() - ucieka.
+Może się wysuwać z róznych stron: left, right, top, button.
+Jeżeli jest modalny to podczas wysuwania pojawia sie pod nim półprzeźroczysta kurtyna, która sprawia,
+że kontet parenta jest lekko zasłonięty.
+
+Animacja odbywa się w ten sposób, że materiał się wysuwa z jednej ze stron parenta (na przykład na gridzie, parenta podajemy w inside) a w tym czasie kurtyna zasłania obaszar grida.
+Komponent jest appendowany do inside&#x27;a - czyli nie podmienia jego zawartości.
+
+@class bardia.layout.Material
+@constructor new bardia.lazout.Material();
+@param config {JSONObject}
+@param config.inside {bardia.dom.Element}
+@param config.size=30 {Integer}
+@param config.unit=&#x27;%&#x27; {String -&gt; &#x27;px&#x27;|&#x27;%&#x27;}
+@param config.edge=&#x27;left&#x27; {String -&gt; &#x27;top&#x27;|&#x27;right&#x27;|&#x27;bottom&#x27;|&#x27;left&#x27;}
+@param config.modal=false {Boolean -&gt; true|false}
+ 
+@example
+~~~
+var material = new bardia.layout.Material({
+   inside: $_element(document.body),
+   size: 90,
+   unit: &quot;%&quot;,
+   edge: &quot;left&quot;
+});
+
+material.show();
+
+material.getContent().insert($_element({
+    $_tag: &quot;DIV&quot;,
+    $_append: &quot;this is div content&quot;
+}));
+
+~~~
+ */
+bardia.layout.Material = (function() {
+
+    var h = this;
+
+    function Material(config) {
+    }
+
+    /**
+     * @method show()
+     */
+    Material.prototype.show = function() {
+        
+    }
+    
+    /**
+     * @method hide()
+     */
+    Material.prototype.hide = function() {
+
+    }
+    
+    /**
+     * @method getContent()
+     * @return {bardia.dom.Element}
+     */
+    Material.prototype.getContent = function() {
+
+    }
+    
+    return Material;
+})();
+bardia.layout.Panel = bardia.oop.Class.create({
+    
+    initialize: function(config) {
+        this.config = config;
+        this.render();
+    },
+    
+    render: function() {
+        var h = this;
+
+        h.root = h.prepareRoot();
+        h.config.inside.update(h.root);
+
+        h.setTabs(h.config.tabs);
+
+        $_upgradeElement(h.root);
+    },
+    
+    getContent: function() {
+    	return this.root.find(&quot;contents&quot;);
+    },
+    
+    setTitle: function(title) {
+    	this.root.find(&quot;title&quot;).update(title);
+    },
+    
+    setTabs: function(tabs) {
+        var h = this;
+
+        if (!tabs) return;
+
+        h.prepareHeaderTabs(tabs);
+        h.prepareContentTabs(tabs);
+    },
+    
+    prepareHeaderTabs: function(tabs) {
+        var h = this;
+        
+        if (h.root.find(&quot;header-tabs&quot;) !== null) {
+            h.root.find(&quot;header-tabs&quot;).update();
+        } else {
+            var header = h.root.find(&quot;header&quot;)
+            header.insert($_element({
+                $_tag: &quot;div&quot;, 
+                class: &quot;mdl-layout__tab-bar mdl-js-ripple-effect&quot;, 
+                id: &quot;header-tabs&quot;,
+            }));
+        }
+
+        tabs.forEach(function(tab, index) {
+            var tabHeader = $_element({
+                $_tag: &quot;a&quot;,
+                $_append: tab.name,
+                $_on: {
+                    &quot;click&quot;: function(e) {
+                        if (tab.onActivate &amp;&amp; !tab.activated) {
+                            setTimeout(function() {
+                                tab.onActivate(h.root.find(&quot;tab_&quot; + index));
+                                tab.activated = true;
+                            }, 500);
+                        }
+                    }
+                },
+                href: &quot;#tab_&quot; + index,
+                class: &quot;mdl-layout__tab&quot;,
+            });
+            h.root.find(&quot;header-tabs&quot;).insert(tabHeader);
+        });
+    },
+
+    prepareContentTabs: function(tabs) {
+        var h = this;
+
+        h.root.find(&quot;contents&quot;).update();
+
+        tabs.forEach(function(tab, index) {
+            var tabContent = $_element({
+                $_tag: &quot;section&quot;, class: &quot;mdl-layout__tab-panel&quot;, id: &quot;tab_&quot; + index,
+                style: &quot;position:absolute; height:100%; width:100%;&quot;
+            });
+            h.root.find(&quot;contents&quot;).insert(tabContent);
+        });
+    },
+
+    prepareRoot: function() {
+        var h = this;
+
+        var json = {
+            $_tag: &quot;div&quot;, 
+            class: &quot;mdl-layout mdl-js-layout mdl-layout--fixed-header&quot;,
+            $_append: [{
+                $_tag: &quot;header&quot;, class: &quot;mdl-layout__header&quot;, id: &quot;header&quot;,
+                $_append: [{
+                    $_tag: &quot;div&quot;, class: &quot;mdl-layout__header-row&quot;,
+                    $_append: [{
+                        $_tag: &quot;span&quot;, class: &quot;mdl-layout-title&quot;, id: &quot;title&quot;,
+                        $_append: h.config.title
+                    }]
+                }]
+            }, {
+                $_tag: &quot;div&quot;, class: &quot;mdl-layout__drawer&quot;,
+                $_append: [{
+                    $_tag: &quot;span&quot;, class: &quot;mdl-layout-title&quot;,
+                    $_append: h.config.title,
+                }]
+            }, {
+                $_tag: &quot;main&quot;, class: &quot;mdl-layout__content&quot;, 
+                id: &quot;contents&quot;,
+                style: &quot;position:relative&quot;
+            }]
+        };
+
+        return $_element(json);
+    }
+});
+bardia.list = {
+
+};
+/**
+ *
+ */
+bardia.list.List = bardia.oop.Class.create({
+    /**
+     *
+     */
+    initialize: function(config) {
+        this.config = config;
+        
+        this.render();
+    },
+    /**
+     *
+     */
+    render: function() {
+        var h = this;
+        
+        h.config.inside.update();
+
+        h.root = $_element({
+            $_tag: &quot;table&quot;,
+            class: &quot;mdl-data-table mdl-js-data-table mdl-shadow--2dp&quot;,
+            $_append: [{
+                $_tag: &quot;thead&quot;,
+                $_append: [{
+                    $_tag: &quot;tr&quot;,
+                    $_append: [{
+                        $_tag: &quot;th&quot;,
+                        class: &quot;mdl-data-table__cell--non-numeric&quot;,
+                        style: &quot;background-color:yellow&quot;,
+                        $_append: &quot;A&quot;
+                    }, {
+                        $_tag: &quot;th&quot;,
+                        $_append: &quot;B&quot;
+                    }, {
+                        $_tag: &quot;th&quot;,
+                        $_append: &quot;C&quot;
+                    }]
+                }]
+            }, {
+                $_tag: &quot;tbody&quot;,
+                $_append: [{
+                    $_tag: &quot;tr&quot;,
+                    $_append: [{
+                        $_tag: &quot;td&quot;,
+                        class: &quot;mdl-data-table__cell--non-numeric&quot;,
+                        $_append: &quot;Grzegorz&quot;
+                    }, {
+                        $_tag: &quot;td&quot;,
+                        $_append: [{
+                            $_tag: &quot;INPUT&quot;,
+                            type: &quot;number&quot;
+                        }]
+                    }, {
+                        $_tag: &quot;td&quot;,
+                        $_append: &quot;Julia&quot;
+                    }]
+                }, {
+                    $_tag: &quot;tr&quot;,
+                    $_append: [{
+                        $_tag: &quot;td&quot;,
+                        class: &quot;mdl-data-table__cell--non-numeric&quot;,
+                        $_append: &quot;Agnieszka&quot;
+                    }, {
+                        $_tag: &quot;td&quot;,
+                        $_append: &quot;BBB&quot;
+                    }, {
+                        $_tag: &quot;td&quot;,
+                        $_append: &quot;CCC&quot;
+                    }]
+                }]
+            }]
+        });
+        
+        h.config.inside.insert(h.root);
+        
+        $_upgradeElement(h.root);
+    }
+});
+/**
+ *
+ */
+bardia.layout.MobileList == (function() {
+    function _mobileList(config) {
+    };
+    return _mobileList;
+})();
+bardia.grid = {
+
+};
+/**
+ *
+ */
+bardia.grid.Grid = bardia.oop.Class.create({
+    /**
+     *
+     */
+    initialize: function(config) {        
+        bardia.oop.Class.inherit(config, this);
+        
+        this.render();
+    },
+    /**
+     *
+     */
+    render: function() {
+        var h = this;
+        
+        h.inside.update();
+
+        h.root = $_element({
+            $_tag: &quot;table&quot;,
+            class: &quot;mdl-data-table mdl-js-data-table mdl-shadow--2dp&quot;,
+            $_append: [{
+                $_tag: &quot;thead&quot;,
+                id: &quot;THHEAD&quot;,
+                $_append: (h.columns || []).map(function(column) {
+                    return {
+                        $_tag: &quot;th&quot;,
+                        class: &quot;mdl-data-table__cell--non-numeric&quot;,
+                        $_append: column.name
+                    }
+                })
+            }, {
+                $_tag: &quot;tbody&quot;,
+                id: &quot;TBODY&quot;,
+                $_append: [{
+                    $_tag: &quot;tr&quot;,
+                    $_append: [{
+                        $_tag: &quot;td&quot;,
+                        class: &quot;mdl-data-table__cell--non-numeric&quot;,
+                        $_append: &quot;Grzegorz&quot;
+                    }, {
+                        $_tag: &quot;td&quot;,
+                        $_append: [{
+                            $_tag: &quot;INPUT&quot;,
+                            type: &quot;number&quot;
+                        }]
+                    }, {
+                        $_tag: &quot;td&quot;,
+                        $_append: &quot;Julia&quot;
+                    }]
+                }, {
+                    $_tag: &quot;tr&quot;,
+                    $_append: [{
+                        $_tag: &quot;td&quot;,
+                        class: &quot;mdl-data-table__cell--non-numeric&quot;,
+                        $_append: &quot;Agnieszka&quot;
+                    }, {
+                        $_tag: &quot;td&quot;,
+                        $_append: &quot;BBB&quot;
+                    }, {
+                        $_tag: &quot;td&quot;,
+                        $_append: &quot;CCC&quot;
+                    }]
+                }]
+            }]
+        });
+        
+        h.inside.insert(h.root);
+        
+        $_upgradeElement(h.root);
+    },
+    
+    fetch(model) {
+        var h = this;
+    }
+});
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
