@@ -24,12 +24,47 @@ ontime.MainView = bardia.oop.Class.create({
                     new bardia.grid.Grid({
                         inside: html,
                         columns: [{
-                            name: "Imię"
+                            name: "Imię",
+                            property: "firstName"
                         }, {
-                            name: "Nazwisko"
+                            name: "Nazwisko",
+                            property: "lastName"
                         }]
                     }).fetch({
-                        rows: [1,2,3,4]
+                        rows: [{
+                            firstName: "Jan",
+                            lastName: "Kowalski"
+                        }, {
+                            firstName: "Jan",
+                            lastName: "Nowak"
+                        }, {
+                            firstName: "Jan",
+                            lastName: "Nowak"
+                        }, {
+                            firstName: "Jan",
+                            lastName: "Nowak"
+                        }, {
+                            firstName: "Jan",
+                            lastName: "Nowak"
+                        }, {
+                            firstName: "Jan",
+                            lastName: "Nowak"
+                        }, {
+                            firstName: "Jan",
+                            lastName: "Nowak"
+                        }, {
+                            firstName: "Jan",
+                            lastName: "Nowak"
+                        }, {
+                            firstName: "Jan",
+                            lastName: "Nowak"
+                        }, {
+                            firstName: "Jan",
+                            lastName: "Nowak"
+                        }, {
+                            firstName: "Jan",
+                            lastName: "Nowak"
+                        }]
                     });
                 }
             }, {
@@ -47,7 +82,7 @@ ontime.MainView = bardia.oop.Class.create({
                 name: "Mobile list",
                 onActivate: function(html) {
                     try {
-                        new ontime.map.MapFeatures({
+                        new bardia.list.MobileList({
                             inside: html
                         });
                     } catch (e) {
@@ -56,11 +91,11 @@ ontime.MainView = bardia.oop.Class.create({
                 }
             }]
         });
-        
+
         var material = new bardia.layout.Material({
             inside: document.body
         });
-        
+
         material.show();
     }
 });

@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 
                     "src/bardia/$_variants/$_mdl/list/$_list.js",
                     "src/bardia/$_variants/$_mdl/list/List.js",
-                    "src/bardia/$_variants/$_materialize/list/MobileList.js",
+                    "src/bardia/$_variants/$_mdl/list/MobileList.js",
 
                     "src/bardia/$_variants/$_mdl/grid/$_grid.js",
                     "src/bardia/$_variants/$_mdl/grid/Grid.js",
@@ -70,7 +70,8 @@ module.exports = function(grunt) {
 
                     "src/bardia/$_variants/$_mdl/list/$_list.js",
                     "src/bardia/$_variants/$_mdl/list/List.js",
-                    
+                    "src/bardia/$_variants/$_materialize/list/MobileList.js",
+
                     "src/bardia/$_variants/$_mdl/grid/$_grid.js",
                     "src/bardia/$_variants/$_mdl/grid/Grid.js",
 

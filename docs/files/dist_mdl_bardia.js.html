@@ -99,15 +99,16 @@ bardia.oop.Class = (function() {
         return klass;
     }
     
-    function inherit(source, target) {
+    function extend(target, source) {
         for (prop in source) {
             target[prop] = source[prop];
         }
+        return target;
     }
 
     return {
         create: create,
-        inherit: inherit
+        extend: extend
     };
     
 })();
@@ -607,11 +608,58 @@ bardia.list.List = bardia.oop.Class.create({
 /**
  *
  */
-bardia.layout.MobileList == (function() {
+bardia.list.MobileList = (function() {
+    
+    var h = this;
+    
+    function prepareRoot() {
+        var result = $_element({
+            $_tag: &quot;ul&quot;,
+            class: &quot;collection with-header&quot;,
+            $_append: [{
+                $_tag: &quot;li&quot;,
+                class: &quot;collection-header&quot;,
+                $_append: &quot;&lt;h4&gt;First Names&lt;/h4&gt;&quot;
+            }, {
+                $_tag: &quot;li&quot;,
+                class: &quot;collection-item&quot;,
+                $_append: &quot;Wojtek&quot;
+            }, {
+                $_tag: &quot;li&quot;,
+                class: &quot;collection-item&quot;,
+                $_append: &quot;Ela&quot;
+            }, {
+                $_tag: &quot;li&quot;,
+                class: &quot;collection-item&quot;,
+                $_append: &quot;Piotr&quot;,
+                $_on: {
+                    &quot;click&quot;: function(e) {
+                        alert(e);
+                    }
+                }
+            }]
+        });
+
+        return result;
+    }
+
     function _mobileList(config) {
+        var root = prepareRoot();
+        config.inside.insert(root);
     };
+
     return _mobileList;
 })();
+
+/*
+      &lt;ul class=&quot;collection with-header&quot;&gt;
+        &lt;li class=&quot;collection-header&quot;&gt;&lt;h4&gt;First Names&lt;/h4&gt;&lt;/li&gt;
+        &lt;li class=&quot;collection-item&quot;&gt;Alvin&lt;/li&gt;
+        &lt;li class=&quot;collection-item&quot;&gt;Alvin&lt;/li&gt;
+        &lt;li class=&quot;collection-item&quot;&gt;Alvin&lt;/li&gt;
+        &lt;li class=&quot;collection-item&quot;&gt;Alvin&lt;/li&gt;
+      &lt;/ul&gt;
+ */
 bardia.grid = {
 
 };
@@ -619,11 +667,12 @@ bardia.grid = {
  *
  */
 bardia.grid.Grid = bardia.oop.Class.create({
+    detailsWidth: &quot;400px&quot;,
     /**
      *
      */
-    initialize: function(config) {        
-        bardia.oop.Class.inherit(config, this);
+    initialize: function(config) {
+        bardia.oop.Class.extend(this, config || {});
         
         this.render();
     },
@@ -636,61 +685,87 @@ bardia.grid.Grid = bardia.oop.Class.create({
         h.inside.update();
 
         h.root = $_element({
-            $_tag: &quot;table&quot;,
-            class: &quot;mdl-data-table mdl-js-data-table mdl-shadow--2dp&quot;,
+            $_tag: &quot;div&quot;,
+            class: &quot;grid-content&quot;,
             $_append: [{
-                $_tag: &quot;thead&quot;,
-                id: &quot;THHEAD&quot;,
-                $_append: (h.columns || []).map(function(column) {
+                $_tag: &quot;div&quot;,
+                class: &quot;grid-headers&quot;,
+                id: &quot;grid-headers&quot;,
+                $_append: h.columns.map(function(column) {
                     return {
-                        $_tag: &quot;th&quot;,
-                        class: &quot;mdl-data-table__cell--non-numeric&quot;,
+                        $_tag: &quot;div&quot;,
+                        class: &quot;grid-header&quot;,
                         $_append: column.name
                     }
                 })
             }, {
-                $_tag: &quot;tbody&quot;,
-                id: &quot;TBODY&quot;,
+                $_tag: &quot;div&quot;,
+                class: &quot;grid-rows&quot;,
+                id: &quot;grid-rows&quot;
+            }, {
+                $_tag: &quot;div&quot;,
+                class: &quot;grid-curtain&quot;,
+                id: &quot;grid-curtain&quot;,
+                $_on: {
+                    &quot;click&quot;: function() {
+                        h.closeDetails();
+                    }
+                },
                 $_append: [{
-                    $_tag: &quot;tr&quot;,
-                    $_append: [{
-                        $_tag: &quot;td&quot;,
-                        class: &quot;mdl-data-table__cell--non-numeric&quot;,
-                        $_append: &quot;Grzegorz&quot;
-                    }, {
-                        $_tag: &quot;td&quot;,
-                        $_append: [{
-                            $_tag: &quot;INPUT&quot;,
-                            type: &quot;number&quot;
-                        }]
-                    }, {
-                        $_tag: &quot;td&quot;,
-                        $_append: &quot;Julia&quot;
-                    }]
-                }, {
-                    $_tag: &quot;tr&quot;,
-                    $_append: [{
-                        $_tag: &quot;td&quot;,
-                        class: &quot;mdl-data-table__cell--non-numeric&quot;,
-                        $_append: &quot;Agnieszka&quot;
-                    }, {
-                        $_tag: &quot;td&quot;,
-                        $_append: &quot;BBB&quot;
-                    }, {
-                        $_tag: &quot;td&quot;,
-                        $_append: &quot;CCC&quot;
-                    }]
+                    $_tag: &quot;div&quot;,
+                    class: &quot;grid-details-right&quot;,
+                    id: &quot;grid-details-right&quot;
                 }]
             }]
         });
-        
+
         h.inside.insert(h.root);
-        
+
         $_upgradeElement(h.root);
     },
-    
+
     fetch(model) {
         var h = this;
+        
+        var rowsDiv = h.root.find(&quot;grid-rows&quot;);
+        rowsDiv.update();
+
+        (model.rows || []).forEach(function(row) {
+            var rowDiv = $_element({
+                $_tag: &quot;div&quot;,
+                class: &quot;grid-row&quot;,
+                $_on: {
+                    &quot;click&quot;: function(e) {
+                        h.openDetails();
+                    }
+                }
+            });
+            rowsDiv.insert(rowDiv);
+            
+            $_upgradeElement(rowDiv);
+
+            h.columns.forEach(function(column) {
+                rowDiv.insert($_element({
+                    $_tag: &quot;td&quot;,
+                    class: &quot;grid-cell&quot;,
+                    $_append: row[column.property]
+                }));
+            });
+        });
+    },
+    
+    openDetails: function() {
+        var h = this;
+
+        h.root.find(&quot;grid-curtain&quot;).dom().style.width = &quot;100%&quot;;
+        h.root.find(&quot;grid-details-right&quot;).dom().style.width = h.detailsWidth;
+    },
+    
+    closeDetails: function() {
+        var h = this;
+
+        h.root.find(&quot;grid-curtain&quot;).dom().style.width = &quot;0px&quot;;
+        h.root.find(&quot;grid-details-right&quot;).dom().style.width = &quot;0px&quot;;
     }
 });
     </pre>

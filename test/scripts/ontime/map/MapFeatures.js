@@ -4,7 +4,7 @@
 ontime.map.MapFeatures = bardia.oop.Class.create({
 
     initialize: function(config) {
-        bardia.oop.Class.inherit(config, this);
+        bardia.oop.Class.extend(this, config);
 
         try {
             this.render();

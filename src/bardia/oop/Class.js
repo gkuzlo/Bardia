@@ -13,15 +13,16 @@ bardia.oop.Class = (function() {
         return klass;
     }
     
-    function inherit(source, target) {
+    function extend(target, source) {
         for (prop in source) {
             target[prop] = source[prop];
         }
+        return target;
     }
 
     return {
         create: create,
-        inherit: inherit
+        extend: extend
     };
     
 })();

@@ -2,11 +2,12 @@
  *
  */
 bardia.grid.Grid = bardia.oop.Class.create({
+    detailsWidth: "400px",
     /**
      *
      */
-    initialize: function(config) {        
-        bardia.oop.Class.inherit(config, this);
+    initialize: function(config) {
+        bardia.oop.Class.extend(this, config || {});
         
         this.render();
     },
@@ -19,60 +20,86 @@ bardia.grid.Grid = bardia.oop.Class.create({
         h.inside.update();
 
         h.root = $_element({
-            $_tag: "table",
-            class: "mdl-data-table mdl-js-data-table mdl-shadow--2dp",
+            $_tag: "div",
+            class: "grid-content",
             $_append: [{
-                $_tag: "thead",
-                id: "THHEAD",
-                $_append: (h.columns || []).map(function(column) {
+                $_tag: "div",
+                class: "grid-headers",
+                id: "grid-headers",
+                $_append: h.columns.map(function(column) {
                     return {
-                        $_tag: "th",
-                        class: "mdl-data-table__cell--non-numeric",
+                        $_tag: "div",
+                        class: "grid-header",
                         $_append: column.name
                     }
                 })
             }, {
-                $_tag: "tbody",
-                id: "TBODY",
+                $_tag: "div",
+                class: "grid-rows",
+                id: "grid-rows"
+            }, {
+                $_tag: "div",
+                class: "grid-curtain",
+                id: "grid-curtain",
+                $_on: {
+                    "click": function() {
+                        h.closeDetails();
+                    }
+                },
                 $_append: [{
-                    $_tag: "tr",
-                    $_append: [{
-                        $_tag: "td",
-                        class: "mdl-data-table__cell--non-numeric",
-                        $_append: "Grzegorz"
-                    }, {
-                        $_tag: "td",
-                        $_append: [{
-                            $_tag: "INPUT",
-                            type: "number"
-                        }]
-                    }, {
-                        $_tag: "td",
-                        $_append: "Julia"
-                    }]
-                }, {
-                    $_tag: "tr",
-                    $_append: [{
-                        $_tag: "td",
-                        class: "mdl-data-table__cell--non-numeric",
-                        $_append: "Agnieszka"
-                    }, {
-                        $_tag: "td",
-                        $_append: "BBB"
-                    }, {
-                        $_tag: "td",
-                        $_append: "CCC"
-                    }]
+                    $_tag: "div",
+                    class: "grid-details-right",
+                    id: "grid-details-right"
                 }]
             }]
         });
-        
+
         h.inside.insert(h.root);
-        
+
         $_upgradeElement(h.root);
     },
-    
+
     fetch(model) {
         var h = this;
+        
+        var rowsDiv = h.root.find("grid-rows");
+        rowsDiv.update();
+
+        (model.rows || []).forEach(function(row) {
+            var rowDiv = $_element({
+                $_tag: "div",
+                class: "grid-row",
+                $_on: {
+                    "click": function(e) {
+                        h.openDetails();
+                    }
+                }
+            });
+            rowsDiv.insert(rowDiv);
+            
+            $_upgradeElement(rowDiv);
+
+            h.columns.forEach(function(column) {
+                rowDiv.insert($_element({
+                    $_tag: "td",
+                    class: "grid-cell",
+                    $_append: row[column.property]
+                }));
+            });
+        });
+    },
+    
+    openDetails: function() {
+        var h = this;
+
+        h.root.find("grid-curtain").dom().style.width = "100%";
+        h.root.find("grid-details-right").dom().style.width = h.detailsWidth;
+    },
+    
+    closeDetails: function() {
+        var h = this;
+
+        h.root.find("grid-curtain").dom().style.width = "0px";
+        h.root.find("grid-details-right").dom().style.width = "0px";
     }
 });

@@ -1,3 +1,45 @@
+.grid-content {
+    position:absolute; top:0px; left:0px; right:0px; bottom:0px;
+}
+
+.grid-headers {
+    position:absolute; top:0px; left:0px; right:0px; height:40px; background-color:white;
+    display:flex; border:1px solid lightGrey; border-width:0px 0px 2px 0px;
+}
+
+.grid-header {
+    position:relative; border:0px; width:200px; background-color:white; line-height:40px;
+    padding:0px 5px 0px 5px; font-weight:bold;
+}
+
+.grid-rows {
+    position:absolute; top:42px; left:0px; right:0px; bottom:0px; background-color:white;
+    display:flex; flex-direction:column; overflow:auto;
+}
+
+.grid-row {
+    position:relative; width:100%; border:1px solid lightGrey; height:40px; display:flex;
+    border-width:0px 0px 1px 0px;
+}
+
+.grid-cell {
+    position:relative; border:0px; width:200px; background-color:white; line-height:40px;
+    padding:0px 5px 0px 5px;
+}
+
+.grid-curtain {
+    position:absolute; top:0px; left:0px; bottom:0px; width:0px;
+    background: rgba(0,0,0,0.5);
+    -webkit-transition: width 1s; /* Safari */
+    transition: width 1s;
+}
+
+.grid-details-right {
+    position:absolute; top:0px; left:0px; bottom:0px; width:0px;
+    background: white; border:0px solid lightGrey; border-width:0px 1px 0px 0px;
+    -webkit-transition: width 1s; /* Safari */
+    transition: width 1s;
+} 
 .border-layout-north {
     position:absolute; overflow:hidden; top:0px; left:0px; right:0px; 
 }

@@ -604,6 +604,61 @@ bardia.list.List = bardia.oop.Class.create({
         $_upgradeElement(h.root);
     }
 });
+/**
+ *
+ */
+bardia.list.MobileList = (function() {
+    
+    var h = this;
+    
+    function prepareRoot() {
+        var result = $_element({
+            $_tag: &quot;ul&quot;,
+            class: &quot;collection with-header&quot;,
+            $_append: [{
+                $_tag: &quot;li&quot;,
+                class: &quot;collection-header&quot;,
+                $_append: &quot;&lt;h4&gt;First Names&lt;/h4&gt;&quot;
+            }, {
+                $_tag: &quot;li&quot;,
+                class: &quot;collection-item&quot;,
+                $_append: &quot;Wojtek&quot;
+            }, {
+                $_tag: &quot;li&quot;,
+                class: &quot;collection-item&quot;,
+                $_append: &quot;Ela&quot;
+            }, {
+                $_tag: &quot;li&quot;,
+                class: &quot;collection-item&quot;,
+                $_append: &quot;Piotr&quot;,
+                $_on: {
+                    &quot;click&quot;: function(e) {
+                        alert(e);
+                    }
+                }
+            }]
+        });
+
+        return result;
+    }
+
+    function _mobileList(config) {
+        var root = prepareRoot();
+        config.inside.insert(root);
+    };
+
+    return _mobileList;
+})();
+
+/*
+      &lt;ul class=&quot;collection with-header&quot;&gt;
+        &lt;li class=&quot;collection-header&quot;&gt;&lt;h4&gt;First Names&lt;/h4&gt;&lt;/li&gt;
+        &lt;li class=&quot;collection-item&quot;&gt;Alvin&lt;/li&gt;
+        &lt;li class=&quot;collection-item&quot;&gt;Alvin&lt;/li&gt;
+        &lt;li class=&quot;collection-item&quot;&gt;Alvin&lt;/li&gt;
+        &lt;li class=&quot;collection-item&quot;&gt;Alvin&lt;/li&gt;
+      &lt;/ul&gt;
+ */
 bardia.grid = {
 
 };
@@ -632,7 +687,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
             class: &quot;mdl-data-table mdl-js-data-table mdl-shadow--2dp&quot;,
             $_append: [{
                 $_tag: &quot;thead&quot;,
-                id: &quot;THHEAD&quot;,
+                id: &quot;thead&quot;,
                 $_append: (h.columns || []).map(function(column) {
                     return {
                         $_tag: &quot;th&quot;,
@@ -643,36 +698,6 @@ bardia.grid.Grid = bardia.oop.Class.create({
             }, {
                 $_tag: &quot;tbody&quot;,
                 id: &quot;TBODY&quot;,
-                $_append: [{
-                    $_tag: &quot;tr&quot;,
-                    $_append: [{
-                        $_tag: &quot;td&quot;,
-                        class: &quot;mdl-data-table__cell--non-numeric&quot;,
-                        $_append: &quot;Grzegorz&quot;
-                    }, {
-                        $_tag: &quot;td&quot;,
-                        $_append: [{
-                            $_tag: &quot;INPUT&quot;,
-                            type: &quot;number&quot;
-                        }]
-                    }, {
-                        $_tag: &quot;td&quot;,
-                        $_append: &quot;Julia&quot;
-                    }]
-                }, {
-                    $_tag: &quot;tr&quot;,
-                    $_append: [{
-                        $_tag: &quot;td&quot;,
-                        class: &quot;mdl-data-table__cell--non-numeric&quot;,
-                        $_append: &quot;Agnieszka&quot;
-                    }, {
-                        $_tag: &quot;td&quot;,
-                        $_append: &quot;BBB&quot;
-                    }, {
-                        $_tag: &quot;td&quot;,
-                        $_append: &quot;CCC&quot;
-                    }]
-                }]
             }]
         });
         
@@ -680,9 +705,28 @@ bardia.grid.Grid = bardia.oop.Class.create({
         
         $_upgradeElement(h.root);
     },
-    
+
     fetch(model) {
         var h = this;
+
+        var tbody = h.root.find(&quot;tbody&quot;);
+        tbody.update();
+
+        (model.rows || []).forEach(function(row) {
+            var row = $_element({
+                $_tag: &quot;tr&quot;
+            });
+            tbody.insert(row);
+
+            h.dolumns.forEach(function(column) {
+                tbody.insert($_element({
+                    $_tag: &quot;td&quot;,
+                    $_append: row[column.property]
+                }));
+            });
+        });
+
+        $materialize(tbody);
     }
 });
     </pre>

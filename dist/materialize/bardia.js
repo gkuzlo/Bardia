@@ -522,6 +522,61 @@ bardia.list.List = bardia.oop.Class.create({
         $_upgradeElement(h.root);
     }
 });
+/**
+ *
+ */
+bardia.list.MobileList = (function() {
+    
+    var h = this;
+    
+    function prepareRoot() {
+        var result = $_element({
+            $_tag: "ul",
+            class: "collection with-header",
+            $_append: [{
+                $_tag: "li",
+                class: "collection-header",
+                $_append: "<h4>First Names</h4>"
+            }, {
+                $_tag: "li",
+                class: "collection-item",
+                $_append: "Wojtek"
+            }, {
+                $_tag: "li",
+                class: "collection-item",
+                $_append: "Ela"
+            }, {
+                $_tag: "li",
+                class: "collection-item",
+                $_append: "Piotr",
+                $_on: {
+                    "click": function(e) {
+                        alert(e);
+                    }
+                }
+            }]
+        });
+
+        return result;
+    }
+
+    function _mobileList(config) {
+        var root = prepareRoot();
+        config.inside.insert(root);
+    };
+
+    return _mobileList;
+})();
+
+/*
+      <ul class="collection with-header">
+        <li class="collection-header"><h4>First Names</h4></li>
+        <li class="collection-item">Alvin</li>
+        <li class="collection-item">Alvin</li>
+        <li class="collection-item">Alvin</li>
+        <li class="collection-item">Alvin</li>
+      </ul>
+ */
 bardia.grid = {
 
 };
@@ -550,7 +605,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
             class: "mdl-data-table mdl-js-data-table mdl-shadow--2dp",
             $_append: [{
                 $_tag: "thead",
-                id: "THHEAD",
+                id: "thead",
                 $_append: (h.columns || []).map(function(column) {
                     return {
                         $_tag: "th",
@@ -561,36 +616,6 @@ bardia.grid.Grid = bardia.oop.Class.create({
             }, {
                 $_tag: "tbody",
                 id: "TBODY",
-                $_append: [{
-                    $_tag: "tr",
-                    $_append: [{
-                        $_tag: "td",
-                        class: "mdl-data-table__cell--non-numeric",
-                        $_append: "Grzegorz"
-                    }, {
-                        $_tag: "td",
-                        $_append: [{
-                            $_tag: "INPUT",
-                            type: "number"
-                        }]
-                    }, {
-                        $_tag: "td",
-                        $_append: "Julia"
-                    }]
-                }, {
-                    $_tag: "tr",
-                    $_append: [{
-                        $_tag: "td",
-                        class: "mdl-data-table__cell--non-numeric",
-                        $_append: "Agnieszka"
-                    }, {
-                        $_tag: "td",
-                        $_append: "BBB"
-                    }, {
-                        $_tag: "td",
-                        $_append: "CCC"
-                    }]
-                }]
             }]
         });
         
@@ -598,8 +623,27 @@ bardia.grid.Grid = bardia.oop.Class.create({
         
         $_upgradeElement(h.root);
     },
-    
+
     fetch(model) {
         var h = this;
+
+        var tbody = h.root.find("tbody");
+        tbody.update();
+
+        (model.rows || []).forEach(function(row) {
+            var row = $_element({
+                $_tag: "tr"
+            });
+            tbody.insert(row);
+
+            h.dolumns.forEach(function(column) {
+                tbody.insert($_element({
+                    $_tag: "td",
+                    $_append: row[column.property]
+                }));
+            });
+        });
+
+        $materialize(tbody);
     }
 });
