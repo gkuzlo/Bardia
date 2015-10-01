@@ -18,6 +18,11 @@ bardia.grid.Grid = bardia.oop.Class.create({
         var h = this;
         
         h.inside.update();
+        
+        h.panel = new bardia.layout.Panel({
+            inside: h.inside,
+            title: "Grid"
+        });
 
         h.root = $_element({
             $_tag: "div",
@@ -54,7 +59,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
             }]
         });
 
-        h.inside.insert(h.root);
+        h.panel.getContent().insert(h.root);
 
         $_upgradeElement(h.root);
     },

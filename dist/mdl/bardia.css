@@ -1,3 +1,55 @@
+.form-content {
+    position:absolute; top:0px; left:0px; right:0px; bottom:0px; display:flex; flex-direction:column;
+}
+
+.form-row {
+    position:relative; width:100%; border:1px solid lightGrey; 
+    border-width:0px 0px 0px 0px; padding:0px 0px 0px 20px;
+}
+
+.form-text-input {
+    height:20px; border:0px solid lightGrey; border-width:0px 0px 1px 0px; outline:none; margin-top:20px; background-color:transparent;
+    box-shadow:none;
+}
+
+.form-text-input:invalid {
+    box-shadow:none;
+}
+
+.form-text-input-label {
+  position: absolute;
+  color:grey;
+  top: 20px;
+  left: 20px;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.form-text-input:focus + label {
+  top:0px;
+  color:blue;
+  font-size: 11px;
+}
+
+.form-text-input:valid + label {
+  top:0px;
+  color:blue;
+  font-size: 11px;
+}
+
+.form-curtain {
+    position:absolute; top:0px; left:0px; bottom:0px; width:0px;
+    background: rgba(0,0,0,0.5);
+    -webkit-transition: width 1s; /* Safari */
+    transition: width 1s;
+}
+
+.form-details-right {
+    position:absolute; top:0px; left:0px; bottom:0px; width:0px;
+    background: white; border:0px solid lightGrey; border-width:0px 1px 0px 0px;
+    -webkit-transition: width 1s; /* Safari */
+    transition: width 1s;
+} 
 .grid-content {
     position:absolute; top:0px; left:0px; right:0px; bottom:0px;
 }

@@ -95,13 +95,26 @@ bardia.layout.Panel = bardia.oop.Class.create({
                     $_append: [{
                         $_tag: "span", class: "mdl-layout-title", id: "title",
                         $_append: h.config.title
+                    }, {
+                        $_tag: "div",
+                        class: "mdl-layout-spacer",
+                    }, {
+                        $_tag: "nav",
+                        class: "mdl-navigation mdl-layout--large-screen-only",
+                        $_append: [{
+                            $_tag: "a",
+                            class: "mdl-navigation__link",
+                            $_append: "Link"
+                        }, {
+                            $_tag: "a",
+                            class: "mdl-navigation__link",
+                            $_append: "Link"
+                        }, {
+                            $_tag: "a",
+                            class: "mdl-navigation__link",
+                            $_append: "Link"
+                        }]
                     }]
-                }]
-            }, {
-                $_tag: "div", class: "mdl-layout__drawer",
-                $_append: [{
-                    $_tag: "span", class: "mdl-layout-title",
-                    $_append: h.config.title,
                 }]
             }, {
                 $_tag: "main", class: "mdl-layout__content", 

@@ -422,13 +422,26 @@ bardia.layout.Panel = bardia.oop.Class.create({
                     $_append: [{
                         $_tag: "span", class: "mdl-layout-title", id: "title",
                         $_append: h.config.title
+                    }, {
+                        $_tag: "div",
+                        class: "mdl-layout-spacer",
+                    }, {
+                        $_tag: "nav",
+                        class: "mdl-navigation mdl-layout--large-screen-only",
+                        $_append: [{
+                            $_tag: "a",
+                            class: "mdl-navigation__link",
+                            $_append: "Link"
+                        }, {
+                            $_tag: "a",
+                            class: "mdl-navigation__link",
+                            $_append: "Link"
+                        }, {
+                            $_tag: "a",
+                            class: "mdl-navigation__link",
+                            $_append: "Link"
+                        }]
                     }]
-                }]
-            }, {
-                $_tag: "div", class: "mdl-layout__drawer",
-                $_append: [{
-                    $_tag: "span", class: "mdl-layout-title",
-                    $_append: h.config.title,
                 }]
             }, {
                 $_tag: "main", class: "mdl-layout__content", 
@@ -601,6 +614,11 @@ bardia.grid.Grid = bardia.oop.Class.create({
         var h = this;
         
         h.inside.update();
+        
+        h.panel = new bardia.layout.Panel({
+            inside: h.inside,
+            title: "Grid"
+        });
 
         h.root = $_element({
             $_tag: "div",
@@ -637,7 +655,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
             }]
         });
 
-        h.inside.insert(h.root);
+        h.panel.getContent().insert(h.root);
 
         $_upgradeElement(h.root);
     },
@@ -684,5 +702,255 @@ bardia.grid.Grid = bardia.oop.Class.create({
 
         h.root.find("grid-curtain").dom().style.width = "0px";
         h.root.find("grid-details-right").dom().style.width = "0px";
+    }
+});
+bardia.form = {
+
+};
+/**
+ *
+ */
+bardia.form.Form = bardia.oop.Class.create({
+
+    detailsWidth: "400px",
+    
+    /**
+     *
+     */
+    initialize: function(config) {
+        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+            title: "Insert title here ..."
+        }, config));
+        
+        this.render();
+    },
+    /**
+     *
+     */
+    render: function() {
+        var h = this;
+
+        h.inside.update();
+
+        h.panel = new bardia.layout.Panel({
+            inside: h.inside,
+            title: h.title
+        });
+        
+        h.prepareRoot();
+    },
+    
+    prepareRoot: function() {
+        var h = this;
+        
+        h.root = $_element({
+            $_tag: "div",
+            class: "form-content",
+        });
+
+        h.fields.forEach(function(field) {
+            
+            var _field = bardia.oop.Class.extend({
+                type: "Text"
+            }, field);
+            
+            var formField = eval("new bardia.form." + _field.type + "Field(_field)");
+            
+            formField.setForm(h);
+            h.root.insert(formField.getElement());
+        });
+        
+        var curtain = $_element({
+            $_tag: "div",
+            class: "form-curtain",
+            id: "form-curtain",
+            $_on: {
+                "click": function() {
+                    h.closeDetails();
+                }
+            },
+            $_append: [{
+                $_tag: "div",
+                class: "form-details-right",
+                id: "form-details-right"
+            }]
+        });
+        
+        h.root.insert(curtain);
+        
+        $_upgradeElement(h.root);
+                
+        h.panel.getContent().insert(h.root);
+    },
+    
+    addBeanChangedListener: function(listener) {
+        var h = this;
+        h.beanListeners = h.beanListeners || [];
+        h.beanListeners.push(listener);
+    },
+    
+    setBean: function(bean) {
+        this.bean = bean;
+        
+        (this.beanListeners || []).forEach(function(listener) {
+            listener(bean);
+        });
+    },
+    
+    getBean: function() {
+        return this.bean;
+    },
+    
+    openDetails: function() {
+        var h = this;
+
+        h.root.find("form-curtain").dom().style.width = "100%";
+        h.root.find("form-details-right").dom().style.width = h.detailsWidth;
+    },
+    
+    closeDetails: function() {
+        var h = this;
+
+        h.root.find("form-curtain").dom().style.width = "0px";
+        h.root.find("form-details-right").dom().style.width = "0px";
+    }
+});
+bardia.form.TextField = bardia.oop.Class.create({
+
+    initialize: function(config) {
+        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+            label: "Insert title here ..."
+        }, config));
+        
+        this.render();
+    },
+    
+    render: function() {
+        var h = this;
+
+        h.root = $_element({
+            $_tag: "div",
+            class: "form-row",
+            $_append: [{
+                $_tag: "input",
+                class: "form-text-input",
+                required: true,
+                type: "text",
+                id: h.property,
+                $_on: {
+                    change: function(e) {
+                        h.updateBeanProperty(e.target.value);
+                    }
+                }
+            }, {
+                $_tag: "label",
+                class: "form-text-input-label",
+                for: h.property,
+                $_append: h.label
+            }]
+        });
+    },
+    
+    getElement: function() {
+        var h = this;
+        return h.root;
+    },
+    
+    updateBeanProperty: function(value) {
+        var h = this;
+        var bean = h.form.getBean();
+        
+        eval("bean." + h.property + " = value");
+        
+        alert(JSON.stringify(h.form.getBean()));
+    },
+    
+    updateInputValue: function(bean) {
+        var h = this;
+        h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");
+    },
+    
+    setForm: function(form) {
+        var h = this;
+        h.form = form;
+        h.form.addBeanChangedListener(function(bean) {
+            h.updateInputValue(bean);
+        });
+    }
+});
+bardia.form.DateField = bardia.oop.Class.create({
+
+    initialize: function(config) {
+        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+            label: "Insert title here ..."
+        }, config));
+        
+        this.render();
+    },
+    
+    render: function() {
+        var h = this;
+
+        h.root = $_element({
+            $_tag: "div",
+            class: "form-row",
+            $_append: [{
+                $_tag: "input",
+                class: "form-text-input",
+                required: true,
+                type: "text",
+                id: h.property,
+                $_on: {
+                    change: function(e) {
+                        h.updateBeanProperty(e.target.value);
+                    }
+                }
+            }, {
+                $_tag: "label",
+                class: "form-text-input-label",
+                for: h.property,
+                $_append: "Data"
+            }, {
+                $_tag: "button",
+                class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
+                $_on: {
+                    click: function(e) {
+                        h.form.openDetails();
+                    }
+                },
+                $_append: [{
+                    $_tag: "i",
+                    class: "material-icons",
+                    $_append: "reorder",
+                }]
+            }]
+        });
+    },
+    
+    getElement: function() {
+        var h = this;
+        return h.root;
+    },
+    
+    updateBeanProperty: function(value) {
+        var h = this;
+        var bean = h.form.getBean();
+        
+        eval("bean." + h.property + " = value");
+        
+        alert(JSON.stringify(h.form.getBean()));
+    },
+    
+    updateInputValue: function(bean) {
+        var h = this;
+        h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");
+    },
+    
+    setForm: function(form) {
+        var h = this;
+        h.form = form;
+        h.form.addBeanChangedListener(function(bean) {
+            h.updateInputValue(bean);
+        });
     }
 });

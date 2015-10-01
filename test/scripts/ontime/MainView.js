@@ -89,6 +89,41 @@ ontime.MainView = bardia.oop.Class.create({
                         alert(e);
                     }
                 }
+            }, {
+                name: "Form",
+                onActivate: function(html) {
+                    try {
+                        new bardia.form.Form({
+                            inside: html,
+                            title: "Dane personalne",
+                            fields: [{
+                                label: "Imię",
+                                property: "firstName"
+                            }, {
+                                label: "Nazwisko",
+                                property: "lastName"
+                            }, {
+                                label: "Wiek",
+                                property: "age",
+                                type: "Date"
+                            }, {
+                                label: "Kraj",
+                                property: "country",
+                                type: "Date"
+                            }, {
+                                label: "Data urodzenia",
+                                property: "dob",
+                                type: "Date"
+                            }]
+                        }).setBean({
+                            firstName: "Grzegorz",
+                            lastName: "Kuzło",
+                            age: "40"
+                        });
+                    } catch (e) {
+                        alert(e);
+                    }
+                }
             }]
         });
 
