@@ -102,17 +102,36 @@ bardia.layout.Panel = bardia.oop.Class.create({
                         $_tag: "nav",
                         class: "mdl-navigation mdl-layout--large-screen-only",
                         $_append: [{
-                            $_tag: "a",
-                            class: "mdl-navigation__link",
-                            $_append: "Link"
+                            $_tag: "button",
+                            class: "mdl-button mdl-js-button mdl-button--icon",
+                            $_append: [{
+                                $_tag: "a",
+                                class: "mdl-navigation__link",
+                                href: "",
+                                $_append: [{
+                                    $_tag: "i",
+                                    class: "material-icons",
+                                    $_append: "done"
+                                }, ]
+                            }]
                         }, {
-                            $_tag: "a",
-                            class: "mdl-navigation__link",
-                            $_append: "Link"
-                        }, {
-                            $_tag: "a",
-                            class: "mdl-navigation__link",
-                            $_append: "Link"
+                            $_tag: "button",
+                            class: "mdl-button mdl-js-button mdl-button--icon",
+                            $_append: [{
+                                $_tag: "a",
+                                class: "mdl-navigation__link",
+                                href: "",
+                                $_append: [{
+                                    $_tag: "i",
+                                    class: "material-icons",
+                                    $_append: "cached"
+                                }, ]
+                            }],
+                            $_on: {
+                                click: function() {
+                                    alert(1);
+                                }
+                            }
                         }]
                     }]
                 }]

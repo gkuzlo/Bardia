@@ -3,9 +3,10 @@ bardia.form.TextField = bardia.oop.Class.create({
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             label: "Insert title here ...",
-            pattern: ((config.required || false)==true)?".+":".*"
+            pattern: ".+",
+            required: config.required || false
         }, config));
-        
+
         this.render();
     },
 
@@ -20,6 +21,7 @@ bardia.form.TextField = bardia.oop.Class.create({
                 class: "form-text-input",
                 type: "text",
                 pattern: h.pattern,
+                required: true,
                 id: h.property,
                 $_on: {
                     change: function(e) {
@@ -30,12 +32,16 @@ bardia.form.TextField = bardia.oop.Class.create({
                 $_tag: "label",
                 class: "form-text-input-label",
                 $_append: h.label
-            }, {
-                $_tag: "label",
-                class: "form-text-input-error",
-                $_append: "text"//$msg("text")
             }]
         });
+        
+        if (h.required===true) {
+            h.root.insert($_element({
+                $_tag: "label",
+                class: "form-text-input-error",
+                $_append: $msg("text")
+            }));
+        }
     },
 
     getElement: function() {

@@ -517,17 +517,36 @@ bardia.layout.Panel = bardia.oop.Class.create({
                         $_tag: &quot;nav&quot;,
                         class: &quot;mdl-navigation mdl-layout--large-screen-only&quot;,
                         $_append: [{
-                            $_tag: &quot;a&quot;,
-                            class: &quot;mdl-navigation__link&quot;,
-                            $_append: &quot;Link&quot;
+                            $_tag: &quot;button&quot;,
+                            class: &quot;mdl-button mdl-js-button mdl-button--icon&quot;,
+                            $_append: [{
+                                $_tag: &quot;a&quot;,
+                                class: &quot;mdl-navigation__link&quot;,
+                                href: &quot;&quot;,
+                                $_append: [{
+                                    $_tag: &quot;i&quot;,
+                                    class: &quot;material-icons&quot;,
+                                    $_append: &quot;done&quot;
+                                }, ]
+                            }]
                         }, {
-                            $_tag: &quot;a&quot;,
-                            class: &quot;mdl-navigation__link&quot;,
-                            $_append: &quot;Link&quot;
-                        }, {
-                            $_tag: &quot;a&quot;,
-                            class: &quot;mdl-navigation__link&quot;,
-                            $_append: &quot;Link&quot;
+                            $_tag: &quot;button&quot;,
+                            class: &quot;mdl-button mdl-js-button mdl-button--icon&quot;,
+                            $_append: [{
+                                $_tag: &quot;a&quot;,
+                                class: &quot;mdl-navigation__link&quot;,
+                                href: &quot;&quot;,
+                                $_append: [{
+                                    $_tag: &quot;i&quot;,
+                                    class: &quot;material-icons&quot;,
+                                    $_append: &quot;cached&quot;
+                                }, ]
+                            }],
+                            $_on: {
+                                click: function() {
+                                    alert(1);
+                                }
+                            }
                         }]
                     }]
                 }]
@@ -903,9 +922,10 @@ bardia.form.TextField = bardia.oop.Class.create({
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             label: &quot;Insert title here ...&quot;,
-            pattern: ((config.required || false)==true)?&quot;.+&quot;:&quot;.*&quot;
+            pattern: &quot;.+&quot;,
+            required: config.required || false
         }, config));
-        
+
         this.render();
     },
 
@@ -920,6 +940,7 @@ bardia.form.TextField = bardia.oop.Class.create({
                 class: &quot;form-text-input&quot;,
                 type: &quot;text&quot;,
                 pattern: h.pattern,
+                required: true,
                 id: h.property,
                 $_on: {
                     change: function(e) {
@@ -930,12 +951,16 @@ bardia.form.TextField = bardia.oop.Class.create({
                 $_tag: &quot;label&quot;,
                 class: &quot;form-text-input-label&quot;,
                 $_append: h.label
-            }, {
-                $_tag: &quot;label&quot;,
-                class: &quot;form-text-input-error&quot;,
-                $_append: &quot;text&quot;//$msg(&quot;text&quot;)
             }]
         });
+        
+        if (h.required===true) {
+            h.root.insert($_element({
+                $_tag: &quot;label&quot;,
+                class: &quot;form-text-input-error&quot;,
+                $_append: $msg(&quot;text&quot;)
+            }));
+        }
     },
 
     getElement: function() {

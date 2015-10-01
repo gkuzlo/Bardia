@@ -118,7 +118,6 @@ ontime.MainView = bardia.oop.Class.create({
                             }]
                         }).setBean({
                             firstName: "Grzegorz",
-                            lastName: "Kuzło",
                             age: "40"
                         });
                     } catch (e) {

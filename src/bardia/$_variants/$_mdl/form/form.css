@@ -1,15 +1,15 @@
 .form-content {
-    position:absolute; top:0px; left:0px; right:0px; bottom:0px; display:flex; flex-direction:column;
+    position:absolute; top:0px; left:0px; right:0px; bottom:0px; display:flex; flex-direction:column; padding:20px;
 }
 
 .form-row {
     position:relative; width:100%; border:1px solid lightGrey; 
-    border-width:0px 0px 0px 0px; padding:0px 0px 0px 20px;
+    border-width:0px 0px 0px 0px; padding:10px 0px 0px 0px;
 }
 
 .form-text-input {
     height:20px; border:0px solid lightGrey; border-width:0px 0px 1px 0px; outline:none; margin-top:20px; background-color:transparent;
-    box-shadow:none;
+    box-shadow:none; nargin-left:20px;
 }
 
 .form-text-input:invalid {
@@ -17,38 +17,38 @@
 }
 
 .form-text-input-label {
-  position: absolute;
-  color:grey;
-  top: 20px;
-  left: 20px;
-  transition: 0.2s;
-  font-size: 14px;
+    position: absolute;
+    color:grey;
+    left:0px;
+    top:30px;
+    transition: 0.2s;
+    font-size: 14px;
 }
 
 .form-text-input-error {
-  position: absolute;
-  color:red;
-  top:0px;
-  left: 120px;
-  transition: 0.2s;
-  font-size: 11px;
-  display:none;
+    position: absolute;
+    color:red;
+    top:10px;
+    left:150px;
+    transition: 0.2s;
+    font-size: 11px;
+    display:none;
 }
 
 .form-text-input:focus + label {
-  top:0px;
-  color:blue;
-  font-size: 11px;
+    top:10px;
+    color:blue;
+    font-size: 11px;
 }
 
-.form-text-input:valid + .form-text-input-label {
-  top:0px;
-  color:blue;
-  font-size: 11px;
+.form-text-input:valid + label {
+    top:10px;
+    color:blue;
+    font-size: 11px;
 }
 
-.form-text-input:invalid + .form-text-input-label + .form-text-input-error {
-  display:block
+.form-text-input:invalid + label + label {
+    display:block
 }
 
 .form-curtain {

@@ -435,17 +435,36 @@ bardia.layout.Panel = bardia.oop.Class.create({
                         $_tag: "nav",
                         class: "mdl-navigation mdl-layout--large-screen-only",
                         $_append: [{
-                            $_tag: "a",
-                            class: "mdl-navigation__link",
-                            $_append: "Link"
+                            $_tag: "button",
+                            class: "mdl-button mdl-js-button mdl-button--icon",
+                            $_append: [{
+                                $_tag: "a",
+                                class: "mdl-navigation__link",
+                                href: "",
+                                $_append: [{
+                                    $_tag: "i",
+                                    class: "material-icons",
+                                    $_append: "done"
+                                }, ]
+                            }]
                         }, {
-                            $_tag: "a",
-                            class: "mdl-navigation__link",
-                            $_append: "Link"
-                        }, {
-                            $_tag: "a",
-                            class: "mdl-navigation__link",
-                            $_append: "Link"
+                            $_tag: "button",
+                            class: "mdl-button mdl-js-button mdl-button--icon",
+                            $_append: [{
+                                $_tag: "a",
+                                class: "mdl-navigation__link",
+                                href: "",
+                                $_append: [{
+                                    $_tag: "i",
+                                    class: "material-icons",
+                                    $_append: "cached"
+                                }, ]
+                            }],
+                            $_on: {
+                                click: function() {
+                                    alert(1);
+                                }
+                            }
                         }]
                     }]
                 }]
@@ -821,9 +840,10 @@ bardia.form.TextField = bardia.oop.Class.create({
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             label: "Insert title here ...",
-            pattern: ((config.required || false)==true)?".+":".*"
+            pattern: ".+",
+            required: config.required || false
         }, config));
-        
+
         this.render();
     },
 
@@ -838,6 +858,7 @@ bardia.form.TextField = bardia.oop.Class.create({
                 class: "form-text-input",
                 type: "text",
                 pattern: h.pattern,
+                required: true,
                 id: h.property,
                 $_on: {
                     change: function(e) {
@@ -848,12 +869,16 @@ bardia.form.TextField = bardia.oop.Class.create({
                 $_tag: "label",
                 class: "form-text-input-label",
                 $_append: h.label
-            }, {
-                $_tag: "label",
-                class: "form-text-input-error",
-                $_append: "text"//$msg("text")
             }]
         });
+        
+        if (h.required===true) {
+            h.root.insert($_element({
+                $_tag: "label",
+                class: "form-text-input-error",
+                $_append: $msg("text")
+            }));
+        }
     },
 
     getElement: function() {
