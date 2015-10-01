@@ -20,10 +20,14 @@ module.exports = function(grunt) {
                     "src/bardia/oop/$_oop.js",
                     "src/bardia/oop/Class.js",
 
+                    
+
                     "src/bardia/dom/$_dom.js",
                     "src/bardia/dom/Element.js",
 
                     "src/bardia/$_variants/$_mdl/$_mdl.js",
+                    
+                    "src/bardia/$_variants/$_mdl/utils/$_utils.js",
 
                     "src/bardia/$_variants/$_mdl/layout/$_layout.js",
                     "src/bardia/$_variants/$_mdl/layout/BorderLayout.js",

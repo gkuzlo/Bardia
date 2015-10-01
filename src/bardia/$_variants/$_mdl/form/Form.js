@@ -5,9 +5,6 @@ bardia.form.Form = bardia.oop.Class.create({
 
     detailsWidth: "400px",
     
-    /**
-     *
-     */
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             title: "Insert title here ..."
@@ -15,9 +12,7 @@ bardia.form.Form = bardia.oop.Class.create({
         
         this.render();
     },
-    /**
-     *
-     */
+
     render: function() {
         var h = this;
 
@@ -92,11 +87,11 @@ bardia.form.Form = bardia.oop.Class.create({
         return this.bean;
     },
     
-    openDetails: function() {
+    openDetails: function(width) {
         var h = this;
 
         h.root.find("form-curtain").dom().style.width = "100%";
-        h.root.find("form-details-right").dom().style.width = h.detailsWidth;
+        h.root.find("form-details-right").dom().style.width = width || h.detailsWidth;
     },
     
     closeDetails: function() {

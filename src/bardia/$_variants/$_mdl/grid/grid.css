@@ -30,13 +30,13 @@
 .grid-curtain {
     position:absolute; top:0px; left:0px; bottom:0px; width:0px;
     background: rgba(0,0,0,0.5);
-    -webkit-transition: width 1s; /* Safari */
-    transition: width 1s;
+    -webkit-transition: width 0.5s; /* Safari */
+    transition: width 0.5s;
 }
 
 .grid-details-right {
     position:absolute; top:0px; left:0px; bottom:0px; width:0px;
     background: white; border:0px solid lightGrey; border-width:0px 1px 0px 0px;
-    -webkit-transition: width 1s; /* Safari */
-    transition: width 1s;
+    -webkit-transition: width 0.5s; /* Safari */
+    transition: width 0.5s;
 } 

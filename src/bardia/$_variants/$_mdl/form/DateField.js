@@ -35,7 +35,7 @@ bardia.form.DateField = bardia.oop.Class.create({
                 class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
                 $_on: {
                     click: function(e) {
-                        h.form.openDetails();
+                        h.form.openDetails("300px");
                     }
                 },
                 $_append: [{
@@ -57,8 +57,6 @@ bardia.form.DateField = bardia.oop.Class.create({
         var bean = h.form.getBean();
         
         eval("bean." + h.property + " = value");
-        
-        alert(JSON.stringify(h.form.getBean()));
     },
     
     updateInputValue: function(bean) {

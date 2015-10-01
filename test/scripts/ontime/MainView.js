@@ -98,10 +98,11 @@ ontime.MainView = bardia.oop.Class.create({
                             title: "Dane personalne",
                             fields: [{
                                 label: "Imię",
-                                property: "firstName"
+                                property: "firstName",
                             }, {
                                 label: "Nazwisko",
-                                property: "lastName"
+                                property: "lastName",
+                                required: true
                             }, {
                                 label: "Wiek",
                                 property: "age",

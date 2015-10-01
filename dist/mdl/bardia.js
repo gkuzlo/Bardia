@@ -148,6 +148,12 @@ $_upgradeElement = (function() {
 
     return materialize;
 })();
+bardia.utils = {
+}
+
+function $msg(message) {
+    return message;
+}
 bardia.layout = {
 }
 /**
@@ -714,9 +720,6 @@ bardia.form.Form = bardia.oop.Class.create({
 
     detailsWidth: "400px",
     
-    /**
-     *
-     */
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             title: "Insert title here ..."
@@ -724,9 +727,7 @@ bardia.form.Form = bardia.oop.Class.create({
         
         this.render();
     },
-    /**
-     *
-     */
+
     render: function() {
         var h = this;
 
@@ -801,11 +802,11 @@ bardia.form.Form = bardia.oop.Class.create({
         return this.bean;
     },
     
-    openDetails: function() {
+    openDetails: function(width) {
         var h = this;
 
         h.root.find("form-curtain").dom().style.width = "100%";
-        h.root.find("form-details-right").dom().style.width = h.detailsWidth;
+        h.root.find("form-details-right").dom().style.width = width || h.detailsWidth;
     },
     
     closeDetails: function() {
@@ -819,12 +820,13 @@ bardia.form.TextField = bardia.oop.Class.create({
 
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: "Insert title here ..."
+            label: "Insert title here ...",
+            pattern: ((config.required || false)==true)?".+":".*"
         }, config));
         
         this.render();
     },
-    
+
     render: function() {
         var h = this;
 
@@ -834,8 +836,8 @@ bardia.form.TextField = bardia.oop.Class.create({
             $_append: [{
                 $_tag: "input",
                 class: "form-text-input",
-                required: true,
                 type: "text",
+                pattern: h.pattern,
                 id: h.property,
                 $_on: {
                     change: function(e) {
@@ -845,31 +847,32 @@ bardia.form.TextField = bardia.oop.Class.create({
             }, {
                 $_tag: "label",
                 class: "form-text-input-label",
-                for: h.property,
                 $_append: h.label
+            }, {
+                $_tag: "label",
+                class: "form-text-input-error",
+                $_append: "text"//$msg("text")
             }]
         });
     },
-    
+
     getElement: function() {
         var h = this;
         return h.root;
     },
-    
+
     updateBeanProperty: function(value) {
         var h = this;
         var bean = h.form.getBean();
         
         eval("bean." + h.property + " = value");
-        
-        alert(JSON.stringify(h.form.getBean()));
     },
-    
+
     updateInputValue: function(bean) {
         var h = this;
         h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");
     },
-    
+
     setForm: function(form) {
         var h = this;
         h.form = form;
@@ -915,7 +918,7 @@ bardia.form.DateField = bardia.oop.Class.create({
                 class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
                 $_on: {
                     click: function(e) {
-                        h.form.openDetails();
+                        h.form.openDetails("300px");
                     }
                 },
                 $_append: [{
@@ -937,8 +940,6 @@ bardia.form.DateField = bardia.oop.Class.create({
         var bean = h.form.getBean();
         
         eval("bean." + h.property + " = value");
-        
-        alert(JSON.stringify(h.form.getBean()));
     },
     
     updateInputValue: function(bean) {

@@ -25,30 +25,44 @@
   font-size: 14px;
 }
 
+.form-text-input-error {
+  position: absolute;
+  color:red;
+  top:0px;
+  left: 120px;
+  transition: 0.2s;
+  font-size: 11px;
+  display:none;
+}
+
 .form-text-input:focus + label {
   top:0px;
   color:blue;
   font-size: 11px;
 }
 
-.form-text-input:valid + label {
+.form-text-input:valid + .form-text-input-label {
   top:0px;
   color:blue;
   font-size: 11px;
 }
 
+.form-text-input:invalid + .form-text-input-label + .form-text-input-error {
+  display:block
+}
+
 .form-curtain {
     position:absolute; top:0px; left:0px; bottom:0px; width:0px;
     background: rgba(0,0,0,0.5);
-    -webkit-transition: width 1s; /* Safari */
-    transition: width 1s;
+    -webkit-transition: width 0.5s; /* Safari */
+    transition: width 0.5s;
 }
 
 .form-details-right {
     position:absolute; top:0px; left:0px; bottom:0px; width:0px;
     background: white; border:0px solid lightGrey; border-width:0px 1px 0px 0px;
-    -webkit-transition: width 1s; /* Safari */
-    transition: width 1s;
+    -webkit-transition: width 0.5s; /* Safari */
+    transition: width 0.5s;
 } 
 .grid-content {
     position:absolute; top:0px; left:0px; right:0px; bottom:0px;
@@ -82,15 +96,15 @@
 .grid-curtain {
     position:absolute; top:0px; left:0px; bottom:0px; width:0px;
     background: rgba(0,0,0,0.5);
-    -webkit-transition: width 1s; /* Safari */
-    transition: width 1s;
+    -webkit-transition: width 0.5s; /* Safari */
+    transition: width 0.5s;
 }
 
 .grid-details-right {
     position:absolute; top:0px; left:0px; bottom:0px; width:0px;
     background: white; border:0px solid lightGrey; border-width:0px 1px 0px 0px;
-    -webkit-transition: width 1s; /* Safari */
-    transition: width 1s;
+    -webkit-transition: width 0.5s; /* Safari */
+    transition: width 0.5s;
 } 
 .border-layout-north {
     position:absolute; overflow:hidden; top:0px; left:0px; right:0px; 
