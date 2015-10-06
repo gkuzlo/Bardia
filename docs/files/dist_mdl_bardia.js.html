@@ -1062,6 +1062,80 @@ bardia.form.DateField = bardia.oop.Class.create({
         });
     }
 });
+bardia.form.LookupField = bardia.oop.Class.create({
+
+    initialize: function(config) {
+        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+            label: &quot;Insert title here ...&quot;
+        }, config));
+        
+        this.render();
+    },
+    
+    render: function() {
+        var h = this;
+
+        h.root = $_element({
+            $_tag: &quot;div&quot;,
+            class: &quot;form-row&quot;,
+            $_append: [{
+                $_tag: &quot;input&quot;,
+                class: &quot;form-text-input&quot;,
+                required: true,
+                type: &quot;text&quot;,
+                id: h.property,
+                $_on: {
+                    change: function(e) {
+                        h.updateBeanProperty(e.target.value);
+                    }
+                }
+            }, {
+                $_tag: &quot;label&quot;,
+                class: &quot;form-text-input-label&quot;,
+                for: h.property,
+                $_append: &quot;Data&quot;
+            }, {
+                $_tag: &quot;button&quot;,
+                class: &quot;mdl-button mdl-js-button mdl-button--icon mdl-button--colored&quot;,
+                $_on: {
+                    click: function(e) {
+                        h.form.openDetails(&quot;300px&quot;);
+                    }
+                },
+                $_append: [{
+                    $_tag: &quot;i&quot;,
+                    class: &quot;material-icons&quot;,
+                    $_append: &quot;keyboard_arrow_down&quot;,
+                }]
+            }]
+        });
+    },
+    
+    getElement: function() {
+        var h = this;
+        return h.root;
+    },
+    
+    updateBeanProperty: function(value) {
+        var h = this;
+        var bean = h.form.getBean();
+        
+        eval(&quot;bean.&quot; + h.property + &quot; = value&quot;);
+    },
+    
+    updateInputValue: function(bean) {
+        var h = this;
+        h.root.find(h.property).dom().value = eval(&quot;bean.&quot; + h.property + &quot; || &#x27;&#x27;&quot;);
+    },
+    
+    setForm: function(form) {
+        var h = this;
+        h.form = form;
+        h.form.addBeanChangedListener(function(bean) {
+            h.updateInputValue(bean);
+        });
+    }
+});
     </pre>
 </div>
                     </div>

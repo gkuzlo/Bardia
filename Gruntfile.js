@@ -45,6 +45,7 @@ module.exports = function(grunt) {
                     "src/bardia/$_variants/$_mdl/form/Form.js",
                     "src/bardia/$_variants/$_mdl/form/TextField.js",
                     "src/bardia/$_variants/$_mdl/form/DateField.js",
+                    "src/bardia/$_variants/$_mdl/form/LookupField.js",
 
                 ], 
                 dest: 'dist/mdl/bardia.js'},

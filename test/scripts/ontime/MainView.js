@@ -115,6 +115,10 @@ ontime.MainView = bardia.oop.Class.create({
                                 label: "Data urodzenia",
                                 property: "dob",
                                 type: "Date"
+                            }, {
+                                label: "Data urodzenia",
+                                property: "dob",
+                                type: "Lookup"
                             }]
                         }).setBean({
                             firstName: "Grzegorz",
