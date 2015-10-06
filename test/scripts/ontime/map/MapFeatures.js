@@ -9,7 +9,7 @@ ontime.map.MapFeatures = bardia.oop.Class.create({
         try {
             this.render();
         } catch (e) {
-            alert(e);
+            alert("1" + e);
         }
     },
     

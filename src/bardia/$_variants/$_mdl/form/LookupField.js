@@ -1,13 +1,15 @@
-bardia.form.LookupField = bardia.oop.Class.create({
+/**
+ * 
+ */
+bardia.form.LookupField = bardia.oop.Class.inherit(bardia.form.TextField, {
 
-    initialize: function(config) {
+    initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: "Insert title here ..."
+            label: "Insert title here ... 2"
         }, config));
-        
         this.render();
     },
-    
+
     render: function() {
         var h = this;
 
@@ -28,47 +30,35 @@ bardia.form.LookupField = bardia.oop.Class.create({
             }, {
                 $_tag: "label",
                 class: "form-text-input-label",
-                for: h.property,
-                $_append: "Data"
-            }, {
-                $_tag: "button",
-                class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
-                $_on: {
-                    click: function(e) {
-                        h.form.openDetails("300px");
-                    }
-                },
-                $_append: [{
-                    $_tag: "i",
-                    class: "material-icons",
-                    $_append: "keyboard_arrow_down",
-                }]
+                "for": h.property,
+                $_append: "Lookup"
             }]
         });
+
+        h.displayButton();
     },
-    
-    getElement: function() {
-        var h = this;
-        return h.root;
-    },
-    
-    updateBeanProperty: function(value) {
-        var h = this;
-        var bean = h.form.getBean();
-        
-        eval("bean." + h.property + " = value");
-    },
-    
-    updateInputValue: function(bean) {
-        var h = this;
-        h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");
-    },
-    
-    setForm: function(form) {
-        var h = this;
-        h.form = form;
-        h.form.addBeanChangedListener(function(bean) {
-            h.updateInputValue(bean);
-        });
+    /**
+     *  
+     */
+    displayButton: function() {
+    	var h = this;
+    	
+    	h.root.insert($_element({
+            $_tag: "button",
+            class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
+            $_on: {
+                click: function(e) {
+                    var element = h.form.openDetails("300px");
+                    if (h.onExpand) {
+                    	h.onExpand(element);
+                    }
+                }
+            },
+            $_append: [{
+                $_tag: "i",
+                class: "material-icons",
+                $_append: "keyboard_arrow_down",
+            }]
+        }));
     }
 });

@@ -62,10 +62,14 @@ bardia.form.TextField = bardia.oop.Class.create({
     },
 
     setForm: function(form) {
-        var h = this;
-        h.form = form;
-        h.form.addBeanChangedListener(function(bean) {
-            h.updateInputValue(bean);
-        });
+    	try {
+	        var h = this;
+	        h.form = form;
+	        h.form.addBeanChangedListener(function(bean) {
+	            h.updateInputValue(bean);
+	        });
+    	} catch (e) {
+    		alert("" + e);
+    	}
     }
 });

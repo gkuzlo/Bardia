@@ -93,8 +93,17 @@ ontime.MainView = bardia.oop.Class.create({
                 name: "Form",
                 onActivate: function(html) {
                     try {
+                    	
+                	var layout = new bardia.layout.BorderLayout({
+                		inside: html,
+                		west: {
+                			width: 500
+                		}
+                	});
+
+
                         new bardia.form.Form({
-                            inside: html,
+                            inside: layout.getWest(),
                             title: "Dane personalne",
                             fields: [{
                                 label: "Imię",
@@ -118,14 +127,33 @@ ontime.MainView = bardia.oop.Class.create({
                             }, {
                                 label: "Data urodzenia",
                                 property: "dob",
-                                type: "Lookup"
+                                type: "Lookup",
+                                renderLabel: function(value) {
+                                	return value;
+                                },
+                                onExpand: function(html) {
+                                	var grid = new bardia.grid.Grid({
+                                		inside: html,
+                                		columns: [{
+                                			name: "A",
+                                			property: "a"
+                                		}]
+                                	});
+                                }
                             }]
-                        }).setBean({
-                            firstName: "Grzegorz",
-                            age: "40"
                         });
+
+	                    var panel = new bardia.layout.Panel({
+	                    	inside: layout.getDefault(),
+	                    	buttons: [{
+	                    		icon: "android"
+	                    	}, {
+	                    		icon: "backup"
+	                    	}]
+	                    });
+                    
                     } catch (e) {
-                        alert(e);
+                        alert("4. " + e);
                     }
                 }
             }]

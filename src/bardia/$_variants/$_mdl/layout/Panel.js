@@ -1,7 +1,7 @@
 bardia.layout.Panel = bardia.oop.Class.create({
     
     initialize: function(config) {
-        this.config = config;
+    	bardia.oop.Class.extend(this, config || {});
         this.render();
     },
     
@@ -9,9 +9,10 @@ bardia.layout.Panel = bardia.oop.Class.create({
         var h = this;
 
         h.root = h.prepareRoot();
-        h.config.inside.update(h.root);
+        h.inside.update(h.root);
 
-        h.setTabs(h.config.tabs);
+        h.setTabs(h.tabs);
+        h.setButtons((h.buttons || []));
 
         $_upgradeElement(h.root);
     },
@@ -94,45 +95,14 @@ bardia.layout.Panel = bardia.oop.Class.create({
                     $_tag: "div", class: "mdl-layout__header-row",
                     $_append: [{
                         $_tag: "span", class: "mdl-layout-title", id: "title",
-                        $_append: h.config.title
+                        $_append: h.title
                     }, {
                         $_tag: "div",
                         class: "mdl-layout-spacer",
                     }, {
                         $_tag: "nav",
+                        id: "buttons",
                         class: "mdl-navigation mdl-layout--large-screen-only",
-                        $_append: [{
-                            $_tag: "button",
-                            class: "mdl-button mdl-js-button mdl-button--icon",
-                            $_append: [{
-                                $_tag: "a",
-                                class: "mdl-navigation__link",
-                                href: "",
-                                $_append: [{
-                                    $_tag: "i",
-                                    class: "material-icons",
-                                    $_append: "done"
-                                }, ]
-                            }]
-                        }, {
-                            $_tag: "button",
-                            class: "mdl-button mdl-js-button mdl-button--icon",
-                            $_append: [{
-                                $_tag: "a",
-                                class: "mdl-navigation__link",
-                                href: "",
-                                $_append: [{
-                                    $_tag: "i",
-                                    class: "material-icons",
-                                    $_append: "cached"
-                                }, ]
-                            }],
-                            $_on: {
-                                click: function() {
-                                    alert(1);
-                                }
-                            }
-                        }]
                     }]
                 }]
             }, {
@@ -143,5 +113,31 @@ bardia.layout.Panel = bardia.oop.Class.create({
         };
 
         return $_element(json);
+    },
+    
+    setButtons: function(buttons) {
+    	var h = this;
+
+    	buttons.forEach(function(button) {
+	    	h.root.find("buttons").insert($_element({
+	            $_tag: "button",
+	            class: "mdl-button mdl-js-button mdl-button--icon",
+	            $_on: {
+	            	"click": function(e) {
+	            		alert(e);
+	            	}
+	            },
+	            $_append: [{
+	                $_tag: "a",
+	                class: "mdl-navigation__link",
+	                href: "",
+	                $_append: [{
+	                    $_tag: "i",
+	                    class: "material-icons",
+	                    $_append: button.icon
+	                }]
+	            }]
+	        }));
+    	});
     }
 });

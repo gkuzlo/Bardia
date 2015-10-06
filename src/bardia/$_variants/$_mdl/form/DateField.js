@@ -28,7 +28,7 @@ bardia.form.DateField = bardia.oop.Class.create({
             }, {
                 $_tag: "label",
                 class: "form-text-input-label",
-                for: h.property,
+                "for": h.property,
                 $_append: "Data"
             }, {
                 $_tag: "button",

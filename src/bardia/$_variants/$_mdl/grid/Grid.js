@@ -1,11 +1,8 @@
-/**
- *
- */
+
 bardia.grid.Grid = bardia.oop.Class.create({
+	
     detailsWidth: "400px",
-    /**
-     *
-     */
+
     initialize: function(config) {
         bardia.oop.Class.extend(this, config || {});
         

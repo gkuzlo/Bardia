@@ -85,30 +85,48 @@ var bardia = {
 bardia.oop = {
 }
 bardia.oop.Class = (function() {
-    
+
     function create(body) {
-        
+
         function klass(config) {
             this.initialize(config); 
         }
-        
+
         for (fun in body) {
             klass.prototype[fun] = body[fun];
         }
-        
+
         return klass;
     }
-    
+
     function extend(target, source) {
-        for (prop in source) {
+        for (var prop in source) {
             target[prop] = source[prop];
         }
+
         return target;
+    }
+
+    function inherit(_function, body) {
+    	function klass(config) {
+    		this.initialize(config);
+    	}
+
+    	var attribute = null;
+    	for (attribute in _function.prototype) {
+    		klass.prototype[attribute] = _function.prototype[attribute];
+    	}
+    	for (attribute in body) {
+    		klass.prototype[attribute] = body[attribute];
+    	}    
+    	
+    	return klass;
     }
 
     return {
         create: create,
-        extend: extend
+        extend: extend,
+        inherit: inherit
     };
     
 })();
@@ -416,7 +434,7 @@ bardia.layout.Material = (function() {
 bardia.layout.Panel = bardia.oop.Class.create({
     
     initialize: function(config) {
-        this.config = config;
+    	bardia.oop.Class.extend(this, config || {});
         this.render();
     },
     
@@ -424,9 +442,10 @@ bardia.layout.Panel = bardia.oop.Class.create({
         var h = this;
 
         h.root = h.prepareRoot();
-        h.config.inside.update(h.root);
+        h.inside.update(h.root);
 
-        h.setTabs(h.config.tabs);
+        h.setTabs(h.tabs);
+        h.setButtons((h.buttons || []));
 
         $_upgradeElement(h.root);
     },
@@ -509,45 +528,14 @@ bardia.layout.Panel = bardia.oop.Class.create({
                     $_tag: &quot;div&quot;, class: &quot;mdl-layout__header-row&quot;,
                     $_append: [{
                         $_tag: &quot;span&quot;, class: &quot;mdl-layout-title&quot;, id: &quot;title&quot;,
-                        $_append: h.config.title
+                        $_append: h.title
                     }, {
                         $_tag: &quot;div&quot;,
                         class: &quot;mdl-layout-spacer&quot;,
                     }, {
                         $_tag: &quot;nav&quot;,
+                        id: &quot;buttons&quot;,
                         class: &quot;mdl-navigation mdl-layout--large-screen-only&quot;,
-                        $_append: [{
-                            $_tag: &quot;button&quot;,
-                            class: &quot;mdl-button mdl-js-button mdl-button--icon&quot;,
-                            $_append: [{
-                                $_tag: &quot;a&quot;,
-                                class: &quot;mdl-navigation__link&quot;,
-                                href: &quot;&quot;,
-                                $_append: [{
-                                    $_tag: &quot;i&quot;,
-                                    class: &quot;material-icons&quot;,
-                                    $_append: &quot;done&quot;
-                                }, ]
-                            }]
-                        }, {
-                            $_tag: &quot;button&quot;,
-                            class: &quot;mdl-button mdl-js-button mdl-button--icon&quot;,
-                            $_append: [{
-                                $_tag: &quot;a&quot;,
-                                class: &quot;mdl-navigation__link&quot;,
-                                href: &quot;&quot;,
-                                $_append: [{
-                                    $_tag: &quot;i&quot;,
-                                    class: &quot;material-icons&quot;,
-                                    $_append: &quot;cached&quot;
-                                }, ]
-                            }],
-                            $_on: {
-                                click: function() {
-                                    alert(1);
-                                }
-                            }
-                        }]
                     }]
                 }]
             }, {
@@ -558,6 +546,32 @@ bardia.layout.Panel = bardia.oop.Class.create({
         };
 
         return $_element(json);
+    },
+    
+    setButtons: function(buttons) {
+    	var h = this;
+
+    	buttons.forEach(function(button) {
+	    	h.root.find(&quot;buttons&quot;).insert($_element({
+	            $_tag: &quot;button&quot;,
+	            class: &quot;mdl-button mdl-js-button mdl-button--icon&quot;,
+	            $_on: {
+	            	&quot;click&quot;: function(e) {
+	            		alert(e);
+	            	}
+	            },
+	            $_append: [{
+	                $_tag: &quot;a&quot;,
+	                class: &quot;mdl-navigation__link&quot;,
+	                href: &quot;&quot;,
+	                $_append: [{
+	                    $_tag: &quot;i&quot;,
+	                    class: &quot;material-icons&quot;,
+	                    $_append: button.icon
+	                }]
+	            }]
+	        }));
+    	});
     }
 });
 bardia.list = {
@@ -701,14 +715,11 @@ bardia.list.MobileList = (function() {
 bardia.grid = {
 
 };
-/**
- *
- */
+
 bardia.grid.Grid = bardia.oop.Class.create({
+	
     detailsWidth: &quot;400px&quot;,
-    /**
-     *
-     */
+
     initialize: function(config) {
         bardia.oop.Class.extend(this, config || {});
         
@@ -820,12 +831,12 @@ bardia.form = {
 bardia.form.Form = bardia.oop.Class.create({
 
     detailsWidth: &quot;400px&quot;,
-    
+
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             title: &quot;Insert title here ...&quot;
         }, config));
-        
+
         this.render();
     },
 
@@ -838,27 +849,27 @@ bardia.form.Form = bardia.oop.Class.create({
             inside: h.inside,
             title: h.title
         });
-        
+
         h.prepareRoot();
     },
-    
+
     prepareRoot: function() {
         var h = this;
-        
+
         h.root = $_element({
             $_tag: &quot;div&quot;,
             class: &quot;form-content&quot;,
         });
 
         h.fields.forEach(function(field) {
-            
             var _field = bardia.oop.Class.extend({
                 type: &quot;Text&quot;
             }, field);
-            
+
             var formField = eval(&quot;new bardia.form.&quot; + _field.type + &quot;Field(_field)&quot;);
-            
+
             formField.setForm(h);
+            
             h.root.insert(formField.getElement());
         });
         
@@ -877,23 +888,22 @@ bardia.form.Form = bardia.oop.Class.create({
                 id: &quot;form-details-right&quot;
             }]
         });
-        
+
         h.root.insert(curtain);
-        
         $_upgradeElement(h.root);
-                
+
         h.panel.getContent().insert(h.root);
     },
-    
+
     addBeanChangedListener: function(listener) {
         var h = this;
         h.beanListeners = h.beanListeners || [];
         h.beanListeners.push(listener);
     },
-    
+
     setBean: function(bean) {
         this.bean = bean;
-        
+
         (this.beanListeners || []).forEach(function(listener) {
             listener(bean);
         });
@@ -908,6 +918,8 @@ bardia.form.Form = bardia.oop.Class.create({
 
         h.root.find(&quot;form-curtain&quot;).dom().style.width = &quot;100%&quot;;
         h.root.find(&quot;form-details-right&quot;).dom().style.width = width || h.detailsWidth;
+
+        return h.root.find(&quot;form-details-right&quot;);
     },
     
     closeDetails: function() {
@@ -1018,7 +1030,7 @@ bardia.form.DateField = bardia.oop.Class.create({
             }, {
                 $_tag: &quot;label&quot;,
                 class: &quot;form-text-input-label&quot;,
-                for: h.property,
+                &quot;for&quot;: h.property,
                 $_append: &quot;Data&quot;
             }, {
                 $_tag: &quot;button&quot;,
@@ -1062,16 +1074,18 @@ bardia.form.DateField = bardia.oop.Class.create({
         });
     }
 });
-bardia.form.LookupField = bardia.oop.Class.create({
+/**
+ * 
+ */
+bardia.form.LookupField = bardia.oop.Class.inherit(bardia.form.TextField, {
 
-    initialize: function(config) {
+    initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: &quot;Insert title here ...&quot;
+            label: &quot;Insert title here ... 2&quot;
         }, config));
-        
         this.render();
     },
-    
+
     render: function() {
         var h = this;
 
@@ -1092,48 +1106,36 @@ bardia.form.LookupField = bardia.oop.Class.create({
             }, {
                 $_tag: &quot;label&quot;,
                 class: &quot;form-text-input-label&quot;,
-                for: h.property,
-                $_append: &quot;Data&quot;
-            }, {
-                $_tag: &quot;button&quot;,
-                class: &quot;mdl-button mdl-js-button mdl-button--icon mdl-button--colored&quot;,
-                $_on: {
-                    click: function(e) {
-                        h.form.openDetails(&quot;300px&quot;);
-                    }
-                },
-                $_append: [{
-                    $_tag: &quot;i&quot;,
-                    class: &quot;material-icons&quot;,
-                    $_append: &quot;keyboard_arrow_down&quot;,
-                }]
+                &quot;for&quot;: h.property,
+                $_append: &quot;Lookup&quot;
             }]
         });
+
+        h.displayButton();
     },
-    
-    getElement: function() {
-        var h = this;
-        return h.root;
-    },
-    
-    updateBeanProperty: function(value) {
-        var h = this;
-        var bean = h.form.getBean();
-        
-        eval(&quot;bean.&quot; + h.property + &quot; = value&quot;);
-    },
-    
-    updateInputValue: function(bean) {
-        var h = this;
-        h.root.find(h.property).dom().value = eval(&quot;bean.&quot; + h.property + &quot; || &#x27;&#x27;&quot;);
-    },
-    
-    setForm: function(form) {
-        var h = this;
-        h.form = form;
-        h.form.addBeanChangedListener(function(bean) {
-            h.updateInputValue(bean);
-        });
+    /**
+     *  
+     */
+    displayButton: function() {
+    	var h = this;
+    	
+    	h.root.insert($_element({
+            $_tag: &quot;button&quot;,
+            class: &quot;mdl-button mdl-js-button mdl-button--icon mdl-button--colored&quot;,
+            $_on: {
+                click: function(e) {
+                    var element = h.form.openDetails(&quot;300px&quot;);
+                    if (h.onExpand) {
+                    	h.onExpand(element);
+                    }
+                }
+            },
+            $_append: [{
+                $_tag: &quot;i&quot;,
+                class: &quot;material-icons&quot;,
+                $_append: &quot;keyboard_arrow_down&quot;,
+            }]
+        }));
     }
 });
     </pre>
