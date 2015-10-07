@@ -520,7 +520,7 @@ UI.Resources = Class.create({
     get: function(key, bean) {
         var result = "";
             if ((result = this.properties.get(key)) === undefined) {
-                result = "???_" + key + "_???";
+                result = key;
             }
 
             if (bean !== undefined) {
@@ -2473,6 +2473,12 @@ UI.TextFormField = Class.create({
         	required: false
         }, config || {});
 
+		for (property in this.config) {
+			if (this.config[property].bind) {
+				this.config[property].bind(this);
+			}
+		}
+
         this.render();
         this.setReadOnly(this.config.readOnly);
     },
@@ -2488,7 +2494,10 @@ UI.TextFormField = Class.create({
 		});
 		h.input = new Element("INPUT", {
 			type: "text",
-			style: "position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px"
+			style: "position:absolute; top:22px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px",
+			onPaste: function(e) {
+
+			}
 		});
 		h.input.on("focus", function() {
 			h.animateLabel();
@@ -2528,19 +2537,17 @@ UI.TextFormField = Class.create({
     		});
     		h.input.on("keyup", function(e) {
     			h.setBeanValue();
-    			
+
     			if (h.config.onChanging !== undefined) {
     				h.config.onChanging(h.getBeanValue());
     			}
     		});
     		h.input.on("keydown", function(e) {
-    			
     			if (13 == e.keyCode) {
     				if (h.config.onEnter) {
     					h.config.onEnter();
     				}
     			}
-    			
     			e.cancelBubble = true;
     		});
 		}
@@ -2569,6 +2576,12 @@ UI.TextFormField = Class.create({
 			});
 			h.inside.insert(fakeInput);
 		}
+    },
+    /**
+     *
+     */
+    setTitle: function(title) {
+    	this.inside.title = title;
     },
     /**
      * @method setReadOnly
@@ -2990,28 +3003,6 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			readOnly: true,
 			style: "position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px"
 		});
-
-//		h.input.on("focus", function() {
-//			h.animateLabel();
-//		});
-//		h.input.on("blur", function(e) {
-//			if (h.isEmpty(h.input.value)) {
-//				h.unanimateLabel()
-//			}
-//		});
-//		h.input.on("change", function(e) {
-//			if (h.config.onChange !== undefined) {
-//				h.config.onChange(h.getBeanValue());
-//			}
-//		});
-//		h.input.on("keyup", function(e) {
-//			h.setBeanValue(h.getInputValue());
-//
-//			if (h.config.onChanging !== undefined) {
-//				h.config.onChanging(h.getBeanValue());
-//			}
-//		});
-		//h.input.disabled = true;
 
 		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
 
@@ -4104,6 +4095,98 @@ UI.IntegerFormField = Class.create(UI.TextFormField, {
     },
 });
 /**
+ *
+ */
+UI.IncrementFormField = Class.create(UI.TextFormField, {
+    /**
+     * @method setConfig
+     */
+    initConfig: function(config) {
+
+    	var h = this;
+
+    	var numbers=new Input(JST_CHARS_NUMBERS);
+
+    	var UI_MASK_INTEGER=[numbers];
+
+        this.config = Object.extend({
+        	property: "$",
+        	disableTab: false,
+        	readOnly: false,
+        	width: 80,
+        	bean: {},
+        	mask: UI_MASK_INTEGER,
+        	max: 25,
+        	min: 1
+        }, config || {});
+
+		for (property in this.config) {
+			if (this.config[property].bind) {
+				this[property] = this.config[property].bind(this);
+			}
+		}
+
+        this.render();
+        this.setReadOnly(this.config.readOnly);
+
+		h.input.on("paste", function(e) {
+			var val = e.clipboardData.getData("text/plain");
+				val = val.parseInt(val);
+
+			h.setInputValue(val);
+			e.preventDefault();
+			e.returnValue = false;
+			return false;
+		});
+
+		h.input.on("change", function(e) {
+			if (h.config.onChange !== undefined) {
+//				if (h.input.value > h.config.max) {
+//				    h.input.value = h.config.max;
+//				} else if (h.input.value < h.config.min) {
+//				    h.input.value = h.config.min;
+//				}
+				h.setBeanValue();
+
+				h.onChange(h.getBeanValue(), h);
+			}
+		});
+
+		h.input.type = "number";
+		h.input.step = 1;
+		h.input.value = 1;
+		h.input.max = h.config.max;
+		h.input.min = h.config.min;
+    },
+    setBeanValue: function(v) {
+    	var h = this;
+
+    	var v = h.getInputValue();
+
+    	eval("h.config.bean." + h.config.property + " = parseInt(v);");
+    },
+    /**
+     * @method setInputValue
+     */
+    setInputValue: function(val) {
+    	var h = this;
+
+    	if (val === undefined) {
+    		val = "";
+    	}
+
+    	var v = new String(val);
+
+    	if (v !== undefined && v.trim() !== "" && v.trim() !== '') {
+    		h.animateLabel();
+    		h.input.value = v;
+    	} else {
+    		h.input.value = "";
+    		h.unanimateLabel();
+    	}
+    },
+});
+/**
  * 
  * 
  * @class UI.DecimalFormField
@@ -4654,7 +4737,12 @@ UI.Grid = Class.create(UI.MaterialComponent, {
             ],
             quickSearch: true,
             detailsWidth: "90%",
-            descriptor: {}
+            descriptor: {
+            	paging: false,
+            	pageSize: 10,
+            	currentPage: 1,
+            	totalAmount: 100
+            }
         }, config || {});
     },
     /**
@@ -4667,7 +4755,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     			inside: h.getMaterial()	
     		}
     		
-    		if (h.config.quickSearch === true) {
+    		if (h.config.quickSearch === true || h.config.descriptor.paging == true) {
     			mainLayoutConfig.south = {
     				height: 60
     			}
@@ -4714,9 +4802,21 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     			element.removeClassName("grid-row-selected");
     		});
 
-    		if (h.config.quickSearch === true) {
+    		if (h.mainLayout.getSouth()) {
+
+                var southContainer = new Element("DIV", {
+                    style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; display:flex; flex-direction:row; overflow:hidden; background+color:yellow"
+                });
+
+    		    h.mainLayout.getSouth().insert(southContainer);
+
+    		    var nextInside = new Element("DIV", {
+    		        style: "position:relative; width:200px;"
+    		    });
+    		    southContainer.insert(nextInside);
+
 	    		new UI.Form({
-	    			inside: h.mainLayout.getSouth(),
+	    			inside: nextInside,
 	    			fields: [
 						 {
 							 property: "search",
@@ -4731,13 +4831,46 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 						 }
 	    			]
 	    		});
+
+    		    h.pagingFormInside = new Element("DIV", {
+    		        style: "position:relative; width:200px"
+    		    });
+    		    southContainer.insert(h.pagingFormInside);
+
+    		    h.displayPagingForm(h.pagingFormInside);
     		}
 
     	h.panel.setTitle(h.config.title);
 
     	h.fetch({
-    		rows: []
+    		rows: [],
+    		descriptor: h.config.descriptor
     	});
+    },
+    displayPagingForm: function() {
+        var h = this;
+
+        if (h.pagingFormInside) {
+			h.pagingForm = new UI.Form({
+				inside: h.pagingFormInside,
+				fields: [
+					 {
+						 property: "currentPage",
+						 label: $MSG("Page") + ": " + h.config.descriptor.currentPage + " / " + (h.config.descriptor.totalAmount / h.config.descriptor.pageSize).toFixed(0),
+						 type: "Increment",
+						 min: 1,
+						 max: (h.config.descriptor.totalAmount / h.config.descriptor.pageSize).toFixed(0),
+						 onChange: function(value) {
+						    this.setTitle($MSG("Page") + ": " + value + " / " + (h.config.descriptor.totalAmount / h.config.descriptor.pageSize).toFixed(0));
+						 	if (h.config.onPageChanged) {
+						 		h.config.onPageChanged(value);
+						 	}
+						 }
+					 }
+				]
+			});
+			h.pagingForm.setBean(h.config.descriptor);
+        }
     },
     /**
      * @method setScrollTop
@@ -4821,6 +4954,11 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
     		h.rowsContent.insert(row);
 		};
+
+		if (h.pagingForm && model.descriptor) {
+		    h.config.descriptor = model.descriptor;
+		    h.displayPagingForm();
+		}
     },
     selectRowByBean: function(bean) {
     	var h = this;

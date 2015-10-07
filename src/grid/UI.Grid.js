@@ -18,7 +18,12 @@ UI.Grid = Class.create(UI.MaterialComponent, {
             ],
             quickSearch: true,
             detailsWidth: "90%",
-            descriptor: {}
+            descriptor: {
+            	paging: false,
+            	pageSize: 10,
+            	currentPage: 1,
+            	totalAmount: 100
+            }
         }, config || {});
     },
     /**
@@ -31,7 +36,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     			inside: h.getMaterial()	
     		}
     		
-    		if (h.config.quickSearch === true) {
+    		if (h.config.quickSearch === true || h.config.descriptor.paging == true) {
     			mainLayoutConfig.south = {
     				height: 60
     			}
@@ -78,9 +83,21 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     			element.removeClassName("grid-row-selected");
     		});
 
-    		if (h.config.quickSearch === true) {
+    		if (h.mainLayout.getSouth()) {
+
+                var southContainer = new Element("DIV", {
+                    style: "position:absolute; top:0px; left:0px; right:0px; bottom:0px; display:flex; flex-direction:row; overflow:hidden; background+color:yellow"
+                });
+
+    		    h.mainLayout.getSouth().insert(southContainer);
+
+    		    var nextInside = new Element("DIV", {
+    		        style: "position:relative; width:200px;"
+    		    });
+    		    southContainer.insert(nextInside);
+
 	    		new UI.Form({
-	    			inside: h.mainLayout.getSouth(),
+	    			inside: nextInside,
 	    			fields: [
 						 {
 							 property: "search",
@@ -95,13 +112,46 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 						 }
 	    			]
 	    		});
+
+    		    h.pagingFormInside = new Element("DIV", {
+    		        style: "position:relative; width:200px"
+    		    });
+    		    southContainer.insert(h.pagingFormInside);
+
+    		    h.displayPagingForm(h.pagingFormInside);
     		}
 
     	h.panel.setTitle(h.config.title);
 
     	h.fetch({
-    		rows: []
+    		rows: [],
+    		descriptor: h.config.descriptor
     	});
+    },
+    displayPagingForm: function() {
+        var h = this;
+
+        if (h.pagingFormInside) {
+			h.pagingForm = new UI.Form({
+				inside: h.pagingFormInside,
+				fields: [
+					 {
+						 property: "currentPage",
+						 label: $MSG("Page") + ": " + h.config.descriptor.currentPage + " / " + (h.config.descriptor.totalAmount / h.config.descriptor.pageSize).toFixed(0),
+						 type: "Increment",
+						 min: 1,
+						 max: (h.config.descriptor.totalAmount / h.config.descriptor.pageSize).toFixed(0),
+						 onChange: function(value) {
+						    this.setTitle($MSG("Page") + ": " + value + " / " + (h.config.descriptor.totalAmount / h.config.descriptor.pageSize).toFixed(0));
+						 	if (h.config.onPageChanged) {
+						 		h.config.onPageChanged(value);
+						 	}
+						 }
+					 }
+				]
+			});
+			h.pagingForm.setBean(h.config.descriptor);
+        }
     },
     /**
      * @method setScrollTop
@@ -185,6 +235,11 @@ UI.Grid = Class.create(UI.MaterialComponent, {
 
     		h.rowsContent.insert(row);
 		};
+
+		if (h.pagingForm && model.descriptor) {
+		    h.config.descriptor = model.descriptor;
+		    h.displayPagingForm();
+		}
     },
     selectRowByBean: function(bean) {
     	var h = this;

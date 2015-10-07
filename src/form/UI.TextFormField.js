@@ -21,6 +21,12 @@ UI.TextFormField = Class.create({
         	required: false
         }, config || {});
 
+		for (property in this.config) {
+			if (this.config[property].bind) {
+				this.config[property].bind(this);
+			}
+		}
+
         this.render();
         this.setReadOnly(this.config.readOnly);
     },
@@ -36,7 +42,10 @@ UI.TextFormField = Class.create({
 		});
 		h.input = new Element("INPUT", {
 			type: "text",
-			style: "position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px"
+			style: "position:absolute; top:22px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px",
+			onPaste: function(e) {
+
+			}
 		});
 		h.input.on("focus", function() {
 			h.animateLabel();
@@ -76,19 +85,17 @@ UI.TextFormField = Class.create({
     		});
     		h.input.on("keyup", function(e) {
     			h.setBeanValue();
-    			
+
     			if (h.config.onChanging !== undefined) {
     				h.config.onChanging(h.getBeanValue());
     			}
     		});
     		h.input.on("keydown", function(e) {
-    			
     			if (13 == e.keyCode) {
     				if (h.config.onEnter) {
     					h.config.onEnter();
     				}
     			}
-    			
     			e.cancelBubble = true;
     		});
 		}
@@ -117,6 +124,12 @@ UI.TextFormField = Class.create({
 			});
 			h.inside.insert(fakeInput);
 		}
+    },
+    /**
+     *
+     */
+    setTitle: function(title) {
+    	this.inside.title = title;
     },
     /**
      * @method setReadOnly

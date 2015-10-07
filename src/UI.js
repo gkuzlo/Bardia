@@ -520,7 +520,7 @@ UI.Resources = Class.create({
     get: function(key, bean) {
         var result = "";
             if ((result = this.properties.get(key)) === undefined) {
-                result = "???_" + key + "_???";
+                result = key;
             }
 
             if (bean !== undefined) {

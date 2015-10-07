@@ -21,6 +21,19 @@
     <script src="ComplexView.js"></script>
 
     <script>
+
+            function $MSG(msg) {
+                return msg;
+            }
+
+            var IS = new UI.IconSet({
+                path : "images"
+            });
+
+            function $ICON(id) {
+                return IS.getIcon(id);
+            }
+
             function initPage() {
                 new ComplexView({
                     inside: window.document.body

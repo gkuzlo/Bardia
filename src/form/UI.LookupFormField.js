@@ -15,28 +15,6 @@ UI.LookupFormField = Class.create(UI.TextFormField, {
 			style: "position:absolute; top:20px; left:10px; border:0px; background-color:transparent; color:#000000; width:" + h.config.width + "px"
 		});
 
-//		h.input.on("focus", function() {
-//			h.animateLabel();
-//		});
-//		h.input.on("blur", function(e) {
-//			if (h.isEmpty(h.input.value)) {
-//				h.unanimateLabel()
-//			}
-//		});
-//		h.input.on("change", function(e) {
-//			if (h.config.onChange !== undefined) {
-//				h.config.onChange(h.getBeanValue());
-//			}
-//		});
-//		h.input.on("keyup", function(e) {
-//			h.setBeanValue(h.getInputValue());
-//
-//			if (h.config.onChanging !== undefined) {
-//				h.config.onChanging(h.getBeanValue());
-//			}
-//		});
-		//h.input.disabled = true;
-
 		h.inside.title = h.config.label + " " + ((h.config.required)?"*":"");
 
     	h.underline = new Element("DIV", {

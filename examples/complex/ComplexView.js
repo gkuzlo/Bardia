@@ -46,6 +46,9 @@ ComplexView = Class.create({
                 var material = h.mainGrid.openDetails();
 
                 h.showDetails(material.getMaterial(), row.bean);
+            },
+            onPageChanged: function(page) {
+                //alert("Page changed to: " + page);
             }
         });
 
@@ -55,13 +58,19 @@ ComplexView = Class.create({
             }, {
                 name: "Wojciech",
                 age: 20
-            }]
+            }],
+            descriptor: {
+                totalAmount: 100,
+                currentPage: 1,
+                pageSize: 10
+            }
         });
 
         h.secGrid = new UI.Grid({
             inside: h.mainLayout.getDefault(),
             title: "Grid 2",
             detailsWidth: "300px",
+            quickSearch: false,
             columns: [{
                 name: "Imię",
                 property: "name",
