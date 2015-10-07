@@ -9,7 +9,8 @@ UI.Form = Class.create(UI.MaterialComponent, {
         this.config = Object.extend({
             fields: [],
             fieldControlls: [],
-            bean: {}
+            bean: {},
+            bgColor: "#ebf0ee"
         }, config || {});
     },
     /**
@@ -17,11 +18,12 @@ UI.Form = Class.create(UI.MaterialComponent, {
      */
     render: function() {
     	var h = this;
-
+    	
     	h.panel = new UI.Panel({
     		inside: h.getMaterial(),
     		title: h.config.title,
-    		buttons: h.config.buttons
+    		buttons: h.config.buttons,
+    		bgColor: h.config.bgColor
     	});
 
     	if (h.config.fields !== undefined) {

@@ -8,7 +8,6 @@
 	position: absolute;
 	bottom:0px; height:5px;
 	left:0px; width:0px;
-	background-color:#6dbbcf;
     -webkit-transition-property: transform;
     transition-property: transform;
     -webkit-transition-duration: 0.3s;
@@ -26,7 +25,6 @@
 	position: absolute;
 	bottom:0px; top:0px;
 	height:0px; width:5px;
-	background-color:#6dbbcf;
     -webkit-transition-property: transform;
     transition-property: transform;
     -webkit-transition-duration: 0.3s;
@@ -35,30 +33,26 @@
     transition-timing-function: ease-out;
 }
 
-.toolbar-bg-color {
-	background-color:rgba(30, 29, 41, 1);
-}
-
 .toolbar-text-color {
 	color:#525160;
 }
 
 .toolbar-item-horizontal {
 	padding-left:15px; font-size:14px; padding-right:15px; display:inline-block; 
-	border-right:1px solid #1E1D29; line-height:70px; height:70px; overflow:hidden;
+	border-right:0px; line-height:59px; height:59px; overflow:hidden;
 	cursor:pointer;
 }
 
 .toolbar-item-horizontal:hover {
-    background-color:rgba(255, 255, 255, 0.1);
+    background-color:#c6c6c6;
 }
 
 .toolbar-item-vertical {
 	padding-left:15px; font-size:14px;
-	border-bottom: 1px solid #1E1D29; line-height:60px; height:60px; overflow:hidden;
+	border-bottom: 0px;line-height:60px; height:60px; overflow:hidden;
 	cursor:pointer;
 }
 
 .toolbar-item-vertical:hover {
-    background-color:rgba(255, 255, 255, 0.1);
+    background-color:#1e1d29;
 }

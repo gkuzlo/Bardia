@@ -9,7 +9,7 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
         var h = this;
         
     	h.content = new Element("DIV", {
-    		style: "position:absolute; top:0px; left:0px; bottom:0px; right:0px; background-color:rgba(30, 29, 41, 0.9)"
+    		style: "position:absolute; top:0px; left:0px; bottom:0px; right:0px; background-color:rgba(30, 29, 41, 1)"
     	});
     	h.getMaterial().update(h.content);
     	
@@ -37,14 +37,12 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 	    			this.nextItem.divItem.remove();
 	    			delete this.nextItem.divItem;
 	    		}
-
-	    		//delete this.nextItem;
     		}
     	};
 
     	var h = this;
     		var item = new Element("DIV", {
-    			style: "padding-left:15px; font-size:16px; padding-right:15px; display:inline-block; border-right:1px solid #1E1D29; line-height:70px; height:70px; color:#525160; overflow:hidden; cursor:pointer"
+    			style: "padding-left:35px; font-size:13px; padding-right:5px; display:inline-block; border:0px; line-height:59px; height:59px; color:#525160; overflow:hidden; cursor:pointer"
     		});
     		item.bean = nextItem;
     		nextItem.divItem = item;
@@ -79,11 +77,16 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 			h.displayMarker(item.divItem);	
 		}, 0);
 		
+		if (h.activeItem) {
+			h.activeItem.divItem.style.color = "#525160";
+		}
+		
 		if (item.divItem.onClick !== undefined) {
 			item.divItem.onClick(item.divItem.bean);
 		}
 
     	h.displayMarker(item.divItem);
+    	h.activeItem = item;
     	
     	item.divItem.bean.removeNextItem();
     	
@@ -110,19 +113,18 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
     displayMarker: function(html) {
     	var h = this;
 
-    	var rightPosition = html.getBoundingClientRect().right - h.content.getBoundingClientRect().left - 6;
+    	html.style.color = "#70c6d9";
+    	
+    	var rightPosition = html.getBoundingClientRect().left - h.content.getBoundingClientRect().left;
 
     	if (h.marker === undefined) {
     		h.marker = new Element("DIV", {
-    			style: "position:absolute; opacity:0.0; top:10px; left:" + rightPosition + "px; width:5px; bottom:10px; background-color:#6dbbcf"
+    			style: "position:absolute; opacity:0.0; left:" + rightPosition + "px;" +
+    				   "width:15px; top:20px; height:15px; background-color:transparent; " +
+    				   "border:5px solid #70c6d9; border-width:5px 5px 0px 0px; transform:rotate(45deg)"
     		});
     		h.content.insert(h.marker);
-    		
-    		h.bgMarker = new Element("DIV", {
-    			style: "position:absolute; opacity:0.05; top:10px; left:0px; width:" + (html.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + "px; bottom:10px; background-color:#6dbbcf"
-    		});
-    		h.content.insert(h.bgMarker);
-    		
+    		    		
     		$PLAY(h.marker, [
      		    {
      		    	opacity: "0.0"
@@ -134,21 +136,12 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
     	} else {
 			$PLAY(h.marker, [
 	  		    {
-	  		       left: (h.marker.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + "px"
+	  		       left: (h.marker.getBoundingClientRect().left - h.content.getBoundingClientRect().left) + "px"
 	  		    },
 	  		    {
-	   		       left: (html.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + "px"
+	   		       left: (html.getBoundingClientRect().left - h.content.getBoundingClientRect().left) + "px"
 	  		    },
 	  		]);
-			
-			$PLAY(h.bgMarker, [
- 	  		    {
- 	  		       width: h.bgMarker.getBoundingClientRect().width + "px"
- 	  		    },
- 	  		    {
- 	   		       width: (html.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + "px"
- 	  		    },
- 	  		]);
     	}
     }
 });

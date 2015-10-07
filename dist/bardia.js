@@ -731,7 +731,7 @@ UI.PanelToolbar = Class.create({
     	var h = this;
 
     	h.material = new Element("DIV", {
-    		style: "position:absolute; display:flex; flex-direction:row; top:0px; left:0px; right:0px; bottom:0px"
+    		style: "position:absolute; display:flex; flex-direction:row; top:0px; left:0px; right:0px; bottom:0px; background-color:transparent"
     	});
     	h.config.inside.update(h.material);
 
@@ -763,6 +763,7 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 	 */
     initConfig: function(config) {
         this.config = Object.extend({
+        	bgColor: "#ebf0ee"
         }, config || {});
     },
     /**
@@ -778,16 +779,16 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 					height: 59
 				}
 			});
-			
+
 			h.material = new Element("DIV", {
-				style: "position:absolute; top:0px; right:0px; top:0px; bottom:0px; left:0px",
+				style: "position:absolute; top:0px; right:0px; top:0px; bottom:0px; left:0px; background-color:" + h.config.bgColor,
 				class: "panel-header"
 			});
 			h.mainLayout.getNorth().insert(h.material);
 			h.material.title = h.config.title;
 
 			h.toolbarDiv = new Element("DIV", {
-				style: "position:absolute; top:15px; height:30px; left:10px; background-color:transparent; width:100%;",
+				style: "position:absolute; top:15px; height:30px; left:10px; width:100%;",
 				class: "panel-toolbar"
 			});
 			h.material.insert(h.toolbarDiv);
@@ -820,7 +821,8 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 
 		h.toolbar = new UI.PanelToolbar({
 			inside: h.toolbarDiv,
-			buttons: buttons || []
+			buttons: buttons || [],
+			bgColor: h.config.bgColor
 		});
     }
 });
@@ -2306,7 +2308,8 @@ UI.Form = Class.create(UI.MaterialComponent, {
         this.config = Object.extend({
             fields: [],
             fieldControlls: [],
-            bean: {}
+            bean: {},
+            bgColor: "#ebf0ee"
         }, config || {});
     },
     /**
@@ -2314,11 +2317,12 @@ UI.Form = Class.create(UI.MaterialComponent, {
      */
     render: function() {
     	var h = this;
-
+    	
     	h.panel = new UI.Panel({
     		inside: h.getMaterial(),
     		title: h.config.title,
-    		buttons: h.config.buttons
+    		buttons: h.config.buttons,
+    		bgColor: h.config.bgColor
     	});
 
     	if (h.config.fields !== undefined) {
@@ -3844,7 +3848,6 @@ UI.BooleanFormField = Class.create({
     	h.fab.pseudoStyle("after", "background-color", "green");
     	h.fab.setStyle({
     	    backgroundColor: "#e0ffe0",
-    	    "box-shadow": "3px 3px 8px green"
     	});
 
 		if (h.config.onChange) {
@@ -3861,7 +3864,6 @@ UI.BooleanFormField = Class.create({
     	h.fab.pseudoStyle("after", "background-color", "#aaaaaa");
     	h.fab.setStyle({
     	    backgroundColor: "#f0f0f0",
-    	    "box-shadow": "3px 3px 8px #666666"
     	});
 
 		if (h.config.onChange) {
@@ -4727,6 +4729,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     initConfig: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
+            bgColor: "#ebf0ee",
             columns: [
                 {
                 	name: "",
@@ -4766,7 +4769,8 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		h.panel = new UI.Panel({
     			inside: h.mainLayout.getDefault(),
     			buttons: h.config.buttons,
-    			title: h.config.title
+    			title: h.config.title,
+    			bgColor: h.config.bgColor
     		});
 
     		h.columnsContent = new Element("DIV", {
@@ -5325,7 +5329,7 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
         var h = this;
         
     	h.content = new Element("DIV", {
-    		style: "position:absolute; top:0px; left:0px; bottom:0px; right:0px; background-color:rgba(30, 29, 41, 0.9)"
+    		style: "position:absolute; top:0px; left:0px; bottom:0px; right:0px; background-color:rgba(30, 29, 41, 1)"
     	});
     	h.getMaterial().update(h.content);
     	
@@ -5353,14 +5357,12 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 	    			this.nextItem.divItem.remove();
 	    			delete this.nextItem.divItem;
 	    		}
-
-	    		//delete this.nextItem;
     		}
     	};
 
     	var h = this;
     		var item = new Element("DIV", {
-    			style: "padding-left:15px; font-size:16px; padding-right:15px; display:inline-block; border-right:1px solid #1E1D29; line-height:70px; height:70px; color:#525160; overflow:hidden; cursor:pointer"
+    			style: "padding-left:35px; font-size:13px; padding-right:5px; display:inline-block; border:0px; line-height:59px; height:59px; color:#525160; overflow:hidden; cursor:pointer"
     		});
     		item.bean = nextItem;
     		nextItem.divItem = item;
@@ -5395,11 +5397,16 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
 			h.displayMarker(item.divItem);	
 		}, 0);
 		
+		if (h.activeItem) {
+			h.activeItem.divItem.style.color = "#525160";
+		}
+		
 		if (item.divItem.onClick !== undefined) {
 			item.divItem.onClick(item.divItem.bean);
 		}
 
     	h.displayMarker(item.divItem);
+    	h.activeItem = item;
     	
     	item.divItem.bean.removeNextItem();
     	
@@ -5426,19 +5433,18 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
     displayMarker: function(html) {
     	var h = this;
 
-    	var rightPosition = html.getBoundingClientRect().right - h.content.getBoundingClientRect().left - 6;
+    	html.style.color = "#70c6d9";
+    	
+    	var rightPosition = html.getBoundingClientRect().left - h.content.getBoundingClientRect().left;
 
     	if (h.marker === undefined) {
     		h.marker = new Element("DIV", {
-    			style: "position:absolute; opacity:0.0; top:10px; left:" + rightPosition + "px; width:5px; bottom:10px; background-color:#6dbbcf"
+    			style: "position:absolute; opacity:0.0; left:" + rightPosition + "px;" +
+    				   "width:15px; top:20px; height:15px; background-color:transparent; " +
+    				   "border:5px solid #70c6d9; border-width:5px 5px 0px 0px; transform:rotate(45deg)"
     		});
     		h.content.insert(h.marker);
-    		
-    		h.bgMarker = new Element("DIV", {
-    			style: "position:absolute; opacity:0.05; top:10px; left:0px; width:" + (html.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + "px; bottom:10px; background-color:#6dbbcf"
-    		});
-    		h.content.insert(h.bgMarker);
-    		
+    		    		
     		$PLAY(h.marker, [
      		    {
      		    	opacity: "0.0"
@@ -5450,21 +5456,12 @@ UI.BreadCrumb = Class.create(UI.MaterialComponent, {
     	} else {
 			$PLAY(h.marker, [
 	  		    {
-	  		       left: (h.marker.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + "px"
+	  		       left: (h.marker.getBoundingClientRect().left - h.content.getBoundingClientRect().left) + "px"
 	  		    },
 	  		    {
-	   		       left: (html.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + "px"
+	   		       left: (html.getBoundingClientRect().left - h.content.getBoundingClientRect().left) + "px"
 	  		    },
 	  		]);
-			
-			$PLAY(h.bgMarker, [
- 	  		    {
- 	  		       width: h.bgMarker.getBoundingClientRect().width + "px"
- 	  		    },
- 	  		    {
- 	   		       width: (html.getBoundingClientRect().right - h.content.getBoundingClientRect().left) + "px"
- 	  		    },
- 	  		]);
     	}
     }
 });
@@ -5476,6 +5473,8 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     initConfig: function(config) {
         this.config = Object.extend({
         	orientation: "vertical",
+        	bgColor: "rgba(30, 29, 41, 1)",
+        	markerColor: "#6dbbcf",
         	items: [],
         	autoclick: true
         }, config || {});
@@ -5493,10 +5492,12 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
  
     renderItemsVertically: function() {
     	var h = this;
-    	
+
     	h.content = new Element("DIV", {
-    		class: "toolbar-marker-v toolbar-bg-color"
+    		class: "toolbar-marker-v",
+    		style: "background-color:" + h.config.bgColor
     	});
+    	h.content.pseudoStyle("before", "background-color",  h.config.markerColor);
 
     	h.getMaterial().update(h.content);
     	
@@ -5557,10 +5558,12 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
      */
     renderItemsHorizontally: function() {
     	var h = this;
-    	
+
     	h.content = new Element("DIV", {
-    		class: "toolbar-marker-h toolbar-bg-color"
+    		class: "toolbar-marker-h",
+    		style: "background-color:" + h.config.bgColor
     	});
+    	h.content.pseudoStyle("before", "background-color",  h.config.markerColor);
 
     	h.getMaterial().update(h.content);
     	
@@ -5654,7 +5657,9 @@ UI.Tabs = Class.create(UI.MaterialComponent, {
 
     initConfig: function(config) {
         this.config = Object.extend({
-        	type: "toolbar"
+        	type: "toolbar",
+        	bgColor: "rgba(30, 29, 41, 1)",
+        	markerColor: "#6dbbcf"
         }, config || {});
     },
 
@@ -5664,7 +5669,7 @@ UI.Tabs = Class.create(UI.MaterialComponent, {
         h.layout = new UI.BorderLayout({
         	inside: h.getMaterial(),
         	north: {
-        		height:70
+        		height:59
         	}
         });
 
@@ -5679,18 +5684,24 @@ UI.Tabs = Class.create(UI.MaterialComponent, {
         if (h.config.type == "toolbar") {
 	        h.toolbar = new UI.Toolbar({
 	        	inside: h.layout.getNorth(),
+	        	bgColor: h.config.bgColor,
+	        	markerColor: h.config.markerColor,
 	        	orientation: "horizontal",
 	        	items: h.config.tabs
 	        });
         } else if (h.config.type == "breadcrumb") {
 	        h.toolbar = new UI.BreadCrumb({
 	        	inside: h.layout.getNorth(),
+	        	bgColor: h.config.bgColor,
+	        	markerColor: h.config.markerColor,
 	        	orientation: "horizontal",
 	        	firstItem: h.config.tabs[0]
 	        });
         } else if (h.config.type == "icon") {
 	        h.toolbar = new UI.IconToolbar({
 	        	inside: h.layout.getNorth(),
+	        	bgColor: h.config.bgColor,
+	        	markerColor: h.config.markerColor,
 	        	orientation: "horizontal",
 	        	items: h.config.tabs
 	        });

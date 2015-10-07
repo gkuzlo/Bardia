@@ -27,7 +27,7 @@
 }
 
 .boolean-fab {
-	box-shadow: 3px 3px 8px #666666; border-radius:3px; position:absolute; top:20px; left:20px; width:25px; height:15px;
+	border-radius:3px; position:absolute; top:20px; left:20px; width:25px; height:15px;
 	border:1px solid grey; position:relative;
 	background-color:#f0f0f0;
     -webkit-transition-property: transform;

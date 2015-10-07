@@ -6,6 +6,8 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
     initConfig: function(config) {
         this.config = Object.extend({
         	orientation: "vertical",
+        	bgColor: "rgba(30, 29, 41, 1)",
+        	markerColor: "#6dbbcf",
         	items: [],
         	autoclick: true
         }, config || {});
@@ -23,10 +25,12 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
  
     renderItemsVertically: function() {
     	var h = this;
-    	
+
     	h.content = new Element("DIV", {
-    		class: "toolbar-marker-v toolbar-bg-color"
+    		class: "toolbar-marker-v",
+    		style: "background-color:" + h.config.bgColor
     	});
+    	h.content.pseudoStyle("before", "background-color",  h.config.markerColor);
 
     	h.getMaterial().update(h.content);
     	
@@ -87,10 +91,12 @@ UI.Toolbar = Class.create(UI.MaterialComponent, {
      */
     renderItemsHorizontally: function() {
     	var h = this;
-    	
+
     	h.content = new Element("DIV", {
-    		class: "toolbar-marker-h toolbar-bg-color"
+    		class: "toolbar-marker-h",
+    		style: "background-color:" + h.config.bgColor
     	});
+    	h.content.pseudoStyle("before", "background-color",  h.config.markerColor);
 
     	h.getMaterial().update(h.content);
     	

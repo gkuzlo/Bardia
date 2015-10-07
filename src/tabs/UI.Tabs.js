@@ -2,7 +2,9 @@ UI.Tabs = Class.create(UI.MaterialComponent, {
 
     initConfig: function(config) {
         this.config = Object.extend({
-        	type: "toolbar"
+        	type: "toolbar",
+        	bgColor: "rgba(30, 29, 41, 1)",
+        	markerColor: "#6dbbcf"
         }, config || {});
     },
 
@@ -12,7 +14,7 @@ UI.Tabs = Class.create(UI.MaterialComponent, {
         h.layout = new UI.BorderLayout({
         	inside: h.getMaterial(),
         	north: {
-        		height:70
+        		height:59
         	}
         });
 
@@ -27,18 +29,24 @@ UI.Tabs = Class.create(UI.MaterialComponent, {
         if (h.config.type == "toolbar") {
 	        h.toolbar = new UI.Toolbar({
 	        	inside: h.layout.getNorth(),
+	        	bgColor: h.config.bgColor,
+	        	markerColor: h.config.markerColor,
 	        	orientation: "horizontal",
 	        	items: h.config.tabs
 	        });
         } else if (h.config.type == "breadcrumb") {
 	        h.toolbar = new UI.BreadCrumb({
 	        	inside: h.layout.getNorth(),
+	        	bgColor: h.config.bgColor,
+	        	markerColor: h.config.markerColor,
 	        	orientation: "horizontal",
 	        	firstItem: h.config.tabs[0]
 	        });
         } else if (h.config.type == "icon") {
 	        h.toolbar = new UI.IconToolbar({
 	        	inside: h.layout.getNorth(),
+	        	bgColor: h.config.bgColor,
+	        	markerColor: h.config.markerColor,
 	        	orientation: "horizontal",
 	        	items: h.config.tabs
 	        });

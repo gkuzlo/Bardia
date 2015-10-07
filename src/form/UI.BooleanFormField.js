@@ -95,7 +95,6 @@ UI.BooleanFormField = Class.create({
     	h.fab.pseudoStyle("after", "background-color", "green");
     	h.fab.setStyle({
     	    backgroundColor: "#e0ffe0",
-    	    "box-shadow": "3px 3px 8px green"
     	});
 
 		if (h.config.onChange) {
@@ -112,7 +111,6 @@ UI.BooleanFormField = Class.create({
     	h.fab.pseudoStyle("after", "background-color", "#aaaaaa");
     	h.fab.setStyle({
     	    backgroundColor: "#f0f0f0",
-    	    "box-shadow": "3px 3px 8px #666666"
     	});
 
 		if (h.config.onChange) {

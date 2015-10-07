@@ -1,8 +1,6 @@
-/*
- *
- */
+
 .panel-header {
-	background-color:#ebf0ee; color:#525070; 
+	color:#525070; 
 }
 
 .panel-header::after {
@@ -12,7 +10,7 @@
 }
 
 .panel-toolbar {
-
+	background-color:transparent
 }
 
 /* Radial Out */

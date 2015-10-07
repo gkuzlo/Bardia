@@ -21,7 +21,7 @@ UI.PanelToolbar = Class.create({
     	var h = this;
 
     	h.material = new Element("DIV", {
-    		style: "position:absolute; display:flex; flex-direction:row; top:0px; left:0px; right:0px; bottom:0px"
+    		style: "position:absolute; display:flex; flex-direction:row; top:0px; left:0px; right:0px; bottom:0px; background-color:transparent"
     	});
     	h.config.inside.update(h.material);
 

@@ -8,6 +8,7 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     initConfig: function(config) {
         this.config = Object.extend({
             inside: window.document.body,
+            bgColor: "#ebf0ee",
             columns: [
                 {
                 	name: "",
@@ -47,7 +48,8 @@ UI.Grid = Class.create(UI.MaterialComponent, {
     		h.panel = new UI.Panel({
     			inside: h.mainLayout.getDefault(),
     			buttons: h.config.buttons,
-    			title: h.config.title
+    			title: h.config.title,
+    			bgColor: h.config.bgColor
     		});
 
     		h.columnsContent = new Element("DIV", {

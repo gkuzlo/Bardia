@@ -8,6 +8,7 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 	 */
     initConfig: function(config) {
         this.config = Object.extend({
+        	bgColor: "#ebf0ee"
         }, config || {});
     },
     /**
@@ -23,16 +24,16 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 					height: 59
 				}
 			});
-			
+
 			h.material = new Element("DIV", {
-				style: "position:absolute; top:0px; right:0px; top:0px; bottom:0px; left:0px",
+				style: "position:absolute; top:0px; right:0px; top:0px; bottom:0px; left:0px; background-color:" + h.config.bgColor,
 				class: "panel-header"
 			});
 			h.mainLayout.getNorth().insert(h.material);
 			h.material.title = h.config.title;
 
 			h.toolbarDiv = new Element("DIV", {
-				style: "position:absolute; top:15px; height:30px; left:10px; background-color:transparent; width:100%;",
+				style: "position:absolute; top:15px; height:30px; left:10px; width:100%;",
 				class: "panel-toolbar"
 			});
 			h.material.insert(h.toolbarDiv);
@@ -65,7 +66,8 @@ UI.Panel = Class.create(UI.MaterialComponent, {
 
 		h.toolbar = new UI.PanelToolbar({
 			inside: h.toolbarDiv,
-			buttons: buttons || []
+			buttons: buttons || [],
+			bgColor: h.config.bgColor
 		});
     }
 });
