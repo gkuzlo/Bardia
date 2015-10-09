@@ -1,7 +1,7 @@
 /**
  *
  */
-ontime.MainView = bardia.oop.Class.create({
+cesip.MainView = bardia.oop.Class.create({
 
     initialize: function(config) {
         this.config = config;
@@ -71,18 +71,7 @@ ontime.MainView = bardia.oop.Class.create({
                 name: "Mapa",
                 onActivate: function(html) {
                     try {
-                        new ontime.map.MapFeatures({
-                            inside: html
-                        });
-                    } catch (e) {
-                        alert(e);
-                    }
-                }
-            }, {
-                name: "Mobile list",
-                onActivate: function(html) {
-                    try {
-                        new bardia.list.MobileList({
+                        new cesip.map.MapFeatures({
                             inside: html
                         });
                     } catch (e) {

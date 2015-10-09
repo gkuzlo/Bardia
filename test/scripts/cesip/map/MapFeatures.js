@@ -1,7 +1,7 @@
 /**
  * Klasa pokazuje niektóre możliwości OpenLayers3
  */
-ontime.map.MapFeatures = bardia.oop.Class.create({
+cesip.map.MapFeatures = bardia.oop.Class.create({
 
     initialize: function(config) {
         bardia.oop.Class.extend(this, config);
