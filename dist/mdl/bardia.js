@@ -103,6 +103,12 @@ bardia.dom.Element = bardia.oop.Class.create({
         } else if (jsonRoot.$_append) {
             this.domNode.innerHTML = jsonRoot.$_append;
         }
+
+        if (jsonRoot.$_props) {
+            for (prop in jsonRoot.$_props) {
+            	this.domNode[prop] = jsonRoot.$_props[prop];
+            }
+        }
         
         if (jsonRoot.$_on) {
             for (eventName in jsonRoot.$_on) {
@@ -119,8 +125,16 @@ bardia.dom.Element = bardia.oop.Class.create({
     insert: function(subElement) {
         try {
             if (subElement) {
-                this.domNode.appendChild(subElement.dom());
-                this.children.push(subElement);
+            	if (subElement.dom) {
+            		this.domNode.appendChild(subElement.dom());
+            		this.children.push(subElement);
+            	} else if ((typeof subElement) == 'string') {
+            		var element = document.createTextNode(subElement);
+            		this.domNode.appendChild(element);
+            	} else if ((typeof subElement) == 'number') {
+            		var element = document.createTextNode(subElement);
+            		this.domNode.appendChild(element);
+            	}                   
             }
         } catch (e) {
             alert("insert: subElement=" + subElement + " " + e);
@@ -134,7 +148,7 @@ bardia.dom.Element = bardia.oop.Class.create({
             this.domNode.removeChild(this.domNode.childNodes[0]);
         }
 
-        if (element)
+        if (element) 
         this.insert(element);
     },
 
@@ -172,6 +186,25 @@ bardia.utils = {
 function $msg(message) {
     return message;
 }
+
+bardia.utils.DateUtils = bardia.oop.Class.create({
+
+    initialize: function(config) {
+
+    },
+
+    formatDateYYYYMMDD: function(date) {
+    	var result = "";
+    		result = date.getYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(); 
+    	return result;
+    },
+    
+    parseDate: function() {
+    	
+    }
+});
+
+bardia.utils.DateUtils.pattern = "";
 bardia.layout = {
 }
 /**
@@ -790,11 +823,12 @@ bardia.form.Form = bardia.oop.Class.create({
             
             h.root.insert(formField.getElement());
         });
-        
+
         var curtain = $_element({
             $_tag: "div",
             class: "form-curtain",
             id: "form-curtain",
+            style: "left:-" + h.inside.dom().getBoundingClientRect().width + "px",
             $_on: {
                 "click": function() {
                     h.closeDetails();
@@ -803,7 +837,13 @@ bardia.form.Form = bardia.oop.Class.create({
             $_append: [{
                 $_tag: "div",
                 class: "form-details-right",
-                id: "form-details-right"
+                id: "form-details-right",
+                $_on: {
+                    "click": function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                },
             }]
         });
 
@@ -826,25 +866,29 @@ bardia.form.Form = bardia.oop.Class.create({
             listener(bean);
         });
     },
-    
+
     getBean: function() {
-        return this.bean;
+    	this.bean = this.bean || {};
+        return this.bean || {};
     },
-    
+
     openDetails: function(width) {
         var h = this;
 
-        h.root.find("form-curtain").dom().style.width = "100%";
+        h.root.find("form-curtain").dom().style.left = "0px";
         h.root.find("form-details-right").dom().style.width = width || h.detailsWidth;
 
-        return h.root.find("form-details-right");
+        var result = h.root.find("form-details-right");
+        result.update();
+
+        return result
     },
-    
+
     closeDetails: function() {
         var h = this;
 
-        h.root.find("form-curtain").dom().style.width = "0px";
-        h.root.find("form-details-right").dom().style.width = "0px";
+        h.root.find("form-curtain").dom().style.left = "-" + h.inside.dom().getBoundingClientRect().width + "px";
+        //h.root.find("form-details-right").dom().style.width = "0px";
     }
 });
 bardia.form.TextField = bardia.oop.Class.create({
@@ -898,6 +942,9 @@ bardia.form.TextField = bardia.oop.Class.create({
         return h.root;
     },
 
+    /**  
+     * z inputa do beana
+     */
     updateBeanProperty: function(value) {
         var h = this;
         var bean = h.form.getBean();
@@ -905,97 +952,30 @@ bardia.form.TextField = bardia.oop.Class.create({
         eval("bean." + h.property + " = value");
     },
 
+    /**
+     * z beana do inputa
+     */
     updateInputValue: function(bean) {
         var h = this;
         h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");
     },
 
     setForm: function(form) {
-        var h = this;
-        h.form = form;
-        h.form.addBeanChangedListener(function(bean) {
-            h.updateInputValue(bean);
-        });
-    }
-});
-bardia.form.DateField = bardia.oop.Class.create({
-
-    initialize: function(config) {
-        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: "Insert title here ..."
-        }, config));
-        
-        this.render();
-    },
-    
-    render: function() {
-        var h = this;
-
-        h.root = $_element({
-            $_tag: "div",
-            class: "form-row",
-            $_append: [{
-                $_tag: "input",
-                class: "form-text-input",
-                required: true,
-                type: "text",
-                id: h.property,
-                $_on: {
-                    change: function(e) {
-                        h.updateBeanProperty(e.target.value);
-                    }
-                }
-            }, {
-                $_tag: "label",
-                class: "form-text-input-label",
-                "for": h.property,
-                $_append: "Data"
-            }, {
-                $_tag: "button",
-                class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
-                $_on: {
-                    click: function(e) {
-                        h.form.openDetails("300px");
-                    }
-                },
-                $_append: [{
-                    $_tag: "i",
-                    class: "material-icons",
-                    $_append: "reorder",
-                }]
-            }]
-        });
-    },
-    
-    getElement: function() {
-        var h = this;
-        return h.root;
-    },
-    
-    updateBeanProperty: function(value) {
-        var h = this;
-        var bean = h.form.getBean();
-        
-        eval("bean." + h.property + " = value");
-    },
-    
-    updateInputValue: function(bean) {
-        var h = this;
-        h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");
-    },
-    
-    setForm: function(form) {
-        var h = this;
-        h.form = form;
-        h.form.addBeanChangedListener(function(bean) {
-            h.updateInputValue(bean);
-        });
+    	try {
+	        var h = this;
+	        h.form = form;
+	        h.form.addBeanChangedListener(function(bean) {
+	            h.updateInputValue(bean);
+	        });
+    	} catch (e) {
+    		alert("" + e);
+    	}
     }
 });
 /**
  * 
  */
-bardia.form.LookupField = bardia.oop.Class.inherit(bardia.form.TextField, {
+bardia.form.ActionField = bardia.oop.Class.inherit(bardia.form.TextField, {
 
     initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
@@ -1031,6 +1011,267 @@ bardia.form.LookupField = bardia.oop.Class.inherit(bardia.form.TextField, {
 
         h.displayButton();
     },
+    /**
+     *  
+     */
+    displayButton: function() {
+    	var h = this;
+    	
+    	h.root.insert($_element({
+            $_tag: "button",
+            class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
+            $_on: {
+                click: function(e) {
+                    var element = h.form.openDetails("300px");
+                    if (h.onExpand) {
+                    	h.onExpand(element);
+                    }
+                }
+            },
+            $_append: [{
+                $_tag: "i",
+                class: "material-icons",
+                $_append: "keyboard_arrow_down",
+            }]
+        }));
+    }
+});
+/**
+ * 
+ */
+bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
+
+    initialize: function(config) {		
+        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+            label: "Insert title here ... 2"
+        }, config));
+
+        this.render();
+    },
+    
+    displayButton: function() {
+    	var h = this;
+
+    	h.root.insert($_element({
+            $_tag: "button",
+            class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
+            $_on: {
+                click: function(e) {
+                    var element = h.form.openDetails("295px");
+                    try {
+                    	h.displayCalendar(element);
+                    } catch (e) {
+                    	alert(e);
+                    }
+                }
+            },
+            $_append: [{
+                $_tag: "i",
+                class: "material-icons",
+                $_append: "today",
+            }]
+        }));
+    },
+    /**
+     * 
+     */
+    displayCalendar: function(html) {    	
+    	var h = this;
+
+    	h.calendarRoot = $_element({
+    		$_tag: "div",
+    		class: "calendar-container",
+    		$_append: [{
+    			$_tag: "div",
+    			class: "calendar-weekday",
+    			id: "weekday"
+    		}, {
+    			$_tag: "div",
+    			class: "calendar-month",
+    			id: "month"
+    		}, {
+    			$_tag: "div",
+    			class: "calendar-month-day",
+    			id: "month-day"
+    		}, {
+    			$_tag: "div",
+    			class: "calendar-year",
+    			id: "year"
+    		}, {
+    			$_tag: "div",
+    			class: "calendar-navigation",
+    			id: "month-navigation",
+    			$_append: [{
+    	            $_tag: "button",
+    	            class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
+    	            $_on: {
+    	                click: function(e) {
+    	                	h.minusMonth();
+    	                }
+    	            },
+    	            $_append: [{
+    	                $_tag: "i",
+    	                class: "material-icons",
+    	                $_append: "keyboard_arrow_left",
+    	            }]
+    	        }, {
+    	        	$_tag: "div",
+    	        	id: "month-full-name"
+    	        }, {
+    	            $_tag: "button",
+    	            class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
+    	            $_on: {
+    	                click: function(e) {
+    	                	h.plusMonth();
+    	                }
+    	            },
+    	            $_append: [{
+    	                $_tag: "i",
+    	                class: "material-icons",
+    	                $_append: "keyboard_arrow_right",
+    	            }]
+    	        }]
+    		}, {
+    			$_tag: "div",
+    			class: "calendar-days",
+    			id: "month-days",
+    		}, {
+    			$_tag: "div",
+    			class: "calendar-buttons",
+    			id: "month-buttons"
+    		}],
+    	});
+
+    	html.insert(h.calendarRoot);
+    	    	
+    	h.updateDaysView();
+    },
+    
+    plusMonth: function() {
+    	var h = this;
+    	h.date.setMonth(h.date.getMonth() + 1);
+    	h.updateDaysView();
+    },
+    
+    minusMonth: function() {
+    	var h = this;
+    	h.date.setMonth(h.date.getMonth() - 1);
+    	h.updateDaysView();
+    },
+    
+    updateDaysView: function() {
+    	var h = this;
+    	
+    	h.date = h.date || eval("h.form.getBean()." + h.property) || new Date();    	
+    	
+    	h.calendarRoot.find("month-days").update();
+    	var days = h.prepareDaysRows();
+    	days.forEach(function(_day) {
+    		h.calendarRoot.find("month-days").insert($_element(_day));
+    	});
+
+    	h.setWeekday();
+    	h.setMonth();
+    	h.setMonthFullName();
+    	h.setMonthDay();
+    	h.setYear();
+    },
+
+    prepareDaysRows: function() {
+    	var h = this;
+    	
+    	var today = new Date();
+
+    	var result = [];
+
+    	var clonedDate = new Date(h.date.getTime());
+    	clonedDate.setDate(1);
+    	clonedDate.setHours(12);
+    	clonedDate.setMinutes(0);
+    	clonedDate.setSeconds(0);
+    	clonedDate.setMilliseconds(0);
+
+    	var currentMonth = clonedDate.getMonth();
+
+    	clonedDate.setTime(clonedDate.getTime() - (clonedDate.getDay()*24*60*60*1000));
+
+    	var i = 0;
+    	for (i=0; i<=41; i++) {
+    		var aDate = new Date(clonedDate.getTime() + (i * 24 * 60 * 60 * 1000));
+
+    		var bgColor = "transparent";
+    		var color = "white";
+    		if (aDate.getMonth() == currentMonth) {
+    			color = "black";
+
+    			if (aDate.getDay() == 0) {
+    				color = "red";
+    			}
+
+    			if (aDate.getDate() == h.date.getDate()) {
+    				bgColor = "#3f51b5";
+    				color = "white";
+    			}
+    		}
+
+    		result.push({
+    			$_tag: "div",
+    			class: "calendar-single-day mdl-js-ripple-effect",
+    			style: "color:" + color + "; background-color:" + bgColor,
+    			$_props: {
+    				date: aDate
+    			},
+    			$_on: {
+    				click: function(e) {
+    					h.updateBeanProperty(e.target.date);
+    					h.updateInputValue(h.form.getBean());
+    					h.form.closeDetails();
+    				}
+    			},
+    			$_append: "" + aDate.getDate()
+    		});
+    	}
+
+    	return result;
+    },
+
+    updateInputValue: function(bean) {
+        var h = this;
+
+        h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");
+    },
+
+    setWeekday: function() {
+    	this.calendarRoot.find("weekday").update(bardia.form.DateField.WEEKDAYS[this.date.getDay()]);
+    },
+    
+    setMonth: function() {
+    	this.calendarRoot.find("month").update(bardia.form.DateField.SHORT_MONTHS[this.date.getMonth()]);
+    },
+    
+    setMonthFullName: function() {
+    	this.calendarRoot.find("month-full-name").update(bardia.form.DateField.MONTHS[this.date.getMonth()]);
+    },
+    
+    setMonthDay: function() {
+    	this.calendarRoot.find("month-day").update("" + this.date.getDate());
+    },
+
+    setYear: function() {
+    	this.calendarRoot.find("year").update("" + this.date.getFullYear());
+    },
+});
+
+bardia.form.DateField.WEEKDAYS = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+bardia.form.DateField.MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+bardia.form.DateField.SHORT_MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+bardia.form.DateField.DU = new bardia.utils.DateUtils();
+
+/**
+ * 
+ */
+bardia.form.LookupField = bardia.oop.Class.inherit(bardia.form.ActionField, {
+
     /**
      *  
      */

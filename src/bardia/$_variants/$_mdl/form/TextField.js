@@ -49,6 +49,9 @@ bardia.form.TextField = bardia.oop.Class.create({
         return h.root;
     },
 
+    /**  
+     * z inputa do beana
+     */
     updateBeanProperty: function(value) {
         var h = this;
         var bean = h.form.getBean();
@@ -56,6 +59,9 @@ bardia.form.TextField = bardia.oop.Class.create({
         eval("bean." + h.property + " = value");
     },
 
+    /**
+     * z beana do inputa
+     */
     updateInputValue: function(bean) {
         var h = this;
         h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");

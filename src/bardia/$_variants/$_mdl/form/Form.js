@@ -45,11 +45,12 @@ bardia.form.Form = bardia.oop.Class.create({
             
             h.root.insert(formField.getElement());
         });
-        
+
         var curtain = $_element({
             $_tag: "div",
             class: "form-curtain",
             id: "form-curtain",
+            style: "left:-" + h.inside.dom().getBoundingClientRect().width + "px",
             $_on: {
                 "click": function() {
                     h.closeDetails();
@@ -58,7 +59,13 @@ bardia.form.Form = bardia.oop.Class.create({
             $_append: [{
                 $_tag: "div",
                 class: "form-details-right",
-                id: "form-details-right"
+                id: "form-details-right",
+                $_on: {
+                    "click": function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                },
             }]
         });
 
@@ -81,24 +88,28 @@ bardia.form.Form = bardia.oop.Class.create({
             listener(bean);
         });
     },
-    
+
     getBean: function() {
-        return this.bean;
+    	this.bean = this.bean || {};
+        return this.bean || {};
     },
-    
+
     openDetails: function(width) {
         var h = this;
 
-        h.root.find("form-curtain").dom().style.width = "100%";
+        h.root.find("form-curtain").dom().style.left = "0px";
         h.root.find("form-details-right").dom().style.width = width || h.detailsWidth;
 
-        return h.root.find("form-details-right");
+        var result = h.root.find("form-details-right");
+        result.update();
+
+        return result
     },
-    
+
     closeDetails: function() {
         var h = this;
 
-        h.root.find("form-curtain").dom().style.width = "0px";
-        h.root.find("form-details-right").dom().style.width = "0px";
+        h.root.find("form-curtain").dom().style.left = "-" + h.inside.dom().getBoundingClientRect().width + "px";
+        //h.root.find("form-details-right").dom().style.width = "0px";
     }
 });

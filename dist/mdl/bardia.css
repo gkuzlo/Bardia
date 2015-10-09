@@ -1,3 +1,55 @@
+
+.calendar-container {
+	display:flex; flex-direction:column; height:100%;
+	background-color:#ff709f;	
+}
+
+.calendar-weekday {
+	height:40px; line-height:40px; background-color:#ff4081; 
+	color:white; text-align:center;
+	font-size:13px;
+}
+
+.calendar-month {
+	height:50px; line-height:50px; background-color:#ff709f;
+	color:white; text-align:center; font-size:25px;
+}
+
+.calendar-month-day {
+	height:80px; line-height:80px; background-color:#ff709f;
+	color:white; text-align:center; font-size:70px;
+}
+
+.calendar-year {
+	height:40px; line-height:40px; background-color:#ff709f;
+	color:white; text-align:center; font-size:25px;
+}
+
+.calendar-navigation {
+	height:40px; background-color:white; display:flex; justify-content:space-between;
+}
+
+.calendar-days {
+	height:300px; background-color:white; display:flex; flex-direction:row; flex-wrap:wrap; 
+	align-content:flex-start; overflow:hidden;
+}
+
+.calendar-buttons {
+	height:40px; background-color:#ff709f;
+}
+
+.calendar-single-day {
+	position:relative; width:36px; height:36px; margin:2px; background-color:white; border-radius:50%;
+	border:1px solid lightGrey; text-align:center; line-height:36px; cursor:pointer;
+}
+
+.calendar-single-day:hover {
+	opacity:0.8;
+}
+
+.calendar-single-day:hover {
+	background-color:#e0e0e0;
+}
 .form-content {
     position:absolute; top:0px; left:0px; right:0px; bottom:0px; display:flex; flex-direction:column; padding:20px;
 }
@@ -52,17 +104,23 @@
 }
 
 .form-curtain {
-    position:absolute; top:0px; left:0px; bottom:0px; width:0px;
-    background: rgba(0,0,0,0.5);
-    -webkit-transition: width 0.5s; /* Safari */
-    transition: width 0.5s;
+    position:absolute; top:0px; left:0px; bottom:0px; border:0px; width:100%; overflow:hidden; 
+    background: rgba(0,0,0,0.1);
+    
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
 }
 
 .form-details-right {
-    position:absolute; top:0px; left:0px; bottom:0px; width:0px;
-    background: white; border:0px solid lightGrey; border-width:0px 1px 0px 0px;
-    -webkit-transition: width 0.5s; /* Safari */
-    transition: width 0.5s;
+    position:absolute; top:0px; left:0px; bottom:0px;
+    background: white; border:0px;
+    
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
 } 
 .grid-content {
     position:absolute; top:0px; left:0px; right:0px; bottom:0px;

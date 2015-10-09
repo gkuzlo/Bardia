@@ -35,7 +35,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "dist\\mdl\\bardia.js",
-            "line": 177,
+            "line": 210,
             "is_constructor": 1,
             "example": [
                 "\n~~~\nvar layout = new bardia.layout.BorderLayout({\n  inside: $_element(document.body),\n  north: {\n       height: 20\n  }\n});\n~~~"
@@ -50,7 +50,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "dist\\mdl\\bardia.js",
-            "line": 283,
+            "line": 316,
             "description": "Materiał, który wysuwa się po wywołaniu metody show().\nPo wywołaniu metody hide() - ucieka.\nMoże się wysuwać z róznych stron: left, right, top, button.\nJeżeli jest modalny to podczas wysuwania pojawia sie pod nim półprzeźroczysta kurtyna, która sprawia,\nże kontet parenta jest lekko zasłonięty.\nAnimacja odbywa się w ten sposób, że materiał się wysuwa z jednej ze stron parenta (na przykład na gridzie, parenta podajemy w inside) a w tym czasie kurtyna zasłania obaszar grida.\nKomponent jest appendowany do inside'a - czyli nie podmienia jego zawartości.",
             "is_constructor": 1,
             "params": [
@@ -203,12 +203,12 @@
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 155,
+            "line": 169,
             "class": "bardia.layout.BorderLayout"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 260,
+            "line": 293,
             "itemtype": "method",
             "name": "getNorth()",
             "return": {
@@ -219,21 +219,21 @@
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 328,
+            "line": 361,
             "itemtype": "method",
             "name": "show()",
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 335,
+            "line": 368,
             "itemtype": "method",
             "name": "hide()",
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 342,
+            "line": 375,
             "itemtype": "method",
             "name": "getContent()",
             "return": {
@@ -244,42 +244,74 @@
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 498,
+            "line": 531,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 502,
+            "line": 535,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 510,
+            "line": 543,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 578,
+            "line": 611,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 646,
+            "line": 679,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 746,
+            "line": 779,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 995,
+            "line": 945,
+            "description": "z inputa do beana",
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1034,
+            "line": 955,
+            "description": "z beana do inputa",
+            "class": "bardia.layout.Material"
+        },
+        {
+            "file": "dist\\mdl\\bardia.js",
+            "line": 975,
+            "class": "bardia.layout.Material"
+        },
+        {
+            "file": "dist\\mdl\\bardia.js",
+            "line": 1014,
+            "class": "bardia.layout.Material"
+        },
+        {
+            "file": "dist\\mdl\\bardia.js",
+            "line": 1039,
+            "class": "bardia.layout.Material"
+        },
+        {
+            "file": "dist\\mdl\\bardia.js",
+            "line": 1075,
+            "class": "bardia.layout.Material"
+        },
+        {
+            "file": "dist\\mdl\\bardia.js",
+            "line": 1270,
+            "class": "bardia.layout.Material"
+        },
+        {
+            "file": "dist\\mdl\\bardia.js",
+            "line": 1275,
             "class": "bardia.layout.Material"
         }
     ],
@@ -342,39 +374,63 @@
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:155"
+            "line": " dist\\mdl\\bardia.js:169"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:498"
+            "line": " dist\\mdl\\bardia.js:531"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:502"
+            "line": " dist\\mdl\\bardia.js:535"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:510"
+            "line": " dist\\mdl\\bardia.js:543"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:578"
+            "line": " dist\\mdl\\bardia.js:611"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:646"
+            "line": " dist\\mdl\\bardia.js:679"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:746"
+            "line": " dist\\mdl\\bardia.js:779"
+        },
+        {
+            "message": "Missing item type\nz inputa do beana",
+            "line": " dist\\mdl\\bardia.js:945"
+        },
+        {
+            "message": "Missing item type\nz beana do inputa",
+            "line": " dist\\mdl\\bardia.js:955"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:995"
+            "line": " dist\\mdl\\bardia.js:975"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1034"
+            "line": " dist\\mdl\\bardia.js:1014"
+        },
+        {
+            "message": "Missing item type",
+            "line": " dist\\mdl\\bardia.js:1039"
+        },
+        {
+            "message": "Missing item type",
+            "line": " dist\\mdl\\bardia.js:1075"
+        },
+        {
+            "message": "Missing item type",
+            "line": " dist\\mdl\\bardia.js:1270"
+        },
+        {
+            "message": "Missing item type",
+            "line": " dist\\mdl\\bardia.js:1275"
         }
     ]
 }

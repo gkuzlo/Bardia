@@ -37,6 +37,12 @@ bardia.dom.Element = bardia.oop.Class.create({
         } else if (jsonRoot.$_append) {
             this.domNode.innerHTML = jsonRoot.$_append;
         }
+
+        if (jsonRoot.$_props) {
+            for (prop in jsonRoot.$_props) {
+            	this.domNode[prop] = jsonRoot.$_props[prop];
+            }
+        }
         
         if (jsonRoot.$_on) {
             for (eventName in jsonRoot.$_on) {
@@ -53,8 +59,16 @@ bardia.dom.Element = bardia.oop.Class.create({
     insert: function(subElement) {
         try {
             if (subElement) {
-                this.domNode.appendChild(subElement.dom());
-                this.children.push(subElement);
+            	if (subElement.dom) {
+            		this.domNode.appendChild(subElement.dom());
+            		this.children.push(subElement);
+            	} else if ((typeof subElement) == 'string') {
+            		var element = document.createTextNode(subElement);
+            		this.domNode.appendChild(element);
+            	} else if ((typeof subElement) == 'number') {
+            		var element = document.createTextNode(subElement);
+            		this.domNode.appendChild(element);
+            	}                   
             }
         } catch (e) {
             alert("insert: subElement=" + subElement + " " + e);
@@ -68,7 +82,7 @@ bardia.dom.Element = bardia.oop.Class.create({
             this.domNode.removeChild(this.domNode.childNodes[0]);
         }
 
-        if (element)
+        if (element) 
         this.insert(element);
     },
 

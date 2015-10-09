@@ -52,15 +52,21 @@
 }
 
 .form-curtain {
-    position:absolute; top:0px; left:0px; bottom:0px; width:0px;
-    background: rgba(0,0,0,0.5);
-    -webkit-transition: width 0.5s; /* Safari */
-    transition: width 0.5s;
+    position:absolute; top:0px; left:0px; bottom:0px; border:0px; width:100%; overflow:hidden; 
+    background: rgba(0,0,0,0.1);
+    
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
 }
 
 .form-details-right {
-    position:absolute; top:0px; left:0px; bottom:0px; width:0px;
-    background: white; border:0px solid lightGrey; border-width:0px 1px 0px 0px;
-    -webkit-transition: width 0.5s; /* Safari */
-    transition: width 0.5s;
+    position:absolute; top:0px; left:0px; bottom:0px;
+    background: white; border:0px;
+    
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
 } 
