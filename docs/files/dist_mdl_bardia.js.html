@@ -240,12 +240,24 @@ bardia.dom.Element = bardia.oop.Class.create({
 
     find: function(id) {
         var result = null;
-        result = this.domNode.querySelector(&quot;#&quot; + id);
+        try {
+        	result = this.domNode.querySelector(&quot;#&quot; + id);
+        } catch (e) {
+        	alert(e + &quot;   &quot; + id);
+        }
         if (result !== null) {
             return result.wrapper;
         } else {
             return null;   
         }
+    },
+    
+    addClassName: function(className) {
+    	this.dom().className = this.dom().className + &quot; &quot; + className;
+    },
+    
+    removeClassName: function(className) {
+    	this.dom().className = this.dom().className.replace(className, &quot;&quot;);
     }
 });
 /**
@@ -277,18 +289,38 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
 
     formatDateYYYYMMDD: function(date) {
     	var result = &quot;&quot;;
-    		result = date.getYear() + &quot;-&quot; + (date.getMonth() + 1) + &quot;-&quot; + date.getDate(); 
+    		result = date.getFullYear() + &quot;-&quot; + this.formatMM((date.getMonth() + 1)) + &quot;-&quot; + this.formatDD(date.getDate()); 
     	return result;
     },
     
     parseDate: function() {
     	
+    },
+    
+    formatMM: function(month) {
+    	if (month &lt;= 9) {
+    		return &quot;0&quot; + month;
+    	} else {
+    		return &quot;&quot; + month;
+    	}
+    },
+    
+    formatDD: function(day) {
+    	if (day &lt;= 9) {
+    		return &quot;0&quot; + day;
+    	} else {
+    		return &quot;&quot; + day;
+    	}
+    },
+    
+    createFormatYYYYMMDD: function(time) {
+    	return this.formatDateYYYYMMDD(new Date(time));
     }
 });
 
 bardia.utils.DateUtils.pattern = &quot;&quot;;
 bardia.layout = {
-}
+};
 /**
  * @class bardia.layout.BorderLayout
  * @constructor
@@ -306,7 +338,7 @@ var layout = new bardia.layout.BorderLayout({
 bardia.layout.BorderLayout = bardia.oop.Class.create({
 
 	initialize: function(config) {
-        this.config = config;
+		bardia.oop.Class.extend(this, bardia.oop.Class.extend({}, config));
         
         this.render();
 	},
@@ -319,58 +351,58 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
         var centerLeft = 0;
         var centerRight = 0;
 
-        if (this.config.north !== undefined) {
-            centerTop = h.config.north.height || 50;
+        if (this.north !== undefined) {
+            centerTop = h.north.height || 50;
 
             var north = {
                 $_tag: &quot;div&quot;,
                 class: &quot;border-layout-north&quot;,
-                style: &quot;height:&quot; + centerTop + &quot;px; background-color:&quot; + (h.config.north.fill || &quot;transparent&quot;)
+                style: &quot;height:&quot; + centerTop + &quot;px; background-color:&quot; + (h.north.fill || &quot;transparent&quot;)
             }
 
-            this.config.inside.insert($_element(north));
+            this.inside.insert($_element(north));
         }
         
-        if (this.config.south !== undefined) {
-            centerBottom = this.config.south.height || 50;
+        if (this.south !== undefined) {
+            centerBottom = this.south.height || 50;
 
             var south = {
                 $_tag: &quot;div&quot;,
                 class: &quot;border-layout-south&quot;,
-                style: &quot;height:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.config.south.fill || &quot;transparent&quot;)
+                style: &quot;height:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.south.fill || &quot;transparent&quot;)
             };
             
-            this.config.inside.insert($_element(south));
+            this.inside.insert($_element(south));
         }
         
-        if (this.config.west !== undefined) {
-            centerLeft = this.config.west.width || 50;
+        if (this.west !== undefined) {
+            centerLeft = this.west.width || 50;
             
             h.west = $_element({
                 $_tag: &quot;div&quot;,
-                style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; left:0px; width:&quot; + centerLeft + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.config.west.fill || &quot;transparent&quot;)
+                style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; left:0px; width:&quot; + centerLeft + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.west.fill || &quot;transparent&quot;)
             });
 
-            h.config.inside.insert(h.west);
+            h.inside.insert(h.west);
         }
         
-        if (this.config.east !== undefined) {
-            centerRight = this.config.east.width || 50;
+        if (this.east !== undefined) {
+            centerRight = this.east.width || 50;
 
             h.east = $_element({
                 $_tag: &quot;div&quot;,
-                style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; right:0px; width:&quot; + centerRight + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.config.east.fill || &quot;transparent&quot;)
+                style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; right:0px; width:&quot; + centerRight + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.east.fill || &quot;transparent&quot;)
             });
 
-            this.config.inside.insert(h.east);
+            this.inside.insert(h.east);
         }
 
         h.center = $_element({
             $_tag: &quot;div&quot;,
-            style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; left:&quot; + centerLeft + &quot;px; right:&quot; + centerRight + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.config.fill || &quot;transparent&quot;)
+            style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; left:&quot; + centerLeft + &quot;px; right:&quot; + centerRight + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.fill || &quot;transparent&quot;)
         });
 
-        h.config.inside.insert(h.center);
+        h.inside.insert(h.center);
     },
     /**
      * @method getNorth()
@@ -494,15 +526,17 @@ bardia.layout.Panel = bardia.oop.Class.create({
     setTabs: function(tabs) {
         var h = this;
 
-        if (!tabs) return;
-
-        h.prepareHeaderTabs(tabs);
-        h.prepareContentTabs(tabs);
+        h.prepareHeaderTabs(tabs || []);
+        h.prepareContentTabs(tabs || []);
     },
     
     prepareHeaderTabs: function(tabs) {
         var h = this;
-        
+
+        if ((tabs || []).length &lt;= 0) {
+        	return;
+        }
+
         if (h.root.find(&quot;header-tabs&quot;) !== null) {
             h.root.find(&quot;header-tabs&quot;).update();
         } else {
@@ -605,6 +639,124 @@ bardia.layout.Panel = bardia.oop.Class.create({
 	            }]
 	        }));
     	});
+    }
+});
+bardia.layout.BreadCrumb = bardia.oop.Class.create({
+    
+    initialize: function(config) {
+    	bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+    		tabs: [],
+    		addedTabs: [],
+    		serial: &quot;S_&quot; + (Math.random()*1000000).toFixed(0),
+    	}, config));
+    	
+    	this.render();
+    },
+    
+    render: function() {
+        var h = this;
+
+        h.root = h.prepareRoot();
+        h.inside.update(h.root);
+    },
+
+    addItem: function(tab) {
+    	var h = this;
+
+    	var headerLink = $_element({
+    		$_tag: &quot;div&quot;,
+    		class: &quot;breadcrumb-link&quot;,
+    		$_append: tab.name,
+    		$_on: {
+    			&quot;click&quot;: function(e) {
+    				h.selectItem(e.target.wrapper);
+    			}
+    		}
+    	});
+    	headerLink.tab = tab;
+    	
+    	h.root.find(h.id(&quot;header&quot;)).insert(headerLink);
+    	
+    	var content = $_element({
+    		$_tag: &quot;div&quot;,
+    		class: &quot;breadcrumb-content&quot;
+    	});
+    	h.root.find(h.id(&quot;contents&quot;)).insert(content);
+    	
+    	headerLink.content = content;
+    	
+    	if (h.lastItem) {
+			h.lastItem.nextItem = headerLink;
+    	} 
+    	
+    	h.selectItem(headerLink);
+    },
+    
+    selectItem: function(wrappedElement) {
+    	var h = this;
+
+    	if (h.lastItem) {		
+    		h.lastItem.removeClassName(&quot;is-active&quot;);
+    		h.lastItem.content.removeClassName(&quot;is-active&quot;);
+    	}
+
+    	h.removeAllNextItems(wrappedElement);
+
+    	h.lastItem = wrappedElement;
+
+    	wrappedElement.addClassName(&quot;is-active&quot;);
+    	wrappedElement.content.addClassName(&quot;is-active&quot;);
+
+		if (wrappedElement.tab.onActivate &amp;&amp; !wrappedElement.activated) {
+			wrappedElement.activated = true;
+			wrappedElement.tab.onActivate(wrappedElement.content);
+		}
+    },
+
+    removeAllNextItems: function(headerLink) {    	
+    	var selectedLink = headerLink;
+    	
+    	var toBeRemoved = [];
+    	while (selectedLink.nextItem) {
+    		toBeRemoved.push(selectedLink.nextItem);
+    		selectedLink = selectedLink.nextItem;
+    	}
+
+    	headerLink.nextItem = null;
+    	delete headerLink.nextItem;
+    	
+    	toBeRemoved.forEach(function(header) {
+    		header.dom().remove();
+    		header.content.dom().remove();
+    		
+    		if (header.nextItem) {
+    			delete header.nextItem;
+    		}
+    	});
+    },
+
+    prepareRoot: function() {
+    	var h = this;
+    	
+        var json = {
+            $_tag: &quot;div&quot;, 
+            class: &quot;breadcrumb-container&quot;,
+            $_append: [{
+                $_tag: &quot;main&quot;, 
+                class: &quot;breadcrumb-contents&quot;, 
+                id: h.id(&quot;contents&quot;),
+            }, {
+                $_tag: &quot;div&quot;, 
+                class: &quot;breadcrumb-header breadcrumb-bg&quot;, 
+                id: h.id(&quot;header&quot;),
+            }]
+        };
+
+        return $_element(json);
+    },
+    
+    id: function(name) {
+    	return this.serial + name;
     }
 });
 bardia.list = {
@@ -754,7 +906,9 @@ bardia.grid.Grid = bardia.oop.Class.create({
     detailsWidth: &quot;400px&quot;,
 
     initialize: function(config) {
-        bardia.oop.Class.extend(this, config || {});
+        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+        	title: &quot;Insert tile here. . .&quot;
+        }, config));
         
         this.render();
     },
@@ -763,57 +917,81 @@ bardia.grid.Grid = bardia.oop.Class.create({
      */
     render: function() {
         var h = this;
-        
-        h.inside.update();
-        
-        h.panel = new bardia.layout.Panel({
-            inside: h.inside,
-            title: &quot;Grid&quot;
-        });
 
         h.root = $_element({
-            $_tag: &quot;div&quot;,
-            class: &quot;grid-content&quot;,
-            $_append: [{
-                $_tag: &quot;div&quot;,
-                class: &quot;grid-headers&quot;,
-                id: &quot;grid-headers&quot;,
-                $_append: h.columns.map(function(column) {
-                    return {
-                        $_tag: &quot;div&quot;,
-                        class: &quot;grid-header&quot;,
-                        $_append: column.name
-                    }
-                })
-            }, {
-                $_tag: &quot;div&quot;,
-                class: &quot;grid-rows&quot;,
-                id: &quot;grid-rows&quot;
-            }, {
-                $_tag: &quot;div&quot;,
-                class: &quot;grid-curtain&quot;,
-                id: &quot;grid-curtain&quot;,
-                $_on: {
-                    &quot;click&quot;: function() {
-                        h.closeDetails();
-                    }
-                },
-                $_append: [{
-                    $_tag: &quot;div&quot;,
-                    class: &quot;grid-details-right&quot;,
-                    id: &quot;grid-details-right&quot;
-                }]
-            }]
+        	$_tag: &quot;div&quot;,
+        	class: &quot;grid-container&quot;,
+        	$_append:[{
+        		$_tag: &quot;div&quot;,
+        		id: &quot;toolbar&quot;,
+        		class: &quot;grid-top grid-bg&quot;,
+        	}, {
+	            $_tag: &quot;div&quot;,
+	            class: &quot;grid-content&quot;,
+	            $_append: [{
+	                $_tag: &quot;div&quot;,
+	                class: &quot;grid-headers&quot;,
+	                id: &quot;grid-headers&quot;,
+	                $_append: h.columns.map(function(column) {
+	                    return {
+	                        $_tag: &quot;div&quot;,
+	                        class: &quot;grid-header&quot;,
+	                        $_append: column.name
+	                    }
+	                })
+	            }, {
+	                $_tag: &quot;div&quot;,
+	                class: &quot;grid-rows&quot;,
+	                id: &quot;grid-rows&quot;
+	            }, {
+	                $_tag: &quot;div&quot;,
+	                class: &quot;grid-curtain&quot;,
+	                id: &quot;grid-curtain&quot;,
+	                $_on: {
+	                    &quot;click&quot;: function() {
+	                        h.closeDetails();
+	                    }
+	                },
+	                $_append: [{
+	                    $_tag: &quot;div&quot;,
+	                    class: &quot;grid-details-right&quot;,
+	                    id: &quot;grid-details-right&quot;
+	                }]
+	            }]
+        	}]
         });
 
-        h.panel.getContent().insert(h.root);
-
-        $_upgradeElement(h.root);
+        h.inside.update(h.root);
+        
+        h.setButtons();
+    },
+    
+    setButtons: function() {
+    	var h = this;
+    	if (h.buttons) {
+    		h.buttons.forEach(function(button) {
+    			h.root.find(&quot;toolbar&quot;).insert($_element({
+    				$_tag: &quot;button&quot;,
+    				class: &quot;mdl-button mdl-js-button mdl-button--icon&quot;,
+    				title: button.name,
+    				$_append: [{
+    					$_tag: &quot;i&quot;,
+    					class: &quot;material-icons&quot;,
+    					$_append: button.icon
+    				}],
+    				$_on: {
+    					&quot;click&quot;: function(e) {
+    						alert(button.icon);
+    					}
+    				}
+    			}));
+    		});
+    	}
     },
 
-    fetch(model) {
+    fetch: function(model) {
         var h = this;
-        
+
         var rowsDiv = h.root.find(&quot;grid-rows&quot;);
         rowsDiv.update();
 
@@ -823,19 +1001,24 @@ bardia.grid.Grid = bardia.oop.Class.create({
                 class: &quot;grid-row&quot;,
                 $_on: {
                     &quot;click&quot;: function(e) {
-                        h.openDetails();
+                        h.onClick(rowDiv);
                     }
                 }
             });
             rowsDiv.insert(rowDiv);
-            
-            $_upgradeElement(rowDiv);
+        	rowDiv.bean = row;
 
             h.columns.forEach(function(column) {
                 rowDiv.insert($_element({
                     $_tag: &quot;td&quot;,
                     class: &quot;grid-cell&quot;,
-                    $_append: row[column.property]
+                    $_append: (function() {
+                    	if (column.render) {
+                    		return column.render(rowDiv);
+                    	} else {
+                        	return eval(&quot;rowDiv.bean.&quot; + column.property);
+                    	}
+                    })()
                 }));
             });
         });

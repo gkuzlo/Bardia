@@ -27,11 +27,12 @@ module.exports = function(grunt) {
 
                     "src/bardia/$_variants/$_mdl/utils/$_utils.js",
                     "src/bardia/$_variants/$_mdl/utils/DateUtils.js",
-                    
+
                     "src/bardia/$_variants/$_mdl/layout/$_layout.js",
                     "src/bardia/$_variants/$_mdl/layout/BorderLayout.js",
                     "src/bardia/$_variants/$_mdl/layout/Material.js",
                     "src/bardia/$_variants/$_mdl/layout/Panel.js",
+                    "src/bardia/$_variants/$_mdl/layout/BreadCrumb.js",
 
                     "src/bardia/$_variants/$_mdl/list/$_list.js",
                     "src/bardia/$_variants/$_mdl/list/List.js",

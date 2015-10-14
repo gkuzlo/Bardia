@@ -122,8 +122,19 @@
 	-o-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;
 } 
+
+.grid-container {
+	position:absolute; top:0px; left:0px; right:0px; bottom:0px;
+}
+
+.grid-top {
+	position:absolute; top:0px; left:0px; right:0px; height:48px;
+	line-height:48px; color:white; padding:0px 20px 0px 20px; 
+	display:flex; flex-direction:row; align-items:center;
+}
+
 .grid-content {
-    position:absolute; top:0px; left:0px; right:0px; bottom:0px;
+	position:absolute; top:48px; left:0px; right:0px; bottom:0px;
 }
 
 .grid-headers {
@@ -163,11 +174,82 @@
     background: white; border:0px solid lightGrey; border-width:0px 1px 0px 0px;
     -webkit-transition: width 0.5s; /* Safari */
     transition: width 0.5s;
-} 
+}
+
+.grid-bg {
+	background:#3f51b5
+}
 .border-layout-north {
     position:absolute; overflow:hidden; top:0px; left:0px; right:0px; 
 }
 
 .border-layout-south {
     position:absolute; overflow:hidden; left:0px; right:0px; bottom:0px; 
+}
+
+.mdl-layout__tab.is-active::after {
+    height: 2px;
+    width: 100%;
+    display: block;
+    content: " ";
+    bottom: 0px;
+    left: 0px;
+    position: absolute;
+    background: green none repeat scroll 0% 0%;
+    animation: 0.2s cubic-bezier(0.4, 0, 0.4, 1) 0.01s alternate forwards 1 running border-expand;
+    transition: all 1s cubic-bezier(0.4, 0, 1, 1) 0s;
+}
+
+.breadcrumb-container {
+	position:absolute; top:0px; left:0px; width:100%; height:100%
+}
+
+.breadcrumb-header {
+	position:absolute; top:0px; left:0px; width:100%; height:48px;
+	display:flex; flex-direction:row; 
+	z-index:3;
+	box-shadow:0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.breadcrumb-link {
+	position:relative; line-height:48px; font-size:14px; color:white; cursor:pointer; padding:0px 20px 0px 20px; margin:0px; border:0px;
+	text-decoration:none;
+}
+
+@keyframes breadcrumb-marker {
+    0%   {background-color: transparent;}
+    100% {background-color: #FF4081;}
+}
+
+.breadcrumb-link.is-active::after {
+	position:absolute; content:''; height:2px; right:0px; left:0px; bottom:0px; background-color: #FF4081;
+	
+	animation-name:example;
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+	
+    -webkit-animation-name: breadcrumb-marker; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 1.0s; /* Chrome, Safari, Opera */
+    animation-name: breadcrumb-marker;
+    animation-duration: 1.0s;
+}
+
+.breadcrumb-contents {
+	position:absolute; top:48px; left:0px; right:0px; bottom:0px;
+}
+
+.breadcrumb-content {
+	position:absolute; top:0px; left:0px; right:0px; bottom:0px;
+	display: none;
+}
+
+.breadcrumb-content.is-active {
+	position:absolute; top:0px; left:0px; right:0px; bottom:0px;
+	display:block;
+}
+
+.breadcrumb-bg {
+	background:#3f51b5
 }

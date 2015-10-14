@@ -5,3 +5,16 @@
 .border-layout-south {
     position:absolute; overflow:hidden; left:0px; right:0px; bottom:0px; 
 }
+
+.mdl-layout__tab.is-active::after {
+    height: 2px;
+    width: 100%;
+    display: block;
+    content: " ";
+    bottom: 0px;
+    left: 0px;
+    position: absolute;
+    background: green none repeat scroll 0% 0%;
+    animation: 0.2s cubic-bezier(0.4, 0, 0.4, 1) 0.01s alternate forwards 1 running border-expand;
+    transition: all 1s cubic-bezier(0.4, 0, 1, 1) 0s;
+}

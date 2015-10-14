@@ -92,11 +92,23 @@ bardia.dom.Element = bardia.oop.Class.create({
 
     find: function(id) {
         var result = null;
-        result = this.domNode.querySelector("#" + id);
+        try {
+        	result = this.domNode.querySelector("#" + id);
+        } catch (e) {
+        	alert(e + "   " + id);
+        }
         if (result !== null) {
             return result.wrapper;
         } else {
             return null;   
         }
+    },
+    
+    addClassName: function(className) {
+    	this.dom().className = this.dom().className + " " + className;
+    },
+    
+    removeClassName: function(className) {
+    	this.dom().className = this.dom().className.replace(className, "");
     }
 });

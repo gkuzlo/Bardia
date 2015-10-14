@@ -28,15 +28,17 @@ bardia.layout.Panel = bardia.oop.Class.create({
     setTabs: function(tabs) {
         var h = this;
 
-        if (!tabs) return;
-
-        h.prepareHeaderTabs(tabs);
-        h.prepareContentTabs(tabs);
+        h.prepareHeaderTabs(tabs || []);
+        h.prepareContentTabs(tabs || []);
     },
     
     prepareHeaderTabs: function(tabs) {
         var h = this;
-        
+
+        if ((tabs || []).length <= 0) {
+        	return;
+        }
+
         if (h.root.find("header-tabs") !== null) {
             h.root.find("header-tabs").update();
         } else {

@@ -79,6 +79,13 @@ cesip.MainView = bardia.oop.Class.create({
                     }
                 }
             }, {
+            	name: "Dane rozkładowe",
+            	onActivate: function(html) {
+            		new cesip.schedules.SchedulesData({
+            			inside: html
+            		});
+            	}
+            }, {
                 name: "Form",
                 onActivate: function(html) {
                     try {
