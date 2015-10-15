@@ -17,7 +17,11 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
 	initialize: function(config) {
 		bardia.oop.Class.extend(this, bardia.oop.Class.extend({}, config));
         
-        this.render();
+		try {
+			this.render();
+		} catch (e) {
+			alert("BorderLayout.render: " + e);
+		}
 	},
 
     render: function() {
@@ -28,79 +32,79 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
         var centerLeft = 0;
         var centerRight = 0;
 
-        if (this.north !== undefined) {
+        if (h.north !== undefined) {
             centerTop = h.north.height || 50;
-
-            var north = {
+            
+            h.northElement = $_element({
                 $_tag: "div",
                 class: "border-layout-north",
                 style: "height:" + centerTop + "px; background-color:" + (h.north.fill || "transparent")
-            }
+            });
 
-            this.inside.insert($_element(north));
+            this.inside.insert(h.northElement);
         }
         
         if (this.south !== undefined) {
             centerBottom = this.south.height || 50;
 
-            var south = {
+            h.southElement = $_element({
                 $_tag: "div",
                 class: "border-layout-south",
                 style: "height:" + centerBottom + "px; background-color:" + (h.south.fill || "transparent")
-            };
+            });
             
-            this.inside.insert($_element(south));
+            this.inside.insert(h.southElement);
         }
         
         if (this.west !== undefined) {
             centerLeft = this.west.width || 50;
             
-            h.west = $_element({
+            h.westElement = $_element({
                 $_tag: "div",
                 style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:0px; width:" + centerLeft + "px; bottom:" + centerBottom + "px; background-color:" + (h.west.fill || "transparent")
             });
 
-            h.inside.insert(h.west);
+            h.inside.insert(h.westElement);
         }
         
         if (this.east !== undefined) {
             centerRight = this.east.width || 50;
 
-            h.east = $_element({
+            h.eastElement = $_element({
                 $_tag: "div",
                 style: "position:absolute; overflow:hidden; top:" + centerTop + "px; right:0px; width:" + centerRight + "px; bottom:" + centerBottom + "px; background-color:" + (h.east.fill || "transparent")
             });
 
-            this.inside.insert(h.east);
+            this.inside.insert(h.eastElement);
         }
 
-        h.center = $_element({
+        h.centerElement = $_element({
             $_tag: "div",
             style: "position:absolute; overflow:hidden; top:" + centerTop + "px; left:" + centerLeft + "px; right:" + centerRight + "px; bottom:" + centerBottom + "px; background-color:" + (h.fill || "transparent")
         });
 
-        h.inside.insert(h.center);
+        h.inside.insert(h.centerElement);
     },
     /**
      * @method getNorth()
      * @return {bardia.dom.Element} instance of bradia dom element wrapper
      */
     getNorth: function() {
-        return this.north;
+        return this.northElement;
     },
     getWest: function() {
-        return this.west;
+        return this.westElement;
     },
     getEast: function() {
-        return this.east;
+        return this.eastElement;
     },
     getSouth: function() {
-        return this.south;
+        return this.southElement;
     },
     getCenter: function() {
-        return this.center;
+        return this.centerElement;
     },
     getDefault: function() {
-        return this.center;
-    }
+        return this.centerElement;
+    },
 });

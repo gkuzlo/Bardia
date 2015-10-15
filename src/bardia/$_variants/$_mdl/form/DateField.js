@@ -142,8 +142,6 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     prepareDaysRows: function() {
     	var h = this;
     	
-    	var today = new Date();
-
     	var result = [];
 
     	var clonedDate = new Date(h.date.getTime());
@@ -185,7 +183,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     			},
     			$_on: {
     				click: function(e) {
-    					h.updateBeanProperty(e.target.date);
+    					h.updateBeanProperty(e.target.date.getTime());
     					h.updateInputValue(h.form.getBean());
     					h.form.closeDetails();
     				}
@@ -200,7 +198,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     updateInputValue: function(bean) {
         var h = this;
 
-        h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");
+        h.root.find(h.property).dom().value = bardia.form.DateField.DU.createFormatYYYYMMDD(eval("bean." + h.property));
     },
 
     setWeekday: function() {

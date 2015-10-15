@@ -7,7 +7,26 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
 
     formatDateYYYYMMDD: function(date) {
     	var result = "";
-    		result = date.getFullYear() + "-" + this.formatMM((date.getMonth() + 1)) + "-" + this.formatDD(date.getDate()); 
+    	try {
+    		result = date.getFullYear() + "-" + this.formatMM((date.getMonth() + 1)) + "-" + this.formatDD(date.getDate());
+    	} catch (e) {
+    		result = "";
+    	}
+    	return result;
+    },
+    
+    daySecondsToHHMM: function(daySeconds) {
+    	var result = "";
+    	
+    		if (daySeconds) {
+	    		var hours = (daySeconds - (daySeconds % 3600)) / 3600;
+	    		
+	    		var restSeconds = (daySeconds - hours * 3600);
+	    		var minutes = (restSeconds - (restSeconds % 60)) / 60;
+	    		
+	    		result = this.formatHH(hours) + ":" + this.formatMM(minutes);
+    		}
+    		
     	return result;
     },
     
@@ -31,8 +50,23 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	}
     },
     
+    formatHH: function(hour) {
+    	if (hour <= 9) {
+    		return "0" + hour;
+    	} else {
+    		return "" + hour;
+    	}
+    },
+    
     createFormatYYYYMMDD: function(time) {
-    	return this.formatDateYYYYMMDD(new Date(time));
+    	var result = "";
+    	try {
+    		if (time)
+    			result = this.formatDateYYYYMMDD(new Date(time));	
+    	} catch (e) {
+    		alert(e);
+    	}
+    	return result;
     }
 });
 

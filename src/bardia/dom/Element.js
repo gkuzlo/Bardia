@@ -30,12 +30,14 @@ bardia.dom.Element = bardia.oop.Class.create({
             }
         }
 
-        if (jsonRoot.$_append && jsonRoot.$_append.forEach) {
+        if (jsonRoot.$_append && jsonRoot.$_append.forEach) {		// kolekcja obiektow w JSON
             jsonRoot.$_append.forEach(function(child) {
                 h.createSubElement(child);
             });
+        } else if (jsonRoot.$_append && jsonRoot.$_append.$_tag) { // jeden obiekt w json
+        	h.createSubElement(jsonRoot.$_append);
         } else if (jsonRoot.$_append) {
-            this.domNode.innerHTML = jsonRoot.$_append;
+            this.domNode.innerHTML = jsonRoot.$_append;				// zwykly tekst
         }
 
         if (jsonRoot.$_props) {

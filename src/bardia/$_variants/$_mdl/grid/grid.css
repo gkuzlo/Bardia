@@ -6,7 +6,8 @@
 .grid-top {
 	position:absolute; top:0px; left:0px; right:0px; height:48px;
 	line-height:48px; color:white; padding:0px 20px 0px 20px; 
-	display:flex; flex-direction:row; align-items:center;
+	display:flex; flex-direction:row; align-items:center; z-index:3;
+	box-shadow:0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);	
 }
 
 .grid-content {
@@ -30,11 +31,26 @@
 
 .grid-row {
     position:relative; width:100%; border:1px solid lightGrey; height:40px; display:flex;
-    border-width:0px 0px 1px 0px;
+    border-width:0px 0px 1px 0px; background-color:white;
+}
+
+@keyframes highlight-row {
+    0%   {background-color: transparent;}
+    50% {background-color: #e0e0e0;}
+    100% {background-color: #f0f0f0;}
+}
+
+.grid-row:hover {
+	background-color:#f0f0f0; cursor:pointer;
+	
+    -webkit-animation-name: highlight-row; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 0.3s; /* Chrome, Safari, Opera */
+    animation-name: highlight-row;
+    animation-duration: 0.3s;
 }
 
 .grid-cell {
-    position:relative; border:0px; width:200px; background-color:white; line-height:40px;
+    position:relative; border:0px; width:200px; background-color:transparent; line-height:40px;
     padding:0px 5px 0px 5px;
 }
 

@@ -79,7 +79,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     				}],
     				$_on: {
     					"click": function(e) {
-    						alert(button.icon);
+    						button.onClick();
     					}
     				}
     			}));

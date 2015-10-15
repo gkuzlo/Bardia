@@ -178,12 +178,14 @@ bardia.dom.Element = bardia.oop.Class.create({
             }
         }
 
-        if (jsonRoot.$_append &amp;&amp; jsonRoot.$_append.forEach) {
+        if (jsonRoot.$_append &amp;&amp; jsonRoot.$_append.forEach) {		// kolekcja obiektow w JSON
             jsonRoot.$_append.forEach(function(child) {
                 h.createSubElement(child);
             });
+        } else if (jsonRoot.$_append &amp;&amp; jsonRoot.$_append.$_tag) { // jeden obiekt w json
+        	h.createSubElement(jsonRoot.$_append);
         } else if (jsonRoot.$_append) {
-            this.domNode.innerHTML = jsonRoot.$_append;
+            this.domNode.innerHTML = jsonRoot.$_append;				// zwykly tekst
         }
 
         if (jsonRoot.$_props) {
@@ -289,7 +291,26 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
 
     formatDateYYYYMMDD: function(date) {
     	var result = &quot;&quot;;
-    		result = date.getFullYear() + &quot;-&quot; + this.formatMM((date.getMonth() + 1)) + &quot;-&quot; + this.formatDD(date.getDate()); 
+    	try {
+    		result = date.getFullYear() + &quot;-&quot; + this.formatMM((date.getMonth() + 1)) + &quot;-&quot; + this.formatDD(date.getDate());
+    	} catch (e) {
+    		result = &quot;&quot;;
+    	}
+    	return result;
+    },
+    
+    daySecondsToHHMM: function(daySeconds) {
+    	var result = &quot;&quot;;
+    	
+    		if (daySeconds) {
+	    		var hours = (daySeconds - (daySeconds % 3600)) / 3600;
+	    		
+	    		var restSeconds = (daySeconds - hours * 3600);
+	    		var minutes = (restSeconds - (restSeconds % 60)) / 60;
+	    		
+	    		result = this.formatHH(hours) + &quot;:&quot; + this.formatMM(minutes);
+    		}
+    		
     	return result;
     },
     
@@ -313,8 +334,23 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	}
     },
     
+    formatHH: function(hour) {
+    	if (hour &lt;= 9) {
+    		return &quot;0&quot; + hour;
+    	} else {
+    		return &quot;&quot; + hour;
+    	}
+    },
+    
     createFormatYYYYMMDD: function(time) {
-    	return this.formatDateYYYYMMDD(new Date(time));
+    	var result = &quot;&quot;;
+    	try {
+    		if (time)
+    			result = this.formatDateYYYYMMDD(new Date(time));	
+    	} catch (e) {
+    		alert(e);
+    	}
+    	return result;
     }
 });
 
@@ -340,7 +376,11 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
 	initialize: function(config) {
 		bardia.oop.Class.extend(this, bardia.oop.Class.extend({}, config));
         
-        this.render();
+		try {
+			this.render();
+		} catch (e) {
+			alert(&quot;BorderLayout.render: &quot; + e);
+		}
 	},
 
     render: function() {
@@ -351,81 +391,81 @@ bardia.layout.BorderLayout = bardia.oop.Class.create({
         var centerLeft = 0;
         var centerRight = 0;
 
-        if (this.north !== undefined) {
+        if (h.north !== undefined) {
             centerTop = h.north.height || 50;
-
-            var north = {
+            
+            h.northElement = $_element({
                 $_tag: &quot;div&quot;,
                 class: &quot;border-layout-north&quot;,
                 style: &quot;height:&quot; + centerTop + &quot;px; background-color:&quot; + (h.north.fill || &quot;transparent&quot;)
-            }
+            });
 
-            this.inside.insert($_element(north));
+            this.inside.insert(h.northElement);
         }
         
         if (this.south !== undefined) {
             centerBottom = this.south.height || 50;
 
-            var south = {
+            h.southElement = $_element({
                 $_tag: &quot;div&quot;,
                 class: &quot;border-layout-south&quot;,
                 style: &quot;height:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.south.fill || &quot;transparent&quot;)
-            };
+            });
             
-            this.inside.insert($_element(south));
+            this.inside.insert(h.southElement);
         }
         
         if (this.west !== undefined) {
             centerLeft = this.west.width || 50;
             
-            h.west = $_element({
+            h.westElement = $_element({
                 $_tag: &quot;div&quot;,
                 style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; left:0px; width:&quot; + centerLeft + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.west.fill || &quot;transparent&quot;)
             });
 
-            h.inside.insert(h.west);
+            h.inside.insert(h.westElement);
         }
         
         if (this.east !== undefined) {
             centerRight = this.east.width || 50;
 
-            h.east = $_element({
+            h.eastElement = $_element({
                 $_tag: &quot;div&quot;,
                 style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; right:0px; width:&quot; + centerRight + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.east.fill || &quot;transparent&quot;)
             });
 
-            this.inside.insert(h.east);
+            this.inside.insert(h.eastElement);
         }
 
-        h.center = $_element({
+        h.centerElement = $_element({
             $_tag: &quot;div&quot;,
             style: &quot;position:absolute; overflow:hidden; top:&quot; + centerTop + &quot;px; left:&quot; + centerLeft + &quot;px; right:&quot; + centerRight + &quot;px; bottom:&quot; + centerBottom + &quot;px; background-color:&quot; + (h.fill || &quot;transparent&quot;)
         });
 
-        h.inside.insert(h.center);
+        h.inside.insert(h.centerElement);
     },
     /**
      * @method getNorth()
      * @return {bardia.dom.Element} instance of bradia dom element wrapper
      */
     getNorth: function() {
-        return this.north;
+        return this.northElement;
     },
     getWest: function() {
-        return this.west;
+        return this.westElement;
     },
     getEast: function() {
-        return this.east;
+        return this.eastElement;
     },
     getSouth: function() {
-        return this.south;
+        return this.southElement;
     },
     getCenter: function() {
-        return this.center;
+        return this.centerElement;
     },
     getDefault: function() {
-        return this.center;
-    }
+        return this.centerElement;
+    },
 });
 /**
 
@@ -496,149 +536,76 @@ bardia.layout.Material = (function() {
     
     return Material;
 })();
+/**
+ *
+ */
 bardia.layout.Panel = bardia.oop.Class.create({
-    
+
     initialize: function(config) {
-    	bardia.oop.Class.extend(this, config || {});
+        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+            title: &quot;Insert title here ...&quot;,
+            serial: &quot;S_&quot; + (Math.random()*1000000).toFixed(0),
+        }, config));
+
         this.render();
     },
-    
+
     render: function() {
         var h = this;
 
-        h.root = h.prepareRoot();
+        h.prepareRoot();
         h.inside.update(h.root);
-
-        h.setTabs(h.tabs);
-        h.setButtons((h.buttons || []));
-
-        $_upgradeElement(h.root);
+        
+        h.setButtons();
+    },
+    
+    setButtons: function() {
+    	var h = this;
+    	if (h.buttons) {
+    		h.buttons.forEach(function(button) {
+    			h.root.find(h.id(&quot;toolbar&quot;)).insert($_element({
+    				$_tag: &quot;button&quot;,
+    				class: &quot;mdl-button mdl-js-button mdl-button--icon&quot;,
+    				title: button.name,
+    				$_append: [{
+    					$_tag: &quot;i&quot;,
+    					class: &quot;material-icons&quot;,
+    					$_append: button.icon
+    				}],
+    				$_on: {
+    					&quot;click&quot;: function(e) {
+    						button.onClick();
+    					}
+    				}
+    			}));
+    		});
+    	}
     },
     
     getContent: function() {
-    	return this.root.find(&quot;contents&quot;);
-    },
-    
-    setTitle: function(title) {
-    	this.root.find(&quot;title&quot;).update(title);
-    },
-    
-    setTabs: function(tabs) {
-        var h = this;
-
-        h.prepareHeaderTabs(tabs || []);
-        h.prepareContentTabs(tabs || []);
-    },
-    
-    prepareHeaderTabs: function(tabs) {
-        var h = this;
-
-        if ((tabs || []).length &lt;= 0) {
-        	return;
-        }
-
-        if (h.root.find(&quot;header-tabs&quot;) !== null) {
-            h.root.find(&quot;header-tabs&quot;).update();
-        } else {
-            var header = h.root.find(&quot;header&quot;)
-            header.insert($_element({
-                $_tag: &quot;div&quot;, 
-                class: &quot;mdl-layout__tab-bar mdl-js-ripple-effect&quot;, 
-                id: &quot;header-tabs&quot;,
-            }));
-        }
-
-        tabs.forEach(function(tab, index) {
-            var tabHeader = $_element({
-                $_tag: &quot;a&quot;,
-                $_append: tab.name,
-                $_on: {
-                    &quot;click&quot;: function(e) {
-                        if (tab.onActivate &amp;&amp; !tab.activated) {
-                            setTimeout(function() {
-                                tab.onActivate(h.root.find(&quot;tab_&quot; + index));
-                                tab.activated = true;
-                            }, 500);
-                        }
-                    }
-                },
-                href: &quot;#tab_&quot; + index,
-                class: &quot;mdl-layout__tab&quot;,
-            });
-            h.root.find(&quot;header-tabs&quot;).insert(tabHeader);
-        });
-    },
-
-    prepareContentTabs: function(tabs) {
-        var h = this;
-
-        h.root.find(&quot;contents&quot;).update();
-
-        tabs.forEach(function(tab, index) {
-            var tabContent = $_element({
-                $_tag: &quot;section&quot;, class: &quot;mdl-layout__tab-panel&quot;, id: &quot;tab_&quot; + index,
-                style: &quot;position:absolute; height:100%; width:100%;&quot;
-            });
-            h.root.find(&quot;contents&quot;).insert(tabContent);
-        });
+    	return this.root.find(this.id(&quot;contents&quot;));
     },
 
     prepareRoot: function() {
         var h = this;
-
-        var json = {
-            $_tag: &quot;div&quot;, 
-            class: &quot;mdl-layout mdl-js-layout mdl-layout--fixed-header&quot;,
-            $_append: [{
-                $_tag: &quot;header&quot;, class: &quot;mdl-layout__header&quot;, id: &quot;header&quot;,
-                $_append: [{
-                    $_tag: &quot;div&quot;, class: &quot;mdl-layout__header-row&quot;,
-                    $_append: [{
-                        $_tag: &quot;span&quot;, class: &quot;mdl-layout-title&quot;, id: &quot;title&quot;,
-                        $_append: h.title
-                    }, {
-                        $_tag: &quot;div&quot;,
-                        class: &quot;mdl-layout-spacer&quot;,
-                    }, {
-                        $_tag: &quot;nav&quot;,
-                        id: &quot;buttons&quot;,
-                        class: &quot;mdl-navigation mdl-layout--large-screen-only&quot;,
-                    }]
-                }]
-            }, {
-                $_tag: &quot;main&quot;, class: &quot;mdl-layout__content&quot;, 
-                id: &quot;contents&quot;,
-                style: &quot;position:relative&quot;
-            }]
-        };
-
-        return $_element(json);
+        
+        h.root = $_element({
+        	$_tag: &quot;div&quot;,
+        	class: &quot;panel-container&quot;,
+        	$_append: [{
+        		$_tag: &quot;div&quot;,
+        		id: h.id(&quot;toolbar&quot;),
+        		class: &quot;panel-top panel-bg&quot;
+        	}, {
+        		$_tag: &quot;div&quot;,
+        		class: &quot;panel-content&quot;,
+        		id: h.id(&quot;contents&quot;)
+        	}]
+        });
     },
     
-    setButtons: function(buttons) {
-    	var h = this;
-
-    	buttons.forEach(function(button) {
-	    	h.root.find(&quot;buttons&quot;).insert($_element({
-	            $_tag: &quot;button&quot;,
-	            class: &quot;mdl-button mdl-js-button mdl-button--icon&quot;,
-	            $_on: {
-	            	&quot;click&quot;: function(e) {
-	            		alert(e);
-	            	}
-	            },
-	            $_append: [{
-	                $_tag: &quot;a&quot;,
-	                class: &quot;mdl-navigation__link&quot;,
-	                href: &quot;&quot;,
-	                $_append: [{
-	                    $_tag: &quot;i&quot;,
-	                    class: &quot;material-icons&quot;,
-	                    $_append: button.icon
-	                }]
-	            }]
-	        }));
-    	});
+    id: function(name) {
+    	return this.serial + name;
     }
 });
 bardia.layout.BreadCrumb = bardia.oop.Class.create({
@@ -748,6 +715,100 @@ bardia.layout.BreadCrumb = bardia.oop.Class.create({
             }, {
                 $_tag: &quot;div&quot;, 
                 class: &quot;breadcrumb-header breadcrumb-bg&quot;, 
+                id: h.id(&quot;header&quot;),
+            }]
+        };
+
+        return $_element(json);
+    },
+    
+    id: function(name) {
+    	return this.serial + name;
+    }
+});
+bardia.layout.Tabs = bardia.oop.Class.create({
+    
+    initialize: function(config) {
+    	bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+    		tabs: [],
+    		addedTabs: [],
+    		serial: &quot;S_&quot; + (Math.random()*1000000).toFixed(0),
+    	}, config));
+    	
+    	this.render();
+    },
+    
+    render: function() {
+        var h = this;
+
+        h.root = h.prepareRoot();
+        h.inside.update(h.root);
+
+        h.tabs.forEach(function(tab) {
+        	h.addItem(tab);
+        });
+    },
+
+    addItem: function(tab) {
+    	var h = this;
+
+    	var headerLink = $_element({
+    		$_tag: &quot;div&quot;,
+    		class: &quot;tabs-link&quot;,
+    		$_append: tab.name,
+    		$_on: {
+    			&quot;click&quot;: function(e) {
+    				h.selectItem(e.target.wrapper);
+    			}
+    		}
+    	});
+    	headerLink.tab = tab;
+    	
+    	h.root.find(h.id(&quot;header&quot;)).insert(headerLink);
+    	
+    	var content = $_element({
+    		$_tag: &quot;div&quot;,
+    		class: &quot;tabs-content&quot;
+    	});
+    	h.root.find(h.id(&quot;contents&quot;)).insert(content);
+    	
+    	headerLink.content = content;
+    	
+    	h.selectItem(headerLink);
+    },
+    
+    selectItem: function(wrappedElement) {
+    	var h = this;
+
+    	if (h.selectedItem) {		
+    		h.selectedItem.removeClassName(&quot;is-active&quot;);
+    		h.selectedItem.content.removeClassName(&quot;is-active&quot;);
+    	}
+    	
+    	h.selectedItem = wrappedElement;
+
+    	wrappedElement.addClassName(&quot;is-active&quot;);
+    	wrappedElement.content.addClassName(&quot;is-active&quot;);
+
+		if (wrappedElement.tab.onActivate &amp;&amp; !wrappedElement.activated) {
+			wrappedElement.activated = true;
+			wrappedElement.tab.onActivate(wrappedElement.content);
+		}
+    },
+
+    prepareRoot: function() {
+    	var h = this;
+    	
+        var json = {
+            $_tag: &quot;div&quot;, 
+            class: &quot;tabs-container&quot;,
+            $_append: [{
+                $_tag: &quot;main&quot;, 
+                class: &quot;tabs-contents&quot;, 
+                id: h.id(&quot;contents&quot;),
+            }, {
+                $_tag: &quot;div&quot;, 
+                class: &quot;tabs-header tabs-bg&quot;, 
                 id: h.id(&quot;header&quot;),
             }]
         };
@@ -981,7 +1042,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     				}],
     				$_on: {
     					&quot;click&quot;: function(e) {
-    						alert(button.icon);
+    						button.onClick();
     					}
     				}
     			}));
@@ -1050,7 +1111,8 @@ bardia.form.Form = bardia.oop.Class.create({
 
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            title: &quot;Insert title here ...&quot;
+            title: &quot;Insert title here ...&quot;,
+            serial: &quot;S_&quot; + (Math.random()*1000000).toFixed(0),
         }, config));
 
         this.render();
@@ -1059,22 +1121,50 @@ bardia.form.Form = bardia.oop.Class.create({
     render: function() {
         var h = this;
 
-        h.inside.update();
-
-        h.panel = new bardia.layout.Panel({
-            inside: h.inside,
-            title: h.title
-        });
-
         h.prepareRoot();
+        h.inside.update(h.root);
+        
+        h.setButtons();
+    },
+    
+    setButtons: function() {
+    	var h = this;
+    	if (h.buttons) {
+    		h.buttons.forEach(function(button) {
+    			h.root.find(h.id(&quot;toolbar&quot;)).insert($_element({
+    				$_tag: &quot;button&quot;,
+    				class: &quot;mdl-button mdl-js-button mdl-button--icon&quot;,
+    				title: button.name,
+    				$_append: [{
+    					$_tag: &quot;i&quot;,
+    					class: &quot;material-icons&quot;,
+    					$_append: button.icon
+    				}],
+    				$_on: {
+    					&quot;click&quot;: function(e) {
+    						button.onClick();
+    					}
+    				}
+    			}));
+    		});
+    	}
     },
 
     prepareRoot: function() {
         var h = this;
-
+        
         h.root = $_element({
-            $_tag: &quot;div&quot;,
-            class: &quot;form-content&quot;,
+        	$_tag: &quot;div&quot;,
+        	class: &quot;form-container&quot;,
+        	$_append: [{
+        		$_tag: &quot;div&quot;,
+        		id: h.id(&quot;toolbar&quot;),
+        		class: &quot;form-top form-bg&quot;
+        	}, {
+        		$_tag: &quot;div&quot;,
+        		class: &quot;form-content&quot;,
+        		id: h.id(&quot;contents&quot;)
+        	}]
         });
 
         h.fields.forEach(function(field) {
@@ -1086,7 +1176,7 @@ bardia.form.Form = bardia.oop.Class.create({
 
             formField.setForm(h);
             
-            h.root.insert(formField.getElement());
+            h.root.find(h.id(&quot;contents&quot;)).insert(formField.getElement());
         });
 
         var curtain = $_element({
@@ -1113,9 +1203,6 @@ bardia.form.Form = bardia.oop.Class.create({
         });
 
         h.root.insert(curtain);
-        $_upgradeElement(h.root);
-
-        h.panel.getContent().insert(h.root);
     },
 
     addBeanChangedListener: function(listener) {
@@ -1146,14 +1233,17 @@ bardia.form.Form = bardia.oop.Class.create({
         var result = h.root.find(&quot;form-details-right&quot;);
         result.update();
 
-        return result
+        return result;
     },
 
     closeDetails: function() {
         var h = this;
 
         h.root.find(&quot;form-curtain&quot;).dom().style.left = &quot;-&quot; + h.inside.dom().getBoundingClientRect().width + &quot;px&quot;;
-        //h.root.find(&quot;form-details-right&quot;).dom().style.width = &quot;0px&quot;;
+    },
+    
+    id: function(name) {
+    	return this.serial + name;
     }
 });
 bardia.form.TextField = bardia.oop.Class.create({
@@ -1270,7 +1360,7 @@ bardia.form.ActionField = bardia.oop.Class.inherit(bardia.form.TextField, {
                 $_tag: &quot;label&quot;,
                 class: &quot;form-text-input-label&quot;,
                 &quot;for&quot;: h.property,
-                $_append: &quot;Lookup&quot;
+                $_append: h.label
             }]
         });
 
@@ -1445,8 +1535,6 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     prepareDaysRows: function() {
     	var h = this;
     	
-    	var today = new Date();
-
     	var result = [];
 
     	var clonedDate = new Date(h.date.getTime());
@@ -1488,7 +1576,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     			},
     			$_on: {
     				click: function(e) {
-    					h.updateBeanProperty(e.target.date);
+    					h.updateBeanProperty(e.target.date.getTime());
     					h.updateInputValue(h.form.getBean());
     					h.form.closeDetails();
     				}
@@ -1503,7 +1591,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     updateInputValue: function(bean) {
         var h = this;
 
-        h.root.find(h.property).dom().value = eval(&quot;bean.&quot; + h.property + &quot; || &#x27;&#x27;&quot;);
+        h.root.find(h.property).dom().value = bardia.form.DateField.DU.createFormatYYYYMMDD(eval(&quot;bean.&quot; + h.property));
     },
 
     setWeekday: function() {
@@ -1561,6 +1649,28 @@ bardia.form.LookupField = bardia.oop.Class.inherit(bardia.form.ActionField, {
             }]
         }));
     }
+});
+
+bardia.form.BooleanField = bardia.oop.Class.inherit(bardia.form.TextField, {
+
+    initialize: function(config) {		
+        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+            label: &quot;Boolean value ...&quot;
+        }, config));
+        
+        this.render();
+    },
+});
+
+bardia.form.IntegerField = bardia.oop.Class.inherit(bardia.form.TextField, {
+
+    initialize: function(config) {		
+        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+            label: &quot;Boolean value ...&quot;
+        }, config));
+        
+        this.render();
+    },
 });
     </pre>
 </div>

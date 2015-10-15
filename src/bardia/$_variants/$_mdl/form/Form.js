@@ -7,7 +7,8 @@ bardia.form.Form = bardia.oop.Class.create({
 
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            title: "Insert title here ..."
+            title: "Insert title here ...",
+            serial: "S_" + (Math.random()*1000000).toFixed(0),
         }, config));
 
         this.render();
@@ -16,22 +17,50 @@ bardia.form.Form = bardia.oop.Class.create({
     render: function() {
         var h = this;
 
-        h.inside.update();
-
-        h.panel = new bardia.layout.Panel({
-            inside: h.inside,
-            title: h.title
-        });
-
         h.prepareRoot();
+        h.inside.update(h.root);
+        
+        h.setButtons();
+    },
+    
+    setButtons: function() {
+    	var h = this;
+    	if (h.buttons) {
+    		h.buttons.forEach(function(button) {
+    			h.root.find(h.id("toolbar")).insert($_element({
+    				$_tag: "button",
+    				class: "mdl-button mdl-js-button mdl-button--icon",
+    				title: button.name,
+    				$_append: [{
+    					$_tag: "i",
+    					class: "material-icons",
+    					$_append: button.icon
+    				}],
+    				$_on: {
+    					"click": function(e) {
+    						button.onClick();
+    					}
+    				}
+    			}));
+    		});
+    	}
     },
 
     prepareRoot: function() {
         var h = this;
-
+        
         h.root = $_element({
-            $_tag: "div",
-            class: "form-content",
+        	$_tag: "div",
+        	class: "form-container",
+        	$_append: [{
+        		$_tag: "div",
+        		id: h.id("toolbar"),
+        		class: "form-top form-bg"
+        	}, {
+        		$_tag: "div",
+        		class: "form-content",
+        		id: h.id("contents")
+        	}]
         });
 
         h.fields.forEach(function(field) {
@@ -43,7 +72,7 @@ bardia.form.Form = bardia.oop.Class.create({
 
             formField.setForm(h);
             
-            h.root.insert(formField.getElement());
+            h.root.find(h.id("contents")).insert(formField.getElement());
         });
 
         var curtain = $_element({
@@ -70,9 +99,6 @@ bardia.form.Form = bardia.oop.Class.create({
         });
 
         h.root.insert(curtain);
-        $_upgradeElement(h.root);
-
-        h.panel.getContent().insert(h.root);
     },
 
     addBeanChangedListener: function(listener) {
@@ -103,13 +129,16 @@ bardia.form.Form = bardia.oop.Class.create({
         var result = h.root.find("form-details-right");
         result.update();
 
-        return result
+        return result;
     },
 
     closeDetails: function() {
         var h = this;
 
         h.root.find("form-curtain").dom().style.left = "-" + h.inside.dom().getBoundingClientRect().width + "px";
-        //h.root.find("form-details-right").dom().style.width = "0px";
+    },
+    
+    id: function(name) {
+    	return this.serial + name;
     }
 });

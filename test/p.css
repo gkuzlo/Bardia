@@ -1,0 +1,36 @@
+
+.grid-bg {
+	background:blue
+}
+
+.form-bg {
+	background:blue
+}
+
+.breadcrumb-bg {
+	background:blue
+}
+
+.tabs-bg {
+	background:blue;
+}
+
+@keyframes breadcrumb-marker {
+    0%   {border-color: transparent;}
+    100% {border-color: yellow;}
+}
+.breadcrumb-link.is-active::after {
+	border-color:yellow;
+}
+.breadcrumb-link.is-active {
+	color:yellow;
+}
+
+@keyframes tabs-marker {
+    0%   {background-color: transparent;}
+    100% {background-color: yellow;}
+}
+
+.tabs-link.is-active::after {
+	background:yellow;
+}

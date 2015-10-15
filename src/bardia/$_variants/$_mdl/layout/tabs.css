@@ -1,64 +1,59 @@
 
-.breadcrumb-container {
+.tabs-container {
 	position:absolute; top:0px; left:0px; width:100%; height:100%
 }
 
-.breadcrumb-header {
+.tabs-header {
 	position:absolute; top:0px; left:0px; width:100%; height:48px;
 	display:flex; flex-direction:row; 
 	z-index:3;
 	box-shadow:0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
 
-.breadcrumb-link {
+.tabs-link {
 	position:relative; line-height:48px; font-size:14px; color:white; cursor:pointer; padding:0px 20px 0px 20px; margin:0px; border:0px;
 	text-decoration:none;
 }
 
-.breadcrumb-link:hover::before {
+.tabs-link:hover::before {
 	position:absolute; top:0px; left:0px; bottom:0px; right:0px;
 	content:'';
 	background:rgba(255,255,255,0.1)
 }
 
-.breadcrumb-link.is-active {
-	color:#FF4081; padding-left:30px;
+@keyframes tabs-marker {
+    0%   {background-color: transparent;}
+    100% {background-color: #FF4081;}
 }
 
-@keyframes breadcrumb-marker {
-    0%   {border-color: transparent;}
-    100% {border-color: #FF4081;}
-}
-
-.breadcrumb-link.is-active::after {
-	position:absolute; content:''; height:10px; width:10px; top:18px; left:10px; border:2px solid #FF4081; border-width:2px 2px 0px 0px;
-	transform:rotate(45deg);
+.tabs-link.is-active::after {
+	position:absolute; content:''; height:2px; right:0px; left:0px; bottom:0px; background-color: #FF4081;
 	
 	-webkit-transition: all 0.5s ease-in-out;
 	-moz-transition: all 0.5s ease-in-out;
 	-o-transition: all 0.5s ease-in-out;
 	transition: all 0.5s ease-in-out;
 	
-    -webkit-animation-name: breadcrumb-marker; /* Chrome, Safari, Opera */
+    -webkit-animation-name: tabs-marker; /* Chrome, Safari, Opera */
     -webkit-animation-duration: 1.0s; /* Chrome, Safari, Opera */
-    animation-name: breadcrumb-marker;
+    animation-name: tabs-marker;
     animation-duration: 1.0s;
 }
 
-.breadcrumb-contents {
+.tabs-contents {
 	position:absolute; top:48px; left:0px; right:0px; bottom:0px;
 }
 
-.breadcrumb-content {
+.tabs-content {
 	position:absolute; top:0px; left:0px; right:0px; bottom:0px;
 	display: none;
 }
 
-.breadcrumb-content.is-active {
+.tabs-content.is-active {
 	position:absolute; top:0px; left:0px; right:0px; bottom:0px;
 	display:block;
 }
 
-.breadcrumb-bg {
+.tabs-bg {
 	background:#3f51b5
 }
