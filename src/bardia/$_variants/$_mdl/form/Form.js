@@ -75,11 +75,11 @@ bardia.form.Form = bardia.oop.Class.create({
             h.root.find(h.id("contents")).insert(formField.getElement());
         });
 
-        var curtain = $_element({
+        h.root.insert($_element({
             $_tag: "div",
             class: "form-curtain",
             id: "form-curtain",
-            style: "left:-" + h.inside.dom().getBoundingClientRect().width + "px",
+            style: "width:0px",
             $_on: {
                 "click": function() {
                     h.closeDetails();
@@ -96,9 +96,24 @@ bardia.form.Form = bardia.oop.Class.create({
                     }
                 },
             }]
-        });
+        }));
 
-        h.root.insert(curtain);
+        h.root.insert($_element({
+        	$_tag: "div",
+        	class: "form-progress",
+        	id: h.id("form-progress"),
+        	$_append: [{
+        		$_tag: "div",
+        		id: h.id("progress"),
+        		class: "mdl-spinner mdl-spinner--single-color mdl-js-spinner"
+        	}, {
+        		$_tag: "div",
+        		id: h.id("form-progress-label"),
+        		class: "form-progress-label form-bg"
+        	}]
+        }));
+        
+        $_upgradeElement(h.root.find(h.id("progress")));
     },
 
     addBeanChangedListener: function(listener) {
@@ -123,7 +138,7 @@ bardia.form.Form = bardia.oop.Class.create({
     openDetails: function(width) {
         var h = this;
 
-        h.root.find("form-curtain").dom().style.left = "0px";
+        h.root.find("form-curtain").dom().style.width = "100%";
         h.root.find("form-details-right").dom().style.width = width || h.detailsWidth;
 
         var result = h.root.find("form-details-right");
@@ -135,7 +150,25 @@ bardia.form.Form = bardia.oop.Class.create({
     closeDetails: function() {
         var h = this;
 
-        h.root.find("form-curtain").dom().style.left = "-" + h.inside.dom().getBoundingClientRect().width + "px";
+        h.root.find("form-curtain").dom().style.width = "0px";
+    },
+
+    openProgress: function() {
+    	var h = this;
+    	h.root.find(h.id("form-progress")).addClassName("form-progress-is-active");
+    	h.root.find(h.id("progress")).addClassName("is-active");
+    },
+
+    closeProgress: function() {
+    	var h = this;
+    	h.root.find(h.id("form-progress")).removeClassName("form-progress-is-active");
+    	h.root.find(h.id("progress")).removeClassName("is-active");
+    },
+    
+    setProgressLabel: function(label) {
+    	var h = this;
+    	
+    	h.root.find(h.id("form-progress-label")).update(label);
     },
     
     id: function(name) {

@@ -886,14 +886,13 @@ bardia.grid.Grid = bardia.oop.Class.create({
 
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-        	title: "Insert tile here. . ."
+        	title: "Insert tile here. . .",
+        	serial: "S_" + (Math.random()*1000000).toFixed(0),
         }, config));
         
         this.render();
     },
-    /**
-     *
-     */
+
     render: function() {
         var h = this;
 
@@ -902,7 +901,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
         	class: "grid-container",
         	$_append:[{
         		$_tag: "div",
-        		id: "toolbar",
+        		id: h.id("toolbar"),
         		class: "grid-top grid-bg",
         	}, {
 	            $_tag: "div",
@@ -910,34 +909,39 @@ bardia.grid.Grid = bardia.oop.Class.create({
 	            $_append: [{
 	                $_tag: "div",
 	                class: "grid-headers",
-	                id: "grid-headers",
+	                id: h.id("grid-headers"),
 	                $_append: h.columns.map(function(column) {
 	                    return {
 	                        $_tag: "div",
 	                        class: "grid-header",
 	                        $_append: column.name
-	                    }
+	                    };
 	                })
 	            }, {
 	                $_tag: "div",
 	                class: "grid-rows",
-	                id: "grid-rows"
-	            }, {
-	                $_tag: "div",
-	                class: "grid-curtain",
-	                id: "grid-curtain",
-	                $_on: {
-	                    "click": function() {
-	                        h.closeDetails();
-	                    }
-	                },
-	                $_append: [{
-	                    $_tag: "div",
-	                    class: "grid-details-right",
-	                    id: "grid-details-right"
-	                }]
+	                id: h.id("grid-rows")
 	            }]
-        	}]
+        	}, {
+                $_tag: "div",
+                class: "grid-curtain",
+                id: h.id("grid-curtain"),
+                $_on: {
+                    "click": function() {
+                        h.closeDetails();
+                    }
+                },
+                $_append: [{
+                    $_tag: "div",
+                    class: "grid-details-right",
+                    id: h.id("grid-details-right"),
+                    $_on: {
+                    	"click": function(e) {
+                    		e.stopPropagation();
+                    	}
+                    }
+                }]
+            }]
         });
 
         h.inside.update(h.root);
@@ -949,7 +953,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     	var h = this;
     	if (h.buttons) {
     		h.buttons.forEach(function(button) {
-    			h.root.find("toolbar").insert($_element({
+    			h.root.find(h.id("toolbar")).insert($_element({
     				$_tag: "button",
     				class: "mdl-button mdl-js-button mdl-button--icon",
     				title: button.name,
@@ -971,7 +975,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     fetch: function(model) {
         var h = this;
 
-        var rowsDiv = h.root.find("grid-rows");
+        var rowsDiv = h.root.find(h.id("grid-rows"));
         rowsDiv.update();
 
         (model.rows || []).forEach(function(row) {
@@ -989,7 +993,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
 
             h.columns.forEach(function(column) {
                 rowDiv.insert($_element({
-                    $_tag: "td",
+                    $_tag: "div",
                     class: "grid-cell",
                     $_append: (function() {
                     	if (column.render) {
@@ -1003,18 +1007,24 @@ bardia.grid.Grid = bardia.oop.Class.create({
         });
     },
     
-    openDetails: function() {
+    openDetails: function(width) {
         var h = this;
 
-        h.root.find("grid-curtain").dom().style.width = "100%";
-        h.root.find("grid-details-right").dom().style.width = h.detailsWidth;
+        h.root.find(h.id("grid-curtain")).dom().style.width = "100%";
+        h.root.find(h.id("grid-details-right")).dom().style.width = width || h.detailsWidth;
+        
+        return h.root.find(h.id("grid-details-right"));
     },
     
     closeDetails: function() {
         var h = this;
 
-        h.root.find("grid-curtain").dom().style.width = "0px";
-        h.root.find("grid-details-right").dom().style.width = "0px";
+        h.root.find(h.id("grid-curtain")).dom().style.width = "0px";
+        h.root.find(h.id("grid-details-right")).dom().style.width = "0px";
+    },
+    
+    id: function(name) {
+    	return this.serial + name;
     }
 });
 bardia.form = {
@@ -1097,11 +1107,11 @@ bardia.form.Form = bardia.oop.Class.create({
             h.root.find(h.id("contents")).insert(formField.getElement());
         });
 
-        var curtain = $_element({
+        h.root.insert($_element({
             $_tag: "div",
             class: "form-curtain",
             id: "form-curtain",
-            style: "left:-" + h.inside.dom().getBoundingClientRect().width + "px",
+            style: "width:0px",
             $_on: {
                 "click": function() {
                     h.closeDetails();
@@ -1118,9 +1128,24 @@ bardia.form.Form = bardia.oop.Class.create({
                     }
                 },
             }]
-        });
+        }));
 
-        h.root.insert(curtain);
+        h.root.insert($_element({
+        	$_tag: "div",
+        	class: "form-progress",
+        	id: h.id("form-progress"),
+        	$_append: [{
+        		$_tag: "div",
+        		id: h.id("progress"),
+        		class: "mdl-spinner mdl-spinner--single-color mdl-js-spinner"
+        	}, {
+        		$_tag: "div",
+        		id: h.id("form-progress-label"),
+        		class: "form-progress-label form-bg"
+        	}]
+        }));
+        
+        $_upgradeElement(h.root.find(h.id("progress")));
     },
 
     addBeanChangedListener: function(listener) {
@@ -1145,7 +1170,7 @@ bardia.form.Form = bardia.oop.Class.create({
     openDetails: function(width) {
         var h = this;
 
-        h.root.find("form-curtain").dom().style.left = "0px";
+        h.root.find("form-curtain").dom().style.width = "100%";
         h.root.find("form-details-right").dom().style.width = width || h.detailsWidth;
 
         var result = h.root.find("form-details-right");
@@ -1157,7 +1182,25 @@ bardia.form.Form = bardia.oop.Class.create({
     closeDetails: function() {
         var h = this;
 
-        h.root.find("form-curtain").dom().style.left = "-" + h.inside.dom().getBoundingClientRect().width + "px";
+        h.root.find("form-curtain").dom().style.width = "0px";
+    },
+
+    openProgress: function() {
+    	var h = this;
+    	h.root.find(h.id("form-progress")).addClassName("form-progress-is-active");
+    	h.root.find(h.id("progress")).addClassName("is-active");
+    },
+
+    closeProgress: function() {
+    	var h = this;
+    	h.root.find(h.id("form-progress")).removeClassName("form-progress-is-active");
+    	h.root.find(h.id("progress")).removeClassName("is-active");
+    },
+    
+    setProgressLabel: function(label) {
+    	var h = this;
+    	
+    	h.root.find(h.id("form-progress-label")).update(label);
     },
     
     id: function(name) {
@@ -1225,9 +1268,6 @@ bardia.form.TextField = bardia.oop.Class.create({
         eval("bean." + h.property + " = value");
     },
 
-    /**
-     * z beana do inputa
-     */
     updateInputValue: function(bean) {
         var h = this;
         h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");
@@ -1316,7 +1356,8 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
 
     initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: "Insert title here ... 2"
+            label: "Insert title here ... 2",
+            date: new Date()
         }, config));
 
         this.render();
@@ -1573,10 +1614,39 @@ bardia.form.BooleanField = bardia.oop.Class.inherit(bardia.form.TextField, {
 
     initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: "Boolean value ..."
+            label: "Boolean value ...",
+            serial: "S_" + (Math.random()*1000000).toFixed(0),
         }, config));
         
         this.render();
+    },
+
+    render: function() {
+    	var h = this;
+    	
+        h.root = $_element({
+            $_tag: "div",
+            class: "form-row",
+            $_append: [{
+            	$_tag: "input",
+            	type: "checkbox",
+            	id: h.property,
+            	$_on: {
+            		"change": function(e) {
+            			h.updateBeanProperty(e.target.checked);
+            		}
+            	}
+            }, {
+            	$_tag: "span",
+            	class: "mdl-checkbox__label",
+            	$_append: h.property
+            }]
+        });
+    },
+
+    updateInputValue: function(bean) {
+        var h = this;
+        h.root.find(h.property).dom().checked = eval("bean." + h.property) || false;
     },
 });
 
@@ -1588,5 +1658,83 @@ bardia.form.IntegerField = bardia.oop.Class.inherit(bardia.form.TextField, {
         }, config));
         
         this.render();
+    },
+});
+bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
+
+    /**
+     *  
+     */
+    displayButton: function() {
+    	var h = this;
+
+    	h.serial = "upload_" + (Math.random()*1000000).toFixed(0);
+    	
+    	h.root.insert($_element({
+            $_tag: "button",
+            class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
+            $_on: {
+                click: function(e) {
+                	h.root.find(h.serial).dom().click();
+                }
+            },
+            $_append: [{
+                $_tag: "i",
+                class: "material-icons",
+                $_append: "file_upload",
+            }, {
+    			$_tag: "form",
+    		    action: bardia.uploadAction,
+    		    method: "POST",
+    		    enctype: "multipart/form-data",
+    		    target: h.serial,
+    		    style: "display:none; width:0px; height:0px",
+    		    $_append: [{
+    				$_tag: "input",
+    				type: "file",
+    				name: "fileName_" + h.serial,
+    				id: h.serial,
+    				style: "display:none",
+    				$_on: {
+    					"change": function() {
+    						h.form.openProgress();
+    						
+    						var form = new FormData();
+    							form.append("file", h.root.find(h.serial).dom().files[0]);
+
+    						var xhr = new XMLHttpRequest();
+
+    						xhr.upload.addEventListener("progress", function(e) {
+    							var pc = parseInt(100 - (e.loaded / e.total * 100));
+    							h.form.setProgressLabel("" + (100 - pc) + " %");
+    						}, false);
+
+    						xhr.onreadystatechange = function (evt) {
+    							if (xhr.readyState == 4) {
+    								h.form.closeProgress();
+
+    								var createdFile = JSON.parse(xhr.responseText);						
+    			                    	h.updateBeanProperty(createdFile);
+    			                    	h.updateInputValue(h.form.getBean());
+    			                    	
+    			            		if (h.onChange !== undefined) {
+    			            			h.onChange(createdFile);
+    			            		}
+    							}
+    						};
+
+    						xhr.open("POST", bardia.uploadAction, true);
+    						xhr.send(form);
+    					}
+    				}
+    			}]
+    		}]
+        }));
+    },
+    
+    updateInputValue: function(bean) {
+        var h = this;
+        var file = eval("bean." + h.property + " || {name:''}");
+        h.root.find(h.property).dom().value = file.name;
     },
 });

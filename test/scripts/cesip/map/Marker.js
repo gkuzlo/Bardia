@@ -31,7 +31,7 @@ cesip.map.Marker = bardia.oop.Class.create({
     		$_append: [{
     			$_tag: "img",
         		src: h.icon,
-        		style: "opacity:0.9; cursor:grabbing; user-drag: none;",
+        		style: "opacity:0.9; cursor:grabbing; user-drag:none;",
         		draggable: false
     		}, {
     			$_tag: "div",

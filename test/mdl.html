@@ -23,6 +23,10 @@
         <script src="scripts/cesip/schedules/VariantDetails.js"></script>
         <script src="scripts/cesip/schedules/ShapeDetails.js"></script>
 
+        <script src="scripts/cesip/configuration/$_package.js"></script>
+        <script src="scripts/cesip/configuration/Configuration.js"></script>
+        <script src="scripts/cesip/configuration/ShapesImports.js"></script>
+
         <script src="scripts/cesip/realtime/$_package.js"></script>
         <script src="scripts/cesip/realtime/Realtime.js"></script>
 
@@ -38,6 +42,8 @@
 
         <script>
 
+        	bardia.uploadAction = "http://localhost:8080/csip/file.upload";
+        
             function renderLayout() {
                 try {
                     doRender();

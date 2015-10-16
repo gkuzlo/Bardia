@@ -5,7 +5,8 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
 
     initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: "Insert title here ... 2"
+            label: "Insert title here ... 2",
+            date: new Date()
         }, config));
 
         this.render();

@@ -2,9 +2,7 @@
  * 
  */
 cesip.schedules.SchedulesData = bardia.oop.Class.create({
-	/**
-	 * 
-	 */
+
 	initialize: function(config) {
 		bardia.oop.Class.extend(this, bardia.oop.Class.extend({
 			tabs: []
@@ -13,9 +11,6 @@ cesip.schedules.SchedulesData = bardia.oop.Class.create({
         this.render();
 	},
 	
-	/**
-	 * 
-	 */
 	render: function() {
 		var h = this;
 
@@ -31,9 +26,6 @@ cesip.schedules.SchedulesData = bardia.oop.Class.create({
         });
 	},
 
-	/**
-	 *  
-	 */
 	showStraps: function(html) {
 		var h = this;
 
@@ -44,6 +36,10 @@ cesip.schedules.SchedulesData = bardia.oop.Class.create({
 			    {
 			    	name: "loid",
 			    	property: "loid"
+			    },
+			    {
+			    	name: "name",
+			    	property: "name",
 			    },
 			    {
 			    	name: "startDate",
@@ -74,23 +70,69 @@ cesip.schedules.SchedulesData = bardia.oop.Class.create({
                     }
                 });
 			},
-			buttons: [
-			    {
-			    	name: "refresh",
-			    	icon: "refresh",
-			    	onClick: function() {
-			    		h.fetchStraps();			    		
-			    	}
-			    }
-			]
+			buttons: [{
+		    	name: "refresh",
+		    	icon: "refresh",
+		    	onClick: function() {
+		    		h.fetchStraps();			    		
+		    	}
+		    }, {
+		    	name: "add",
+		    	icon: "add_circle_outline",
+		    	onClick: function() {
+		    		h.showImportForm();
+		    	}
+		    }]
 		});
 
 		h.fetchStraps();
 	},
 	
-	/**
-	 * 
-	 */
+	showImportForm: function() {
+		var h = this;
+
+		var material = h.strapsGrid.openDetails();
+
+		var form = new bardia.form.Form({
+			inside: material,
+			fields: [{
+				label: "name",
+				property: "name"
+			}, {
+				label: "startDate",
+				property: "startDate",
+				type: "Date"
+			}],
+			buttons: [{
+				icon: "keyboard_arrow_left",
+				onClick: function() {
+					h.strapsGrid.closeDetails();
+					h.fetchStraps();
+				}
+			}, {
+				icon: "save",
+				onClick: function() {
+					h.importData(form.getBean());
+				}
+			}]
+		});
+	},
+	
+	importData: function(dataImport) {
+		var h = this;
+		
+		var rest = new cesip.rest.REST({
+			onSuccess: function(model) {
+				h.strapsGrid.closeDetails();
+				h.fetchStraps();
+			},
+			onFailure: function() {
+
+			}
+		});
+		rest.importData(dataImport);
+	},
+	
 	fetchStraps: function() {
 		var h = this;
 		var rest = new cesip.rest.REST({

@@ -269,54 +269,48 @@
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 894,
+            "line": 1033,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1023,
-            "class": "bardia.layout.Material"
-        },
-        {
-            "file": "dist\\mdl\\bardia.js",
-            "line": 1218,
+            "line": 1261,
             "description": "z inputa do beana",
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1228,
-            "description": "z beana do inputa",
+            "line": 1288,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1248,
+            "line": 1327,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1287,
+            "line": 1352,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1312,
+            "line": 1389,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1348,
+            "line": 1582,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1541,
+            "line": 1587,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1546,
+            "line": 1665,
             "class": "bardia.layout.Material"
         }
     ],
@@ -403,43 +397,39 @@
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:894"
-        },
-        {
-            "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1023"
+            "line": " dist\\mdl\\bardia.js:1033"
         },
         {
             "message": "Missing item type\nz inputa do beana",
-            "line": " dist\\mdl\\bardia.js:1218"
-        },
-        {
-            "message": "Missing item type\nz beana do inputa",
-            "line": " dist\\mdl\\bardia.js:1228"
+            "line": " dist\\mdl\\bardia.js:1261"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1248"
+            "line": " dist\\mdl\\bardia.js:1288"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1287"
+            "line": " dist\\mdl\\bardia.js:1327"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1312"
+            "line": " dist\\mdl\\bardia.js:1352"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1348"
+            "line": " dist\\mdl\\bardia.js:1389"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1541"
+            "line": " dist\\mdl\\bardia.js:1582"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1546"
+            "line": " dist\\mdl\\bardia.js:1587"
+        },
+        {
+            "message": "Missing item type",
+            "line": " dist\\mdl\\bardia.js:1665"
         }
     ]
 }

@@ -70,7 +70,7 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 			buttons: [
 			    {
 			    	title: "Powrot",
-			    	customIcon: "csip/images/back.png",
+			    	icon: "chevron_left",
 			    	onClick: function() {
 			    		if (h.onClose) {
 			    			h.onClose();
@@ -79,7 +79,7 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 			    },
 			    {
 			    	title: "Zapisz",
-			    	customIcon: "csip/images/save.png",
+			    	icon: "save",
 			    	onClick: function() {
 			    		var rest = new cesip.rest.REST({
 			    			onSuccess: function() {
@@ -113,14 +113,14 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 			buttons: [
 			    {
 			    	title: "Znajdź kształt",
-			    	customIcon: "csip/images/find.png",
+			    	icon: "gesture",
 			    	onClick: function() {
 			    		h.findRoute();
 			    	}
 			    },
 			    {
 			    	title: "Reset",
-			    	customIcon: "csip/images/reset.png",
+			    	icon: "sync",
 			    	onClick: function() {
 			    		h.resetShape();
 			    	}

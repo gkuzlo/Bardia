@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                     
                     "src/bardia/$_variants/$_mdl/grid/$_grid.js",
                     "src/bardia/$_variants/$_mdl/grid/Grid.js",
-                    
+
                     "src/bardia/$_variants/$_mdl/form/$_form.js",
                     "src/bardia/$_variants/$_mdl/form/Form.js",
                     "src/bardia/$_variants/$_mdl/form/TextField.js",
@@ -50,6 +50,7 @@ module.exports = function(grunt) {
                     "src/bardia/$_variants/$_mdl/form/LookupField.js",
                     "src/bardia/$_variants/$_mdl/form/BooleanField.js",
                     "src/bardia/$_variants/$_mdl/form/IntegerField.js",
+                    "src/bardia/$_variants/$_mdl/form/FileField.js",
 
                 ], 
                 dest: 'dist/mdl/bardia.js'},

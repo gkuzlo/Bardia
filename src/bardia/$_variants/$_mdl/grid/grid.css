@@ -20,7 +20,7 @@
 }
 
 .grid-header {
-    position:relative; border:0px; width:200px; background-color:white; line-height:40px;
+    position:relative; border:0px; width:150px; background-color:white; line-height:40px;
     padding:0px 5px 0px 5px; font-weight:bold;
 }
 
@@ -36,7 +36,7 @@
 
 @keyframes highlight-row {
     0%   {background-color: transparent;}
-    50% {background-color: #e0e0e0;}
+    50% {background-color: #f0f0f0;}
     100% {background-color: #f0f0f0;}
 }
 
@@ -50,22 +50,24 @@
 }
 
 .grid-cell {
-    position:relative; border:0px; width:200px; background-color:transparent; line-height:40px;
+    position:relative; border:0px; width:150px; background-color:transparent; line-height:40px;
     padding:0px 5px 0px 5px;
 }
 
 .grid-curtain {
-    position:absolute; top:0px; left:0px; bottom:0px; width:0px;
+    position:absolute; top:0px; left:0px; bottom:0px; width:0px; 
     background: rgba(0,0,0,0.5);
     -webkit-transition: width 0.5s; /* Safari */
     transition: width 0.5s;
+    z-index:3;
 }
 
 .grid-details-right {
     position:absolute; top:0px; left:0px; bottom:0px; width:0px;
-    background: white; border:0px solid lightGrey; border-width:0px 1px 0px 0px;
+    background: white; border:0px;
     -webkit-transition: width 0.5s; /* Safari */
-    transition: width 0.5s;
+    transition: width 0.5s; overflow:hidden;
+    z-index:4;
 }
 
 .grid-bg {

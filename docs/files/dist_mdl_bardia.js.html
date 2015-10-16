@@ -968,14 +968,13 @@ bardia.grid.Grid = bardia.oop.Class.create({
 
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-        	title: &quot;Insert tile here. . .&quot;
+        	title: &quot;Insert tile here. . .&quot;,
+        	serial: &quot;S_&quot; + (Math.random()*1000000).toFixed(0),
         }, config));
         
         this.render();
     },
-    /**
-     *
-     */
+
     render: function() {
         var h = this;
 
@@ -984,7 +983,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
         	class: &quot;grid-container&quot;,
         	$_append:[{
         		$_tag: &quot;div&quot;,
-        		id: &quot;toolbar&quot;,
+        		id: h.id(&quot;toolbar&quot;),
         		class: &quot;grid-top grid-bg&quot;,
         	}, {
 	            $_tag: &quot;div&quot;,
@@ -992,34 +991,39 @@ bardia.grid.Grid = bardia.oop.Class.create({
 	            $_append: [{
 	                $_tag: &quot;div&quot;,
 	                class: &quot;grid-headers&quot;,
-	                id: &quot;grid-headers&quot;,
+	                id: h.id(&quot;grid-headers&quot;),
 	                $_append: h.columns.map(function(column) {
 	                    return {
 	                        $_tag: &quot;div&quot;,
 	                        class: &quot;grid-header&quot;,
 	                        $_append: column.name
-	                    }
+	                    };
 	                })
 	            }, {
 	                $_tag: &quot;div&quot;,
 	                class: &quot;grid-rows&quot;,
-	                id: &quot;grid-rows&quot;
-	            }, {
-	                $_tag: &quot;div&quot;,
-	                class: &quot;grid-curtain&quot;,
-	                id: &quot;grid-curtain&quot;,
-	                $_on: {
-	                    &quot;click&quot;: function() {
-	                        h.closeDetails();
-	                    }
-	                },
-	                $_append: [{
-	                    $_tag: &quot;div&quot;,
-	                    class: &quot;grid-details-right&quot;,
-	                    id: &quot;grid-details-right&quot;
-	                }]
+	                id: h.id(&quot;grid-rows&quot;)
 	            }]
-        	}]
+        	}, {
+                $_tag: &quot;div&quot;,
+                class: &quot;grid-curtain&quot;,
+                id: h.id(&quot;grid-curtain&quot;),
+                $_on: {
+                    &quot;click&quot;: function() {
+                        h.closeDetails();
+                    }
+                },
+                $_append: [{
+                    $_tag: &quot;div&quot;,
+                    class: &quot;grid-details-right&quot;,
+                    id: h.id(&quot;grid-details-right&quot;),
+                    $_on: {
+                    	&quot;click&quot;: function(e) {
+                    		e.stopPropagation();
+                    	}
+                    }
+                }]
+            }]
         });
 
         h.inside.update(h.root);
@@ -1031,7 +1035,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     	var h = this;
     	if (h.buttons) {
     		h.buttons.forEach(function(button) {
-    			h.root.find(&quot;toolbar&quot;).insert($_element({
+    			h.root.find(h.id(&quot;toolbar&quot;)).insert($_element({
     				$_tag: &quot;button&quot;,
     				class: &quot;mdl-button mdl-js-button mdl-button--icon&quot;,
     				title: button.name,
@@ -1053,7 +1057,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     fetch: function(model) {
         var h = this;
 
-        var rowsDiv = h.root.find(&quot;grid-rows&quot;);
+        var rowsDiv = h.root.find(h.id(&quot;grid-rows&quot;));
         rowsDiv.update();
 
         (model.rows || []).forEach(function(row) {
@@ -1071,7 +1075,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
 
             h.columns.forEach(function(column) {
                 rowDiv.insert($_element({
-                    $_tag: &quot;td&quot;,
+                    $_tag: &quot;div&quot;,
                     class: &quot;grid-cell&quot;,
                     $_append: (function() {
                     	if (column.render) {
@@ -1085,18 +1089,24 @@ bardia.grid.Grid = bardia.oop.Class.create({
         });
     },
     
-    openDetails: function() {
+    openDetails: function(width) {
         var h = this;
 
-        h.root.find(&quot;grid-curtain&quot;).dom().style.width = &quot;100%&quot;;
-        h.root.find(&quot;grid-details-right&quot;).dom().style.width = h.detailsWidth;
+        h.root.find(h.id(&quot;grid-curtain&quot;)).dom().style.width = &quot;100%&quot;;
+        h.root.find(h.id(&quot;grid-details-right&quot;)).dom().style.width = width || h.detailsWidth;
+        
+        return h.root.find(h.id(&quot;grid-details-right&quot;));
     },
     
     closeDetails: function() {
         var h = this;
 
-        h.root.find(&quot;grid-curtain&quot;).dom().style.width = &quot;0px&quot;;
-        h.root.find(&quot;grid-details-right&quot;).dom().style.width = &quot;0px&quot;;
+        h.root.find(h.id(&quot;grid-curtain&quot;)).dom().style.width = &quot;0px&quot;;
+        h.root.find(h.id(&quot;grid-details-right&quot;)).dom().style.width = &quot;0px&quot;;
+    },
+    
+    id: function(name) {
+    	return this.serial + name;
     }
 });
 bardia.form = {
@@ -1179,11 +1189,11 @@ bardia.form.Form = bardia.oop.Class.create({
             h.root.find(h.id(&quot;contents&quot;)).insert(formField.getElement());
         });
 
-        var curtain = $_element({
+        h.root.insert($_element({
             $_tag: &quot;div&quot;,
             class: &quot;form-curtain&quot;,
             id: &quot;form-curtain&quot;,
-            style: &quot;left:-&quot; + h.inside.dom().getBoundingClientRect().width + &quot;px&quot;,
+            style: &quot;width:0px&quot;,
             $_on: {
                 &quot;click&quot;: function() {
                     h.closeDetails();
@@ -1200,9 +1210,24 @@ bardia.form.Form = bardia.oop.Class.create({
                     }
                 },
             }]
-        });
+        }));
 
-        h.root.insert(curtain);
+        h.root.insert($_element({
+        	$_tag: &quot;div&quot;,
+        	class: &quot;form-progress&quot;,
+        	id: h.id(&quot;form-progress&quot;),
+        	$_append: [{
+        		$_tag: &quot;div&quot;,
+        		id: h.id(&quot;progress&quot;),
+        		class: &quot;mdl-spinner mdl-spinner--single-color mdl-js-spinner&quot;
+        	}, {
+        		$_tag: &quot;div&quot;,
+        		id: h.id(&quot;form-progress-label&quot;),
+        		class: &quot;form-progress-label form-bg&quot;
+        	}]
+        }));
+        
+        $_upgradeElement(h.root.find(h.id(&quot;progress&quot;)));
     },
 
     addBeanChangedListener: function(listener) {
@@ -1227,7 +1252,7 @@ bardia.form.Form = bardia.oop.Class.create({
     openDetails: function(width) {
         var h = this;
 
-        h.root.find(&quot;form-curtain&quot;).dom().style.left = &quot;0px&quot;;
+        h.root.find(&quot;form-curtain&quot;).dom().style.width = &quot;100%&quot;;
         h.root.find(&quot;form-details-right&quot;).dom().style.width = width || h.detailsWidth;
 
         var result = h.root.find(&quot;form-details-right&quot;);
@@ -1239,7 +1264,25 @@ bardia.form.Form = bardia.oop.Class.create({
     closeDetails: function() {
         var h = this;
 
-        h.root.find(&quot;form-curtain&quot;).dom().style.left = &quot;-&quot; + h.inside.dom().getBoundingClientRect().width + &quot;px&quot;;
+        h.root.find(&quot;form-curtain&quot;).dom().style.width = &quot;0px&quot;;
+    },
+
+    openProgress: function() {
+    	var h = this;
+    	h.root.find(h.id(&quot;form-progress&quot;)).addClassName(&quot;form-progress-is-active&quot;);
+    	h.root.find(h.id(&quot;progress&quot;)).addClassName(&quot;is-active&quot;);
+    },
+
+    closeProgress: function() {
+    	var h = this;
+    	h.root.find(h.id(&quot;form-progress&quot;)).removeClassName(&quot;form-progress-is-active&quot;);
+    	h.root.find(h.id(&quot;progress&quot;)).removeClassName(&quot;is-active&quot;);
+    },
+    
+    setProgressLabel: function(label) {
+    	var h = this;
+    	
+    	h.root.find(h.id(&quot;form-progress-label&quot;)).update(label);
     },
     
     id: function(name) {
@@ -1307,9 +1350,6 @@ bardia.form.TextField = bardia.oop.Class.create({
         eval(&quot;bean.&quot; + h.property + &quot; = value&quot;);
     },
 
-    /**
-     * z beana do inputa
-     */
     updateInputValue: function(bean) {
         var h = this;
         h.root.find(h.property).dom().value = eval(&quot;bean.&quot; + h.property + &quot; || &#x27;&#x27;&quot;);
@@ -1398,7 +1438,8 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
 
     initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: &quot;Insert title here ... 2&quot;
+            label: &quot;Insert title here ... 2&quot;,
+            date: new Date()
         }, config));
 
         this.render();
@@ -1655,10 +1696,39 @@ bardia.form.BooleanField = bardia.oop.Class.inherit(bardia.form.TextField, {
 
     initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: &quot;Boolean value ...&quot;
+            label: &quot;Boolean value ...&quot;,
+            serial: &quot;S_&quot; + (Math.random()*1000000).toFixed(0),
         }, config));
         
         this.render();
+    },
+
+    render: function() {
+    	var h = this;
+    	
+        h.root = $_element({
+            $_tag: &quot;div&quot;,
+            class: &quot;form-row&quot;,
+            $_append: [{
+            	$_tag: &quot;input&quot;,
+            	type: &quot;checkbox&quot;,
+            	id: h.property,
+            	$_on: {
+            		&quot;change&quot;: function(e) {
+            			h.updateBeanProperty(e.target.checked);
+            		}
+            	}
+            }, {
+            	$_tag: &quot;span&quot;,
+            	class: &quot;mdl-checkbox__label&quot;,
+            	$_append: h.property
+            }]
+        });
+    },
+
+    updateInputValue: function(bean) {
+        var h = this;
+        h.root.find(h.property).dom().checked = eval(&quot;bean.&quot; + h.property) || false;
     },
 });
 
@@ -1670,6 +1740,84 @@ bardia.form.IntegerField = bardia.oop.Class.inherit(bardia.form.TextField, {
         }, config));
         
         this.render();
+    },
+});
+bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
+
+    /**
+     *  
+     */
+    displayButton: function() {
+    	var h = this;
+
+    	h.serial = &quot;upload_&quot; + (Math.random()*1000000).toFixed(0);
+    	
+    	h.root.insert($_element({
+            $_tag: &quot;button&quot;,
+            class: &quot;mdl-button mdl-js-button mdl-button--icon mdl-button--colored&quot;,
+            $_on: {
+                click: function(e) {
+                	h.root.find(h.serial).dom().click();
+                }
+            },
+            $_append: [{
+                $_tag: &quot;i&quot;,
+                class: &quot;material-icons&quot;,
+                $_append: &quot;file_upload&quot;,
+            }, {
+    			$_tag: &quot;form&quot;,
+    		    action: bardia.uploadAction,
+    		    method: &quot;POST&quot;,
+    		    enctype: &quot;multipart/form-data&quot;,
+    		    target: h.serial,
+    		    style: &quot;display:none; width:0px; height:0px&quot;,
+    		    $_append: [{
+    				$_tag: &quot;input&quot;,
+    				type: &quot;file&quot;,
+    				name: &quot;fileName_&quot; + h.serial,
+    				id: h.serial,
+    				style: &quot;display:none&quot;,
+    				$_on: {
+    					&quot;change&quot;: function() {
+    						h.form.openProgress();
+    						
+    						var form = new FormData();
+    							form.append(&quot;file&quot;, h.root.find(h.serial).dom().files[0]);
+
+    						var xhr = new XMLHttpRequest();
+
+    						xhr.upload.addEventListener(&quot;progress&quot;, function(e) {
+    							var pc = parseInt(100 - (e.loaded / e.total * 100));
+    							h.form.setProgressLabel(&quot;&quot; + (100 - pc) + &quot; %&quot;);
+    						}, false);
+
+    						xhr.onreadystatechange = function (evt) {
+    							if (xhr.readyState == 4) {
+    								h.form.closeProgress();
+
+    								var createdFile = JSON.parse(xhr.responseText);						
+    			                    	h.updateBeanProperty(createdFile);
+    			                    	h.updateInputValue(h.form.getBean());
+    			                    	
+    			            		if (h.onChange !== undefined) {
+    			            			h.onChange(createdFile);
+    			            		}
+    							}
+    						};
+
+    						xhr.open(&quot;POST&quot;, bardia.uploadAction, true);
+    						xhr.send(form);
+    					}
+    				}
+    			}]
+    		}]
+        }));
+    },
+    
+    updateInputValue: function(bean) {
+        var h = this;
+        var file = eval(&quot;bean.&quot; + h.property + &quot; || {name:&#x27;&#x27;}&quot;);
+        h.root.find(h.property).dom().value = file.name;
     },
 });
     </pre>

@@ -9,7 +9,11 @@ cesip.rest.REST = bardia.oop.Class.create({
 
 		this.url = "http://localhost:8080/csip";
 	},
-	
+
+    importData: function(dataImport) {
+    	this.invokePOST("/importData.json", {}, dataImport);
+    },
+
 	getSchedulesImports: function() {
 		this.invokeGET("/getDayTypes.json");
 	},
@@ -57,7 +61,15 @@ cesip.rest.REST = bardia.oop.Class.create({
 	findRoute: function(nodesList) {
     	this.invokePOST("/findRoute.json", {}, nodesList);
     },
-    
+
+	importOSM: function(importBean) {
+    	this.invokePOST("/importOSM.json", {}, importBean);
+    },
+
+    getOSMImports: function() {
+    	this.invokePOST("/osmImports.json", {}, {});
+    },
+
 	invokeGET: function(uri) {
 		var h = this;
 		var xhttp = new XMLHttpRequest();	
@@ -67,7 +79,7 @@ cesip.rest.REST = bardia.oop.Class.create({
 					h.onSuccess(JSON.parse(xhttp.responseText));
 				}
 			}
-		}
+		};
 		xhttp.open("GET", this.url + uri, true);
 		xhttp.send();
 	},
@@ -82,7 +94,7 @@ cesip.rest.REST = bardia.oop.Class.create({
 					h.onSuccess(JSON.parse(xhttp.responseText));
 				}
 			}
-		}
+		};
 		xhttp.open("POST", this.url + uri, true);
 		xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 		

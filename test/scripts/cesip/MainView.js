@@ -44,6 +44,13 @@ cesip.MainView = bardia.oop.Class.create({
             		});
             	}
             }, {
+            	name: "Konfiguracja",
+            	onActivate: function(html) {
+            		new cesip.configuration.Configuration({
+            			inside: html
+            		});
+            	}
+            }, {
                 name: "Form",
                 onActivate: function(html) {
                     try {
@@ -85,6 +92,10 @@ cesip.MainView = bardia.oop.Class.create({
 	                            		}]
 	                            	});
 	                            }
+	                        }, {
+	                        	label: "plik",
+	                        	property: "fileToUpload",
+	                        	type: "File"
 	                        }],
 	                    	buttons: [{
 	                    		icon: "android"
