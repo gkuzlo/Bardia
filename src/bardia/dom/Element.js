@@ -75,6 +75,8 @@ bardia.dom.Element = bardia.oop.Class.create({
         } catch (e) {
             alert("insert: subElement=" + subElement + " " + e);
         }
+        
+        return subElement;
     },
 
     update: function(element) {
@@ -112,5 +114,12 @@ bardia.dom.Element = bardia.oop.Class.create({
     
     removeClassName: function(className) {
     	this.dom().className = this.dom().className.replace(className, "");
+    },
+    
+    setStyle: function(style) {
+    	var s = null;
+    	for (s in style) {
+    		this.dom().style[s] = style[s];
+    	}
     }
 });

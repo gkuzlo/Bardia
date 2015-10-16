@@ -96,6 +96,10 @@ cesip.MainView = bardia.oop.Class.create({
 	                        	label: "plik",
 	                        	property: "fileToUpload",
 	                        	type: "File"
+	                        }, {
+	                        	label: "Zaoamiętaj",
+	                        	property: "remember",
+	                        	type: "Boolean"
 	                        }],
 	                    	buttons: [{
 	                    		icon: "android"

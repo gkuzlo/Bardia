@@ -19,7 +19,7 @@ cesip.map.Marker = bardia.oop.Class.create({
     	
     	h.material = $_element({
     		$_tag: "div",
-    		style: "position:relative; cursor:grabbing; display:flex; align-items:center; flex-wrap:wrap; flex-direction:column; margin-left:-100%; background-color:transparent; opacity:1; margin-top:-24px",
+    		style: "position:relative; cursor:grabbing; display:flex; align-items:center; flex-wrap:wrap; flex-direction:column; margin-left:-100%; background-color:transparent; opacity:1; margin-top:-48px",
     		$_on: {
     			"mousedown": function(e) {
     				h.map.selectedOverlay = h.overlay;
@@ -31,7 +31,7 @@ cesip.map.Marker = bardia.oop.Class.create({
     		$_append: [{
     			$_tag: "img",
         		src: h.icon,
-        		style: "opacity:0.9; cursor:grabbing; user-drag:none;",
+        		style: "opacity:0.6; cursor:grabbing; user-drag:none;",
         		draggable: false
     		}, {
     			$_tag: "div",

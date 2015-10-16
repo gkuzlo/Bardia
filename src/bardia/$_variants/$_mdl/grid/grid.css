@@ -30,13 +30,13 @@
 }
 
 .grid-row {
-    position:relative; width:100%; border:1px solid lightGrey; height:40px; display:flex;
+    position:relative; width:100%; border:1px solid lightGrey; height:30px; display:flex;
     border-width:0px 0px 1px 0px; background-color:white;
 }
 
 @keyframes highlight-row {
     0%   {background-color: transparent;}
-    50% {background-color: #f0f0f0;}
+    50% {background-color: #eeeeee;}
     100% {background-color: #f0f0f0;}
 }
 
@@ -46,11 +46,11 @@
     -webkit-animation-name: highlight-row; /* Chrome, Safari, Opera */
     -webkit-animation-duration: 0.3s; /* Chrome, Safari, Opera */
     animation-name: highlight-row;
-    animation-duration: 0.3s;
+    animation-duration: 0.7s;
 }
 
 .grid-cell {
-    position:relative; border:0px; width:150px; background-color:transparent; line-height:40px;
+    position:relative; border:0px; width:150px; background-color:transparent; line-height:30px;
     padding:0px 5px 0px 5px;
 }
 

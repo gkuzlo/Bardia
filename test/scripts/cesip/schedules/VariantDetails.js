@@ -1,19 +1,13 @@
-/**
- * 
- */
+
 cesip.schedules.VariantDetails = bardia.oop.Class.create({
-	/**
-	 * @method initConfig
-	 */
+
 	initialize : function(config) {
 		bardia.oop.Class.extend(this, bardia.oop.Class.extend({
 		}, config));
 		
 		this.render();
 	},
-	/**
-	 * 
-	 */
+
 	render: function() {
 		var h = this;
 		
@@ -30,9 +24,7 @@ cesip.schedules.VariantDetails = bardia.oop.Class.create({
 
 		rest.getVariantDetails(h.variant);
 	},
-	/**
-	 * 
-	 */
+
 	display: function(fullVariant) {
 		var h = this;
 		
@@ -52,11 +44,8 @@ cesip.schedules.VariantDetails = bardia.oop.Class.create({
 
 		h.displayForm(fullVariant);
 		h.displayGrid(fullVariant);
-		h.displayMap();
 	},
-	/**
-	 * 
-	 */
+
 	displayForm: function(fullVariant) {
 		var h = this;
 		
@@ -77,19 +66,17 @@ cesip.schedules.VariantDetails = bardia.oop.Class.create({
 		});
 		h.form.setBean(fullVariant);
 	},
-	/**
-	 * 
-	 */
+
 	displayGrid: function(fullVariant) {
 		var h = this;
 
 		h.grid = new bardia.grid.Grid({
 			inside: h.subLayout.getDefault(),
+			clickAfterFetch: true,
 			columns: [
 			    {
 			    	name: "ID",
 			    	render: function(row, cell) {
-			    		/*
 			    		if (row.bean.published == true) {
 			    			cell.setStyle({
 			    				color: "green",
@@ -101,7 +88,6 @@ cesip.schedules.VariantDetails = bardia.oop.Class.create({
 			    				fontWeight: "bold"
 			    			});			    			
 			    		}
-			    		*/
 			    		
 			    		return row.bean.loid;
 			    	}
@@ -124,9 +110,7 @@ cesip.schedules.VariantDetails = bardia.oop.Class.create({
 			rows: fullVariant.connections
 		});
 	},
-	/**
-	 * 
-	 */
+
 	displayConnection: function(conn) {
 		var h = this;
 		
@@ -144,9 +128,7 @@ cesip.schedules.VariantDetails = bardia.oop.Class.create({
 			toCode: conn.toStopPoint.symbol
 		});
 	},
-	/**
-	 * 
-	 */
+
 	displayConnectionDetails: function(emptyConnection) {
 		var h = this;
 		
@@ -176,10 +158,4 @@ cesip.schedules.VariantDetails = bardia.oop.Class.create({
 		});
 		rest.getConnectionDetails(emptyConnection);
 	},
-	/**
-	 * 
-	 */
-	displayMap: function() {
-		var h = this;
-	}
 });

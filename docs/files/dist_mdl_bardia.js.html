@@ -223,6 +223,8 @@ bardia.dom.Element = bardia.oop.Class.create({
         } catch (e) {
             alert(&quot;insert: subElement=&quot; + subElement + &quot; &quot; + e);
         }
+        
+        return subElement;
     },
 
     update: function(element) {
@@ -260,6 +262,13 @@ bardia.dom.Element = bardia.oop.Class.create({
     
     removeClassName: function(className) {
     	this.dom().className = this.dom().className.replace(className, &quot;&quot;);
+    },
+    
+    setStyle: function(style) {
+    	var s = null;
+    	for (s in style) {
+    		this.dom().style[s] = style[s];
+    	}
     }
 });
 /**
@@ -969,6 +978,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
         	title: &quot;Insert tile here. . .&quot;,
+        	clickAfterFetch: false,
         	serial: &quot;S_&quot; + (Math.random()*1000000).toFixed(0),
         }, config));
         
@@ -1034,22 +1044,24 @@ bardia.grid.Grid = bardia.oop.Class.create({
     setButtons: function() {
     	var h = this;
     	if (h.buttons) {
-    		h.buttons.forEach(function(button) {
-    			h.root.find(h.id(&quot;toolbar&quot;)).insert($_element({
+    		h.buttons.forEach(function(button, index) {
+    			
+    			var el = $_element({
     				$_tag: &quot;button&quot;,
     				class: &quot;mdl-button mdl-js-button mdl-button--icon&quot;,
-    				title: button.name,
     				$_append: [{
-    					$_tag: &quot;i&quot;,
-    					class: &quot;material-icons&quot;,
-    					$_append: button.icon
+    					$_tag: &quot;div&quot;,
+    					class: &quot;icon material-icons&quot;,
+    					$_append: button.icon,
     				}],
     				$_on: {
     					&quot;click&quot;: function(e) {
     						button.onClick();
     					}
     				}
-    			}));
+    			});
+    			
+    			h.root.find(h.id(&quot;toolbar&quot;)).insert(el);
     		});
     	}
     },
@@ -1060,6 +1072,8 @@ bardia.grid.Grid = bardia.oop.Class.create({
         var rowsDiv = h.root.find(h.id(&quot;grid-rows&quot;));
         rowsDiv.update();
 
+        h.firstRow = null;
+        
         (model.rows || []).forEach(function(row) {
             var rowDiv = $_element({
                 $_tag: &quot;div&quot;,
@@ -1072,21 +1086,37 @@ bardia.grid.Grid = bardia.oop.Class.create({
             });
             rowsDiv.insert(rowDiv);
         	rowDiv.bean = row;
+        	
+        	h.firstRow = h.firstRow || rowDiv;
 
-            h.columns.forEach(function(column) {
-                rowDiv.insert($_element({
+            h.columns.forEach(function(column) {            	
+            	var cell = $_element({
                     $_tag: &quot;div&quot;,
                     class: &quot;grid-cell&quot;,
-                    $_append: (function() {
-                    	if (column.render) {
-                    		return column.render(rowDiv);
-                    	} else {
-                        	return eval(&quot;rowDiv.bean.&quot; + column.property);
-                    	}
-                    })()
-                }));
+                    style: &quot;width:&quot; + (column.width || 150) + &quot;px&quot;,
+                });
+            	
+            	if (column.render) {
+            		var rendered = column.render(rowDiv, cell);	
+            		if (rendered.$_tag) {
+            			cell.insert($_element(rendered));
+            		} else {
+            			cell.insert(rendered);
+            		}
+            	} else {
+                	cell.insert(&quot;&quot; + eval(&quot;rowDiv.bean.&quot; + column.property));
+            	}
+
+                rowDiv.insert(cell);
             });
         });
+        
+        if (h.clickAfterFetch == true) {
+        	if (h.firstRow) {
+        		h.firstRow.dom().click();
+        	}
+        }
+        
     },
     
     openDetails: function(width) {

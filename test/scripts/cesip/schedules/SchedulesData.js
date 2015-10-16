@@ -324,10 +324,6 @@ cesip.schedules.SchedulesData = bardia.oop.Class.create({
 			    	}
 			    },
 			    {
-			    	name: "name",
-			    	property: "name"
-			    },
-			    {
 			    	name: "Wariant",
 			    	property: "wariant",
 			    	render: function(row) {
@@ -402,10 +398,6 @@ cesip.schedules.SchedulesData = bardia.oop.Class.create({
 			    {
 			    	name: "loid",
 			    	property: "loid"
-			    },
-			    {
-			    	name: "name",
-			    	property: "name"
 			    },
 			    {
 			    	name: "scheduledDepartureSec",

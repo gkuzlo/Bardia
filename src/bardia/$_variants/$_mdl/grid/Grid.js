@@ -6,6 +6,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
         	title: "Insert tile here. . .",
+        	clickAfterFetch: false,
         	serial: "S_" + (Math.random()*1000000).toFixed(0),
         }, config));
         
@@ -71,22 +72,24 @@ bardia.grid.Grid = bardia.oop.Class.create({
     setButtons: function() {
     	var h = this;
     	if (h.buttons) {
-    		h.buttons.forEach(function(button) {
-    			h.root.find(h.id("toolbar")).insert($_element({
+    		h.buttons.forEach(function(button, index) {
+    			
+    			var el = $_element({
     				$_tag: "button",
     				class: "mdl-button mdl-js-button mdl-button--icon",
-    				title: button.name,
     				$_append: [{
-    					$_tag: "i",
-    					class: "material-icons",
-    					$_append: button.icon
+    					$_tag: "div",
+    					class: "icon material-icons",
+    					$_append: button.icon,
     				}],
     				$_on: {
     					"click": function(e) {
     						button.onClick();
     					}
     				}
-    			}));
+    			});
+    			
+    			h.root.find(h.id("toolbar")).insert(el);
     		});
     	}
     },
@@ -97,6 +100,8 @@ bardia.grid.Grid = bardia.oop.Class.create({
         var rowsDiv = h.root.find(h.id("grid-rows"));
         rowsDiv.update();
 
+        h.firstRow = null;
+        
         (model.rows || []).forEach(function(row) {
             var rowDiv = $_element({
                 $_tag: "div",
@@ -109,21 +114,37 @@ bardia.grid.Grid = bardia.oop.Class.create({
             });
             rowsDiv.insert(rowDiv);
         	rowDiv.bean = row;
+        	
+        	h.firstRow = h.firstRow || rowDiv;
 
-            h.columns.forEach(function(column) {
-                rowDiv.insert($_element({
+            h.columns.forEach(function(column) {            	
+            	var cell = $_element({
                     $_tag: "div",
                     class: "grid-cell",
-                    $_append: (function() {
-                    	if (column.render) {
-                    		return column.render(rowDiv);
-                    	} else {
-                        	return eval("rowDiv.bean." + column.property);
-                    	}
-                    })()
-                }));
+                    style: "width:" + (column.width || 150) + "px",
+                });
+            	
+            	if (column.render) {
+            		var rendered = column.render(rowDiv, cell);	
+            		if (rendered.$_tag) {
+            			cell.insert($_element(rendered));
+            		} else {
+            			cell.insert(rendered);
+            		}
+            	} else {
+                	cell.insert("" + eval("rowDiv.bean." + column.property));
+            	}
+
+                rowDiv.insert(cell);
             });
         });
+        
+        if (h.clickAfterFetch == true) {
+        	if (h.firstRow) {
+        		h.firstRow.dom().click();
+        	}
+        }
+        
     },
     
     openDetails: function(width) {
