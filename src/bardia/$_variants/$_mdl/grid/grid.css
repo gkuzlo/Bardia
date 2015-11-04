@@ -34,19 +34,8 @@
     border-width:0px 0px 1px 0px; background-color:white;
 }
 
-@keyframes highlight-row {
-    0%   {background-color: transparent;}
-    50% {background-color: #eeeeee;}
-    100% {background-color: #f0f0f0;}
-}
-
 .grid-row:hover {
 	background-color:#f0f0f0; cursor:pointer;
-	
-    -webkit-animation-name: highlight-row; /* Chrome, Safari, Opera */
-    -webkit-animation-duration: 0.3s; /* Chrome, Safari, Opera */
-    animation-name: highlight-row;
-    animation-duration: 0.7s;
 }
 
 .grid-cell {
@@ -55,18 +44,18 @@
 }
 
 .grid-curtain {
-    position:absolute; top:0px; left:0px; bottom:0px; width:0px; 
-    background: rgba(0,0,0,0.5);
-    -webkit-transition: width 0.5s; /* Safari */
-    transition: width 0.5s;
+    position:absolute; top:0px; left:0px; bottom:0px; width:0px; overflow:hidden;
+    background: rgba(0,0,0,0.0);
+    -webkit-transition: all 0.5s; /* Safari */
+    transition: all 0.5s;
     z-index:3;
 }
 
 .grid-details-right {
-    position:absolute; top:0px; left:0px; bottom:0px; width:0px;
+    position:absolute; top:0px; left:0px; bottom:0px;
     background: white; border:0px;
-    -webkit-transition: width 0.5s; /* Safari */
-    transition: width 0.5s; overflow:hidden;
+    -webkit-transition: all 0.5s; /* Safari */
+    transition: all 0.5s; overflow:hidden;
     z-index:4;
 }
 

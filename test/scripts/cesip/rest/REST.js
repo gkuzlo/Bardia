@@ -69,6 +69,30 @@ cesip.rest.REST = bardia.oop.Class.create({
     getOSMImports: function() {
     	this.invokePOST("/osmImports.json", {}, {});
     },
+    
+	getDayTypes: function() {
+    	this.invokeGET("/getDayTypes.json", {});
+    },
+
+	saveDayType: function(dayType) {
+    	this.invokePOST("/saveDayType.json", {}, dayType);
+    },
+
+	getCalendar: function() {
+    	this.invokePOST("/getCalendar.json", {}, {});
+    },
+
+	saveDay: function(day) {
+    	this.invokePOST("/saveDay.json", {}, day);
+    },
+    
+    getStopPoints: function() {
+    	this.invokePOST("/getStopPoints.json", {}, {});
+    },
+
+    saveStopPoint: function(stopPoint) {
+    	this.invokePOST("/saveStopPoint.json", {}, stopPoint);
+    },
 
 	invokeGET: function(uri) {
 		var h = this;

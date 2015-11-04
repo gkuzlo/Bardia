@@ -14,7 +14,7 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 		var h = this;
 		
 		h.inside.update();
-		
+				
 		try {
 			var rest = new cesip.rest.REST({
 				onSuccess: function(cdmConnection) {
@@ -66,6 +66,11 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 			    	property: "published",
 			    	type: "Boolean"
 			    },
+			    {
+			    	label: "warning",
+			    	property: "warning",
+			    	type: "Boolean"
+			    },
 			],
 			buttons: [
 			    {
@@ -95,6 +100,7 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 			    			}
 			    		});
 			    		h.shape.published = h.form.getBean().published;
+			    		h.shape.warning = h.form.getBean().warning;
 			    		rest.saveConnection(h.shape);
 			    	}
 			    },
@@ -104,7 +110,8 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 		h.form.setBean({
 			fromStopPoint: h.shape.fromStopPoint.symbol + " " + h.shape.fromStopPoint.group.name,
 			toStopPoint: h.shape.toStopPoint.symbol + " " + h.shape.toStopPoint.group.name,
-			published: h.shape.published
+			published: h.shape.published,
+			warning: h.shape.warning
 		});
 		
 		h.panel = new bardia.layout.Panel({
@@ -115,6 +122,9 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 			    	title: "Znajdź kształt",
 			    	icon: "gesture",
 			    	onClick: function() {
+			    		if (!h.shape.nodes || h.shape.nodes.length <= 0) {
+			    			h.resetShape();
+			    		}
 			    		h.findRoute();
 			    	}
 			    },
@@ -128,8 +138,10 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 			]
 		});
 
-		h.displayMap();
-		h.displayShape(h.shape);
+		setTimeout(function() {
+			h.displayMap();
+			h.displayShape(h.shape);
+		}, 500);
 	},
     /**
      * @method renderMap
@@ -186,7 +198,7 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 	    		if(feature.getGeometry().getType() == "Point") {
 	    			return [new ol.style.Style({
 		    				image: new ol.style.Circle({
-			  	    		    radius: 3,
+			  	    		    radius: 5,
 				    		    fill: new ol.style.Fill({
 				    		    	color: 'white'
 				    		    }),
@@ -222,7 +234,7 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
     		styles['LineString'] = [new ol.style.Style({
     			stroke: new ol.style.Stroke({
     				color: 'red',
-    				width: 3
+    				width: 6
     		    }),
     		    fill: new ol.style.Fill({
     		    	color: 'rgba(0, 0, 255, 0.1)'
@@ -244,7 +256,7 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
     			} else {
     				return styles[feature.getGeometry().getType()] || styles['default'];
     			}
-    		}
+    		};
     	})();
 
     	h.map = new ol.Map({
@@ -297,18 +309,14 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 		
 		h.displayShapeOnMap();
     },
-    /**
-     * 
-     */
+
     displayShapeOnMap: function() {
     	var h = this;
     	
     	h.displayStopPointOnMap(h.shape.fromStopPoint);
     	h.displayStopPointOnMap(h.shape.toStopPoint);
     },
-    /**
-     * 
-     */
+
     displayStopPointOnMap: function(stopPoint) {
     	var h = this;
 
@@ -330,15 +338,24 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
         marker.setTitle(stopPoint.group.name);
 
         var feature = new ol.Feature(new ol.geom.Point(coordinates));
+        feature.on("change", function(e) {	    	
+	    	var coords = feature.getGeometry().getCoordinates();
+
+    		var coord = ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
+    		
+    		stopPoint.longitude = coord[0];
+    		stopPoint.latitude = coord[1];
+	    });
+        
         h.connectionVectors.getSource().addFeature(feature);
 
 		h.map.getView().setCenter(overlay.getPosition());
     },
-    /**
-     * 
-     */
+
     findRoute: function() {
     	var h = this;
+    	
+    	h.select.getFeatures().clear();
 
     	var rest = new cesip.rest.REST({
     		onSuccess: function(model) {
@@ -354,9 +371,7 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
     		nodes: h.shape.nodes
     	});
     },
-    /**
-     * 
-     */
+
     displayShape: function(shape) {
     	var h = this;
     	
@@ -390,10 +405,8 @@ cesip.schedules.ShapeDetails = bardia.oop.Class.create({
 
 	    h.connectionVectors.getSource().addFeature(line);
     },
-    /**
-     * 
-     */
-	resetShape: function(nodes) {
+
+	resetShape: function() {
 		var h = this;
 		
 		var connection = h.shape;

@@ -3,7 +3,6 @@ bardia.form.BooleanField = bardia.oop.Class.inherit(bardia.form.TextField, {
 
     initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: "Boolean value ...",
             serial: "S_" + (Math.random()*1000000).toFixed(0),
         }, config));
         
@@ -28,7 +27,7 @@ bardia.form.BooleanField = bardia.oop.Class.inherit(bardia.form.TextField, {
             }, {
             	$_tag: "span",
             	class: "mdl-checkbox__label",
-            	$_append: h.property
+            	$_append: h.label || "???" + h.property + "???"
             }]
         });
     },

@@ -16,9 +16,14 @@ bardia.layout.Tabs = bardia.oop.Class.create({
         h.root = h.prepareRoot();
         h.inside.update(h.root);
 
+        var headerLink = null;
         h.tabs.forEach(function(tab) {
-        	h.addItem(tab);
+        	headerLink = h.addItem(tab);
         });
+        
+        if (headerLink != null) {
+        	h.selectItem(headerLink);
+        }
     },
 
     addItem: function(tab) {
@@ -45,8 +50,8 @@ bardia.layout.Tabs = bardia.oop.Class.create({
     	h.root.find(h.id("contents")).insert(content);
     	
     	headerLink.content = content;
-    	
-    	h.selectItem(headerLink);
+
+    	return headerLink;
     },
     
     selectItem: function(wrappedElement) {

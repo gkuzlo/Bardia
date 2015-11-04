@@ -1,13 +1,15 @@
+/**
+ * 
+ */
 cesip.realtime.Realtime = bardia.oop.Class.create({
 
 	initialize: function(config) {
 		bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-			tabs: []
 		}, config));
 		
 		this.render();
 	},
-	
+
 	render: function() {
 		var h = this;
 
@@ -16,7 +18,12 @@ cesip.realtime.Realtime = bardia.oop.Class.create({
 			tabs: [{
 				name: "Pojazdy"
 			}, {
-				name: "Wirtualny monitor"
+				name: "Wirtualny monitor",
+				onActivate: function(html) {
+					new cesip.realtime.VirtualMonitor({
+						inside: html
+					});
+				}
 			}]
 		});
 	}

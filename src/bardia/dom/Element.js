@@ -80,14 +80,17 @@ bardia.dom.Element = bardia.oop.Class.create({
     },
 
     update: function(element) {
+    	var h = this;
+    	
+    	(this.children || []).forEach(function(child) {
+    		delete child.dom().wrapper;
+    		h.dom().removeChild(child.dom());
+    	});
         (this.children || []).splice(0, this.children.length);
 
-        while (this.domNode.childNodes.length > 0) {
-            this.domNode.removeChild(this.domNode.childNodes[0]);
+        if (element) { 
+        	this.insert(element);
         }
-
-        if (element) 
-        this.insert(element);
     },
 
     dom: function() {
@@ -101,6 +104,7 @@ bardia.dom.Element = bardia.oop.Class.create({
         } catch (e) {
         	alert(e + "   " + id);
         }
+
         if (result !== null) {
             return result.wrapper;
         } else {
@@ -108,12 +112,33 @@ bardia.dom.Element = bardia.oop.Class.create({
         }
     },
     
+    findByClass: function(className) {
+        var result = null;
+        try {
+        	result = this.domNode.querySelector(className);
+        } catch (e) {
+        	alert(e + "   " + className);
+        }
+
+        if (result != null && result.wrapper) {
+        	return result.wrapper;
+        } else if (result != null && !result.wrapper) {
+        	return $_element(result);
+        } else {
+            return null;   
+        }    	
+    },
+
     addClassName: function(className) {
     	this.dom().className = this.dom().className + " " + className;
     },
     
     removeClassName: function(className) {
     	this.dom().className = this.dom().className.replace(className, "");
+    },
+    
+    hasClassName: function(className) {
+    	return this.dom().className.indexOf(className) > -1;
     },
     
     setStyle: function(style) {

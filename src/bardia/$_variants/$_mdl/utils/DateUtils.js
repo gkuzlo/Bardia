@@ -15,6 +15,17 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	return result;
     },
     
+    formatDateHHmm: function(date) {
+    	var result = "";
+    	try {
+    		result = this.formatMM((date.getHours())) + ":" + this.formatMM(date.getMinutes());
+    	} catch (e) {
+    		alert(e);
+    		result = "";
+    	}
+    	return result;
+    },
+    
     daySecondsToHHMM: function(daySeconds) {
     	var result = "";
     	
@@ -63,6 +74,17 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	try {
     		if (time)
     			result = this.formatDateYYYYMMDD(new Date(time));	
+    	} catch (e) {
+    		alert(e);
+    	}
+    	return result;
+    },
+
+    createFormatHHmm: function(time) {
+    	var result = "";
+    	try {
+    		if (time)
+    			result = this.formatDateHHmm(new Date(time));	
     	} catch (e) {
     		alert(e);
     	}

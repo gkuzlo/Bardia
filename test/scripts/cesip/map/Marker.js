@@ -16,39 +16,20 @@ cesip.map.Marker = bardia.oop.Class.create({
      */
     create: function() {
     	var h = this;
-    	
+
     	h.material = $_element({
-    		$_tag: "div",
-    		style: "position:relative; cursor:grabbing; display:flex; align-items:center; flex-wrap:wrap; flex-direction:column; margin-left:-100%; background-color:transparent; opacity:1; margin-top:-48px",
-    		$_on: {
-    			"mousedown": function(e) {
-    				h.map.selectedOverlay = h.overlay;
-    			},
-    			"mouseup": function(e) {
-    				h.map.selectedOverlay = undefined;
-    			}
-    		},
-    		$_append: [{
-    			$_tag: "img",
-        		src: h.icon,
-        		style: "opacity:0.6; cursor:grabbing; user-drag:none;",
-        		draggable: false
-    		}, {
-    			$_tag: "div",
-    			id: "title",
-    			style: "cursor:grabbing; font-size:12px; background-color:rgba(255,255,255,0.9); border:1px solid black; padding:5px; margin:5px; border-radius:3px; wrap-word:no-wrap",
-    			$_append: h.title 
-    		}, {
-    			$_tag: "div",
-    			style: "position:absolute; top:0px; left:0px; width:100%; height:100%; background-color:rgba(0,0,0,0.0)",
-    		}]
+			$_tag: "div",
+			id: "title",
+			style: "cursor:grabbing; font-size:12px; height:20px; line-height:20px; background-color:rgba(255,255,255,0.5); border:1px solid black; padding:3px; border-radius:3px; wrap-word:no-wrap; " +
+					"margin-top:-40px; margin-left:-50%; margin-right:50%",
+			$_append: h.title 
     	});
     },
     setOverlay: function(overlay) {
     	this.overlay = overlay;
     },
     setTitle: function(title) {
-    	this.material.find("title").update(title);
+    	this.material.update(title);
     },
     select: function() {
     	alert("cesip.map.Marker.select() not implemented");

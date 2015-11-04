@@ -34,13 +34,23 @@ bardia.grid.Grid = bardia.oop.Class.create({
 	                    return {
 	                        $_tag: "div",
 	                        class: "grid-header",
+	                        style: "width:" + (column.width || 150) + "px",
 	                        $_append: column.name
 	                    };
 	                })
 	            }, {
 	                $_tag: "div",
 	                class: "grid-rows",
-	                id: h.id("grid-rows")
+	                id: h.id("grid-rows"),
+	                $_on: {
+	                    "click": function(e) {
+	                    	var element = e.target; 
+	                    	while(element.className !== "grid-row") {
+	                    		element = element.parentElement;
+	                    	}
+	                        h.onClick(element.wrapper);
+	                    }
+	                }
 	            }]
         	}, {
                 $_tag: "div",
@@ -55,6 +65,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
                     $_tag: "div",
                     class: "grid-details-right",
                     id: h.id("grid-details-right"),
+                    style: "width:" + h.detailsWidth + "; left:-" + h.detailsWidth, 
                     $_on: {
                     	"click": function(e) {
                     		e.stopPropagation();
@@ -106,11 +117,6 @@ bardia.grid.Grid = bardia.oop.Class.create({
             var rowDiv = $_element({
                 $_tag: "div",
                 class: "grid-row",
-                $_on: {
-                    "click": function(e) {
-                        h.onClick(rowDiv);
-                    }
-                }
             });
             rowsDiv.insert(rowDiv);
         	rowDiv.bean = row;
@@ -126,7 +132,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
             	
             	if (column.render) {
             		var rendered = column.render(rowDiv, cell);	
-            		if (rendered.$_tag) {
+            		if (rendered && rendered != null && rendered.$_tag && rendered.$_tag != null) {
             			cell.insert($_element(rendered));
             		} else {
             			cell.insert(rendered);
@@ -147,11 +153,12 @@ bardia.grid.Grid = bardia.oop.Class.create({
         
     },
     
-    openDetails: function(width) {
+    openDetails: function() {
         var h = this;
 
         h.root.find(h.id("grid-curtain")).dom().style.width = "100%";
-        h.root.find(h.id("grid-details-right")).dom().style.width = width || h.detailsWidth;
+        h.root.find(h.id("grid-curtain")).dom().style.background = "rgba(0,0,0,0.5)";
+        h.root.find(h.id("grid-details-right")).dom().style.left = "0px";
         
         return h.root.find(h.id("grid-details-right"));
     },
@@ -160,7 +167,8 @@ bardia.grid.Grid = bardia.oop.Class.create({
         var h = this;
 
         h.root.find(h.id("grid-curtain")).dom().style.width = "0px";
-        h.root.find(h.id("grid-details-right")).dom().style.width = "0px";
+        h.root.find(h.id("grid-curtain")).dom().style.background = "rgba(0,0,0,0.0)";
+        h.root.find(h.id("grid-details-right")).dom().style.left = "-" + h.detailsWidth;
     },
     
     id: function(name) {
