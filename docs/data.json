@@ -269,48 +269,42 @@
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1123,
+            "line": 1193,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1351,
-            "description": "z inputa do beana",
+            "line": 1451,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1378,
+            "line": 1499,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1417,
+            "line": 1528,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1442,
+            "line": 1565,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1479,
+            "line": 1758,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1672,
+            "line": 1763,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1677,
-            "class": "bardia.layout.Material"
-        },
-        {
-            "file": "dist\\mdl\\bardia.js",
-            "line": 1754,
+            "line": 1855,
             "class": "bardia.layout.Material"
         }
     ],
@@ -397,39 +391,35 @@
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1123"
-        },
-        {
-            "message": "Missing item type\nz inputa do beana",
-            "line": " dist\\mdl\\bardia.js:1351"
+            "line": " dist\\mdl\\bardia.js:1193"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1378"
+            "line": " dist\\mdl\\bardia.js:1451"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1417"
+            "line": " dist\\mdl\\bardia.js:1499"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1442"
+            "line": " dist\\mdl\\bardia.js:1528"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1479"
+            "line": " dist\\mdl\\bardia.js:1565"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1672"
+            "line": " dist\\mdl\\bardia.js:1758"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1677"
+            "line": " dist\\mdl\\bardia.js:1763"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:1754"
+            "line": " dist\\mdl\\bardia.js:1855"
         }
     ]
 }

@@ -210,10 +210,19 @@
 
 .grid-details-right {
     position:absolute; top:0px; left:0px; bottom:0px;
-    background: white; border:0px;
-    -webkit-transition: all 0.5s; /* Safari */
-    transition: all 0.5s; overflow:hidden;
-    z-index:4;
+    background:white; border:0px;
+    
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s; 
+    
+    overflow:hidden;
+    z-index:4; 
+}
+
+.grid-title {
+	padding-left:20px;
 }
 
 .grid-bg {

@@ -987,10 +987,12 @@ bardia.grid.Grid = bardia.oop.Class.create({
 	                $_on: {
 	                    "click": function(e) {
 	                    	var element = e.target; 
-	                    	while(element.className !== "grid-row") {
+	                    	while(element.className && element.className !== "grid-row") {
 	                    		element = element.parentElement;
 	                    	}
-	                        h.onClick(element.wrapper);
+	                    	if (element.wrapper && element.className && element.className == "grid-row") {
+	                    		h.onClick(element.wrapper);
+	                    	}
 	                    }
 	                }
 	            }]
@@ -1020,6 +1022,8 @@ bardia.grid.Grid = bardia.oop.Class.create({
         h.inside.update(h.root);
         
         h.setButtons();
+        h.setTitle(h.title);
+        h.createSearchField();
     },
     
     setButtons: function() {
@@ -1045,6 +1049,58 @@ bardia.grid.Grid = bardia.oop.Class.create({
     			h.root.find(h.id("toolbar")).insert(el);
     		});
     	}
+    },
+    
+    setTitle: function(title) {
+    	var h = this;
+
+		var el = $_element({
+			$_tag: "div",
+			class: "grid-title",
+			$_append: title
+		});
+    			
+    	h.root.find(h.id("toolbar")).insert(el);
+    },
+    
+    createSearchField: function() {
+    	var h = this;
+    	
+    	var textSearch = $_element({
+    		$_tag: "div",
+    		class: "mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right",
+    		style: "position:absolute; right:10px; margin-top:-8px",
+    		$_append: [{
+    			$_tag: "label",
+    			class: "mdl-button mdl-js-button mdl-button--icon",
+    			"for": h.id("search_input"),
+    			$_append: [{
+    				$_tag: "i",
+    				class: "material-icons",
+    				$_append: "search"
+    			}]
+    		}, {
+    			$_tag: "div",
+    			class: "mdl-textfield__expandable-holder",
+    			$_append: [{
+    				$_tag: "input",
+    				class: "mdl-textfield__input",
+    				style: "background-color:transparent; font-size:14px; font-family:Arial; margin-bottom:4px",
+    				type: "text",
+    				name: "sample",
+    			    id: h.id("search_input"),
+    			    $_on: {
+    			    	keyup: function(e) {
+    			    		h.filterRows(e.target.value);
+    			    	}
+    			    }
+    			}]
+    		}]
+    	});
+    	
+    	h.root.find(h.id("toolbar")).insert(textSearch);
+    	
+    	$_upgradeElement(textSearch);
     },
 
     fetch: function(model) {
@@ -1094,7 +1150,21 @@ bardia.grid.Grid = bardia.oop.Class.create({
         }
         
     },
-    
+
+    filterRows: function(value) {
+    	var h = this;
+
+    	var rowsDiv = h.root.find(h.id("grid-rows"));
+
+    	for (var i=0; i<rowsDiv.dom().childNodes.length; i++) {
+    		if (rowsDiv.dom().childNodes[i].innerHTML.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+    			rowsDiv.dom().childNodes[i].style.display = "flex"
+    		} else {
+    			rowsDiv.dom().childNodes[i].style.display = "none"
+    		}
+    	}
+    },
+
     openDetails: function() {
         var h = this;
 
@@ -1160,7 +1230,9 @@ bardia.form.Form = bardia.oop.Class.create({
     				}],
     				$_on: {
     					"click": function(e) {
-    						button.onClick();
+    						if (button.onClick) {
+    							button.onClick();
+    						}
     					}
     				}
     			}));
@@ -1300,10 +1372,12 @@ bardia.form.Form = bardia.oop.Class.create({
 bardia.form.TextField = bardia.oop.Class.create({
 
     initialize: function(config) {
+
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             label: "Insert title here ...",
             pattern: ".+",
-            required: config.required || false
+            required: config.required || false,
+            serial: "S_" + (Math.random()*1000000).toFixed(0),
         }, config));
 
         this.render();
@@ -1321,7 +1395,7 @@ bardia.form.TextField = bardia.oop.Class.create({
                 type: "text",
                 pattern: h.pattern,
                 required: true,
-                id: h.property,
+                id: h.id(h.property),
                 $_on: {
                     change: function(e) {
                         h.updateBeanProperty(e.target.value);
@@ -1348,19 +1422,14 @@ bardia.form.TextField = bardia.oop.Class.create({
         return h.root;
     },
 
-    /**  
-     * z inputa do beana
-     */
     updateBeanProperty: function(value) {
-        var h = this;
-        var bean = h.form.getBean();
-        
-        eval("bean." + h.property + " = value");
+        var h = this;        
+        eval("h.form.getBean()." + h.property + " = value;");
     },
 
-    updateInputValue: function(bean) {
+    updateInputValue: function() {
         var h = this;
-        h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");
+        h.root.find(h.id(h.property)).dom().value = eval("h.form.getBean()." + h.property + " || ''");
     },
 
     setForm: function(form) {
@@ -1373,6 +1442,10 @@ bardia.form.TextField = bardia.oop.Class.create({
     	} catch (e) {
     		alert("" + e);
     	}
+    },
+    
+    id: function(name) {
+    	return this.serial + name;
     }
 });
 /**
@@ -1382,7 +1455,8 @@ bardia.form.ActionField = bardia.oop.Class.inherit(bardia.form.TextField, {
 
     initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: "Insert title here ... 2"
+            label: "Title ... ",
+            serial: "S_" + (Math.random()*1000000).toFixed(0),
         }, config));
         this.render();
     },
@@ -1398,10 +1472,18 @@ bardia.form.ActionField = bardia.oop.Class.inherit(bardia.form.TextField, {
                 class: "form-text-input",
                 required: true,
                 type: "text",
-                id: h.property,
+                id: h.id(h.property),
                 $_on: {
                     change: function(e) {
                         h.updateBeanProperty(e.target.value);
+                    },
+                    keydown: function(e) {
+                    	e.stopPropagation();
+                    	e.preventDefault();
+                    },
+                    mousedown: function(e) {
+                    	e.stopPropagation();
+                    	e.preventDefault();
                     }
                 }
             }, {
@@ -1425,7 +1507,7 @@ bardia.form.ActionField = bardia.oop.Class.inherit(bardia.form.TextField, {
             class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
             $_on: {
                 click: function(e) {
-                    var element = h.form.openDetails("300px");
+                    var element = h.form.openDetails("100%");
                     if (h.onExpand) {
                     	h.onExpand(element);
                     }
@@ -1437,6 +1519,10 @@ bardia.form.ActionField = bardia.oop.Class.inherit(bardia.form.TextField, {
                 $_append: "keyboard_arrow_down",
             }]
         }));
+    },
+    
+    id: function(name) {
+    	return this.serial + name;
     }
 });
 /**
@@ -1685,7 +1771,7 @@ bardia.form.LookupField = bardia.oop.Class.inherit(bardia.form.ActionField, {
             class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
             $_on: {
                 click: function(e) {
-                    var element = h.form.openDetails("300px");
+                    var element = h.form.openDetails("100%");
                     if (h.onExpand) {
                     	h.onExpand(element);
                     }
@@ -1697,7 +1783,22 @@ bardia.form.LookupField = bardia.oop.Class.inherit(bardia.form.ActionField, {
                 $_append: "keyboard_arrow_down",
             }]
         }));
-    }
+    },
+    
+    updateInputValue: function() {
+        var h = this;
+
+        var inputValue = eval("h.form.getBean()." + h.property + " || ''");
+        
+        if (h.formatLabel) {
+        	try {
+        		inputValue = h.formatLabel(h.form.getBean());
+        	} catch (e) {
+        		alert("updateInputValue(): " + e);
+        	}
+        }
+        h.root.find(h.id(h.property)).dom().value = inputValue;
+    },
 });
 
 bardia.form.BooleanField = bardia.oop.Class.inherit(bardia.form.TextField, {

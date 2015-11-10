@@ -45,10 +45,12 @@ bardia.grid.Grid = bardia.oop.Class.create({
 	                $_on: {
 	                    "click": function(e) {
 	                    	var element = e.target; 
-	                    	while(element.className !== "grid-row") {
+	                    	while(element.className && element.className !== "grid-row") {
 	                    		element = element.parentElement;
 	                    	}
-	                        h.onClick(element.wrapper);
+	                    	if (element.wrapper && element.className && element.className == "grid-row") {
+	                    		h.onClick(element.wrapper);
+	                    	}
 	                    }
 	                }
 	            }]
@@ -78,6 +80,8 @@ bardia.grid.Grid = bardia.oop.Class.create({
         h.inside.update(h.root);
         
         h.setButtons();
+        h.setTitle(h.title);
+        h.createSearchField();
     },
     
     setButtons: function() {
@@ -103,6 +107,58 @@ bardia.grid.Grid = bardia.oop.Class.create({
     			h.root.find(h.id("toolbar")).insert(el);
     		});
     	}
+    },
+
+    setTitle: function(title) {
+    	var h = this;
+
+		var el = $_element({
+			$_tag: "div",
+			class: "grid-title",
+			$_append: title
+		});
+    			
+    	h.root.find(h.id("toolbar")).insert(el);
+    },
+    
+    createSearchField: function() {
+    	var h = this;
+    	
+    	var textSearch = $_element({
+    		$_tag: "div",
+    		class: "mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right",
+    		style: "position:absolute; right:10px; margin-top:-8px",
+    		$_append: [{
+    			$_tag: "label",
+    			class: "mdl-button mdl-js-button mdl-button--icon",
+    			"for": h.id("search_input"),
+    			$_append: [{
+    				$_tag: "i",
+    				class: "material-icons",
+    				$_append: "search"
+    			}]
+    		}, {
+    			$_tag: "div",
+    			class: "mdl-textfield__expandable-holder",
+    			$_append: [{
+    				$_tag: "input",
+    				class: "mdl-textfield__input",
+    				style: "background-color:transparent; font-size:14px; font-family:Arial; margin-bottom:4px",
+    				type: "text",
+    				name: "sample",
+    			    id: h.id("search_input"),
+    			    $_on: {
+    			    	keyup: function(e) {
+    			    		h.filterRows(e.target.value);
+    			    	}
+    			    }
+    			}]
+    		}]
+    	});
+    	
+    	h.root.find(h.id("toolbar")).insert(textSearch);
+    	
+    	$_upgradeElement(textSearch);
     },
 
     fetch: function(model) {
@@ -152,7 +208,21 @@ bardia.grid.Grid = bardia.oop.Class.create({
         }
         
     },
-    
+
+    filterRows: function(value) {
+    	var h = this;
+
+    	var rowsDiv = h.root.find(h.id("grid-rows"));
+
+    	for (var i=0; i<rowsDiv.dom().childNodes.length; i++) {
+    		if (rowsDiv.dom().childNodes[i].innerHTML.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+    			rowsDiv.dom().childNodes[i].style.display = "flex"
+    		} else {
+    			rowsDiv.dom().childNodes[i].style.display = "none"
+    		}
+    	}
+    },
+
     openDetails: function() {
         var h = this;
 

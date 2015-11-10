@@ -38,7 +38,9 @@ bardia.form.Form = bardia.oop.Class.create({
     				}],
     				$_on: {
     					"click": function(e) {
-    						button.onClick();
+    						if (button.onClick) {
+    							button.onClick();
+    						}
     					}
     				}
     			}));

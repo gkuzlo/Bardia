@@ -1,10 +1,12 @@
 bardia.form.TextField = bardia.oop.Class.create({
 
     initialize: function(config) {
+
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             label: "Insert title here ...",
             pattern: ".+",
-            required: config.required || false
+            required: config.required || false,
+            serial: "S_" + (Math.random()*1000000).toFixed(0),
         }, config));
 
         this.render();
@@ -22,7 +24,7 @@ bardia.form.TextField = bardia.oop.Class.create({
                 type: "text",
                 pattern: h.pattern,
                 required: true,
-                id: h.property,
+                id: h.id(h.property),
                 $_on: {
                     change: function(e) {
                         h.updateBeanProperty(e.target.value);
@@ -49,19 +51,14 @@ bardia.form.TextField = bardia.oop.Class.create({
         return h.root;
     },
 
-    /**  
-     * z inputa do beana
-     */
     updateBeanProperty: function(value) {
-        var h = this;
-        var bean = h.form.getBean();
-        
-        eval("bean." + h.property + " = value");
+        var h = this;        
+        eval("h.form.getBean()." + h.property + " = value;");
     },
 
-    updateInputValue: function(bean) {
+    updateInputValue: function() {
         var h = this;
-        h.root.find(h.property).dom().value = eval("bean." + h.property + " || ''");
+        h.root.find(h.id(h.property)).dom().value = eval("h.form.getBean()." + h.property + " || ''");
     },
 
     setForm: function(form) {
@@ -74,5 +71,9 @@ bardia.form.TextField = bardia.oop.Class.create({
     	} catch (e) {
     		alert("" + e);
     	}
+    },
+    
+    id: function(name) {
+    	return this.serial + name;
     }
 });
