@@ -70,7 +70,12 @@ bardia.layout.Tabs = bardia.oop.Class.create({
 		if (wrappedElement.tab.onActivate && !wrappedElement.activated) {
 			wrappedElement.activated = true;
 			wrappedElement.tab.onActivate(wrappedElement.content);
+		} 
+
+		if (wrappedElement.tab.onSelect) {
+			wrappedElement.tab.onSelect(wrappedElement.content);
 		}
+
     },
 
     prepareRoot: function() {

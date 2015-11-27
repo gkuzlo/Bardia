@@ -152,7 +152,14 @@ bardia.dom.Element = bardia.oop.Class.create({
     		delete child.dom().wrapper;
     		h.dom().removeChild(child.dom());
     	});
-        (this.children || []).splice(0, this.children.length);
+    	
+    	if (this.children) {
+    		this.children.splice(0, this.children.length);
+    	}
+    	
+        while (this.dom().firstChild) {
+            this.dom().removeChild(this.dom().firstChild);
+        }
 
         if (element) { 
         	this.insert(element);
@@ -772,7 +779,12 @@ bardia.layout.Tabs = bardia.oop.Class.create({
 		if (wrappedElement.tab.onActivate && !wrappedElement.activated) {
 			wrappedElement.activated = true;
 			wrappedElement.tab.onActivate(wrappedElement.content);
+		} 
+
+		if (wrappedElement.tab.onSelect) {
+			wrappedElement.tab.onSelect(wrappedElement.content);
 		}
+
     },
 
     prepareRoot: function() {
@@ -1050,7 +1062,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     		});
     	}
     },
-    
+
     setTitle: function(title) {
     	var h = this;
 
