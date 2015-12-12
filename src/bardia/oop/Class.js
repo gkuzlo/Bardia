@@ -22,18 +22,19 @@ bardia.oop.Class = (function() {
     }
 
     function inherit(_function, body) {
-    	function klass(config) {
-    		this.initialize(config);
-    	}
+        var klass = function(config) {
+            this.initialize(config); 
+        }
 
-    	var attribute = null;
-    	for (attribute in _function.prototype) {
-    		klass.prototype[attribute] = _function.prototype[attribute];
+    	var fun = null;
+    	for (fun in _function.prototype) {
+    		klass.prototype[fun] = _function.prototype[fun];
     	}
-    	for (attribute in body) {
-    		klass.prototype[attribute] = body[attribute];
-    	}    
     	
+        for (fun in body) {
+            klass.prototype[fun] = body[fun];
+        }
+
     	return klass;
     }
 

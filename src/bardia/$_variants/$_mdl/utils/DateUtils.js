@@ -26,6 +26,17 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	return result;
     },
     
+    formatDateHHmmSS: function(date) {
+    	var result = "";
+    	try {
+    		result = this.formatMM(date.getHours()) + ":" + this.formatMM(date.getMinutes()) + ":" + this.formatMM(date.getSeconds());
+    	} catch (e) {
+    		alert(e);
+    		result = "";
+    	}
+    	return result;
+    },
+    
     daySecondsToHHMM: function(daySeconds) {
     	var result = "";
     	

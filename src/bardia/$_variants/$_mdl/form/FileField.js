@@ -6,8 +6,6 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     displayButton: function() {
     	var h = this;
 
-    	h.serial = "upload_" + (Math.random()*1000000).toFixed(0);
-    	
     	h.root.insert($_element({
             $_tag: "button",
             class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
@@ -72,7 +70,8 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     
     updateInputValue: function(bean) {
         var h = this;
+
         var file = eval("bean." + h.property + " || {name:''}");
-        h.root.find(h.property).dom().value = file.name;
+        h.root.find(h.id(h.property)).dom().value = file.name;
     },
 });

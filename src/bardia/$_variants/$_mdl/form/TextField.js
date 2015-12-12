@@ -23,7 +23,7 @@ bardia.form.TextField = bardia.oop.Class.create({
                 class: "form-text-input",
                 type: "text",
                 pattern: h.pattern,
-                required: true,
+                required: false,
                 id: h.id(h.property),
                 $_on: {
                     change: function(e) {
@@ -36,7 +36,7 @@ bardia.form.TextField = bardia.oop.Class.create({
                 $_append: h.label
             }]
         });
-        
+
         if (h.required===true) {
             h.root.insert($_element({
                 $_tag: "label",

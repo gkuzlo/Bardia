@@ -26,18 +26,19 @@ bardia.oop.Class = (function() {
     }
 
     function inherit(_function, body) {
-    	function klass(config) {
-    		this.initialize(config);
-    	}
+        var klass = function(config) {
+            this.initialize(config); 
+        }
 
-    	var attribute = null;
-    	for (attribute in _function.prototype) {
-    		klass.prototype[attribute] = _function.prototype[attribute];
+    	var fun = null;
+    	for (fun in _function.prototype) {
+    		klass.prototype[fun] = _function.prototype[fun];
     	}
-    	for (attribute in body) {
-    		klass.prototype[attribute] = body[attribute];
-    	}    
     	
+        for (fun in body) {
+            klass.prototype[fun] = body[fun];
+        }
+
     	return klass;
     }
 
@@ -262,6 +263,17 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	var result = "";
     	try {
     		result = this.formatMM((date.getHours())) + ":" + this.formatMM(date.getMinutes());
+    	} catch (e) {
+    		alert(e);
+    		result = "";
+    	}
+    	return result;
+    },
+    
+    formatDateHHmmSS: function(date) {
+    	var result = "";
+    	try {
+    		result = this.formatMM(date.getHours()) + ":" + this.formatMM(date.getMinutes()) + ":" + this.formatMM(date.getSeconds());
     	} catch (e) {
     		alert(e);
     		result = "";
@@ -1081,7 +1093,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     	var textSearch = $_element({
     		$_tag: "div",
     		class: "mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right",
-    		style: "position:absolute; right:10px; margin-top:-8px",
+    		style: "position:absolute; right:10px; top:0px; margin-top:-8px",
     		$_append: [{
     			$_tag: "label",
     			class: "mdl-button mdl-js-button mdl-button--icon",
@@ -1406,7 +1418,7 @@ bardia.form.TextField = bardia.oop.Class.create({
                 class: "form-text-input",
                 type: "text",
                 pattern: h.pattern,
-                required: true,
+                required: false,
                 id: h.id(h.property),
                 $_on: {
                     change: function(e) {
@@ -1419,7 +1431,7 @@ bardia.form.TextField = bardia.oop.Class.create({
                 $_append: h.label
             }]
         });
-        
+
         if (h.required===true) {
             h.root.insert($_element({
                 $_tag: "label",
@@ -1574,9 +1586,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
             }]
         }));
     },
-    /**
-     * 
-     */
+
     displayCalendar: function(html) {    	
     	var h = this;
 
@@ -1738,7 +1748,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     updateInputValue: function(bean) {
         var h = this;
 
-        h.root.find(h.property).dom().value = bardia.form.DateField.DU.createFormatYYYYMMDD(eval("bean." + h.property));
+        h.root.find(h.id(h.property)).dom().value = bardia.form.DateField.DU.createFormatYYYYMMDD(eval("bean." + h.property));
     },
 
     setWeekday: function() {
@@ -1767,17 +1777,11 @@ bardia.form.DateField.MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", 
 bardia.form.DateField.SHORT_MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 bardia.form.DateField.DU = new bardia.utils.DateUtils();
 
-/**
- * 
- */
 bardia.form.LookupField = bardia.oop.Class.inherit(bardia.form.ActionField, {
 
-    /**
-     *  
-     */
     displayButton: function() {
     	var h = this;
-    	
+
     	h.root.insert($_element({
             $_tag: "button",
             class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
@@ -1870,8 +1874,6 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     displayButton: function() {
     	var h = this;
 
-    	h.serial = "upload_" + (Math.random()*1000000).toFixed(0);
-    	
     	h.root.insert($_element({
             $_tag: "button",
             class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
@@ -1936,7 +1938,8 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     
     updateInputValue: function(bean) {
         var h = this;
+
         var file = eval("bean." + h.property + " || {name:''}");
-        h.root.find(h.property).dom().value = file.name;
+        h.root.find(h.id(h.property)).dom().value = file.name;
     },
 });

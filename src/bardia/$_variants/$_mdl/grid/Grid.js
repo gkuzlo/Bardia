@@ -127,7 +127,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     	var textSearch = $_element({
     		$_tag: "div",
     		class: "mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right",
-    		style: "position:absolute; right:10px; margin-top:-8px",
+    		style: "position:absolute; right:10px; top:0px; margin-top:-8px",
     		$_append: [{
     			$_tag: "label",
     			class: "mdl-button mdl-js-button mdl-button--icon",

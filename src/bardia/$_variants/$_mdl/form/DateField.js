@@ -35,9 +35,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
             }]
         }));
     },
-    /**
-     * 
-     */
+
     displayCalendar: function(html) {    	
     	var h = this;
 
@@ -199,7 +197,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     updateInputValue: function(bean) {
         var h = this;
 
-        h.root.find(h.property).dom().value = bardia.form.DateField.DU.createFormatYYYYMMDD(eval("bean." + h.property));
+        h.root.find(h.id(h.property)).dom().value = bardia.form.DateField.DU.createFormatYYYYMMDD(eval("bean." + h.property));
     },
 
     setWeekday: function() {

@@ -1,14 +1,8 @@
-/**
- * 
- */
 bardia.form.LookupField = bardia.oop.Class.inherit(bardia.form.ActionField, {
 
-    /**
-     *  
-     */
     displayButton: function() {
     	var h = this;
-    	
+
     	h.root.insert($_element({
             $_tag: "button",
             class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
