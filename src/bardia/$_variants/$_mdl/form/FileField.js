@@ -20,7 +20,7 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
                 $_append: "file_upload",
             }, {
     			$_tag: "form",
-    		    action: bardia.uploadAction,
+    		    action: h.uploadAction || bardia.uploadAction,
     		    method: "POST",
     		    enctype: "multipart/form-data",
     		    target: h.serial,
@@ -59,7 +59,7 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     							}
     						};
 
-    						xhr.open("POST", bardia.uploadAction, true);
+    						xhr.open("POST", h.uploadAction || bardia.uploadAction, true);
     						xhr.send(form);
     					}
     				}

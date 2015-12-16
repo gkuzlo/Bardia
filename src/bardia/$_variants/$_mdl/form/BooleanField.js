@@ -15,25 +15,24 @@ bardia.form.BooleanField = bardia.oop.Class.inherit(bardia.form.TextField, {
         h.root = $_element({
             $_tag: "div",
             class: "form-row",
-            $_append: [{
-            	$_tag: "input",
-            	type: "checkbox",
-            	id: h.property,
-            	$_on: {
-            		"change": function(e) {
-            			h.updateBeanProperty(e.target.checked);
-            		}
-            	}
-            }, {
-            	$_tag: "span",
-            	class: "mdl-checkbox__label",
-            	$_append: h.label || "???" + h.property + "???"
-            }]
         });
+        
+        h.checkBox = new bardia.controlls.CheckBox({
+        	onChange: function(value) {
+        		h.updateBeanProperty(value);
+        	}
+        });
+        
+        h.root.insert(h.checkBox.getWrapper());
+        h.root.insert($_element({
+        	$_tag: "div",
+        	style: "position:absolute; left:50px; top:13px;",
+        	$_append: h.label || "???" + h.property + "???"
+        }));
     },
 
     updateInputValue: function(bean) {
         var h = this;
-        h.root.find(h.property).dom().checked = eval("bean." + h.property) || false;
+        h.checkBox.setValue(eval("bean." + h.property) || false);
     },
 });

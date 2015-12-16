@@ -348,6 +348,86 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
 });
 
 bardia.utils.DateUtils.pattern = "";
+bardia.controlls = {
+
+};
+
+bardia.controlls.CheckBox = bardia.oop.Class.create({
+
+    initialize: function(config) {		
+        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+        	value: false
+        }, config));
+        this.render();
+    },
+    
+    render: function() {
+    	var h = this;
+
+    	h.root = $_element({
+    		$_tag: "div",
+    		style: "position:relative; width:25px; height:8px; border:0px; background:lightGrey; margin:10px 0px 0px 10px; border-radius:4px; cursor:pointer",
+    		class: "controlls-default",
+			$_on: {
+				"click": function(e) {
+					h.change();
+				}
+			},
+    		$_append: [{
+    			$_tag: "div",
+    			id: "checkbox",
+    			style: "position:absolute; top:-4px; left:-4px; width:16px; height:16px; background:grey; border-radius:8px; cursor:pointer",
+    			class: "controlls-default",
+    		}]
+    	});
+    	
+    	h.setValue(h.value || false);
+    },
+    
+    getWrapper: function() {
+    	var h = this;
+    	return h.root;
+    },
+    
+    select: function() {
+    	var h = this;
+    	
+    	h.value = true;
+    	h.root.find("checkbox").dom().style.left = "13px";
+    	h.root.find("checkbox").dom().style.backgroundColor = "#3f51b5";
+    },
+    
+    unselect: function() {
+    	var h = this;
+    	
+    	h.value = false;
+    	h.root.find("checkbox").dom().style.left = "-4px";
+    	h.root.find("checkbox").dom().style.backgroundColor = "grey";
+    },
+
+    change: function() {
+    	var h = this;
+    	h.setValue(!h.value);
+    	
+    	if (h.onChange) {
+    		h.onChange(h.getValue());
+    	}
+    },
+
+    setValue: function(trueOrFalse) {
+    	var h = this;
+    	if (trueOrFalse == true) {
+    		h.select();
+    	} else {
+    		h.unselect();
+    	}
+    },
+    
+    getValue: function() {
+    	var h = this;
+    	return h.value;
+    }
+});
 bardia.layout = {
 };
 /**
@@ -989,6 +1069,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
         		$_tag: "div",
         		id: h.id("toolbar"),
         		class: "grid-top grid-bg",
+        		
         	}, {
 	            $_tag: "div",
 	            class: "grid-content",
@@ -1045,13 +1126,17 @@ bardia.grid.Grid = bardia.oop.Class.create({
 
         h.inside.update(h.root);
         
-        h.setButtons();
+        h.setButtons(h.buttons);
         h.setTitle(h.title);
         h.createSearchField();
     },
     
-    setButtons: function() {
+    setButtons: function(buttons) {
     	var h = this;
+    	h.buttons = buttons;
+    	
+    	h.root.find(h.id("toolbar")).update();
+
     	if (h.buttons) {
     		h.buttons.forEach(function(button, index) {
     			
@@ -1073,20 +1158,23 @@ bardia.grid.Grid = bardia.oop.Class.create({
     			h.root.find(h.id("toolbar")).insert(el);
     		});
     	}
+    	
+		var el = $_element({
+			$_tag: "div",
+			class: "grid-title",
+			$_append: h.title
+		});
+
+    	h.root.find(h.id("toolbar")).insert(el);
     },
 
     setTitle: function(title) {
     	var h = this;
 
-		var el = $_element({
-			$_tag: "div",
-			class: "grid-title",
-			$_append: title
-		});
-    			
-    	h.root.find(h.id("toolbar")).insert(el);
+		h.title = title;
+		h.setButtons(h.buttons);
     },
-    
+
     createSearchField: function() {
     	var h = this;
     	
@@ -1127,6 +1215,9 @@ bardia.grid.Grid = bardia.oop.Class.create({
     	$_upgradeElement(textSearch);
     },
 
+    /**
+     * 
+     */
     fetch: function(model) {
         var h = this;
 
@@ -1189,12 +1280,15 @@ bardia.grid.Grid = bardia.oop.Class.create({
     	}
     },
 
-    openDetails: function() {
+    openDetails: function(width) {
         var h = this;
+
+        h.detailsWidth = width || h.detailsWidth;
 
         h.root.find(h.id("grid-curtain")).dom().style.width = "100%";
         h.root.find(h.id("grid-curtain")).dom().style.background = "rgba(0,0,0,0.5)";
         h.root.find(h.id("grid-details-right")).dom().style.left = "0px";
+        h.root.find(h.id("grid-details-right")).dom().style.width = h.detailsWidth;
         
         return h.root.find(h.id("grid-details-right"));
     },
@@ -1833,26 +1927,25 @@ bardia.form.BooleanField = bardia.oop.Class.inherit(bardia.form.TextField, {
         h.root = $_element({
             $_tag: "div",
             class: "form-row",
-            $_append: [{
-            	$_tag: "input",
-            	type: "checkbox",
-            	id: h.property,
-            	$_on: {
-            		"change": function(e) {
-            			h.updateBeanProperty(e.target.checked);
-            		}
-            	}
-            }, {
-            	$_tag: "span",
-            	class: "mdl-checkbox__label",
-            	$_append: h.label || "???" + h.property + "???"
-            }]
         });
+        
+        h.checkBox = new bardia.controlls.CheckBox({
+        	onChange: function(value) {
+        		h.updateBeanProperty(value);
+        	}
+        });
+        
+        h.root.insert(h.checkBox.getWrapper());
+        h.root.insert($_element({
+        	$_tag: "div",
+        	style: "position:absolute; left:50px; top:13px;",
+        	$_append: h.label || "???" + h.property + "???"
+        }));
     },
 
     updateInputValue: function(bean) {
         var h = this;
-        h.root.find(h.property).dom().checked = eval("bean." + h.property) || false;
+        h.checkBox.setValue(eval("bean." + h.property) || false);
     },
 });
 
@@ -1888,7 +1981,7 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
                 $_append: "file_upload",
             }, {
     			$_tag: "form",
-    		    action: bardia.uploadAction,
+    		    action: h.uploadAction || bardia.uploadAction,
     		    method: "POST",
     		    enctype: "multipart/form-data",
     		    target: h.serial,
@@ -1927,7 +2020,7 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     							}
     						};
 
-    						xhr.open("POST", bardia.uploadAction, true);
+    						xhr.open("POST", h.uploadAction || bardia.uploadAction, true);
     						xhr.send(form);
     					}
     				}

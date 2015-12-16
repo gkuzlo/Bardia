@@ -1,4 +1,11 @@
 
+.controlls-default {    
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
 .calendar-container {
 	display:flex; flex-direction:column; height:100%;
 	background-color:#ff709f;	

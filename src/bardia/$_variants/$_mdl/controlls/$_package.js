@@ -1,0 +1,3 @@
+bardia.controlls = {
+
+};

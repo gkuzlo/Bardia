@@ -23,6 +23,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
         		$_tag: "div",
         		id: h.id("toolbar"),
         		class: "grid-top grid-bg",
+        		
         	}, {
 	            $_tag: "div",
 	            class: "grid-content",
@@ -79,13 +80,17 @@ bardia.grid.Grid = bardia.oop.Class.create({
 
         h.inside.update(h.root);
         
-        h.setButtons();
+        h.setButtons(h.buttons);
         h.setTitle(h.title);
         h.createSearchField();
     },
     
-    setButtons: function() {
+    setButtons: function(buttons) {
     	var h = this;
+    	h.buttons = buttons;
+    	
+    	h.root.find(h.id("toolbar")).update();
+
     	if (h.buttons) {
     		h.buttons.forEach(function(button, index) {
     			
@@ -107,20 +112,23 @@ bardia.grid.Grid = bardia.oop.Class.create({
     			h.root.find(h.id("toolbar")).insert(el);
     		});
     	}
+    	
+		var el = $_element({
+			$_tag: "div",
+			class: "grid-title",
+			$_append: h.title
+		});
+
+    	h.root.find(h.id("toolbar")).insert(el);
     },
 
     setTitle: function(title) {
     	var h = this;
 
-		var el = $_element({
-			$_tag: "div",
-			class: "grid-title",
-			$_append: title
-		});
-    			
-    	h.root.find(h.id("toolbar")).insert(el);
+		h.title = title;
+		h.setButtons(h.buttons);
     },
-    
+
     createSearchField: function() {
     	var h = this;
     	
@@ -161,6 +169,9 @@ bardia.grid.Grid = bardia.oop.Class.create({
     	$_upgradeElement(textSearch);
     },
 
+    /**
+     * 
+     */
     fetch: function(model) {
         var h = this;
 
@@ -223,12 +234,15 @@ bardia.grid.Grid = bardia.oop.Class.create({
     	}
     },
 
-    openDetails: function() {
+    openDetails: function(width) {
         var h = this;
+
+        h.detailsWidth = width || h.detailsWidth;
 
         h.root.find(h.id("grid-curtain")).dom().style.width = "100%";
         h.root.find(h.id("grid-curtain")).dom().style.background = "rgba(0,0,0,0.5)";
         h.root.find(h.id("grid-details-right")).dom().style.left = "0px";
+        h.root.find(h.id("grid-details-right")).dom().style.width = h.detailsWidth;
         
         return h.root.find(h.id("grid-details-right"));
     },
