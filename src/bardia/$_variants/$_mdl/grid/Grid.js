@@ -217,7 +217,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
         		h.firstRow.dom().click();
         	}
         }
-        
+
     },
 
     filterRows: function(value) {
@@ -254,7 +254,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
         h.root.find(h.id("grid-curtain")).dom().style.background = "rgba(0,0,0,0.0)";
         h.root.find(h.id("grid-details-right")).dom().style.left = "-" + h.detailsWidth;
     },
-    
+
     id: function(name) {
     	return this.serial + name;
     }
