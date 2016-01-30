@@ -25,6 +25,9 @@ module.exports = function(grunt) {
 
                     "src/bardia/$_variants/$_mdl/$_mdl.js",
 
+                    "src/bardia/$_variants/$_mdl/cmn/$_package.js",
+                    "src/bardia/$_variants/$_mdl/cmn/ProgressBar.js",
+                    
                     "src/bardia/$_variants/$_mdl/utils/$_utils.js",
                     "src/bardia/$_variants/$_mdl/utils/DateUtils.js",
 

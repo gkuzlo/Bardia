@@ -212,6 +212,11 @@ bardia.grid.Grid = bardia.oop.Class.create({
             });
         });
         
+        var filterValue = h.root.find(h.id("search_input")).dom().value;
+        if (filterValue && filterValue != "") {
+        	h.filterRows(filterValue);
+        }
+        
         if (h.clickAfterFetch == true) {
         	if (h.firstRow) {
         		h.firstRow.dom().click();

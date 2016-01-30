@@ -318,6 +318,53 @@ $_upgradeElement = (function() {
 
     return materialize;
 })();
+bardia.cmn = {
+
+};
+/**
+ * 
+ */
+bardia.cmn.ProgressBar = bardia.oop.Class.create({
+
+    initialize: function(config) {		
+        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+        	inside: $_element(window.document.body),
+        	title: &quot;waiting for ...&quot;
+        }, config || {}));
+    },
+
+    open: function() {
+    	var h = this;
+
+    	h.root = $_element({
+        	$_tag: &quot;div&quot;,
+        	class: &quot;bardia-progress&quot;,
+        	$_append: [{
+        		$_tag: &quot;div&quot;,
+        		id: &quot;_spinner&quot;,
+        		class: &quot;mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active&quot;,
+        		style: &quot;z-index:100000001;&quot;
+        	}, {
+        		$_tag: &quot;div&quot;,
+        		class: &quot;bardia-progress-label&quot;,
+        		style: &quot;z-index:100000002;&quot;,
+        		$_append: h.title
+        	}]
+        });
+        
+        $_upgradeElement(h.root.find(&quot;_spinner&quot;));
+        h.inside.insert(h.root);
+    },
+    
+    close: function() {
+    	var h = this;
+    	    	
+    	h.inside.dom().removeChild(h.root.dom());
+
+    	delete h.root.dom();
+    	delete h.root;
+    }
+});
 bardia.utils = {
 }
 
@@ -1340,12 +1387,17 @@ bardia.grid.Grid = bardia.oop.Class.create({
             });
         });
         
+        var filterValue = h.root.find(h.id(&quot;search_input&quot;)).dom().value;
+        if (filterValue &amp;&amp; filterValue != &quot;&quot;) {
+        	h.filterRows(filterValue);
+        }
+        
         if (h.clickAfterFetch == true) {
         	if (h.firstRow) {
         		h.firstRow.dom().click();
         	}
         }
-        
+
     },
 
     filterRows: function(value) {
@@ -1382,7 +1434,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
         h.root.find(h.id(&quot;grid-curtain&quot;)).dom().style.background = &quot;rgba(0,0,0,0.0)&quot;;
         h.root.find(h.id(&quot;grid-details-right&quot;)).dom().style.left = &quot;-&quot; + h.detailsWidth;
     },
-    
+
     id: function(name) {
     	return this.serial + name;
     }
@@ -1604,6 +1656,7 @@ bardia.form.TextField = bardia.oop.Class.create({
             }, {
                 $_tag: &quot;label&quot;,
                 class: &quot;form-text-input-label&quot;,
+                style: &quot;z-index:0&quot;,
                 $_append: h.label
             }]
         });
@@ -1625,6 +1678,10 @@ bardia.form.TextField = bardia.oop.Class.create({
     updateBeanProperty: function(value) {
         var h = this;        
         eval(&quot;h.form.getBean().&quot; + h.property + &quot; = value;&quot;);
+        //
+		if (h.onChange) {
+			h.onChange(value);
+		}
     },
 
     updateInputValue: function() {

@@ -33,6 +33,7 @@ bardia.form.TextField = bardia.oop.Class.create({
             }, {
                 $_tag: "label",
                 class: "form-text-input-label",
+                style: "z-index:0",
                 $_append: h.label
             }]
         });
@@ -54,6 +55,10 @@ bardia.form.TextField = bardia.oop.Class.create({
     updateBeanProperty: function(value) {
         var h = this;        
         eval("h.form.getBean()." + h.property + " = value;");
+        //
+		if (h.onChange) {
+			h.onChange(value);
+		}
     },
 
     updateInputValue: function() {
