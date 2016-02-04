@@ -4,9 +4,9 @@ bardia.form.TextField = bardia.oop.Class.create({
 
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             label: "Insert title here ...",
-            pattern: ".+",
-            required: config.required || false,
+            required: false,
             serial: "S_" + (Math.random()*1000000).toFixed(0),
+            readOnly: false
         }, config));
 
         this.render();
@@ -21,30 +21,49 @@ bardia.form.TextField = bardia.oop.Class.create({
             $_append: [{
                 $_tag: "input",
                 class: "form-text-input",
-                type: "text",
-                pattern: h.pattern,
                 required: false,
                 id: h.id(h.property),
                 $_on: {
                     change: function(e) {
+                    	alert("changing");
                         h.updateBeanProperty(e.target.value);
+                    },
+                    focus: function(e) {
+                    	if (h.readOnly == true) {
+                    		e.stopPropagation();
+                    		e.target.blur();
+                    	}
                     }
                 }
             }, {
                 $_tag: "label",
                 class: "form-text-input-label",
                 style: "z-index:0",
+                id: h.id("label"),
                 $_append: h.label
             }]
         });
 
-        if (h.required===true) {
-            h.root.insert($_element({
-                $_tag: "label",
-                class: "form-text-input-error",
-                $_append: $msg("text")
-            }));
+        if (h.required == true) {
+            h.root.find(h.id("label")).update("* " + h.label);
         }
+        
+        h.setReadOnly(h.readOnly);
+        h.prepareMask();
+    },
+    
+	prepareMask: function() {
+		var h = this;
+
+
+	},
+    
+    setReadOnly: function(trueOrFalse) {
+    	var h = this;
+    	
+    	if (true == trueOrFalse) {
+    		h.root.find(h.id(h.property)).addClassName("form-text-input-readonly");
+    	}
     },
 
     getElement: function() {

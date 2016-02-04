@@ -71,6 +71,7 @@
 .calendar-single-day:hover {
 	background-color:#e0e0e0;
 }
+
 .form-container {
 	position:absolute; top:0px; left:0px; right:0px; bottom:0px;
 }
@@ -95,6 +96,10 @@
 	position:relative;
     height:20px; border:0px solid lightGrey; border-width:0px 0px 1px 0px; outline:none; margin-top:20px; background-color:transparent;
     box-shadow:none; z-index:5;
+}
+
+.form-text-input-readonly {
+	color:grey
 }
 
 .form-text-input:invalid {

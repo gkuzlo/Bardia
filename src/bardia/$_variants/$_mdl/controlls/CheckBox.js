@@ -3,7 +3,8 @@ bardia.controlls.CheckBox = bardia.oop.Class.create({
 
     initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-        	value: false
+        	value: false,
+        	readOnly: false
         }, config));
         this.render();
     },
@@ -17,7 +18,9 @@ bardia.controlls.CheckBox = bardia.oop.Class.create({
     		class: "controlls-default",
 			$_on: {
 				"click": function(e) {
-					h.change();
+					if (h.readOnly == false) {
+						h.change();
+					}
 				}
 			},
     		$_append: [{
