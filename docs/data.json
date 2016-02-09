@@ -284,22 +284,22 @@
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2260,
+            "line": 2297,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2308,
+            "line": 2350,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2337,
+            "line": 2379,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2668,
+            "line": 2710,
             "class": "bardia.layout.Material"
         }
     ],
@@ -398,19 +398,19 @@
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2260"
+            "line": " dist\\mdl\\bardia.js:2297"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2308"
+            "line": " dist\\mdl\\bardia.js:2350"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2337"
+            "line": " dist\\mdl\\bardia.js:2379"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2668"
+            "line": " dist\\mdl\\bardia.js:2710"
         }
     ]
 }

@@ -8,7 +8,7 @@ bardia.form.Form = bardia.oop.Class.create({
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             title: "Insert title here ...",
-            serial: "S_" + (Math.random()*1000000).toFixed(0),
+            serial: "S_" + (Math.random() * 1000000).toFixed(0),
         }, config));
 
         this.render();
@@ -22,7 +22,7 @@ bardia.form.Form = bardia.oop.Class.create({
         
         h.setButtons();
     },
-    
+
     setButtons: function() {
     	var h = this;
     	if (h.buttons) {
@@ -65,12 +65,14 @@ bardia.form.Form = bardia.oop.Class.create({
         	}]
         });
 
+        h.formFields = [];
         h.fields.forEach(function(field) {
             var _field = bardia.oop.Class.extend({
                 type: "Text"
             }, field);
 
             var formField = eval("new bardia.form." + _field.type + "Field(_field)");
+            h.formFields.push(formField);
 
             formField.setForm(h);
             
@@ -116,6 +118,18 @@ bardia.form.Form = bardia.oop.Class.create({
         }));
         
         $_upgradeElement(h.root.find(h.id("progress")));
+    },
+    
+    validate: function() {
+    	var h = this;
+    	
+    	var result = true;
+
+    	h.formFields.forEach(function(formField) {
+    		result = result && formField.validate();
+    	});
+
+    	return result;
     },
 
     addBeanChangedListener: function(listener) {

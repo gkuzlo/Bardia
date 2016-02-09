@@ -25,7 +25,6 @@ bardia.form.TextField = bardia.oop.Class.create({
                 id: h.id(h.property),
                 $_on: {
                     change: function(e) {
-                    	alert("changing");
                         h.updateBeanProperty(e.target.value);
                     },
                     focus: function(e) {
@@ -54,8 +53,8 @@ bardia.form.TextField = bardia.oop.Class.create({
     
 	prepareMask: function() {
 		var h = this;
-
-
+		
+		// do nothing for simple text
 	},
     
     setReadOnly: function(trueOrFalse) {
@@ -83,6 +82,30 @@ bardia.form.TextField = bardia.oop.Class.create({
     updateInputValue: function() {
         var h = this;
         h.root.find(h.id(h.property)).dom().value = eval("h.form.getBean()." + h.property + " || ''");
+    },
+    
+    validate: function() {
+    	var h = this;
+    	
+    	if (true === h.required && (!h.root.find(h.id(h.property)).dom().value || h.root.find(h.id(h.property)).dom().value.trim() == "")) {
+    		h.markError();
+    		return false;
+    	} else {
+    		h.unmarkError();
+    		return true;
+    	}
+    	
+    	return true;
+    },
+    
+    markError: function() {
+    	var h = this;
+    	h.root.find(h.id("label")).addClassName("form-text-input-label-error");
+    },
+    
+    unmarkError: function() {
+    	var h = this;
+    	h.root.find(h.id("label")).removeClassName("form-text-input-label-error");
     },
 
     setForm: function(form) {

@@ -1985,7 +1985,7 @@ bardia.form.Form = bardia.oop.Class.create({
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             title: "Insert title here ...",
-            serial: "S_" + (Math.random()*1000000).toFixed(0),
+            serial: "S_" + (Math.random() * 1000000).toFixed(0),
         }, config));
 
         this.render();
@@ -1999,7 +1999,7 @@ bardia.form.Form = bardia.oop.Class.create({
         
         h.setButtons();
     },
-    
+
     setButtons: function() {
     	var h = this;
     	if (h.buttons) {
@@ -2042,12 +2042,14 @@ bardia.form.Form = bardia.oop.Class.create({
         	}]
         });
 
+        h.formFields = [];
         h.fields.forEach(function(field) {
             var _field = bardia.oop.Class.extend({
                 type: "Text"
             }, field);
 
             var formField = eval("new bardia.form." + _field.type + "Field(_field)");
+            h.formFields.push(formField);
 
             formField.setForm(h);
             
@@ -2093,6 +2095,18 @@ bardia.form.Form = bardia.oop.Class.create({
         }));
         
         $_upgradeElement(h.root.find(h.id("progress")));
+    },
+    
+    validate: function() {
+    	var h = this;
+    	
+    	var result = true;
+
+    	h.formFields.forEach(function(formField) {
+    		result = result && formField.validate();
+    	});
+
+    	return result;
     },
 
     addBeanChangedListener: function(listener) {
@@ -2181,7 +2195,6 @@ bardia.form.TextField = bardia.oop.Class.create({
                 id: h.id(h.property),
                 $_on: {
                     change: function(e) {
-                    	alert("changing");
                         h.updateBeanProperty(e.target.value);
                     },
                     focus: function(e) {
@@ -2210,8 +2223,8 @@ bardia.form.TextField = bardia.oop.Class.create({
     
 	prepareMask: function() {
 		var h = this;
-
-
+		
+		// do nothing for simple text
 	},
     
     setReadOnly: function(trueOrFalse) {
@@ -2239,6 +2252,30 @@ bardia.form.TextField = bardia.oop.Class.create({
     updateInputValue: function() {
         var h = this;
         h.root.find(h.id(h.property)).dom().value = eval("h.form.getBean()." + h.property + " || ''");
+    },
+    
+    validate: function() {
+    	var h = this;
+    	
+    	if (true === h.required && (!h.root.find(h.id(h.property)).dom().value || h.root.find(h.id(h.property)).dom().value.trim() == "")) {
+    		h.markError();
+    		return false;
+    	} else {
+    		h.unmarkError();
+    		return true;
+    	}
+    	
+    	return true;
+    },
+    
+    markError: function() {
+    	var h = this;
+    	h.root.find(h.id("label")).addClassName("form-text-input-label-error");
+    },
+    
+    unmarkError: function() {
+    	var h = this;
+    	h.root.find(h.id("label")).removeClassName("form-text-input-label-error");
     },
 
     setForm: function(form) {
@@ -2299,9 +2336,14 @@ bardia.form.ActionField = bardia.oop.Class.inherit(bardia.form.TextField, {
                 $_tag: "label",
                 class: "form-text-input-label",
                 "for": h.property,
+                id: h.id("label"),
                 $_append: h.label
             }]
         });
+        
+        if (h.required == true) {
+            h.root.find(h.id("label")).update("* " + h.label);
+        }
 
         h.displayButton();
     },

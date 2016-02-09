@@ -40,9 +40,14 @@ bardia.form.ActionField = bardia.oop.Class.inherit(bardia.form.TextField, {
                 $_tag: "label",
                 class: "form-text-input-label",
                 "for": h.property,
+                id: h.id("label"),
                 $_append: h.label
             }]
         });
+        
+        if (h.required == true) {
+            h.root.find(h.id("label")).update("* " + h.label);
+        }
 
         h.displayButton();
     },

@@ -116,14 +116,8 @@
     z-index:4;
 }
 
-.form-text-input-error {
-    position: absolute;
+.form-text-input-label-error {
     color:red;
-    bottom:-15px;
-    left:0px;
-    transition: 0.2s;
-    font-size: 11px;
-    display:none;
 }
 
 .form-text-input:focus + label {
@@ -139,7 +133,7 @@
 }
 
 .form-text-input:invalid + label + label {
-    display:block
+    display:block;
 }
 
 .form-curtain {
