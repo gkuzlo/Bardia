@@ -3,14 +3,6 @@
  */
 bardia.form.ActionField = bardia.oop.Class.inherit(bardia.form.TextField, {
 
-    initialize: function(config) {		
-        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: "Title ... ",
-            serial: "S_" + (Math.random()*1000000).toFixed(0),
-        }, config));
-        this.render();
-    },
-
     render: function() {
         var h = this;
 
@@ -44,20 +36,21 @@ bardia.form.ActionField = bardia.oop.Class.inherit(bardia.form.TextField, {
                 $_append: h.label
             }]
         });
-        
-        if (h.required == true) {
-            h.root.find(h.id("label")).update("* " + h.label);
-        }
 
-        h.displayButton();
+        h.actionButton = h.displayButton();
+        h.root.insert(h.actionButton);
+
+        h.setReadOnly(h.readOnly);
+        h.setVisible(h.visible);
+        h.setRequired(h.required);
     },
     /**
      *  
      */
     displayButton: function() {
     	var h = this;
-    	
-    	h.root.insert($_element({
+
+    	return $_element({
             $_tag: "button",
             class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
             $_on: {
@@ -73,10 +66,23 @@ bardia.form.ActionField = bardia.oop.Class.inherit(bardia.form.TextField, {
                 class: "material-icons",
                 $_append: "keyboard_arrow_down",
             }]
-        }));
+        });
     },
     
     id: function(name) {
     	return this.serial + name;
-    }
+    },
+    
+    setReadOnly: function(trueOrFalse) {
+    	var h = this;
+
+    	h.readOnly = trueOrFalse;
+    	if (true == trueOrFalse) {
+    		h.root.find(h.id(h.property)).addClassName("form-text-input-readonly");
+    		h.actionButton.addClassName("bardia-not-visible");
+    	} else {
+    		h.root.find(h.id(h.property)).removeClassName("form-text-input-readonly");
+    		h.actionButton.removeClassName("bardia-not-visible");
+    	}
+    },
 });

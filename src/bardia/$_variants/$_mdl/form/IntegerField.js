@@ -1,17 +1,6 @@
 
 bardia.form.IntegerField = bardia.oop.Class.inherit(bardia.form.TextField, {
 
-    initialize: function(config) {		        
-        bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: "Insert title here ...",
-            required: false,
-            serial: "S_" + (Math.random()*1000000).toFixed(0),
-            readOnly: false
-        }, config));
-
-        this.render();
-    },
-
 	prepareMask: function() {
 		var h = this;
 

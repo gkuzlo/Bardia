@@ -9,6 +9,7 @@ bardia.form.Form = bardia.oop.Class.create({
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
             title: "Insert title here ...",
             serial: "S_" + (Math.random() * 1000000).toFixed(0),
+            buttons: []
         }, config));
 
         this.render();
@@ -26,6 +27,7 @@ bardia.form.Form = bardia.oop.Class.create({
     setButtons: function() {
     	var h = this;
     	if (h.buttons) {
+    		h.root.find(h.id("toolbar")).update();
     		h.buttons.forEach(function(button) {
     			h.root.find(h.id("toolbar")).insert($_element({
     				$_tag: "button",
@@ -33,7 +35,8 @@ bardia.form.Form = bardia.oop.Class.create({
     				title: button.name,
     				$_append: [{
     					$_tag: "i",
-    					class: "material-icons",
+    					class: "material-icons form-icon",
+    					style: button.style || "",
     					$_append: button.icon
     				}],
     				$_on: {
@@ -45,6 +48,14 @@ bardia.form.Form = bardia.oop.Class.create({
     				}
     			}));
     		});
+    		
+    		var el = $_element({
+    			$_tag: "div",
+    			class: "form-title",
+    			$_append: h.title
+    		});
+
+        	h.root.find(h.id("toolbar")).insert(el);
     	}
     },
 
@@ -82,17 +93,17 @@ bardia.form.Form = bardia.oop.Class.create({
         h.root.insert($_element({
             $_tag: "div",
             class: "form-curtain",
-            id: "form-curtain",
+            id: h.id("form-curtain"),
             style: "width:0px",
             $_on: {
                 "click": function() {
-                    h.closeDetails();
+                    //h.closeDetails();
                 }
             },
             $_append: [{
                 $_tag: "div",
                 class: "form-details-right",
-                id: "form-details-right",
+                id: h.id("form-details-right"),
                 $_on: {
                     "click": function(e) {
                         e.preventDefault();
@@ -126,7 +137,7 @@ bardia.form.Form = bardia.oop.Class.create({
     	var result = true;
 
     	h.formFields.forEach(function(formField) {
-    		result = result && formField.validate();
+    		result = formField.validate() && result;
     	});
 
     	return result;
@@ -154,19 +165,25 @@ bardia.form.Form = bardia.oop.Class.create({
     openDetails: function(width) {
         var h = this;
 
-        h.root.find("form-curtain").dom().style.width = "100%";
-        h.root.find("form-details-right").dom().style.width = width || h.detailsWidth;
+        h.detailsWidth = width || h.detailsWidth;
 
-        var result = h.root.find("form-details-right");
-        result.update();
+        h.root.find(h.id("form-curtain")).dom().style.width = "100%";
+        h.root.find(h.id("form-curtain")).dom().style.background = "rgba(0,0,0,0.7)";
+        h.root.find(h.id("form-details-right")).dom().style.left = "0px";
+        h.root.find(h.id("form-details-right")).dom().style.width = h.detailsWidth;
+        
+        var result = h.root.find(h.id("form-details-right"));
+        	result.update();
 
         return result;
     },
-
+    
     closeDetails: function() {
         var h = this;
 
-        h.root.find("form-curtain").dom().style.width = "0px";
+        h.root.find(h.id("form-curtain")).dom().style.width = "0px";
+        h.root.find(h.id("form-curtain")).dom().style.background = "rgba(0,0,0,0.0)";
+        h.root.find(h.id("form-details-right")).dom().style.left = "-" + h.detailsWidth;
     },
 
     openProgress: function() {
@@ -189,5 +206,16 @@ bardia.form.Form = bardia.oop.Class.create({
     
     id: function(name) {
     	return this.serial + name;
+    },
+    
+    findFieldByProperty: function(propertyName) {
+    	var h = this;
+    	var result = null;
+    	h.formFields.forEach(function(fieldControl) {
+    		if (fieldControl.property && propertyName == fieldControl.property) {
+    			result = fieldControl;
+    		}
+    	});
+    	return result;
     }
 });

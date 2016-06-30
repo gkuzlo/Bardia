@@ -6,7 +6,7 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     displayButton: function() {
     	var h = this;
 
-    	h.root.insert($_element({
+    	return $_element({
             $_tag: "button",
             class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
             $_on: {
@@ -16,13 +16,12 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
             },
             $_append: [{
                 $_tag: "i",
-                class: "material-icons",
+                class: "material-icons action-icon",
                 $_append: "file_upload",
             }, {
     			$_tag: "form",
     		    action: h.uploadAction || bardia.uploadAction,
     		    method: "POST",
-    		    enctype: "multipart/form-data",
     		    target: h.serial,
     		    style: "display:none; width:0px; height:0px",
     		    $_append: [{
@@ -34,11 +33,11 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     				$_on: {
     					"change": function() {
     						h.form.openProgress();
-    						
+
     						var form = new FormData();
     							form.append("file", h.root.find(h.serial).dom().files[0]);
 
-    						var xhr = new XMLHttpRequest();
+    						var xhr = new XMLHttpRequest();    						
 
     						xhr.upload.addEventListener("progress", function(e) {
     							var pc = parseInt(100 - (e.loaded / e.total * 100));
@@ -59,13 +58,16 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     							}
     						};
 
-    						xhr.open("POST", h.uploadAction || bardia.uploadAction, true);
+    						var uploadUrl = h.uploadAction || bardia.uploadAction;
+    						xhr.open("POST", uploadUrl + "?fileName=" + h.root.find(h.serial).dom().files[0].name, true);
+    						xhr.setRequestHeader("Accept-Encoding", "UTF-8");
+    						
     						xhr.send(form);
     					}
     				}
     			}]
     		}]
-        }));
+        });
     },
     
     updateInputValue: function(bean) {

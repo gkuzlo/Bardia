@@ -41,6 +41,7 @@ bardia.dom.Element = bardia.oop.Class.create({
         }
 
         if (jsonRoot.$_props) {
+        	this.$_props = jsonRoot.$_props
             for (prop in jsonRoot.$_props) {
             	this.domNode[prop] = jsonRoot.$_props[prop];
             }
@@ -137,15 +138,30 @@ bardia.dom.Element = bardia.oop.Class.create({
     },
 
     addClassName: function(className) {
-    	this.dom().className = this.dom().className + " " + className;
+    	var classes = this.dom().className.split(" ");
+
+    	var exists = false;
+    	classes.forEach(function(_class) {
+    		if (_class.trim() == className) {
+    			exists = true;
+    		}
+    	});
+
+    	if (false == exists) {
+    		this.dom().className = this.dom().className + " " + className;
+    	}
     },
-    
+
     removeClassName: function(className) {
     	this.dom().className = this.dom().className.replace(className, "");
     },
-    
+
     hasClassName: function(className) {
     	return this.dom().className.indexOf(className) > -1;
+    },
+    
+    clone: function() {
+    	return new bardia.dom.Element(this.domNode.cloneNode(true));
     },
     
     setStyle: function(style) {

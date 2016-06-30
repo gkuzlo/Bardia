@@ -2,20 +2,24 @@
  * 
  */
 bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
+    
+    initialize: function(config) {
 
-    initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
-            label: "Insert title here ... 2",
-            date: new Date()
+            label: "Insert title here ...",
+            serial: "S_" + (Math.random()*1000000).toFixed(0),
+            readOnly: false,
+            visible: true,
+            required: false,
         }, config));
 
         this.render();
     },
-    
+	
     displayButton: function() {
     	var h = this;
 
-    	h.root.insert($_element({
+    	return $_element({
             $_tag: "button",
             class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
             $_on: {
@@ -30,10 +34,10 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
             },
             $_append: [{
                 $_tag: "i",
-                class: "material-icons",
+                class: "material-icons action-icon",
                 $_append: "today",
             }]
-        }));
+        });
     },
 
     displayCalendar: function(html) {    	

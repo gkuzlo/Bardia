@@ -12,17 +12,19 @@ bardia.layout.Tabs = bardia.oop.Class.create({
     
     render: function() {
         var h = this;
+        
+        h.headerLinks = [];
 
         h.root = h.prepareRoot();
         h.inside.update(h.root);
 
         var headerLink = null;
         h.tabs.forEach(function(tab) {
-        	headerLink = h.addItem(tab);
+        	h.headerLinks.push(h.addItem(tab));
         });
         
-        if (headerLink != null) {
-        	h.selectItem(headerLink);
+        if (h.headerLinks && h.headerLinks.length > 0) {
+        	h.selectItem(h.headerLinks[h.headerLinks.length - 1]);
         }
     },
 
@@ -52,6 +54,15 @@ bardia.layout.Tabs = bardia.oop.Class.create({
     	headerLink.content = content;
 
     	return headerLink;
+    },
+    
+    selectItemByIndex: function(index) {
+    	var h = this;
+    	if (h.headerLinks && index >= 0 && index < h.headerLinks.length) {
+    		h.selectItem(h.headerLinks[index]);
+    	} else {
+    		h.selectItem(h.headerLinks[h.headerLinks.length - 1]);
+    	}
     },
     
     selectItem: function(wrappedElement) {

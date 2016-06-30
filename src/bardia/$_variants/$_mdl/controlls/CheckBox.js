@@ -26,7 +26,7 @@ bardia.controlls.CheckBox = bardia.oop.Class.create({
     		$_append: [{
     			$_tag: "div",
     			id: "checkbox",
-    			style: "position:absolute; top:-4px; left:-4px; width:16px; height:16px; background:grey; border-radius:8px; cursor:pointer",
+    			style: "position:absolute; top:-4px; width:16px; height:16px; border-radius:8px; cursor:pointer",
     			class: "controlls-default",
     		}]
     	});
@@ -43,16 +43,16 @@ bardia.controlls.CheckBox = bardia.oop.Class.create({
     	var h = this;
     	
     	h.value = true;
-    	h.root.find("checkbox").dom().style.left = "13px";
-    	h.root.find("checkbox").dom().style.backgroundColor = "#3f51b5";
+    	h.root.find("checkbox").removeClassName("checkbox-unselected");
+    	h.root.find("checkbox").addClassName("checkbox-selected");
     },
     
     unselect: function() {
     	var h = this;
-    	
-    	h.value = false;
-    	h.root.find("checkbox").dom().style.left = "-4px";
-    	h.root.find("checkbox").dom().style.backgroundColor = "grey";
+
+    	h.value = false;    	
+    	h.root.find("checkbox").removeClassName("checkbox-selected");
+    	h.root.find("checkbox").addClassName("checkbox-unselected");
     },
 
     change: function() {
@@ -76,5 +76,11 @@ bardia.controlls.CheckBox = bardia.oop.Class.create({
     getValue: function() {
     	var h = this;
     	return h.value;
+    },
+    
+    setReadOnly: function(trueFalse) {
+    	var h = this;
+    	
+    	h.readOnly = trueFalse || false;
     }
 });
