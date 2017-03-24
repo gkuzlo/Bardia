@@ -88,7 +88,7 @@ module.exports = function(grunt) {
                     "src/bardia/$_variants/$_mdl/form/TextAreaField.js",
                     "src/bardia/$_variants/$_mdl/form/TimeSecField.js",
                     "src/bardia/$_variants/$_mdl/form/PasswordField.js",
-
+                    "src/bardia/$_variants/$_mdl/form/CurrencyField.js",
                 ], 
                 dest: 'dist/mdl/bardia.js'},
             ]

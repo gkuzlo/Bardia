@@ -38,4 +38,9 @@ bardia.form.BooleanField = bardia.oop.Class.inherit(bardia.form.TextField, {
     	h.checkBox.setReadOnly(trueOrFalse);
     },
 
+    validate: function() {
+    	var h = this;
+    	    	
+    	return true;
+    },
 });

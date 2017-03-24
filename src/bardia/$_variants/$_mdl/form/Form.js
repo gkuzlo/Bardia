@@ -21,42 +21,52 @@ bardia.form.Form = bardia.oop.Class.create({
         h.prepareRoot();
         h.inside.update(h.root);
         
-        h.setButtons();
+        h.setButtons(h.buttons || []);
     },
 
-    setButtons: function() {
+    setButtons: function(buttons) {
     	var h = this;
-    	if (h.buttons) {
-    		h.root.find(h.id("toolbar")).update();
-    		h.buttons.forEach(function(button) {
-    			h.root.find(h.id("toolbar")).insert($_element({
-    				$_tag: "button",
-    				class: "mdl-button mdl-js-button mdl-button--icon",
-    				title: button.name,
-    				$_append: [{
-    					$_tag: "i",
-    					class: "material-icons form-icon",
-    					style: button.style || "",
-    					$_append: button.icon
-    				}],
-    				$_on: {
-    					"click": function(e) {
-    						if (button.onClick) {
-    							button.onClick();
-    						}
-    					}
-    				}
-    			}));
-    		});
-    		
-    		var el = $_element({
-    			$_tag: "div",
-    			class: "form-title",
-    			$_append: h.title
-    		});
+    	
+    	h.buttons = buttons;
 
-        	h.root.find(h.id("toolbar")).insert(el);
-    	}
+		h.root.find(h.id("toolbar")).update();
+		h.buttons.forEach(function(button) {
+			h.root.find(h.id("toolbar")).insert($_element({
+				$_tag: "button",
+				class: "mdl-button mdl-js-button mdl-button--icon",
+				title: button.name,
+				$_append: [{
+					$_tag: "i",
+					class: "material-icons form-icon",
+					style: button.style || "",
+					$_append: button.icon
+				}],
+				$_on: {
+					"click": function(e) {
+						if (button.onClick) {
+							button.onClick();
+						}
+					}
+				}
+			}));
+		});
+		
+		var el = $_element({
+			$_tag: "div",
+			class: "form-title",
+			id: "form_title",
+			$_append: h.title
+		});
+
+    	h.root.find(h.id("toolbar")).insert(el);
+    },
+    
+    setTitle: function(title) {
+    	var h = this;
+    	
+    	h.title = title;
+
+    	h.setButtons(h.buttons);
     },
 
     prepareRoot: function() {
@@ -186,10 +196,11 @@ bardia.form.Form = bardia.oop.Class.create({
         h.root.find(h.id("form-details-right")).dom().style.left = "-" + h.detailsWidth;
     },
 
-    openProgress: function() {
+    openProgress: function(message) {
     	var h = this;
     	h.root.find(h.id("form-progress")).addClassName("form-progress-is-active");
     	h.root.find(h.id("progress")).addClassName("is-active");
+    	h.root.find(h.id("form-progress-label")).update((message || "..."));
     },
 
     closeProgress: function() {

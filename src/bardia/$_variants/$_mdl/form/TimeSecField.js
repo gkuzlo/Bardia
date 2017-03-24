@@ -42,8 +42,8 @@ bardia.form.TimeSecField = bardia.oop.Class.inherit(bardia.form.TextField, {
 
         v = parseInt(v);
         
-        var hours = (v / 60).toFixed(0);
-        var minutes = (v % 60).toFixed(0);
+        var hours = ((v - (v%60)) / 60);
+        var minutes = (v % 60);
         
         if (hours < 10) {
         	hours = "0" + hours;

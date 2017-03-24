@@ -1,7 +1,0 @@
-.border-layout-north {
-    position:absolute; overflow:hidden; top:0px; left:0px; right:0px; 
-}
-
-.border-layout-south {
-    position:absolute; overflow:hidden; left:0px; right:0px; bottom:0px; 
-}

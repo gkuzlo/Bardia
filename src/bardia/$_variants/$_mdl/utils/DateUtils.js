@@ -26,10 +26,14 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	return result;
     },
     
+    /**
+      var du = new bardia.utils.DateUtils();
+      return du.formatDateHHmm() + " " + du.formatDateYYYYMMDDHHmm() 
+     */
     formatDateYYYYMMDDHHmm: function(date) {
     	var result = "";
     	try {
-    		result = date.getFullYear() + "-" + this.formatMM((date.getMonth() + 1)) + "-" + this.formatDD(date.getDate() + " " + (date.getHours())) + ":" + this.formatMM(date.getMinutes());
+    		result = date.getFullYear() + "-" + this.formatMM((date.getMonth() + 1)) + "-" + this.formatDD(date.getDate() + " " + this.formatHH(date.getHours())) + ":" + this.formatMM(date.getMinutes());
     	} catch (e) {
     		result = "";
     	}
@@ -97,6 +101,10 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	}
     },
     
+    /**
+     * bardia.utils.DateUtils
+     * createFormatYYYYMMDD
+     */
     createFormatYYYYMMDD: function(time) {
     	var result = "";
     	try {
@@ -129,7 +137,9 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	}
     	return result;
     },
-    
+    /**
+     * new bardia.utils.DateUtils().createFormatDateYYYYMMDDHHmm()
+     */
     createFormatDateYYYYMMDDHHmm: function(time) {
     	var result = "";
     	try {
@@ -140,12 +150,12 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	}
     	return result;    	
     },
-    
-    getLeftMinutesTo: function(dateMillis) {
-    	var diff = dateMillis - new Date().getTime();
-    	var diffSec = diff/1000;
+
+    getLeftMinutesTo: function(dateMillis, nowMillis) {
+    	var diff = dateMillis - nowMillis;
+    	var diffSec = diff / 1000;
     	var diffMins = diffSec / 60;
-    	
+
     	return diffMins.toFixed(0);
     },
     
@@ -190,7 +200,7 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
 
         return result;
     },
-    
+
     formatTimeSecNoZerosSec: function(date) {	
     	if (!date) {
     		return "";
@@ -201,9 +211,26 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
 		}
 		return result;
     },
-    
+
     formatSeconds: function(daySeconds) {
     	var result = "";
+    	return result;
+    },
+
+    EOW: function () {
+    	return this.parseDate("4712-12-31T00:00:00.000+0000");
+    },
+
+    BOW: function () {
+    	return new Date(0);
+    },
+    
+    stripTime: function(d) {
+    	var result = new Date(d.getTime());
+    	result.setHours(0);
+    	result.setMinutes(0);
+    	result.setSeconds(0);
+    	result.setMilliseconds(0);
     	return result;
     }
 });

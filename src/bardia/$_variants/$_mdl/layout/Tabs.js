@@ -20,7 +20,12 @@ bardia.layout.Tabs = bardia.oop.Class.create({
 
         var headerLink = null;
         h.tabs.forEach(function(tab) {
-        	h.headerLinks.push(h.addItem(tab));
+        	if (tab.access == undefined) {
+        		tab.access = bardia.VISIBLE;
+        	}
+        	if (tab.access > bardia.INVISIBLE) {
+        		h.headerLinks.push(h.addItem(tab));
+        	}
         });
         
         if (h.headerLinks && h.headerLinks.length > 0) {
@@ -42,6 +47,7 @@ bardia.layout.Tabs = bardia.oop.Class.create({
     		}
     	});
     	headerLink.tab = tab;
+    	headerLink.id = tab.id;
     	
     	h.root.find(h.id("header")).insert(headerLink);
     	
@@ -59,9 +65,26 @@ bardia.layout.Tabs = bardia.oop.Class.create({
     selectItemByIndex: function(index) {
     	var h = this;
     	if (h.headerLinks && index >= 0 && index < h.headerLinks.length) {
-    		h.selectItem(h.headerLinks[index]);
+    		return h.selectItem(h.headerLinks[index]);
     	} else {
-    		h.selectItem(h.headerLinks[h.headerLinks.length - 1]);
+    		return h.selectItem(h.headerLinks[h.headerLinks.length - 1]);
+    	}
+    },
+    
+    selectItemById: function(id) {
+    	var h = this;
+
+    	if (h.headerLinks) {
+    		var theLink = null;
+    		h.headerLinks.forEach(function(headerLink) {
+    			if (headerLink.id && headerLink.id == id) {
+    				theLink = headerLink;
+    			}
+    		});
+    		
+    		if (theLink != null) {
+    			return h.selectItem(theLink);
+    		}
     	}
     },
     
@@ -85,8 +108,9 @@ bardia.layout.Tabs = bardia.oop.Class.create({
 
 		if (wrappedElement.tab.onSelect) {
 			wrappedElement.tab.onSelect(wrappedElement.content);
-		}
-
+		} 
+		
+		return wrappedElement.content;
     },
 
     prepareRoot: function() {

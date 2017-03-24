@@ -2,17 +2,22 @@
 bardia.grid.Grid = bardia.oop.Class.create({
 
     detailsWidth: "400px",
-
+    /**
+     * 
+     */
     initialize: function(config) {
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
         	title: "Insert tile here. . .",
         	clickAfterFetch: false,
         	serial: "S_" + (Math.random()*1000000).toFixed(0),
+        	visibleRowsCount: 0
         }, config));
 
         this.render();
     },
-
+    /**
+     * 
+     */
     render: function() {
         var h = this;
         
@@ -122,51 +127,56 @@ bardia.grid.Grid = bardia.oop.Class.create({
                 }]
             }]
         });
-        
-        var progress = $_element({
+
+        h.root.insert($_element({
         	$_tag: "div",
-        	class: "grid-progress",
+        	class: "bardia-progress",
         	id: h.id("grid-progress"),
         	$_append: [{
         		$_tag: "div",
-        		id: h.id("progress"),
-        		class: "mdl-spinner mdl-spinner--single-color mdl-js-spinner"
-        	}, {
-        		$_tag: "div",
-        		id: h.id("grid-progress-label"),
-        		class: "grid-progress-label grid-bg",
-        		$_append: "loading"
+        		class: "bardia-progress-label-container",
+        		$_append: [{
+            		$_tag: "div",
+            		class: "material-icons bardia-progress-icon",
+            		$_append: "replay"
+            	}, {
+            		$_tag: "div",
+            		id: h.id("grid-progress-label"),
+            		class: "bardia-progress-label"
+            	}]
         	}]
-        });
-        
-        h.root.insert(progress);
-        
-        $_upgradeElement(progress);
+        }));
 
         h.inside.update(h.root);
-        
-	  h.columns.forEach(function(column, index) {
-		var mat = new bardia.controlls.ScrollingCell({
-			value: column.name
-		}).getMaterial();
-		h.root.find("grid_column_title_" + index).update(mat);
-	  });
-        
+
+        h.columns.forEach(function(column, index) {
+			var mat = new bardia.controlls.ScrollingCell({
+				value: column.name
+			}).getMaterial();
+			h.root.find("grid_column_title_" + index).update(mat);
+        });
+
 		h.setButtons(h.buttons);
 		h.setTitle(h.title);
 		h.createSearchField();
     },
-
+    /**
+     * 
+     */
     setScrollTop: function(pixels) {
     	var h = this;
     		h.root.find(h.id("grid-rows")).dom().scrollTop = pixels;
     },
-    
+    /**
+     * 
+     */
     getScrollTop: function() {
     	var h = this;
 		return h.root.find(h.id("grid-rows")).dom().scrollTop;
     },
-
+    /**
+     * 
+     */
     selectRowByBean: function(bean) {
     	var h = this;
     	for(var i=0; i<h.rowsElements.length; i++) {
@@ -177,7 +187,9 @@ bardia.grid.Grid = bardia.oop.Class.create({
     		}
     	}
     },
-    
+    /**
+     * 
+     */
     findRowByBean: function(bean) {
     	var h = this;
     	var result = null;
@@ -191,7 +203,22 @@ bardia.grid.Grid = bardia.oop.Class.create({
 
     	return result;
     },
-    
+    /**
+     * 
+     */
+    selectRowByAttribute: function(attribute, value) {
+    	var h = this;
+    	for(var i=0; i<h.rowsElements.length; i++) {
+    		if (h.rowsElements[i].bean[attribute] === value) {
+    			h.rowsElements[i].dom().click();
+    			h.rowsElements[i].dom().focus();
+    			break;
+    		}
+    	}
+    },
+    /**
+     * 
+     */
     sortByColumn: function(columnHeader) {
     	var h = this;
 
@@ -209,12 +236,16 @@ bardia.grid.Grid = bardia.oop.Class.create({
     	h.sortedColumn = columnHeader;
     	h.sort(h.sortedColumn);
     },
-    
+    /**
+     * 
+     */
     sortByColumnIndex: function(index) {
     	var h = this;
 	    	h.sortByColumn(h.root.find("grid-column-index" + index));
     },
-
+    /**
+     * 
+     */
     reverseSorting: function(columnHeader) {
     	var h = this;
     	
@@ -240,7 +271,9 @@ bardia.grid.Grid = bardia.oop.Class.create({
         	});    		
     	}
     },
-
+    /**
+     * 
+     */
     hideSorting: function(columnHeader) {
     	var h = this;
     	
@@ -251,11 +284,13 @@ bardia.grid.Grid = bardia.oop.Class.create({
     		top: "-30px"
     	});
     },
-
+    /**
+     * 
+     */
     setButtons: function(buttons) {
     	var h = this;
-    	h.buttons = buttons;
 
+    	h.buttons = buttons;
     	h.root.find(h.id("toolbar")).update();
 
     	if (h.buttons) {
@@ -263,6 +298,7 @@ bardia.grid.Grid = bardia.oop.Class.create({
     			var el = $_element({
     				$_tag: "button",
     				class: "mdl-button mdl-js-button mdl-button--icon",
+    				title: button.name,
     				$_append: [{
     					$_tag: "div",
     					class: "icon material-icons grid-icon",
@@ -275,25 +311,25 @@ bardia.grid.Grid = bardia.oop.Class.create({
     					}
     				}
     			});
-    			
     			h.root.find(h.id("toolbar")).insert(el);
     		});
     	}
-    	
+
 		var el = $_element({
 			$_tag: "div",
+			id: h.id("grid_title"),
 			class: "grid-title",
-			$_append: h.title
+			$_append: "[" + h.getVisibleRowsCount() + "] " + h.title
 		});
 
     	h.root.find(h.id("toolbar")).insert(el);
     },
-
+    
     setTitle: function(title) {
     	var h = this;
-
 		h.title = title;
-		h.setButtons(h.buttons);
+		//h.root.find(h.id("grid_title")).update("[" + h.getVisibleRowsCount() +"] " + h.title);
+		h.root.find(h.id("grid_title")).update(h.title);
     },
 
     createSearchField: function() {
@@ -301,33 +337,46 @@ bardia.grid.Grid = bardia.oop.Class.create({
     	
     	h.textSearch = $_element({
     		$_tag: "div",
-    		class: "mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right",
-    		style: "position:absolute; right:10px; top:0px; margin-top:-8px; z-index:5",
+    		style: "position:relative; display:flex; flex-direction:row; top:3px; line-height:30px;  margin:0px; padding:0px;",
     		$_append: [{
-    			$_tag: "label",
-    			class: "mdl-button mdl-js-button mdl-button--icon",
-    			"for": h.id("search_input"),
-    			$_append: [{
-    				$_tag: "i",
-    				class: "material-icons grid-icon",
-    				$_append: "search"
-    			}]
-    		}, {
     			$_tag: "div",
-    			class: "mdl-textfield__expandable-holder",
+    			id: "search_div",
+    			style: "overflow:hidden; width:0px; margin-left:20px; padding:0px;",
+    			class: "grid-animated",
     			$_append: [{
     				$_tag: "input",
     				class: "mdl-textfield__input",
-    				style: "background-color:transparent; font-size:14px; font-family:Arial; margin-bottom:4px",
+    				style: "background-color:transparent; font-size:14px; font-family:Arial; margin-bottom:4px; outline:none; box-shadow:none; border:1px solid white; border-width:0px 0px 1px 0px;",
     				type: "text",
     				name: "sample",
     			    id: h.id("search_input"),
     			    $_on: {
     			    	keyup: function(e) {
     			    		h.filterRows(e.target.value);
+    			    	},
+    			    	blur: function(e) {
+    			    		if (!e.target.value || e.target.value == "" || e.target.value == null) {
+    			    			h.textSearch.find("search_div").dom().style.width = "0px";
+    			    		}
     			    	}
     			    }
-    			}]
+    			}],
+    		}, {
+    			$_tag: "div",
+    			"for": h.id("search_input"),
+    			id: h.id("search_icon"),
+    			$_append: [{
+    				$_tag: "i",
+    				class: "material-icons",
+    				style: "cursor:pointer",
+    				$_append: "search"
+    			}],
+    			$_on: {
+			    	click: function() {
+			    		h.textSearch.find("search_div").dom().style.width = "150px";
+			    		h.textSearch.find(h.id("search_input")).dom().focus();
+			    	}
+    			}
     		}]
     	});
     	
@@ -335,7 +384,9 @@ bardia.grid.Grid = bardia.oop.Class.create({
     	
     	$_upgradeElement(h.textSearch);
     },
-
+    /**
+     * 
+     */
     sort: function(columnHeader) {
     	var h = this;
 
@@ -372,7 +423,12 @@ bardia.grid.Grid = bardia.oop.Class.create({
     		}
     	}
     },
-
+    getVisibleRowsCount: function() {
+    	return this.visibleRowsCount;
+    },
+    /**
+     * 
+     */
     fetch: function(model) {
         var h = this;
         
@@ -380,41 +436,48 @@ bardia.grid.Grid = bardia.oop.Class.create({
         	delete h.model;
         }
         h.model = model;
+        
+        h.visibleRowsCount = model.rows.length;
                 
         if (undefined == h.sortedColumn) {
         	h.fetchNoSort(h.model);
         } else {        	
         	h.sort(h.sortedColumn);
         }
+        
+        var filterValue = h.textSearch.find(h.id("search_input")).dom().value;
+        if (filterValue && filterValue.trim() != "") {
+        	h.filterRows(filterValue);
+        }
+
+        h.setTitle(h.title);
     },
-    
     /**
      * 
      */
     fetchNoSort: function(model) {
         var h = this;
-        
+
         if (h.rowsElements) {
         	delete h.rowsElements;
         }
         h.rowsElements = [];
-        
+
         var rowsDiv = h.root.find(h.id("grid-rows"));
         rowsDiv.update();
 
-        h.firstRow = null;
-        
-        (model.rows || []).forEach(function(row) {
+        h.firstRow = undefined;
+
+        (model.rows || []).forEach(function(row, index) {
             var rowDiv = $_element({
                 $_tag: "div",
                 class: "grid-row-",
+                tabIndex: index
             });
             rowsDiv.insert(rowDiv);
         	rowDiv.bean = row;
 
         	h.rowsElements.push(rowDiv);
-        	
-        	h.firstRow = h.firstRow || rowDiv;
 
             h.columns.forEach(function(column) {            	
             	var cell = $_element({
@@ -422,50 +485,96 @@ bardia.grid.Grid = bardia.oop.Class.create({
                     class: "grid-cell",
                     style: "width:" + (column.width || 150) + "px",
                 });
-            	
+
             	if (column.render) {
             		var rendered = column.render(rowDiv, cell);	
             		if (rendered && rendered != null && rendered.$_tag && rendered.$_tag != null) {
             			cell.insert($_element(rendered));
-            		} else {
+            		} else if (rendered && rendered.dom !== undefined) {
             			cell.insert(rendered);
+            		} else {
+            			cell.insert("" + rendered);
             		}
             	} else {
             		var value = eval("rowDiv.bean." + column.property);
-            		if (value == undefined || value === null) {
+            		if (value === undefined || value === null) {
             			value = "";
             		}
-                	cell.insert(value);
+                	cell.insert("" + value);
             	}
 
                 rowDiv.insert(cell);
             });
         });
-        
-        var filterValue = h.textSearch.find(h.id("search_input")).dom().value;
-        if (filterValue && filterValue.trim() != "") {
-        	h.filterRows(filterValue);
-        }
-        
-        if (h.clickAfterFetch == true) {
-        	if (h.firstRow) {
-        		h.firstRow.dom().click();
-        	}
-        }        
-    },
 
+//        if (h.clickAfterFetch == true) {
+//        	if (h.firstRow) {
+//        		h.firstRow.dom().click();
+//        	}
+//        }        
+    },
+    /**
+     * 
+     */
     filterRows: function(value) {
     	var h = this;
 
+    	h.visibleRowsCount = 0;
+    	
+    	if (h.textSearch.find(h.id("search_input")).dom().value !== value) {
+    		h.textSearch.find(h.id("search_input")).dom().value = value;
+    		h.textSearch.find(h.id("search_icon")).dom().click();
+    	}
+    	
+    	var values = value.toLowerCase().split(" ");
+    	
     	var rowsDiv = h.root.find(h.id("grid-rows"));
+    	
+    	h.firstRow = undefined;
 
     	for (var i=0; i<rowsDiv.dom().childNodes.length; i++) {
-    		if (rowsDiv.dom().childNodes[i].innerHTML.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-    			rowsDiv.dom().childNodes[i].style.display = "flex"
+    		var cellValue = rowsDiv.dom().childNodes[i].innerHTML.toLowerCase();
+    		
+    		var exists = false;
+    		values.some(function(val) {
+    			if(cellValue.indexOf(val.trim()) >= 0) {
+    				exists = true;
+    				return true;
+    			}
+    		});
+
+    		if (true == exists) {
+    			rowsDiv.dom().childNodes[i].style.display = "flex";
+    			h.firstRow = h.firstRow || rowsDiv.dom().childNodes[i]; 
+    			h.visibleRowsCount++;
     		} else {
-    			rowsDiv.dom().childNodes[i].style.display = "none"
+    			rowsDiv.dom().childNodes[i].style.display = "none";
     		}
     	}
+    	
+        if (h.clickAfterFetch == true) {
+        	if (h.firstRow) {
+        		h.firstRow.click();
+        	}
+        }
+
+    	if (h.onFiltered) {
+    		h.onFiltered();
+    	}
+    },
+    
+    getVisibleBeans: function() {
+    	var h = this;
+
+    	var beans = [];
+    	
+    	h.rowsElements.forEach(function(row) {
+			if (row.dom().style.display == "flex") {
+				beans.push(row.bean);
+			}    		
+    	});
+    	
+    	return beans;
     },
 
     openDetails: function(width) {
@@ -480,10 +589,10 @@ bardia.grid.Grid = bardia.oop.Class.create({
         
         var result = h.root.find(h.id("grid-details-right"));
         result.update();
-        
+
         return result;
     },
-    
+
     closeDetails: function() {
         var h = this;
 
@@ -495,16 +604,17 @@ bardia.grid.Grid = bardia.oop.Class.create({
     id: function(name) {
     	return this.serial + name;
     },
-    
-    openProgress: function() {
+
+    openProgress: function(message) {
     	var h = this;
-    	h.root.find(h.id("grid-progress")).addClassName("grid-progress-is-active");
-    	h.root.find(h.id("progress")).addClassName("is-active");
+    	h.root.find(h.id("grid-progress")).addClassName("bardia-progress-is-active");
+    	if (message) {
+    		h.root.find(h.id("grid-progress-label")).update(message); 		
+    	}
     },
 
     closeProgress: function() {
     	var h = this;
-    	h.root.find(h.id("grid-progress")).removeClassName("grid-progress-is-active");
-    	h.root.find(h.id("progress")).removeClassName("is-active");
+    	h.root.find(h.id("grid-progress")).removeClassName("bardia-progress-is-active");
     },
 });

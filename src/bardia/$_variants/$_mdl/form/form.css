@@ -1,6 +1,6 @@
 
 .form-container {
-	position:absolute; top:0px; left:0px; right:0px; bottom:0px;
+	position:absolute; top:0px; left:0px; right:0px; bottom:0px; background:white;
 }
 
 .form-top {
@@ -11,22 +11,24 @@
 }
 
 .form-content {
-    position:absolute; top:48px; left:0px; right:0px; bottom:0px; display:flex; flex-direction:column; padding:20px;
+    position:absolute; top:48px; left:0px; right:0px; bottom:0px; display:flex; flex-direction:column; padding:20px; overflow:auto;
 }
 
 .form-row {
     position:relative; width:100%; border:1px solid lightGrey; 
-    border-width:0px 0px 0px 0px; padding:10px 0px 0px 0px;
+    border-width:0px 0px 0px 0px; padding:10px 0px 0px 0px; 
+    min-height:40px; 
 }
 
 .form-text-input {
-	position:relative;
-    height:20px; border:0px solid lightGrey; border-width:0px 0px 1px 0px; outline:none; margin-top:20px; background-color:transparent;
-    box-shadow:none; 
+	position:absolute;
+	left:0px; 
+    border:0px solid lightGrey; border-width:0px 0px 1px 0px; outline:none; margin-top:20px; background-color:transparent;
+    box-shadow:none;     
 }
 
 .form-text-input-readonly {
-	color:grey
+	color:grey; background-color:#fafafa;
 }
 
 .form-text-input:invalid {
@@ -34,14 +36,14 @@
 }
 
 .form-textarea {
-	height:50px; width:300px;
+	height:50px; width:100%;
 }
 
 .form-text-input-label {
     position: absolute;
-    color:grey;
+    color:#3f51b5;
     left:0px;
-    top:30px;
+    top:28px;
     transition: 0.2s;
     font-size: 14px;
     cursor: text;
@@ -53,13 +55,11 @@
 
 .form-text-input:focus + label {
     top:10px;
-    color:blue;
     font-size: 11px;
 }
 
 .form-text-input:valid + label {
     top:10px;
-    color:blue;
     font-size: 11px;
 }
 
@@ -110,7 +110,7 @@
 }
 
 .form-title {
-	padding-left:20px;
+	padding-left:20px; white-space:nowrap
 }
 
 .form-icon {
@@ -119,4 +119,12 @@
 
 .action-icon {
 	color:#3f51b5
+}
+
+.action-delete-icon {
+	color:rgba(255,0,0,0.3);	
+}
+
+.action-delete-icon:hover {
+	color:rgba(255,0,0,0.5);	
 }

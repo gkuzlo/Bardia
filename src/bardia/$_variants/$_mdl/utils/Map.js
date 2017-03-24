@@ -47,6 +47,10 @@ bardia.utils.Map = bardia.oop.Class.create({
 	}
 });
 
+bardia.utils.onImportScriptError = function() {
+	window.location.href = window.location.href;
+}
+
 bardia.utils.ScriptImporter = bardia.oop.Class.create({
 
 	initialize: function(config) {
@@ -64,9 +68,9 @@ bardia.utils.ScriptImporter = bardia.oop.Class.create({
 
 		var xhttp = new XMLHttpRequest();	
 
-		xhttp.open("GET", url, false);
+		xhttp.open("GET", url + "?" + new Date().getTime(), false);
 		xhttp.send(null);
-		
+
 		if (xhttp.readyState == 4 && (xhttp.status == 200 || xhttp.status == 0)) {
 			try {
 				h.importedScripts.put(url, {
@@ -74,7 +78,10 @@ bardia.utils.ScriptImporter = bardia.oop.Class.create({
 				});
 				globalEval(xhttp.responseText);
 			} catch (e) {
-				alert(""+ e + " Error importing script " + url);
+				console.log("" + e + " Error importing script " + url);
+				if (bardia.utils.onImportScriptError) {
+					bardia.utils.onImportScriptError();
+				}
 			}
 		}
 	},
@@ -90,7 +97,7 @@ bardia.utils.ScriptImporter = bardia.oop.Class.create({
 			var css = $_element({
 				$_tag: "link",
 				rel: "stylesheet",
-				href: url
+				href: url + "?" + new Date().getTime()
 			});
 			document.getElementsByTagName("head")[0].appendChild(css.dom());
 			h.importedScripts.put(url, {
@@ -114,7 +121,6 @@ var globalEval = function globalEval(src) {
 };
 
 var IMPORTER = new bardia.utils.ScriptImporter({
-	
 });
 
 function importScript(path) {

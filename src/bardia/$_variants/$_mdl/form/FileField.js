@@ -45,22 +45,18 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     						}, false);
 
     						xhr.onreadystatechange = function (evt) {
-    							if (xhr.readyState == 4) {
+    							if (xhr.readyState == 4 && xhr.status == 200) {
     								h.form.closeProgress();
 
     								var createdFile = JSON.parse(xhr.responseText);						
     			                    	h.updateBeanProperty(createdFile);
     			                    	h.updateInputValue(h.form.getBean());
-    			                    	
-    			            		if (h.onChange !== undefined) {
-    			            			h.onChange(createdFile);
-    			            		}
+    			                    	h.root.find(h.serial).dom().value = "";
     							}
     						};
 
     						var uploadUrl = h.uploadAction || bardia.uploadAction;
     						xhr.open("POST", uploadUrl + "?fileName=" + h.root.find(h.serial).dom().files[0].name, true);
-    						xhr.setRequestHeader("Accept-Encoding", "UTF-8");
     						
     						xhr.send(form);
     					}

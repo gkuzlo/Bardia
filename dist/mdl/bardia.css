@@ -1,3 +1,39 @@
+.bardia-progress {
+	position:absolute; top:0px; left:0px; width:0%; bottom:0px; background:rgba(1,0,0,1.0);
+	display:flex; flex-direction:column; justify-content:center; align-items:center; overflow:hidden;
+
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+.bardia-progress.bardia-progress-is-active {
+	width: 100%; 
+}
+
+.bardia-progress-label-container {
+	display:flex; flex-direction:row; justify-content:center; background:rgba(0,0,0,0); overflow:hidden;
+}
+
+.bardia-progress-label {
+	top:0px; left:0px; height:30px; line-height:28px; text-align:center; padding:0px 30px 0px 30px; 
+	margin:0px; border:0px solid grey; background:#3f51b5; background-color:#3f51b5; color:white; border-radius:0px; font-size:12px;
+}
+
+.bardia-progress-icon {
+	color:#3f51b5; line-height:30px; height:30px; width:30px; text-align:center; background:rgba(0,0,0,0); margin:0px; font-size:14px; padding-top:2px;
+	-webkit-transition: all 1s ease-in-out;
+	-moz-transition: all 1s ease-in-out;
+	-o-transition: all 1s ease-in-out;
+	transition: all 1s ease-in-out;
+    animation: bardia-progress-icon-rotate 2s infinite;
+}
+
+@keyframes bardia-progress-icon-rotate {
+    0%   {transform:rotate(0deg)}
+    100%   {transform:rotate(-360deg)}
+}
 
 div {
 	font-family:Arial;
@@ -63,36 +99,41 @@ textarea {
 }
 
 .calendar-container {
-	display:flex; flex-direction:column; height:100%;
-	background-color:#ff709f;	
+	position:absolute; top:0px; left:0px; right:0px; bottom:0px;
+	background-color:white; overflow:hidden;
 }
 
 .calendar-weekday {
-	height:40px; line-height:40px; background-color:#ff4081; 
-	color:white; text-align:center;
-	font-size:13px;
+	position:absolute; top:0px; left:0px; right:0px; font-size:14px;  
+	height:40px; line-height:40px; background-color:rgba(255,64,129,0.7); color:white; 
+	text-align:left; padding-left:20px;
 }
 
 .calendar-month {
-	height:50px; line-height:50px; background-color:#ff709f;
-	color:white; text-align:center; font-size:25px;
-}
-
-.calendar-month-day {
-	height:80px; line-height:80px; background-color:#ff709f;
-	color:white; text-align:center; font-size:70px;
+	position:absolute; top:40px; left:120px; right:0px;
+	height:40px; line-height:40px; background-color:rgba(255,64,129,1);
+	color:white; text-align:center; font-size:21px; text-align:left;
 }
 
 .calendar-year {
-	height:40px; line-height:40px; background-color:#ff709f;
-	color:white; text-align:center; font-size:25px;
+	position:absolute; top:70px; left:120px; right:0px;
+	height:50px; line-height:50px; background-color:rgba(255,64,129,0.9);
+	color:white; text-align:center; font-size:21px; text-align:left; 
+}
+
+.calendar-month-day {
+	position:absolute; top:40px; left:0px; width:120px;
+	height:80px; line-height:80px; background-color:rgba(255,64,129,1);
+	color:white; text-align:center; font-size:76px;
 }
 
 .calendar-navigation {
-	height:40px; background-color:white; display:flex; justify-content:space-between;
+	position:absolute; top:120px; left:0px; right:0px; line-height:40px;
+	height:40px; background-color:white;
 }
 
 .calendar-days {
+	position:absolute; top:160px; left:0px; right:0px;
 	height:300px; background-color:white; display:flex; flex-direction:row; flex-wrap:wrap; 
 	align-content:flex-start; overflow:hidden;
 }
@@ -102,8 +143,8 @@ textarea {
 }
 
 .calendar-single-day {
-	position:relative; width:36px; height:36px; margin:2px; background-color:white; border-radius:50%;
-	border:1px solid lightGrey; text-align:center; line-height:36px; cursor:pointer;
+	position:relative; width:36px; height:30px; margin:2px; background-color:white; border-radius:0px;
+	border:1px solid lightGrey; text-align:center; line-height:30px; cursor:pointer;
 }
 
 .calendar-single-day:hover {
@@ -114,8 +155,20 @@ textarea {
 	background-color:#e0e0e0;
 }
 
+.calendar-nav-icon {
+	position:absolute; font-size:32px;
+}
+
+.calendar-not-today {
+	background-color:transparent; color:grey;
+}
+
+.calendar-today {
+	background-color:#3f51b5; color:white;
+}
+
 .form-container {
-	position:absolute; top:0px; left:0px; right:0px; bottom:0px;
+	position:absolute; top:0px; left:0px; right:0px; bottom:0px; background:white;
 }
 
 .form-top {
@@ -126,22 +179,24 @@ textarea {
 }
 
 .form-content {
-    position:absolute; top:48px; left:0px; right:0px; bottom:0px; display:flex; flex-direction:column; padding:20px;
+    position:absolute; top:48px; left:0px; right:0px; bottom:0px; display:flex; flex-direction:column; padding:20px; overflow:auto;
 }
 
 .form-row {
     position:relative; width:100%; border:1px solid lightGrey; 
-    border-width:0px 0px 0px 0px; padding:10px 0px 0px 0px;
+    border-width:0px 0px 0px 0px; padding:10px 0px 0px 0px; 
+    min-height:40px; 
 }
 
 .form-text-input {
-	position:relative;
-    height:20px; border:0px solid lightGrey; border-width:0px 0px 1px 0px; outline:none; margin-top:20px; background-color:transparent;
-    box-shadow:none; 
+	position:absolute;
+	left:0px; 
+    border:0px solid lightGrey; border-width:0px 0px 1px 0px; outline:none; margin-top:20px; background-color:transparent;
+    box-shadow:none;     
 }
 
 .form-text-input-readonly {
-	color:grey
+	color:grey; background-color:#fafafa;
 }
 
 .form-text-input:invalid {
@@ -149,14 +204,14 @@ textarea {
 }
 
 .form-textarea {
-	height:50px; width:300px;
+	height:50px; width:100%;
 }
 
 .form-text-input-label {
     position: absolute;
-    color:grey;
+    color:#3f51b5;
     left:0px;
-    top:30px;
+    top:28px;
     transition: 0.2s;
     font-size: 14px;
     cursor: text;
@@ -168,13 +223,11 @@ textarea {
 
 .form-text-input:focus + label {
     top:10px;
-    color:blue;
     font-size: 11px;
 }
 
 .form-text-input:valid + label {
     top:10px;
-    color:blue;
     font-size: 11px;
 }
 
@@ -225,7 +278,7 @@ textarea {
 }
 
 .form-title {
-	padding-left:20px;
+	padding-left:20px; white-space:nowrap
 }
 
 .form-icon {
@@ -234,6 +287,14 @@ textarea {
 
 .action-icon {
 	color:#3f51b5
+}
+
+.action-delete-icon {
+	color:rgba(255,0,0,0.3);	
+}
+
+.action-delete-icon:hover {
+	color:rgba(255,0,0,0.5);	
 }
 
 .grid-container {
@@ -269,6 +330,10 @@ textarea {
 .grid-row- {
     position:relative; width:90%; border:1px solid lightGrey; height:30px; min-height:30; display:flex;
     border-width:0px 0px 1px 0px; background-color:white; width:100%; overflow:hidden;
+}
+
+.grid-row-:focus {
+	outline:none;
 }
 
 .grid-row-:hover {
@@ -330,6 +395,13 @@ textarea {
 	-moz-transition: all 0.5s;
 	-o-transition: all 0.5s;
 	transition: all 0.5s; 
+}
+
+.grid-animated {    
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;  
 }
 
 .material-icons.grid-icon {
@@ -420,7 +492,7 @@ textarea {
 	background:#3f51b5
 }
 .panel-container {
-	position:absolute; top:0px; left:0px; right:0px; bottom:0px; background-color:white;
+	position:absolute; top:0px; left:0px; right:0px; bottom:0px; background-color:white; overflow:hidden;
 }
 
 .panel-top {
@@ -438,6 +510,15 @@ textarea {
 	background:#3f51b5
 }
 
+.panel-animated {
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s; 
+
+    overflow:hidden;
+}
+
 .panel-details-right {
     position:absolute; top:0px; left:0px; bottom:0px; width:0px;
     background:white; border:0px;
@@ -450,6 +531,19 @@ textarea {
     overflow:hidden; 
 }
 
+.panel-button-blinked {
+  animation: panel_button_blink 1s infinite;
+}
+
+@keyframes panel_button_blink {
+  0% {
+    opacity:0
+  }
+  100% {
+    opacity:1
+  }
+}
+
 .tabs-container {
 	position:absolute; top:0px; left:0px; width:100%; height:100%
 }
@@ -457,7 +551,6 @@ textarea {
 .tabs-header {
 	position:absolute; top:0px; left:0px; width:100%; height:48px;
 	display:flex; flex-direction:row; 
-	z-index:3;
 	box-shadow:0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
 

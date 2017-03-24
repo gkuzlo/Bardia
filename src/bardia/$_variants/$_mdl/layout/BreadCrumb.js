@@ -3,7 +3,6 @@ bardia.layout.BreadCrumb = bardia.oop.Class.create({
     initialize: function(config) {
     	bardia.oop.Class.extend(this, bardia.oop.Class.extend({
     		tabs: [],
-    		addedTabs: [],
     		serial: "S_" + (Math.random()*1000000).toFixed(0),
     	}, config));
     	
@@ -31,7 +30,7 @@ bardia.layout.BreadCrumb = bardia.oop.Class.create({
     		}
     	});
     	headerLink.tab = tab;
-    	
+    	    	
     	h.root.find(h.id("header")).insert(headerLink);
     	
     	var content = $_element({
@@ -55,6 +54,8 @@ bardia.layout.BreadCrumb = bardia.oop.Class.create({
     	if (h.lastItem) {		
     		h.lastItem.removeClassName("is-active");
     		h.lastItem.content.removeClassName("is-active");
+    		
+        	wrappedElement.previousItem = h.lastItem; 
     	}
 
     	h.removeAllNextItems(wrappedElement);
@@ -90,6 +91,14 @@ bardia.layout.BreadCrumb = bardia.oop.Class.create({
     			delete header.nextItem;
     		}
     	});
+    },
+    
+    removeLastItem: function() {
+    	var h = this;
+    	
+    	if (h.lastItem && h.lastItem.previousItem) {
+    		h.removeAllNextItems(h.lastItem.previousItem);
+    	}
     },
 
     prepareRoot: function() {

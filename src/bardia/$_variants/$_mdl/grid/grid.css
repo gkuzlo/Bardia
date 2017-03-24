@@ -34,6 +34,10 @@
     border-width:0px 0px 1px 0px; background-color:white; width:100%; overflow:hidden;
 }
 
+.grid-row-:focus {
+	outline:none;
+}
+
 .grid-row-:hover {
 	background-color:#f0f0f0; cursor:pointer;
 }
@@ -93,6 +97,13 @@
 	-moz-transition: all 0.5s;
 	-o-transition: all 0.5s;
 	transition: all 0.5s; 
+}
+
+.grid-animated {    
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;  
 }
 
 .material-icons.grid-icon {

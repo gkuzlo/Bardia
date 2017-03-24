@@ -1,4 +1,7 @@
 var bardia = {
+	INVISIBLE: 0,
+	READONLY: 1,
+	VISIBLE: 2
 };
 bardia.oop = {
 }
@@ -108,6 +111,7 @@ bardia.dom.Element = bardia.oop.Class.create({
         }
 
         if (jsonRoot.$_props) {
+        	this.$_props = jsonRoot.$_props
             for (prop in jsonRoot.$_props) {
             	this.domNode[prop] = jsonRoot.$_props[prop];
             }
@@ -150,8 +154,12 @@ bardia.dom.Element = bardia.oop.Class.create({
     	var h = this;
     	
     	(this.children || []).forEach(function(child) {
-    		delete child.dom().wrapper;
-    		h.dom().removeChild(child.dom());
+    		try {
+	    		delete child.dom().wrapper; 
+	    		h.dom().removeChild(child.dom());
+    		} catch (e) {
+    			console.log("error removing child node");
+    		}
     	});
     	
     	if (this.children) {
@@ -174,7 +182,8 @@ bardia.dom.Element = bardia.oop.Class.create({
     find: function(id) {
         var result = null;
         try {
-        	result = this.domNode.querySelector("#" + id);
+        	//result = this.domNode.querySelector("#" + id);
+        	result = this.domNode.querySelector("[id='" + id + "']");
         } catch (e) {
         	alert(e + "   " + id);
         }
@@ -204,26 +213,24 @@ bardia.dom.Element = bardia.oop.Class.create({
     },
 
     addClassName: function(className) {
-    	var classes = this.dom().className.split(" ");
+    	var classes = this.dom().classList;
 
-    	var exists = false;
-    	classes.forEach(function(_class) {
-    		if (_class.trim() == className) {
-    			exists = true;
-    		}
-    	});
-
-    	if (false == exists) {
-    		this.dom().className = this.dom().className + " " + className;
+    	if (!classes.contains(className)) {
+    		classes.add(className);
     	}
     },
 
     removeClassName: function(className) {
-    	this.dom().className = this.dom().className.replace(className, "");
+    	var classes = this.dom().classList;
+
+    	if (classes.contains(className)) {
+    		classes.remove(className);
+    	}
     },
 
     hasClassName: function(className) {
-    	return this.dom().className.indexOf(className) > -1;
+    	var classes = this.dom().classList;
+    	return classes.contains(className);
     },
     
     clone: function() {
@@ -235,7 +242,7 @@ bardia.dom.Element = bardia.oop.Class.create({
     	for (s in style) {
     		this.dom().style[s] = style[s];
     	}
-    }
+    },    
 });
 /**
  *
@@ -285,6 +292,10 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	return result;
     },
     
+    /**
+      var du = new bardia.utils.DateUtils();
+      return du.formatDateHHmm() + " " + du.formatDateYYYYMMDDHHmm() 
+     */
     formatDateYYYYMMDDHHmm: function(date) {
     	var result = "";
     	try {
@@ -388,7 +399,9 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	}
     	return result;
     },
-    
+    /**
+     * new bardia.utils.DateUtils().createFormatDateYYYYMMDDHHmm()
+     */
     createFormatDateYYYYMMDDHHmm: function(time) {
     	var result = "";
     	try {
@@ -399,12 +412,12 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	}
     	return result;    	
     },
-    
-    getLeftMinutesTo: function(dateMillis) {
-    	var diff = dateMillis - new Date().getTime();
-    	var diffSec = diff/1000;
+
+    getLeftMinutesTo: function(dateMillis, nowMillis) {
+    	var diff = dateMillis - nowMillis;
+    	var diffSec = diff / 1000;
     	var diffMins = diffSec / 60;
-    	
+
     	return diffMins.toFixed(0);
     },
     
@@ -413,10 +426,24 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
  	       try {
  	    	   result = this.formatNumber(((intValue - intValue % 60) / 60), 2) + ":" + this.formatNumber((intValue % 60), 2)
  	       } catch (e) {
-
+ 	    	   console.log("ERROR: convertIntToTime");
  	       }
  	   return result;
     },
+    
+    convertDaySecondsToTime: function(daySeconds) {
+  	   var result = "00:00:00";
+  	       try {
+  	    	   var hours = (daySeconds - (daySeconds % 3600)) / 3600;
+  	    	   var minutes = ((daySeconds - (hours * 3600)) / 60).toFixed(0);
+  	    	   var seconds = daySeconds % 60;
+  	    	   
+  	    	   result = this.formatNumber(hours, 2) + ":" + this.formatNumber(minutes, 2) + ":" + this.formatNumber(seconds, 2)
+  	       } catch (e) {
+  	    	   console.log("ERROR: convertDaySecondsToTime");
+  	       }
+  	   return result;
+     },
     
     formatNumber: function(num, len) {
         var result = null;
@@ -446,6 +473,11 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
 		}
 		return result;
     },
+    
+    formatSeconds: function(daySeconds) {
+    	var result = "";
+    	return result;
+    }
 });
 
 bardia.utils.DateUtils.pattern = "";
@@ -498,3 +530,80 @@ bardia.utils.Map = bardia.oop.Class.create({
 		}
 	}
 });
+
+bardia.utils.ScriptImporter = bardia.oop.Class.create({
+
+	initialize: function(config) {
+		bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+			importedScripts: new bardia.utils.Map()
+		}, config));
+	},
+
+	js: function(url) {
+		var h = this;
+
+		if (h.importedScripts.containsKey(url)) {
+			return;
+		}
+
+		var xhttp = new XMLHttpRequest();	
+
+		xhttp.open("GET", url + "?" + new Date().getTime(), false);
+		xhttp.send(null);
+
+		if (xhttp.readyState == 4 && (xhttp.status == 200 || xhttp.status == 0)) {
+			try {
+				h.importedScripts.put(url, {
+					imported: true
+				});
+				globalEval(xhttp.responseText);
+			} catch (e) {
+				alert(""+ e + " Error importing script " + url);
+			}
+		}
+	},
+	
+	css: function(url) {
+		var h = this;
+
+		if (h.importedScripts.containsKey(url)) {
+			return;
+		}
+
+		try {
+			var css = $_element({
+				$_tag: "link",
+				rel: "stylesheet",
+				href: url + "?" + new Date().getTime()
+			});
+			document.getElementsByTagName("head")[0].appendChild(css.dom());
+			h.importedScripts.put(url, {
+				imported: true
+			});
+		} catch (e) {
+			alert(""+ e + " Error importing css " + url);
+		}
+	},
+});
+
+var globalEval = function globalEval(src) {
+    if (window.execScript) {
+        window.execScript(src);
+        return;
+    }
+    var fn = function() {
+        window.eval.call(window,src);
+    };
+    fn();
+};
+
+var IMPORTER = new bardia.utils.ScriptImporter({
+});
+
+function importScript(path) {
+	IMPORTER.js(path);
+};
+
+function importCss(path) {
+	IMPORTER.css(path);
+};

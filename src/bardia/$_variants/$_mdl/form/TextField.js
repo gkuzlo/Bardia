@@ -8,7 +8,8 @@ bardia.form.TextField = bardia.oop.Class.create({
             readOnly: false,
             visible: true,
             required: false,
-            detailsWidth: "90%"
+            detailsWidth: "90%",
+            maxLength: 255
         }, config));
 
         this.render();
@@ -25,20 +26,27 @@ bardia.form.TextField = bardia.oop.Class.create({
                 class: "form-text-input",
                 required: false,
                 id: h.id(h.property),
+                maxLength: h.maxLength || 255,
                 $_on: {
                     change: function(e) {
                         h.updateBeanProperty(e.target.value);
                     },
-                    focus: function(e) {
-                    	if (h.readOnly == true) {
-                    		e.stopPropagation();
-                    		e.target.blur();
-                    	}
-                    },
+//                    focus: function(e) {
+//                    	if (h.readOnly == true) {
+//                    		e.stopPropagation();
+//                    		e.target.blur();
+//                    	}
+//                    },
                     keyup: function(e) {
                     	if (h.onKeyUp) {
                     		h.onKeyUp(e.target.value);
                     	}
+                    },
+                    keydown: function(e) {
+                    	if (h.readOnly == true) {
+                    		e.stopPropagation();
+                    		e.target.blur();
+                    	}                    	
                     }
                 }
             }, {
@@ -69,6 +77,13 @@ bardia.form.TextField = bardia.oop.Class.create({
     
 	prepareMask: function() {
 		var h = this;
+
+		if (h.mask) {
+			var mask = new InputMask(h.mask, h.root.find(h.id(h.property)).dom());
+			mask.updateFunction = function(_mask) {
+				h.updateBeanProperty(_mask.control.value);
+			}
+		}
 		
 		// do nothing for simple text
 	},
@@ -78,8 +93,10 @@ bardia.form.TextField = bardia.oop.Class.create({
 
     	h.readOnly = trueOrFalse;
     	if (true == trueOrFalse) {
+    		h.root.find(h.id(h.property)).readOnly = true;
     		h.root.find(h.id(h.property)).addClassName("form-text-input-readonly");
     	} else {
+    		h.root.find(h.id(h.property)).readOnly = false;
     		h.root.find(h.id(h.property)).removeClassName("form-text-input-readonly");
     	}
     },
@@ -121,15 +138,29 @@ bardia.form.TextField = bardia.oop.Class.create({
     validate: function() {
     	var h = this;
     	
-    	if (true === h.required && (!h.root.find(h.id(h.property)).dom().value || h.root.find(h.id(h.property)).dom().value.trim() == "")) {
-    		h.markError();
-    		return false;
-    	} else {
-    		h.unmarkError();
-    		return true;
+    	var result = true;
+    	
+    	try {
+	    	if (true === h.required && (!h.root.find(h.id(h.property)).dom().value || h.root.find(h.id(h.property)).dom().value.trim() == "")) {
+	    		h.markError();
+	    		result = false;
+	    	}
+
+	    	if (h.mask) {
+		    	if (result == true && h.mask && h.root.find(h.id(h.property)).dom().value.length < h.mask.length && true == h.required && h.root.find(h.id(h.property)).dom().value.length > 0) {
+		    		h.markError();
+		    		result = false;
+		    	} 
+	    	}
+	    	
+	    	if (result == true) {
+	    		h.unmarkError();
+	    	}
+    	} catch (e) {
+    		alert("bardia.form.TextField -> eror property -> " + h.property);
     	}
     	
-    	return true;
+    	return result;
     },
     
     markError: function() {

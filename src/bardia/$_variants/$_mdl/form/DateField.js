@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     
     initialize: function(config) {
@@ -11,33 +9,53 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
             readOnly: false,
             visible: true,
             required: false,
+            date: new Date(),
+            du: new bardia.utils.DateUtils()
         }, config));
 
         this.render();
     },
-	
+
     displayButton: function() {
     	var h = this;
 
     	return $_element({
-            $_tag: "button",
-            class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
-            $_on: {
-                click: function(e) {
-                    var element = h.form.openDetails("295px");
-                    try {
-                    	h.displayCalendar(element);
-                    } catch (e) {
-                    	alert(e);
+    		$_tag: "div",
+    		style: "position:absolute; bottom:0px; left:170px; display:" + ((h.readOnly==true)?"none":"flex") + "; flex-direction:row",
+    		$_append: [{
+                $_tag: "button",
+                class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
+                $_on: {
+                    click: function(e) {
+                        var element = h.form.openDetails("295px");
+                        try {
+                        	h.displayCalendar(element);
+                        } catch (e) {
+                        	alert(e);
+                        }
                     }
-                }
-            },
-            $_append: [{
-                $_tag: "i",
-                class: "material-icons action-icon",
-                $_append: "today",
+                },
+                $_append: [{
+                    $_tag: "i",
+                    class: "material-icons action-icon",
+                    $_append: "today",
+                }]
+            }, {
+                $_tag: "button",
+                class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
+                $_on: {
+                    click: function(e) {
+                    	h.updateBeanProperty(undefined);
+                    	h.updateInputValue(h.form.getBean());
+                    }
+                },
+                $_append: [{
+                    $_tag: "i",
+                    class: "material-icons action-delete-icon",
+                    $_append: "cancel",
+                }]
             }]
-        });
+    	});
     },
 
     displayCalendar: function(html) {    	
@@ -67,34 +85,29 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     			class: "calendar-navigation",
     			id: "month-navigation",
     			$_append: [{
-    	            $_tag: "button",
-    	            class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
+    	            $_tag: "div",
+    	            class: "material-icons mdl-button mdl-js-button mdl-button--icon calendar-nav-icon",
+    	            $_append: "keyboard_arrow_left",
+    	            style: "top:5px; left:5px;",
     	            $_on: {
     	                click: function(e) {
     	                	h.minusMonth();
     	                }
     	            },
-    	            $_append: [{
-    	                $_tag: "i",
-    	                class: "material-icons",
-    	                $_append: "keyboard_arrow_left",
-    	            }]
     	        }, {
     	        	$_tag: "div",
-    	        	id: "month-full-name"
-    	        }, {
-    	            $_tag: "button",
-    	            class: "mdl-button mdl-js-button mdl-button--icon mdl-button--colored",
+    	        	id: "month-full-name",
+    	        	style: "position:absolute; top:0px; left:30px; right:30px; height:40px; text-align:center;"
+    	        }, { 
+    	            $_tag: "div",
+    	            class: "material-icons mdl-button mdl-js-button mdl-button--icon calendar-nav-icon",
+    	            $_append: "keyboard_arrow_right",
+    	            style: "top:5px; right:5px;",
     	            $_on: {
     	                click: function(e) {
     	                	h.plusMonth();
     	                }
     	            },
-    	            $_append: [{
-    	                $_tag: "i",
-    	                class: "material-icons",
-    	                $_append: "keyboard_arrow_right",
-    	            }]
     	        }]
     		}, {
     			$_tag: "div",
@@ -104,7 +117,18 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     			$_tag: "div",
     			class: "calendar-buttons",
     			id: "month-buttons"
-    		}],
+    		}, { 
+	            $_tag: "div",
+	            class: "material-icons mdl-button mdl-js-button mdl-button--icon calendar-nav-icon",
+	            $_append: "cancel",
+	            style: "top:5px; right:5px; color:white;",
+	            title: "Cancel",
+	            $_on: {
+	                click: function(e) {
+	                	h.form.closeDetails();
+	                }
+	            },
+	        }],
     	});
 
     	html.insert(h.calendarRoot);
@@ -127,7 +151,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     updateDaysView: function() {
     	var h = this;
     	
-    	h.date = h.date || eval("h.form.getBean()." + h.property) || new Date();    	
+    	h.date = h.date || eval("h.form.getBean()." + h.property) || h.du.stripTime(new Date());    	
     	
     	h.calendarRoot.find("month-days").update();
     	var days = h.prepareDaysRows();
@@ -149,7 +173,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
 
     	var clonedDate = new Date(h.date.getTime());
     	clonedDate.setDate(1);
-    	clonedDate.setHours(12);
+    	clonedDate.setHours(0);
     	clonedDate.setMinutes(0);
     	clonedDate.setSeconds(0);
     	clonedDate.setMilliseconds(0);
@@ -161,9 +185,8 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     	var i = 0;
     	for (i=0; i<=41; i++) {
     		var aDate = new Date(clonedDate.getTime() + (i * 24 * 60 * 60 * 1000));
-
-    		var bgColor = "transparent";
-    		var color = "white";
+    		
+    		var clazz = "calendar-not-today";
     		if (aDate.getMonth() == currentMonth) {
     			color = "black";
 
@@ -172,15 +195,13 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     			}
 
     			if (aDate.getDate() == h.date.getDate()) {
-    				bgColor = "#3f51b5";
-    				color = "white";
+    				clazz = "calendar-today";
     			}
     		}
 
     		result.push({
     			$_tag: "div",
-    			class: "calendar-single-day mdl-js-ripple-effect",
-    			style: "color:" + color + "; background-color:" + bgColor,
+    			class: "calendar-single-day mdl-js-ripple-effect " + clazz,
     			$_props: {
     				date: aDate
     			},
@@ -200,8 +221,10 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
 
     updateInputValue: function(bean) {
         var h = this;
-
-        h.root.find(h.id(h.property)).dom().value = bardia.form.DateField.DU.createFormatYYYYMMDD(eval("bean." + h.property));
+        var date = new Date(eval("bean." + h.property));
+        if (date) {
+        	h.root.find(h.id(h.property)).dom().value = h.du.createFormatYYYYMMDD(date.getTime());
+        }
     },
 
     setWeekday: function() {

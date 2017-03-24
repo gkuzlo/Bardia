@@ -4,8 +4,11 @@ bardia.controlls.CheckBox = bardia.oop.Class.create({
     initialize: function(config) {		
         bardia.oop.Class.extend(this, bardia.oop.Class.extend({
         	value: false,
-        	readOnly: false
+        	readOnly: false,
+        	unselectedClass: "checkbox-unselected",
+        	selectedClass: "checkbox-selected"
         }, config));
+
         this.render();
     },
     
@@ -30,7 +33,7 @@ bardia.controlls.CheckBox = bardia.oop.Class.create({
     			class: "controlls-default",
     		}]
     	});
-    	
+
     	h.setValue(h.value || false);
     },
     
@@ -41,18 +44,18 @@ bardia.controlls.CheckBox = bardia.oop.Class.create({
     
     select: function() {
     	var h = this;
-    	
+
     	h.value = true;
-    	h.root.find("checkbox").removeClassName("checkbox-unselected");
-    	h.root.find("checkbox").addClassName("checkbox-selected");
+    	h.root.find("checkbox").removeClassName(h.unselectedClass);
+    	h.root.find("checkbox").addClassName(h.selectedClass);
     },
-    
+
     unselect: function() {
     	var h = this;
 
     	h.value = false;    	
-    	h.root.find("checkbox").removeClassName("checkbox-selected");
-    	h.root.find("checkbox").addClassName("checkbox-unselected");
+    	h.root.find("checkbox").removeClassName(h.selectedClass);
+    	h.root.find("checkbox").addClassName(h.unselectedClass);
     },
 
     change: function() {
@@ -82,5 +85,23 @@ bardia.controlls.CheckBox = bardia.oop.Class.create({
     	var h = this;
     	
     	h.readOnly = trueFalse || false;
+    },
+    
+    setVisible: function(isTrue) {
+    	var h = this;
+
+    	if (isTrue === undefined) {
+    		isTrue = true;
+    	}
+    	
+    	if (true == isTrue) {
+    		h.root.setStyle({
+    			display: "block"
+    		});    		
+    	} else {
+    		h.root.setStyle({
+    			display: "none"
+    		});
+    	}
     }
 });

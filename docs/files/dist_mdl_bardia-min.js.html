@@ -81,6 +81,9 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 var bardia = {
+	INVISIBLE: 0,
+	READONLY: 1,
+	VISIBLE: 2
 };
 bardia.oop = {
 }
@@ -190,6 +193,7 @@ bardia.dom.Element = bardia.oop.Class.create({
         }
 
         if (jsonRoot.$_props) {
+        	this.$_props = jsonRoot.$_props
             for (prop in jsonRoot.$_props) {
             	this.domNode[prop] = jsonRoot.$_props[prop];
             }
@@ -232,8 +236,12 @@ bardia.dom.Element = bardia.oop.Class.create({
     	var h = this;
     	
     	(this.children || []).forEach(function(child) {
-    		delete child.dom().wrapper;
-    		h.dom().removeChild(child.dom());
+    		try {
+	    		delete child.dom().wrapper; 
+	    		h.dom().removeChild(child.dom());
+    		} catch (e) {
+    			console.log(&quot;error removing child node&quot;);
+    		}
     	});
     	
     	if (this.children) {
@@ -256,7 +264,8 @@ bardia.dom.Element = bardia.oop.Class.create({
     find: function(id) {
         var result = null;
         try {
-        	result = this.domNode.querySelector(&quot;#&quot; + id);
+        	//result = this.domNode.querySelector(&quot;#&quot; + id);
+        	result = this.domNode.querySelector(&quot;[id=&#x27;&quot; + id + &quot;&#x27;]&quot;);
         } catch (e) {
         	alert(e + &quot;   &quot; + id);
         }
@@ -286,26 +295,24 @@ bardia.dom.Element = bardia.oop.Class.create({
     },
 
     addClassName: function(className) {
-    	var classes = this.dom().className.split(&quot; &quot;);
+    	var classes = this.dom().classList;
 
-    	var exists = false;
-    	classes.forEach(function(_class) {
-    		if (_class.trim() == className) {
-    			exists = true;
-    		}
-    	});
-
-    	if (false == exists) {
-    		this.dom().className = this.dom().className + &quot; &quot; + className;
+    	if (!classes.contains(className)) {
+    		classes.add(className);
     	}
     },
 
     removeClassName: function(className) {
-    	this.dom().className = this.dom().className.replace(className, &quot;&quot;);
+    	var classes = this.dom().classList;
+
+    	if (classes.contains(className)) {
+    		classes.remove(className);
+    	}
     },
 
     hasClassName: function(className) {
-    	return this.dom().className.indexOf(className) &gt; -1;
+    	var classes = this.dom().classList;
+    	return classes.contains(className);
     },
     
     clone: function() {
@@ -317,7 +324,7 @@ bardia.dom.Element = bardia.oop.Class.create({
     	for (s in style) {
     		this.dom().style[s] = style[s];
     	}
-    }
+    },    
 });
 /**
  *
@@ -367,6 +374,10 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	return result;
     },
     
+    /**
+      var du = new bardia.utils.DateUtils();
+      return du.formatDateHHmm() + &quot; &quot; + du.formatDateYYYYMMDDHHmm() 
+     */
     formatDateYYYYMMDDHHmm: function(date) {
     	var result = &quot;&quot;;
     	try {
@@ -470,7 +481,9 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	}
     	return result;
     },
-    
+    /**
+     * new bardia.utils.DateUtils().createFormatDateYYYYMMDDHHmm()
+     */
     createFormatDateYYYYMMDDHHmm: function(time) {
     	var result = &quot;&quot;;
     	try {
@@ -481,12 +494,12 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     	}
     	return result;    	
     },
-    
-    getLeftMinutesTo: function(dateMillis) {
-    	var diff = dateMillis - new Date().getTime();
-    	var diffSec = diff/1000;
+
+    getLeftMinutesTo: function(dateMillis, nowMillis) {
+    	var diff = dateMillis - nowMillis;
+    	var diffSec = diff / 1000;
     	var diffMins = diffSec / 60;
-    	
+
     	return diffMins.toFixed(0);
     },
     
@@ -495,10 +508,24 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
  	       try {
  	    	   result = this.formatNumber(((intValue - intValue % 60) / 60), 2) + &quot;:&quot; + this.formatNumber((intValue % 60), 2)
  	       } catch (e) {
-
+ 	    	   console.log(&quot;ERROR: convertIntToTime&quot;);
  	       }
  	   return result;
     },
+    
+    convertDaySecondsToTime: function(daySeconds) {
+  	   var result = &quot;00:00:00&quot;;
+  	       try {
+  	    	   var hours = (daySeconds - (daySeconds % 3600)) / 3600;
+  	    	   var minutes = ((daySeconds - (hours * 3600)) / 60).toFixed(0);
+  	    	   var seconds = daySeconds % 60;
+  	    	   
+  	    	   result = this.formatNumber(hours, 2) + &quot;:&quot; + this.formatNumber(minutes, 2) + &quot;:&quot; + this.formatNumber(seconds, 2)
+  	       } catch (e) {
+  	    	   console.log(&quot;ERROR: convertDaySecondsToTime&quot;);
+  	       }
+  	   return result;
+     },
     
     formatNumber: function(num, len) {
         var result = null;
@@ -528,6 +555,11 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
 		}
 		return result;
     },
+    
+    formatSeconds: function(daySeconds) {
+    	var result = &quot;&quot;;
+    	return result;
+    }
 });
 
 bardia.utils.DateUtils.pattern = &quot;&quot;;
@@ -580,6 +612,83 @@ bardia.utils.Map = bardia.oop.Class.create({
 		}
 	}
 });
+
+bardia.utils.ScriptImporter = bardia.oop.Class.create({
+
+	initialize: function(config) {
+		bardia.oop.Class.extend(this, bardia.oop.Class.extend({
+			importedScripts: new bardia.utils.Map()
+		}, config));
+	},
+
+	js: function(url) {
+		var h = this;
+
+		if (h.importedScripts.containsKey(url)) {
+			return;
+		}
+
+		var xhttp = new XMLHttpRequest();	
+
+		xhttp.open(&quot;GET&quot;, url + &quot;?&quot; + new Date().getTime(), false);
+		xhttp.send(null);
+
+		if (xhttp.readyState == 4 &amp;&amp; (xhttp.status == 200 || xhttp.status == 0)) {
+			try {
+				h.importedScripts.put(url, {
+					imported: true
+				});
+				globalEval(xhttp.responseText);
+			} catch (e) {
+				alert(&quot;&quot;+ e + &quot; Error importing script &quot; + url);
+			}
+		}
+	},
+	
+	css: function(url) {
+		var h = this;
+
+		if (h.importedScripts.containsKey(url)) {
+			return;
+		}
+
+		try {
+			var css = $_element({
+				$_tag: &quot;link&quot;,
+				rel: &quot;stylesheet&quot;,
+				href: url + &quot;?&quot; + new Date().getTime()
+			});
+			document.getElementsByTagName(&quot;head&quot;)[0].appendChild(css.dom());
+			h.importedScripts.put(url, {
+				imported: true
+			});
+		} catch (e) {
+			alert(&quot;&quot;+ e + &quot; Error importing css &quot; + url);
+		}
+	},
+});
+
+var globalEval = function globalEval(src) {
+    if (window.execScript) {
+        window.execScript(src);
+        return;
+    }
+    var fn = function() {
+        window.eval.call(window,src);
+    };
+    fn();
+};
+
+var IMPORTER = new bardia.utils.ScriptImporter({
+});
+
+function importScript(path) {
+	IMPORTER.js(path);
+};
+
+function importCss(path) {
+	IMPORTER.css(path);
+};
     </pre>
 </div>
                     </div>

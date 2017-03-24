@@ -20,15 +20,41 @@ bardia.controlls.ScrollingCell = bardia.oop.Class.create({
 			title: h.value,
 			$_on: {
 				mouseover: function(e) {
-					if (e.target.parentElement.getClientRects()[0].width < h.root.dom().getClientRects()[0].width) {
-						h.root.dom().style.left = -(h.root.dom().getClientRects()[0].width - e.target.parentElement.getClientRects()[0].width) + "px";
-					}
+					h.startScrolling();
 				},
 				mouseout: function(e) {
-					h.root.dom().style.left = "0px";
+					h.stopScrolling();
 				}
 			}
 		});
+		
+		h.autoscroll();
+	},
+	
+	autoscroll: function() {
+		var h = this;
+		
+		h.interval = setInterval(function() {
+			h.startScrolling();
+			
+			setTimeout(function() {
+				h.stopScrolling();
+			}, 10000);
+		}, 30000);
+	},
+	
+	startScrolling: function() {
+		var h = this;
+		
+		if (h.root.dom().parentElement.getClientRects()[0] && h.root.dom().getClientRects()[0] && h.root.dom().parentElement.getClientRects()[0].width < h.root.dom().getClientRects()[0].width) {
+			h.root.dom().style.left = -(h.root.dom().getClientRects()[0].width - h.root.dom().parentElement.getClientRects()[0].width) + "px";
+		}
+	},
+	
+	stopScrolling: function() {
+		var h = this;
+		
+		h.root.dom().style.left = "0px";
 	},
 
 	getMaterial: function() {

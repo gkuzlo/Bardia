@@ -1,5 +1,5 @@
 .panel-container {
-	position:absolute; top:0px; left:0px; right:0px; bottom:0px; background-color:white;
+	position:absolute; top:0px; left:0px; right:0px; bottom:0px; background-color:white; overflow:hidden;
 }
 
 .panel-top {
@@ -17,6 +17,15 @@
 	background:#3f51b5
 }
 
+.panel-animated {
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s; 
+
+    overflow:hidden;
+}
+
 .panel-details-right {
     position:absolute; top:0px; left:0px; bottom:0px; width:0px;
     background:white; border:0px;
@@ -27,4 +36,17 @@
 	transition: all 0.5s; 
 
     overflow:hidden; 
+}
+
+.panel-button-blinked {
+  animation: panel_button_blink 1s infinite;
+}
+
+@keyframes panel_button_blink {
+  0% {
+    opacity:0
+  }
+  100% {
+    opacity:1
+  }
 }

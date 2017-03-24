@@ -12,7 +12,9 @@ bardia.form.TextAreaField = bardia.oop.Class.inherit(bardia.form.TextField, {
             $_append: [{
                 $_tag: "textarea",
                 class: "form-text-input form-textarea",
+                style: h.style || "",
                 required: false,
+                maxLength: h.maxLength || 255,
                 id: h.id(h.property),
                 $_on: {
                     change: function(e) {
@@ -22,6 +24,15 @@ bardia.form.TextAreaField = bardia.oop.Class.inherit(bardia.form.TextField, {
                     	if (h.readOnly == true) {
                     		e.stopPropagation();
                     		e.target.blur();
+                    	} else {
+                    		if (h.onFocus) {
+                    			h.onFocus();
+                    		}
+                    	}
+                    },
+                    blur: function() {
+                    	if (h.onBlur) {
+                    		h.onBlur();
                     	}
                     }
                 }
