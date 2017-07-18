@@ -9,6 +9,7 @@ bardia.form.TextAreaField = bardia.oop.Class.inherit(bardia.form.TextField, {
         h.root = $_element({
             $_tag: "div",
             class: "form-row",
+            style: "height:60px",
             $_append: [{
                 $_tag: "textarea",
                 class: "form-text-input form-textarea",

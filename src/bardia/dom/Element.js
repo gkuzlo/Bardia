@@ -25,7 +25,7 @@ bardia.dom.Element = bardia.oop.Class.create({
         this.domNode.wrapper = this;
 
         for (attr in jsonRoot) {
-            if (!attr.startsWith("$_")) {
+            if (attr.indexOf("$_") != 0) {
                 this.domNode.setAttribute(attr, jsonRoot[attr]);
             }
         }

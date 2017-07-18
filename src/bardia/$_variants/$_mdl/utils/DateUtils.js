@@ -65,7 +65,9 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     		
     	return result;
     },
-    
+    /*
+     * bardia.utils.DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss.SSS+SSSS";
+     */
     parseDate: function(dateStr) {
         if (!dateStr) {
             return "";

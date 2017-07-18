@@ -35,7 +35,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "dist\\mdl\\bardia.js",
-            "line": 1588,
+            "line": 1590,
             "is_constructor": 1,
             "example": [
                 "\n~~~\nvar layout = new bardia.layout.BorderLayout({\n  root: $_element(document.body),\n  north: {\n       height: 20\n  }\n});\n~~~"
@@ -50,7 +50,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "dist\\mdl\\bardia.js",
-            "line": 1767,
+            "line": 1769,
             "description": "Materiał, który wysuwa się po wywołaniu metody show().\nPo wywołaniu metody hide() - ucieka.\nMoże się wysuwać z róznych stron: left, right, top, button.\nJeżeli jest modalny to podczas wysuwania pojawia sie pod nim półprzeźroczysta kurtyna, która sprawia,\nże kontet parenta jest lekko zasłonięty.\nAnimacja odbywa się w ten sposób, że materiał się wysuwa z jednej ze stron parenta (na przykład na gridzie, parenta podajemy w inside) a w tym czasie kurtyna zasłania obaszar grida.\nKomponent jest appendowany do inside'a - czyli nie podmienia jego zawartości.",
             "is_constructor": 1,
             "params": [
@@ -95,34 +95,40 @@
     "classitems": [
         {
             "file": "dist\\mdl\\bardia-min.js",
-            "line": 55,
+            "line": 667,
             "class": "bardia.layout.BorderLayout"
         },
         {
             "file": "dist\\mdl\\bardia-min.js",
-            "line": 62,
+            "line": 674,
             "description": "creates an element",
             "class": "bardia.layout.BorderLayout"
         },
         {
             "file": "dist\\mdl\\bardia-min.js",
-            "line": 71,
+            "line": 683,
             "class": "bardia.layout.BorderLayout"
         },
         {
             "file": "dist\\mdl\\bardia-min.js",
-            "line": 247,
+            "line": 859,
             "class": "bardia.layout.BorderLayout"
         },
         {
             "file": "dist\\mdl\\bardia-min.js",
-            "line": 295,
+            "line": 907,
             "description": "var du = new bardia.utils.DateUtils();\nreturn du.formatDateHHmm() + \" \" + du.formatDateYYYYMMDDHHmm()",
             "class": "bardia.layout.BorderLayout"
         },
         {
             "file": "dist\\mdl\\bardia-min.js",
-            "line": 402,
+            "line": 984,
+            "description": "bardia.utils.DateUtils\ncreateFormatYYYYMMDD",
+            "class": "bardia.layout.BorderLayout"
+        },
+        {
+            "file": "dist\\mdl\\bardia-min.js",
+            "line": 1020,
             "description": "new bardia.utils.DateUtils().createFormatDateYYYYMMDDHHmm()",
             "class": "bardia.layout.BorderLayout"
         },
@@ -160,33 +166,33 @@
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1029,
+            "line": 1031,
             "description": "bardia.utils.DateUtils\ncreateFormatYYYYMMDD",
             "class": "bardia.layout.BorderLayout"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1065,
+            "line": 1067,
             "description": "new bardia.utils.DateUtils().createFormatDateYYYYMMDDHHmm()",
             "class": "bardia.layout.BorderLayout"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1812,
+            "line": 1814,
             "itemtype": "method",
             "name": "show()",
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1819,
+            "line": 1821,
             "itemtype": "method",
             "name": "hide()",
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 1826,
+            "line": 1828,
             "itemtype": "method",
             "name": "getContent()",
             "return": {
@@ -197,149 +203,153 @@
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2380,
+            "line": 2382,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2384,
+            "line": 2386,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2392,
+            "line": 2394,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2460,
+            "line": 2462,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2522,
+            "line": 2524,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2535,
+            "line": 2537,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2680,
+            "line": 2682,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2687,
+            "line": 2689,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2694,
+            "line": 2696,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2707,
+            "line": 2709,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2723,
+            "line": 2725,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2736,
+            "line": 2738,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2756,
+            "line": 2758,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2763,
+            "line": 2765,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2791,
+            "line": 2793,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2804,
+            "line": 2806,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2904,
+            "line": 2906,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2946,
+            "line": 2948,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 2972,
+            "line": 2974,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 3033,
+            "line": 3035,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 3141,
+            "line": 3143,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 3575,
+            "line": 3577,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 3621,
+            "line": 3623,
             "class": "bardia.layout.Material"
         },
         {
             "file": "dist\\mdl\\bardia.js",
-            "line": 4120,
+            "line": 4122,
             "class": "bardia.layout.Material"
         }
     ],
     "warnings": [
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia-min.js:55"
+            "line": " dist\\mdl\\bardia-min.js:667"
         },
         {
             "message": "Missing item type\ncreates an element",
-            "line": " dist\\mdl\\bardia-min.js:62"
+            "line": " dist\\mdl\\bardia-min.js:674"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia-min.js:71"
+            "line": " dist\\mdl\\bardia-min.js:683"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia-min.js:247"
+            "line": " dist\\mdl\\bardia-min.js:859"
         },
         {
             "message": "Missing item type\nvar du = new bardia.utils.DateUtils();\nreturn du.formatDateHHmm() + \" \" + du.formatDateYYYYMMDDHHmm()",
-            "line": " dist\\mdl\\bardia-min.js:295"
+            "line": " dist\\mdl\\bardia-min.js:907"
+        },
+        {
+            "message": "Missing item type\nbardia.utils.DateUtils\ncreateFormatYYYYMMDD",
+            "line": " dist\\mdl\\bardia-min.js:984"
         },
         {
             "message": "Missing item type\nnew bardia.utils.DateUtils().createFormatDateYYYYMMDDHHmm()",
-            "line": " dist\\mdl\\bardia-min.js:402"
+            "line": " dist\\mdl\\bardia-min.js:1020"
         },
         {
             "message": "Missing item type",
@@ -367,107 +377,107 @@
         },
         {
             "message": "Missing item type\nbardia.utils.DateUtils\ncreateFormatYYYYMMDD",
-            "line": " dist\\mdl\\bardia.js:1029"
+            "line": " dist\\mdl\\bardia.js:1031"
         },
         {
             "message": "Missing item type\nnew bardia.utils.DateUtils().createFormatDateYYYYMMDDHHmm()",
-            "line": " dist\\mdl\\bardia.js:1065"
+            "line": " dist\\mdl\\bardia.js:1067"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2380"
+            "line": " dist\\mdl\\bardia.js:2382"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2384"
+            "line": " dist\\mdl\\bardia.js:2386"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2392"
+            "line": " dist\\mdl\\bardia.js:2394"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2460"
+            "line": " dist\\mdl\\bardia.js:2462"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2522"
+            "line": " dist\\mdl\\bardia.js:2524"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2535"
+            "line": " dist\\mdl\\bardia.js:2537"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2680"
+            "line": " dist\\mdl\\bardia.js:2682"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2687"
+            "line": " dist\\mdl\\bardia.js:2689"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2694"
+            "line": " dist\\mdl\\bardia.js:2696"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2707"
+            "line": " dist\\mdl\\bardia.js:2709"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2723"
+            "line": " dist\\mdl\\bardia.js:2725"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2736"
+            "line": " dist\\mdl\\bardia.js:2738"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2756"
+            "line": " dist\\mdl\\bardia.js:2758"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2763"
+            "line": " dist\\mdl\\bardia.js:2765"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2791"
+            "line": " dist\\mdl\\bardia.js:2793"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2804"
+            "line": " dist\\mdl\\bardia.js:2806"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2904"
+            "line": " dist\\mdl\\bardia.js:2906"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2946"
+            "line": " dist\\mdl\\bardia.js:2948"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:2972"
+            "line": " dist\\mdl\\bardia.js:2974"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:3033"
+            "line": " dist\\mdl\\bardia.js:3035"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:3141"
+            "line": " dist\\mdl\\bardia.js:3143"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:3575"
+            "line": " dist\\mdl\\bardia.js:3577"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:3621"
+            "line": " dist\\mdl\\bardia.js:3623"
         },
         {
             "message": "Missing item type",
-            "line": " dist\\mdl\\bardia.js:4120"
+            "line": " dist\\mdl\\bardia.js:4122"
         }
     ]
 }

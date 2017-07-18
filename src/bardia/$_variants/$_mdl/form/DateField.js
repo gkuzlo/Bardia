@@ -9,7 +9,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
             readOnly: false,
             visible: true,
             required: false,
-            date: new Date(),
+            date: new bardia.utils.DateUtils().stripTime(new Date()),
             du: new bardia.utils.DateUtils()
         }, config));
 

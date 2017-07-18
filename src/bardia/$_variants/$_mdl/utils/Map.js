@@ -80,7 +80,7 @@ bardia.utils.ScriptImporter = bardia.oop.Class.create({
 			} catch (e) {
 				console.log("" + e + " Error importing script " + url);
 				if (bardia.utils.onImportScriptError) {
-					bardia.utils.onImportScriptError();
+					bardia.utils.onImportScriptError(xhttp);
 				}
 			}
 		}

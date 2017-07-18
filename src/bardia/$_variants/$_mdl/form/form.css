@@ -23,8 +23,8 @@
 .form-text-input {
 	position:absolute;
 	left:0px; 
-    border:0px solid lightGrey; border-width:0px 0px 1px 0px; outline:none; margin-top:20px; background-color:transparent;
-    box-shadow:none;     
+    border:0px solid lightGrey; border-width:0px 0px 1px 0px; outline:none; margin-left:0px; margin-top:20px; background-color:transparent;
+    box-shadow:none; color:black;
 }
 
 .form-text-input-readonly {

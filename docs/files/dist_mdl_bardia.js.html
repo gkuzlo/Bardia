@@ -789,7 +789,7 @@ bardia.dom.Element = bardia.oop.Class.create({
         this.domNode.wrapper = this;
 
         for (attr in jsonRoot) {
-            if (!attr.startsWith(&quot;$_&quot;)) {
+            if (attr.indexOf(&quot;$_&quot;) != 0) {
                 this.domNode.setAttribute(attr, jsonRoot[attr]);
             }
         }
@@ -1072,7 +1072,9 @@ bardia.utils.DateUtils = bardia.oop.Class.create({
     		
     	return result;
     },
-    
+    /*
+     * bardia.utils.DATE_FORMAT = &quot;yyyy-MM-ddTHH:mm:ss.SSS+SSSS&quot;;
+     */
     parseDate: function(dateStr) {
         if (!dateStr) {
             return &quot;&quot;;
@@ -1326,7 +1328,7 @@ bardia.utils.ScriptImporter = bardia.oop.Class.create({
 			} catch (e) {
 				console.log(&quot;&quot; + e + &quot; Error importing script &quot; + url);
 				if (bardia.utils.onImportScriptError) {
-					bardia.utils.onImportScriptError();
+					bardia.utils.onImportScriptError(xhttp);
 				}
 			}
 		}
@@ -2259,7 +2261,7 @@ bardia.layout.BreadCrumb = bardia.oop.Class.create({
 
 		if (wrappedElement.tab.onActivate &amp;&amp; !wrappedElement.activated) {
 			wrappedElement.activated = true;
-			wrappedElement.tab.onActivate(wrappedElement.content);
+			wrappedElement.tab.onActivate(wrappedElement.content, wrappedElement);
 		}
     },
 
@@ -3753,7 +3755,7 @@ bardia.form.DateField = bardia.oop.Class.inherit(bardia.form.ActionField, {
             readOnly: false,
             visible: true,
             required: false,
-            date: new Date(),
+            date: new bardia.utils.DateUtils().stripTime(new Date()),
             du: new bardia.utils.DateUtils()
         }, config));
 
@@ -4206,6 +4208,84 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     	var h = this;
 
     	return $_element({
+    		$_tag: &quot;div&quot;,
+    		style: &quot;position:absolute; bottom:0px; left:170px; display:&quot; + ((h.readOnly==true)?&quot;none&quot;:&quot;flex&quot;) + &quot;; flex-direction:row&quot;,
+    		$_append: [{
+                $_tag: &quot;button&quot;,
+                class: &quot;mdl-button mdl-js-button mdl-button--icon mdl-button--colored&quot;,
+                $_on: {
+                    click: function(e) {
+                    	h.root.find(h.serial).dom().click();
+                    }
+                },
+                $_append: [{
+                    $_tag: &quot;i&quot;,
+                    class: &quot;material-icons action-icon&quot;,
+                    $_append: &quot;file_upload&quot;,
+                }]
+            }, {
+                $_tag: &quot;button&quot;,
+                class: &quot;mdl-button mdl-js-button mdl-button--icon mdl-button--colored&quot;,
+                $_on: {
+                    click: function(e) {
+                    	h.updateBeanProperty(undefined);
+                    	h.updateInputValue(h.form.getBean());
+                    }
+                },
+                $_append: [{
+                    $_tag: &quot;i&quot;,
+                    class: &quot;material-icons action-delete-icon&quot;,
+                    $_append: &quot;cancel&quot;,
+                }]
+            }, {
+    			$_tag: &quot;form&quot;,
+    		    action: h.uploadAction || bardia.uploadAction,
+    		    method: &quot;POST&quot;,
+    		    target: h.serial,
+    		    style: &quot;display:none; width:0px; height:0px&quot;,
+    		    $_append: [{
+    				$_tag: &quot;input&quot;,
+    				type: &quot;file&quot;,
+    				name: &quot;fileName_&quot; + h.serial,
+    				id: h.serial,
+    				style: &quot;display:none&quot;,
+    				$_on: {
+    					&quot;change&quot;: function() {
+    						h.form.openProgress();
+
+    						var form = new FormData();
+    							form.append(&quot;file&quot;, h.root.find(h.serial).dom().files[0]);
+
+    						var xhr = new XMLHttpRequest();    						
+
+    						xhr.upload.addEventListener(&quot;progress&quot;, function(e) {
+    							var pc = parseInt(100 - (e.loaded / e.total * 100));
+    							h.form.setProgressLabel(&quot;&quot; + (100 - pc) + &quot; %&quot;);
+    						}, false);
+
+    						xhr.onreadystatechange = function (evt) {
+    							if (xhr.readyState == 4 &amp;&amp; xhr.status == 200) {
+    								h.form.closeProgress();
+
+    								var createdFile = JSON.parse(xhr.responseText);						
+    			                    	h.updateBeanProperty(createdFile);
+    			                    	h.updateInputValue(h.form.getBean());
+    			                    	h.root.find(h.serial).dom().value = &quot;&quot;;
+    							}
+    						};
+
+    						var uploadUrl = h.uploadAction || bardia.uploadAction;
+    						xhr.open(&quot;POST&quot;, uploadUrl + &quot;?fileName=&quot; + h.root.find(h.serial).dom().files[0].name, true);
+    						
+    						xhr.send(form);
+    					}
+    				}
+    			}]
+            }]
+    	});
+    	
+    	/*
+    	return $_element({
             $_tag: &quot;button&quot;,
             class: &quot;mdl-button mdl-js-button mdl-button--icon mdl-button--colored&quot;,
             $_on: {
@@ -4263,6 +4343,7 @@ bardia.form.FileField = bardia.oop.Class.inherit(bardia.form.ActionField, {
     			}]
     		}]
         });
+    	*/
     },
     
     updateInputValue: function(bean) {
@@ -4283,6 +4364,7 @@ bardia.form.TextAreaField = bardia.oop.Class.inherit(bardia.form.TextField, {
         h.root = $_element({
             $_tag: &quot;div&quot;,
             class: &quot;form-row&quot;,
+            style: &quot;height:60px&quot;,
             $_append: [{
                 $_tag: &quot;textarea&quot;,
                 class: &quot;form-text-input form-textarea&quot;,

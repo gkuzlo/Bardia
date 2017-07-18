@@ -15,6 +15,10 @@ module.exports = function(grunt) {
     	js_min: {
     	   files: [{
 	    	   src: [
+        	        "src/jst/JavaScriptUtil.js",
+        	        "src/jst/InputMask.js",
+        	        "src/jst/Parsers.js",
+
 	                "src/bardia/$_bardia.js",
 
 	                "src/bardia/oop/$_oop.js",
